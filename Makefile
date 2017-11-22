@@ -4,7 +4,7 @@ FILTERS=$(wildcard filters/*)
 test:
 	@let err=0 ; \
 	for d in $(FILTERS) ; do \
-	    make -C $$d ; \
+	    make -C $$d test ; \
 	    if [ $$? -eq 0 ]; then \
 	    	echo "PASS $$d" ; \
 	    else \
