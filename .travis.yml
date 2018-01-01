@@ -5,8 +5,8 @@ sudo: false
 language: generic
 
 # Caching so the next build will be fast too.
-cache:
-  directories: []
+#cache:
+#  directories: []
 
 matrix:
   include:
@@ -22,11 +22,11 @@ matrix:
 
 before_install:
 - unset CC
-# - export PATH=$PATH
+- export PATH=pandoc-$PANDOCVERSION:$PATH
 # Download and unpack the pandoc binary
 - |
-  wget https://github.com/jgm/pandoc/releases/download/$PANDOCVERSION/pandoc-$PANDOCVERSION-1-amd64.deb
-  dpkg -i pandoc-$PANDOCVERSION-1-amd64.deb
+  wget https://github.com/jgm/pandoc/releases/download/$PANDOCVERSION/pandoc-$PANDOCVERSION-linux.tar.gz
+  tar xvzf pandoc-$PANDOCVERSION-linux.tar.gz
 
 install: []
 
