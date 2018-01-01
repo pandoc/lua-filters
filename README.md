@@ -1,6 +1,9 @@
-# lua-filters
+[![travis build
+status](https://img.shields.io/travis/pandoc/lua-filters/master.svg?label=travis+build)](https://travis-ci.org/pandoc/lua-filters)
 
 This repository collects lua filters for pandoc.
+# lua-filters
+
 To learn about lua filters, see the
 [documentation](http://pandoc.org/lua-filters.html).
 
