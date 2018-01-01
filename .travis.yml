@@ -27,6 +27,9 @@ before_install:
 - |
   wget https://github.com/jgm/pandoc/releases/download/$PANDOCVERSION/pandoc-$PANDOCVERSION-linux.tar.gz
   tar xvzf pandoc-$PANDOCVERSION-linux.tar.gz
+  pwd
+  echo $PATH
+  pandoc-$PANDOCVERSION/bin/pandoc --version
 
 install: []
 
