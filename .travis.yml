@@ -22,7 +22,7 @@ matrix:
 
 before_install:
 - unset CC
-- export PATH=pandoc-$PANDOCVERSION:$PATH
+- export PATH=pandoc-$PANDOCVERSION/bin:$PATH
 # Download and unpack the pandoc binary
 - |
   wget https://github.com/jgm/pandoc/releases/download/$PANDOCVERSION/pandoc-$PANDOCVERSION-linux.tar.gz
