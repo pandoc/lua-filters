@@ -25,11 +25,10 @@ before_install:
 - export PATH=$HOME/pandoc-$PANDOCVERSION/bin:$PATH
 # Download and unpack the pandoc binary
 - |
+  pushd $HOME
   wget https://github.com/jgm/pandoc/releases/download/$PANDOCVERSION/pandoc-$PANDOCVERSION-linux.tar.gz
   tar xvzf pandoc-$PANDOCVERSION-linux.tar.gz
-  pwd
-  echo $PATH
-  pandoc-$PANDOCVERSION/bin/pandoc --version
+  popd
 
 install: []
 
