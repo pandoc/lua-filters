@@ -18,6 +18,8 @@ function M.ballot_box (format)
     return pandoc.RawInline('html', '[ ]')
   elseif format == 'org' then
     return pandoc.RawInline('org', '[ ]')
+  elseif format == 'latex' then
+    return pandoc.RawInline('tex', '$\\square$')
   else
     return pandoc.Str '☐'
   end
@@ -35,6 +37,8 @@ function M.ballot_box_with_check (format)
     return pandoc.RawInline('html', '[x]')
   elseif format == 'org' then
     return pandoc.RawInline('org', '[X]')
+  elseif format == 'latex' then
+    return pandoc.RawInline('tex', '$\\rlap{$\\checkmark$}\\square$')
   else
     return pandoc.Str '☑'
   end
