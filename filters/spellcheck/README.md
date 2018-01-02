@@ -32,3 +32,11 @@ If the word is in a div or span with a non-default `lang`
 attribute, the relevant language will be indicated in
 brackets after the word, separated by a tab.
 
+To add words to the list for a language, you can add files
+with names `.aspell.LANG.pws` in your home directory.  Example:
+
+```
+% cat ~/.aspell.en.pws
+personal_ws-1.1 en 0
+goopy
+```
