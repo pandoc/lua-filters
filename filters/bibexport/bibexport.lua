@@ -7,7 +7,7 @@ local citation_id_set = {}
 function Cite (c)
   local cs = c.citations
   for i = 1, #cs do
-    citation_id_set[cs[i].id] = true
+    citation_id_set[cs[i].id or cs[i].citationId] = true
   end
 end
 
