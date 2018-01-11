@@ -4,7 +4,7 @@
 FILTERS=$*
 let err=0
 for d in $FILTERS ; do
-    make -C $d test
+    make --no-print-directory -C $d test
     if [ $? -eq 0 ]; then
     	echo "PASS $d"
     else
