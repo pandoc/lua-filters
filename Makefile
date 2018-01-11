@@ -1,4 +1,4 @@
-FILTERS=$(wildcard filters/*)
+FILTERS=$(wildcard $(shell find * -type d))
 .PHONY: test
 
 test:

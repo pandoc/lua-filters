@@ -8,8 +8,7 @@ This repository collects lua filters for pandoc.
 To learn about lua filters, see the
 [documentation](http://pandoc.org/lua-filters.html).
 
-Each filter goes in its own subdirectory of the `filters`
-directory.  Each subdirectory contains:
+Each filter goes in its own subdirectory.  Each subdirectory contains:
 
 - the filter itself (e.g. `wordcount.lua`)
 - a `README.md` describing the use of the filter
