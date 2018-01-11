@@ -8,7 +8,6 @@ OPTIONS_test_default := -t native \
 	--lua-filter=section-refs.lua
 
 OPTIONS_test_no_citeproc := -t native \
-	-M bibliography=bibliography.bib \
 	--lua-filter=section-refs.lua
 
 OPTIONS_test_refs_name := -t native \
