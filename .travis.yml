@@ -11,9 +11,9 @@ language: minimal
 matrix:
   include:
   - env: PANDOCVERSION=2.0.6
-    addons: {apt: {packages: [texlive-bibtex-extra,aspell,aspell-fr,aspell-en,imagemagick,texlive-pictures]}}
+    addons: {apt: {packages: [texlive-bibtex-extra,aspell,aspell-fr,aspell-en,imagemagick,texlive-pictures,texlive-latex-base]}}
   - env: PANDOCVERSION=2.1
-    addons: {apt: {packages: [texlive-bibtex-extra,aspell,aspell-fr,aspell-en,imagemagick,texlive-pictures]}}
+    addons: {apt: {packages: [texlive-bibtex-extra,aspell,aspell-fr,aspell-en,imagemagick,texlive-pictures,texlive-latex-base]}}
 
   allow_failures:
   - env: PANDOCVERSION=2.0.6
