@@ -24,16 +24,9 @@ OPTIONS_test_section_level := -t native \
 	-F pandoc-citeproc \
 	--lua-filter=section-refs.lua
 
-ifeq "$(PANDOC_MINOR_VERSION)" "0"
-.PHONY: test
-test:
-	@echo "testing for pandoc < 2.1"
-	@true
-else
 .PHONY: test
 test: test_default test_no_citeproc test_refs_name test_section_level
 	@echo "testing for pandoc >= 2.1"
-endif
 
 test_%: expected_%.native sample.md bibliography.bib
 	@pandoc sample.md $(OPTIONS_$@) | diff -u - $<
