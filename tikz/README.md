@@ -10,4 +10,23 @@ a hash of the source, so that they need not be regenerated each
 time the document is built. (A more sophisticated version of
 this might put these in a special cache directory.)
 
+Here's an example of the markdown source you might use:
+```
+Here's my picture!
+
+\begin{tikzpicture}
+
+\def \n {5}
+\def \radius {3cm}
+\def \margin {8} % margin in angles, depends on the radius
+
+\foreach \s in {1,...,\n}
+{
+  \node[draw, circle] at ({360/\n * (\s - 1)}:\radius) {$\s$};
+  \draw[->, >=latex] ({360/\n * (\s - 1)+\margin}:\radius)
+    arc ({360/\n * (\s - 1)+\margin}:{360/\n * (\s)-\margin}:\radius);
+}
+\end{tikzpicture}
+```
+
 To run it, `pandoc --lua-filter tikz.lua myfile.md -s -o myfile.html`.
