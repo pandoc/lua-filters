@@ -9,12 +9,11 @@ if FORMAT == "latex" then
          local img = figure.content[1]
          if img.caption and img.attributes['short-caption'] then
             local caption_cmd = string.format('\n\\caption[%s]',img.attributes['short-caption'])
-            local name = img.c[1][1]
             local hypertarget = latex("{%%\n")
             local label = "\n"
-            if name ~= "" then
-               hypertarget = string.format("\\hypertarget{%s}{%%\n",name)
-               label = string.format("\n\\label{%s}",name)
+            if img.identifier ~= img.title then
+               hypertarget = string.format("\\hypertarget{%s}{%%\n",img.identifier)
+               label = string.format("\n\\label{%s}",img.identifier)
             end
             return pandoc.Para {
                latex(hypertarget .. "\\begin{figure}\n\\centering\n"),
