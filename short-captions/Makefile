@@ -2,8 +2,9 @@ LF	=	--lua-filter=short-captions.lua
 F	=	-F pandoc-crossref
 
 test:
-	@echo testing short-captions.lua alone
 	@pandoc $(LF) README.md -w latex | diff - expected-1.tex
+
+crossref:
 	@echo testing short-captions.lua after  pandoc-crossref
 	@pandoc $(F) $(LF) README.md -w latex | diff - expected-2.tex
 	@echo testing short-captions.lua before pandoc-crossref
