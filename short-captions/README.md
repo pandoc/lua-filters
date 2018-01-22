@@ -29,7 +29,7 @@ If the document metadata includes `lof:true`,  then the List of Figures will use
 
 @Fig:shortcap is an interesting figure with a long caption, but a short caption in the List of Figures.
 
-![This is an *extremely* interesting figure that has a lot of detail I will need to describe in a few sentences. This figure has a short caption that will appear in the list of figures. Other attributes are preserved](images/fig.pdf){#fig:shortcap short-caption="An interesting figure" width="50%"}
+![This is an *extremely* interesting figure that has a lot of detail I will need to describe in a few sentences. This figure has a short caption that will appear in the list of figures. Other attributes are preserved](fig.pdf){#fig:shortcap short-caption="An interesting figure" width="50%"}
 
 
 # Limitations
