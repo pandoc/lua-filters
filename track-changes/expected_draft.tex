@@ -54,10 +54,6 @@
 
 \usepackage[dvipsnames,svgnames,x11names]{xcolor}
 \usepackage[markup=underlined,authormarkup=none]{changes}
-% concatenate or create abbreviation for author names with spaces
-\definechangesauthor[name={Mathias C. Walter}, color=NavyBlue]{MCW}
-%%% Alternative definition to have the remarks
-%%% in the margins instead of footnotes
 \usepackage{todonotes}
 \setlength{\marginparwidth}{3cm}
 \makeatletter
@@ -65,6 +61,8 @@
 \makeatother
 \newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
 \newcommand\hl{\bgroup\markoverwith{\textcolor{yellow}{\rule[-.5ex]{.1pt}{2.5ex}}}\ULon} % \hl from soul package is not compatible
+\definechangesauthor[name={MCW}]{MCW}
+\definechangesauthor[name={Mathias F. Walter}]{MFW}
 
 \title{Track changes in LaTeX}
 \date{}
@@ -88,7 +86,7 @@ This is/was a text with a \deleted[id=MCW]{short} deletion.
 Here is a \protect\note[id=MCW]{Why?}\hl{com\added[id=MCW]{m}ent with
 nest\deleted[id=MCW]{t}ed changes}.
 
-Here should be a \protect\note[id=MCW]{Note}\hl{header with a comment}
+Here should be a \protect\note[id=MFW]{Note}\hl{header with a comment}
 \ldots{} but this is not supported yet.
 
 Some unmodified text.

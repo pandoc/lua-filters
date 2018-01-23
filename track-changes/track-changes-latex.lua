@@ -2,10 +2,7 @@
 local List = require 'pandoc.List'
 
 local M = {}
-
-local function is_html (format)
-    return format == 'html' or format == 'html4' or format == 'html5'
-end
+local authors = {}
 
 local function is_tex(format)
     return format == 'latex' or format == 'tex' or format == 'context'
@@ -14,8 +11,6 @@ end
 M.header_track_changes = [[
 \usepackage[dvipsnames,svgnames,x11names]{xcolor}
 \usepackage[markup=underlined,authormarkup=none]{changes}
-% concatenate or create abbreviation for author names with spaces
-\definechangesauthor[name={Mathias C. Walter}, color=NavyBlue]{MCW}
 \usepackage{todonotes}
 \setlength{\marginparwidth}{3cm}
 \makeatletter
@@ -25,30 +20,65 @@ M.header_track_changes = [[
 \newcommand\hl{\bgroup\markoverwith{\textcolor{yellow}{\rule[-.5ex]{.1pt}{2.5ex}}}\ULon} % \hl from soul package is not compatible
 ]]
 
+local function initials(s)
+    ignore = { -- list of words to ignore
+        ['dr'] = true, ['mr'] = true, ['ms'] = true, ['mrs'] = true, ['prof'] = true,
+        ['mx'] = true, ['sir'] = true,
+    }
+
+    local ans = {}
+    for w in s:gmatch '[%w\']+' do
+        if not ignore[w:lower()] then ans[#ans+1] = w:sub(1,1):upper() end
+    end
+    return table.concat(ans)
+end
+
+local toTex = {["comment-start"] = "\\protect\\note", insertion = "\\added", deletion = "\\deleted"}
+
 function M.Span(elem)
-    if elem.classes[1] == "comment-start" then
-        return pandoc.RawInline('latex', '\\protect\\note[id=' .. elem.attributes.author .. ']{' .. pandoc.utils.stringify(elem.content) .. '}\\hl{')
+    if toTex[elem.classes[1]] ~= nil then
+        local author = elem.attributes.author
+        local inits
+        if author:find(" ") then inits = initials(author) else inits = author end
+        authors[inits] = author
+        local s = toTex[elem.classes[1]] .. '[id=' .. inits .. ']{' .. pandoc.utils.stringify(elem.content) .. '}'
+        if elem.classes[1] == "comment-start" then
+            s = s .. '\\hl{'
+        end
+        return pandoc.RawInline('latex', s)
     elseif elem.classes[1] == "comment-end" then
         return pandoc.RawInline('latex', '}')
-    elseif elem.classes[1] == "insertion" then
-        local content_str = pandoc.utils.stringify(elem.content)
-        return pandoc.RawInline('latex', '\\added[id=' .. elem.attributes.author .. ']{' .. content_str .. '}')
-    elseif elem.classes[1] == "deletion" then
-        local content_str = pandoc.utils.stringify(elem.content)
-        return pandoc.RawInline('latex', '\\deleted[id=' .. elem.attributes.author .. ']{' .. content_str .. '}')
     end
+end
+
+local function pairsByKeys(t, f)
+    local a = {}
+    for n in pairs(t) do table.insert(a, n) end
+    table.sort(a, f)
+    local i = 0      -- iterator variable
+    local iter = function ()   -- iterator function
+      i = i + 1
+      if a[i] == nil then return nil
+      else return a[i], t[a[i]]
+      end
+    end
+    return iter
 end
 
 --- Add packages to the header includes.
 function M.add_track_changes(meta)
     local header_includes
-    if meta['header-includes'] and meta['header-includes'].t ~= 'MetaList' then
+    if meta['header-includes'] and meta['header-includes'].t == 'MetaList' then
         header_includes = meta['header-includes']
     else
         header_includes = pandoc.MetaList{meta.header_includes}
     end
     header_includes[#header_includes + 1] =
         pandoc.MetaBlocks{pandoc.RawBlock('latex', M.header_track_changes)}
+    for key,value in pairsByKeys(authors) do -- sorted author list; otherwise make test may fail
+        header_includes[#header_includes + 1] =
+            pandoc.MetaBlocks{pandoc.RawBlock('latex', '\\definechangesauthor[name={' .. value .. '}]{' .. key .. '}')}
+    end
     meta['header-includes'] = header_includes
     return meta
 end
