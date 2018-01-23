@@ -9,7 +9,7 @@ if FORMAT == "latex" then
          local img = figure.content[1]
          if img.caption and img.attributes['short-caption'] then
             local caption_cmd = string.format('\n\\caption[%s]',img.attributes['short-caption'])
-            local hypertarget = latex("{%%\n")
+            local hypertarget = "{%%\n"
             local label = "\n"
             if img.identifier ~= img.title then
                hypertarget = string.format("\\hypertarget{%s}{%%\n",img.identifier)
