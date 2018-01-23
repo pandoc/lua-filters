@@ -15,7 +15,7 @@ Here is the text to be moved.
 
 Here is a comment with nested changes.
 
-Here should be a header with a comment ... but this is not supported
-yet.
+A header with a comment {#a-header-with-a-notecomment}
+=======================
 
 Some unmodified text.

@@ -43,7 +43,7 @@ function M.Span(elem)
         authors[inits] = author
         local s = toTex[elem.classes[1]] .. '[id=' .. inits .. ']{' .. pandoc.utils.stringify(elem.content) .. '}'
         if elem.classes[1] == "comment-start" then
-            s = s .. '\\hl{'
+            s = s .. '\\protect\\hl{'
         end
         return pandoc.RawInline('latex', s)
     elseif elem.classes[1] == "comment-end" then
