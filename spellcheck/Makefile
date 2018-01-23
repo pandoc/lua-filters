@@ -1,2 +1,2 @@
 test:
-	@pandoc --lua-filter=spellcheck.lua sample.md | sort | diff -u - expected.txt
+	@pandoc --lua-filter=spellcheck.lua sample.md | sort | diff --strip-trailing-cr -u - expected.txt

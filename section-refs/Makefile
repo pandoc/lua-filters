@@ -23,4 +23,4 @@ OPTIONS_test_section_level := -t native \
 test: test_default test_no_citeproc test_refs_name test_section_level
 
 test_%: expected_%.native sample.md bibliography.bib
-	@pandoc sample.md $(OPTIONS_$@) | diff -u - $<
+	@pandoc sample.md $(OPTIONS_$@) | diff --strip-trailing-cr -u - $<
