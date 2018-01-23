@@ -9,12 +9,17 @@ local function is_tex(format)
 end
 
 M.header_track_changes = [[
-\usepackage[dvipsnames,svgnames,x11names]{xcolor}
 \usepackage[markup=underlined,authormarkup=none]{changes}
-\usepackage{todonotes}
+\definecolor{auth1}{HTML}{4477AA}
+\definecolor{auth2}{HTML}{117733}
+\definecolor{auth3}{HTML}{999933}
+\definecolor{auth4}{HTML}{CC6677}
+\definecolor{auth5}{HTML}{AA4499}
+\definecolor{auth6}{HTML}{332288}
+\usepackage[textsize=scriptsize]{todonotes}
 \setlength{\marginparwidth}{3cm}
 \makeatletter
-\setremarkmarkup{\todo[color=Changes@Color#1!20,size=\scriptsize]{\textbf{#1:}~#2}}
+\setremarkmarkup{\todo[color=Changes@Color#1!20]{\textbf{#1:}~#2}}
 \makeatother
 \newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
 \newcommand\hl{%
@@ -79,9 +84,11 @@ function M.add_track_changes(meta)
     end
     header_includes[#header_includes + 1] =
         pandoc.MetaBlocks{pandoc.RawBlock('latex', M.header_track_changes)}
+    local a = 1
     for key,value in pairsByKeys(authors) do -- sorted author list; otherwise make test may fail
         header_includes[#header_includes + 1] =
-            pandoc.MetaBlocks{pandoc.RawBlock('latex', '\\definechangesauthor[name={' .. value .. '}]{' .. key .. '}')}
+            pandoc.MetaBlocks{pandoc.RawBlock('latex', '\\definechangesauthor[name={' .. value .. '}, color=auth' .. a .. ']{' .. key .. '}')}
+        a = a + 1
     end
     meta['header-includes'] = header_includes
     return meta

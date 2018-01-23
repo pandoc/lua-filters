@@ -52,17 +52,29 @@
 \def\fps@figure{htbp}
 \makeatother
 
-\usepackage[dvipsnames,svgnames,x11names]{xcolor}
 \usepackage[markup=underlined,authormarkup=none]{changes}
-\usepackage{todonotes}
+\definecolor{auth1}{HTML}{4477AA}
+\definecolor{auth2}{HTML}{117733}
+\definecolor{auth3}{HTML}{999933}
+\definecolor{auth4}{HTML}{CC6677}
+\definecolor{auth5}{HTML}{AA4499}
+\definecolor{auth6}{HTML}{332288}
+\usepackage[textsize=scriptsize]{todonotes}
 \setlength{\marginparwidth}{3cm}
 \makeatletter
-\setremarkmarkup{\todo[color=Changes@Color#1!20,size=\scriptsize]{\textbf{#1:}~#2}}
+\setremarkmarkup{\todo[color=Changes@Color#1!20]{\textbf{#1:}~#2}}
 \makeatother
 \newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
-\newcommand\hl{\bgroup\markoverwith{\textcolor{yellow}{\rule[-.5ex]{.1pt}{2.5ex}}}\ULon} % \hl from soul package is not compatible
-\definechangesauthor[name={MCW}]{MCW}
-\definechangesauthor[name={Mathias F. Walter}]{MFW}
+\newcommand\hl{%
+  \bgroup
+  \expandafter\def\csname sout\space\endcsname{\bgroup \ULdepth =-.8ex \ULset}%
+  \markoverwith{\textcolor{yellow}{\rule[-.5ex]{.1pt}{2.5ex}}}%
+  \ULon}
+\definechangesauthor[name={FKA}, color=auth1]{FKA}
+\definechangesauthor[name={JFK}, color=auth2]{JFK}
+\definechangesauthor[name={MCW}, color=auth3]{MCW}
+\definechangesauthor[name={Mathias F. Walter}, color=auth4]{MFW}
+\definechangesauthor[name={SWS}, color=auth5]{SWS}
 
 \title{Track changes in LaTeX}
 \date{}
@@ -78,14 +90,14 @@ from me.
 
 This is a text with \added[id=MCW]{an exciting} insertion.
 
-This is/was a text with a \deleted[id=MCW]{short} deletion.
+This is/was a text with a \deleted[id=SWS]{short} deletion.
 
-\added[id=MCW]{Here is the text to be moved.}
+\added[id=FKA]{Here is the text to be moved.}
 
-\deleted[id=MCW]{Here is the text to be moved.}
+\deleted[id=JFK]{Here is the text to be moved.}
 
-Here is a \protect\note[id=MCW]{Why?}\protect\hl{com\added[id=MCW]{m}ent
-with nest\deleted[id=MCW]{t}ed changes}.
+Here is a \protect\note[id=JFK]{Why?}\protect\hl{com\added[id=SWS]{m}ent
+with nest\deleted[id=FKA]{t}ed changes}.
 
 \hypertarget{a-header-with-a-notecomment}{%
 \section{\texorpdfstring{A header with a
