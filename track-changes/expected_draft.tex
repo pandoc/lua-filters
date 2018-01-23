@@ -1,0 +1,96 @@
+\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provides euro and other symbols
+\else % if luatex or xelatex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\usepackage{hyperref}
+\hypersetup{
+            pdftitle={Track changes in LaTeX},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\usepackage[dvipsnames,svgnames,x11names]{xcolor}
+\usepackage[markup=underlined,authormarkup=none]{changes}
+% concatenate or create abbreviation for author names with spaces
+\definechangesauthor[name={Mathias C. Walter}, color=NavyBlue]{MCW}
+%%% Alternative definition to have the remarks
+%%% in the margins instead of footnotes
+\usepackage{todonotes}
+\setlength{\marginparwidth}{3cm}
+\makeatletter
+\setremarkmarkup{\todo[color=Changes@Color#1!20,size=\scriptsize]{\textbf{#1:}~#2}}
+\makeatother
+\newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
+\newcommand\hl{\bgroup\markoverwith{\textcolor{yellow}{\rule[-.5ex]{.1pt}{2.5ex}}}\ULon} % \hl from soul package is not compatible
+
+\title{Track changes in LaTeX}
+\date{}
+
+\begin{document}
+\maketitle
+
+\hypertarget{track-changes-in-latex}{%
+\section{Track changes in LaTeX}\label{track-changes-in-latex}}
+
+A \protect\note[id=MCW]{I agree!}\hl{\textbf{simple}} comment from me.
+
+This is a text with \added[id=MCW]{an exciting} insertion.
+
+This is/was a text with a \deleted[id=MCW]{short} deletion.
+
+\added[id=MCW]{Here is the text to be moved.}
+
+\deleted[id=MCW]{Here is the text to be moved.}
+
+Here is a \protect\note[id=MCW]{Why?}\hl{com\added[id=MCW]{m}ent with
+nest\deleted[id=MCW]{t}ed changes}.
+
+Here should be a \protect\note[id=MCW]{Note}\hl{header with a comment}
+\ldots{} but this is not supported yet.
+
+Some unmodified text.
+
+\end{document}
