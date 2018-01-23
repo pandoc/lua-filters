@@ -16,8 +16,6 @@ M.header_track_changes = [[
 \usepackage[markup=underlined,authormarkup=none]{changes}
 % concatenate or create abbreviation for author names with spaces
 \definechangesauthor[name={Mathias C. Walter}, color=NavyBlue]{MCW}
-%%% Alternative definition to have the remarks
-%%% in the margins instead of footnotes
 \usepackage{todonotes}
 \setlength{\marginparwidth}{3cm}
 \makeatletter
@@ -41,19 +39,6 @@ function M.Span(elem)
     end
 end
 
-function dump(o)
-    if type(o) == 'table' then
-       local s = '{ '
-       for k,v in pairs(o) do
-          if type(k) ~= 'number' then k = '"'..k..'"' end
-          s = s .. '['..k..'] = ' .. dump(v) .. ','
-       end
-       return s .. '} '
-    else
-       return tostring(o)
-    end
-end
-
 --- Add packages to the header includes.
 function M.add_track_changes(meta)
     local header_includes
@@ -62,8 +47,6 @@ function M.add_track_changes(meta)
     else
         header_includes = pandoc.MetaList{meta.header_includes}
     end
---    print(header_includes)
---    print(dump(header_includes))
     header_includes[#header_includes + 1] =
         pandoc.MetaBlocks{pandoc.RawBlock('latex', M.header_track_changes)}
     meta['header-includes'] = header_includes
