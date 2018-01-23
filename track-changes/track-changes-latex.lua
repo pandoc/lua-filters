@@ -17,7 +17,11 @@ M.header_track_changes = [[
 \setremarkmarkup{\todo[color=Changes@Color#1!20,size=\scriptsize]{\textbf{#1:}~#2}}
 \makeatother
 \newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
-\newcommand\hl{\bgroup\markoverwith{\textcolor{yellow}{\rule[-.5ex]{.1pt}{2.5ex}}}\ULon} % \hl from soul package is not compatible
+\newcommand\hl{%
+  \bgroup
+  \expandafter\def\csname sout\space\endcsname{\bgroup \ULdepth =-.8ex \ULset}%
+  \markoverwith{\textcolor{yellow}{\rule[-.5ex]{.1pt}{2.5ex}}}%
+  \ULon}
 ]]
 
 local function initials(s)
