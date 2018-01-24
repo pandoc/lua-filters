@@ -43,10 +43,10 @@ but a short caption in the List of Figures.
 \begin{figure}
 \centering
 \includegraphics[width=0.5\textwidth,height=\textheight]{fig.pdf}
-\caption[An interesting figure]{This is an \emph{extremely} interesting
-figure that has a lot of detail I will need to describe in a few
-sentences. This figure has a short caption that will appear in the list
-of figures. Other attributes are preserved}
+\caption[{A short caption with math \(x^n + y^n = z^n\)}]{This is an
+\emph{extremely} interesting figure that has a lot of detail I will need
+to describe in a few sentences. This figure has a short caption that
+will appear in the list of figures. Other attributes are preserved}
 \label{fig:shortcap}
 \end{figure}
 }
@@ -57,6 +57,6 @@ of figures. Other attributes are preserved}
 \begin{itemize}
 \tightlist
 \item
-  The filter does not currently process the markup within the
-  \texttt{short-caption} attribute value.
+  The filter will process the \texttt{short-caption} attribute value as
+  pandoc markdown, regardless of the input format.
 \end{itemize}
