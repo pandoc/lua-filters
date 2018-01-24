@@ -1,6 +1,3 @@
-
-local List = require 'pandoc.List'
-
 local M = {}
 local authors = {}
 
@@ -30,7 +27,7 @@ M.header_track_changes = [[
 ]]
 
 local function initials(s)
-    ignore = { -- list of words to ignore
+    local ignore = { -- list of words to ignore
         ['dr'] = true, ['mr'] = true, ['ms'] = true, ['mrs'] = true, ['prof'] = true,
         ['mx'] = true, ['sir'] = true,
     }
@@ -44,11 +41,10 @@ end
 
 local toTex = {["comment-start"] = "\\protect\\note", insertion = "\\added", deletion = "\\deleted"}
 
-function M.Span(elem)
+function M.TrackingSpanToTex(elem)
     if toTex[elem.classes[1]] ~= nil then
         local author = elem.attributes.author
-        local inits
-        if author:find(" ") then inits = initials(author) else inits = author end
+        local inits = author:find' ' and initials(author) or author
         authors[inits] = author
         local s = toTex[elem.classes[1]] .. '[id=' .. inits .. ']{' .. pandoc.utils.stringify(elem.content) .. '}'
         if elem.classes[1] == "comment-start" then
@@ -64,12 +60,10 @@ local function pairsByKeys(t, f)
     local a = {}
     for n in pairs(t) do table.insert(a, n) end
     table.sort(a, f)
-    local i = 0      -- iterator variable
-    local iter = function ()   -- iterator function
+    local i = 0
+    local iter = function ()
       i = i + 1
-      if a[i] == nil then return nil
-      else return a[i], t[a[i]]
-      end
+      return a[i], t[a[i]]
     end
     return iter
 end
@@ -95,7 +89,7 @@ function M.add_track_changes(meta)
 end
 
 M[1] = {
-    Span = M.Span,
+    Span = M.TrackingSpanToTex,
     Meta = is_tex(FORMAT) and M.add_track_changes or nil
 }
 
