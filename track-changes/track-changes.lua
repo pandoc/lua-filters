@@ -128,6 +128,9 @@ function M.TrackingSpanToHtml(elem)
             s = s .. ' ' .. hattr .. '="' .. v .. '"'
         end
         if elem.classes[1] == "comment-start" then
+            if elem.identifier then
+                s = s .. ' data-id="' .. elem.identifier .. '"'
+            end
             s = s .. ' title="' .. pandoc.utils.stringify(pandoc.walk_inline(elem, relinerHtml)) .. '">'
         else
             s = s .. '>' .. pandoc.utils.stringify(elem.content) .. '</' .. toHtml[elem.classes[1]] .. '>'
