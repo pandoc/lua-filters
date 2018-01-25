@@ -21,6 +21,8 @@ This is a new paragraph.
 
 And so is this.
 
+One more.
+
 A header with a comment {#a-header-with-a-notecomment}
 =======================
 

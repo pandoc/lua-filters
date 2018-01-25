@@ -20,7 +20,7 @@ M.header_track_changes = [[
 \usepackage[textsize=scriptsize]{todonotes}
 \setlength{\marginparwidth}{3cm}
 \makeatletter
-\setremarkmarkup{\todo[color=Changes@Color#1!20]{\textbf{#1:}~#2}}
+\setremarkmarkup{\todo[color=Changes@Color#1!20]{\sffamily\textbf{#1:}~#2}}
 \makeatother
 \newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
 \newcommand\hlnotesingle{%
@@ -47,6 +47,22 @@ local function initials(s)
     return table.concat(ans)
 end
 
+relinerHtml = {
+    Str = function (s)
+        if s.text == "¶" then
+            return pandoc.Str('&#10;')
+        end
+    end
+}
+
+relinerTex = {
+    Str = function (s)
+        if s.text == "¶" then
+            return pandoc.Str('\\newline')
+        end
+    end
+}
+
 local toTex = {["comment-start"] = "\\protect\\note", insertion = "\\added", deletion = "\\deleted"}
 
 function M.TrackingSpanToTex(elem)
@@ -54,9 +70,11 @@ function M.TrackingSpanToTex(elem)
         local author = elem.attributes.author
         local inits = author:find' ' and initials(author) or author
         authors[inits] = author
-        local s = toTex[elem.classes[1]] .. '[id=' .. inits .. ']{' .. pandoc.utils.stringify(elem.content) .. '}'
+        local s = toTex[elem.classes[1]] .. '[id=' .. inits .. ']{'
         if elem.classes[1] == "comment-start" then
-            s = s .. '\\protect\\hl{'
+            s = s .. pandoc.utils.stringify(pandoc.walk_inline(elem, relinerTex)) .. '}\\protect\\hl{'
+        else
+            s = s .. pandoc.utils.stringify(elem.content) .. '}'
         end
         return pandoc.RawInline('latex', s)
     elseif elem.classes[1] == "comment-end" then
@@ -103,14 +121,14 @@ function M.TrackingSpanToHtml(elem)
         local author = elem.attributes.author
         local inits = author:find' ' and initials(author) or author
         authors[inits] = author
-        local s = '<' .. toHtml[elem.classes[1]] -- .. ' date="' .. elem.attributes.date .. '" data-author="' .. elem.attributes.author
+        local s = '<' .. toHtml[elem.classes[1]]
         for k,v in pairs(elem.attributes) do
             local hattr = k
             if hattr ~= 'date' then hattr = 'data-' .. hattr end
             s = s .. ' ' .. hattr .. '="' .. v .. '"'
         end
         if elem.classes[1] == "comment-start" then
-            s = s .. ' title="' .. pandoc.utils.stringify(elem.content) .. '">'
+            s = s .. ' title="' .. pandoc.utils.stringify(pandoc.walk_inline(elem, relinerHtml)) .. '">'
         else
             s = s .. '>' .. pandoc.utils.stringify(elem.content) .. '</' .. toHtml[elem.classes[1]] .. '>'
         end
