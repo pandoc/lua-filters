@@ -5,6 +5,10 @@ local function is_tex(format)
     return format == 'latex' or format == 'tex' or format == 'context'
 end
 
+local function is_html (format)
+    return format == 'html' or format == 'html4' or format == 'html5'
+end
+
 M.header_track_changes = [[
 \usepackage[markup=underlined,authormarkup=none]{changes}
 \definecolor{auth1}{HTML}{4477AA}
@@ -92,11 +96,65 @@ function M.add_track_changes(meta)
     return meta
 end
 
-if is_tex(FORMAT) then
-    M[1] = {
-        Span = M.TrackingSpanToTex,
-        Meta = M.add_track_changes
-    }
+local toHtml = {["comment-start"] = "mark", insertion = "ins", deletion = "del"}
+
+function M.TrackingSpanToHtml(elem)
+    if toHtml[elem.classes[1]] ~= nil then
+        local author = elem.attributes.author
+        local inits = author:find' ' and initials(author) or author
+        authors[inits] = author
+        local s = '<' .. toHtml[elem.classes[1]] -- .. ' date="' .. elem.attributes.date .. '" data-author="' .. elem.attributes.author
+        for k,v in pairs(elem.attributes) do
+            local hattr = k
+            if hattr ~= 'date' then hattr = 'data-' .. hattr end
+            s = s .. ' ' .. hattr .. '="' .. v .. '"'
+        end
+        if elem.classes[1] == "comment-start" then
+            s = s .. ' title="' .. pandoc.utils.stringify(elem.content) .. '">'
+        else
+            s = s .. '>' .. pandoc.utils.stringify(elem.content) .. '</' .. toHtml[elem.classes[1]] .. '>'
+        end
+        return pandoc.RawInline('html', s)
+    elseif elem.classes[1] == "comment-end" then
+        return pandoc.RawInline('html', '</mark>')
+    end
+end
+
+function M.SpanAcceptChanges(elem)
+    if elem.classes[1] == "comment-start" or elem.classes[1] == "comment-end" then
+        return {}
+    elseif elem.classes[1] == "insertion" then
+        return elem.content
+    elseif elem.classes[1] == "deletion" then
+        return {}
+    end
+end
+
+function M.SpanRejectChanges(elem)
+    if elem.classes[1] == "comment-start" or elem.classes[1] == "comment-end" then
+        return {}
+    elseif elem.classes[1] == "insertion" then
+        return {}
+    elseif elem.classes[1] == "deletion" then
+        return elem.content
+    end
+end
+
+if PANDOC_READER_OPTIONS.trackChanges == 'AcceptChanges' then
+    M[1] = { Span = M.SpanAcceptChanges }
+elseif PANDOC_READER_OPTIONS.trackChanges == 'RejectChanges' then
+    M[1] = { Span = M.SpanRejectChanges }
+else -- assumes AllChanges
+    if is_html(FORMAT) then
+        M[1] = {
+            Span = M.TrackingSpanToHtml
+        }
+    elseif is_tex(FORMAT) then
+        M[1] = {
+            Span = M.TrackingSpanToTex,
+            Meta = M.add_track_changes
+        }
+    end
 end
 
 return M

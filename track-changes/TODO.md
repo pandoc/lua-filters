@@ -7,6 +7,6 @@
 - [ ] treat comments with multiple paragraphs (see [#4270](https://github.com/jgm/pandoc/issues/4270))
 - [ ] color comments with authors color
 - [ ] docx sample
-- [ ] `PANDOC_READER_OPTIONS.trackChanges`
+- [x] `PANDOC_READER_OPTIONS.trackChanges`
 - [x] HTML support with `<ins>`, `<del>` (requested with jgm/pandoc#1560) and `<mark>` with title attribute or spans with CSS
 - [ ] HTML track changes decorations like explaind at [Comparing and contrasting ins, del, and s](http://html5doctor.com/ins-del-s)

@@ -1,8 +1,8 @@
 ---
-title: Track changes in LaTeX
+title: Track changes in LaTeX and HTML
 ...
 
-# Track changes in LaTeX
+# Track changes in LaTeX and HTML
 
 A [I agree!]{.comment-start id="1" author="Mathias C. Walter" date="2016-05-21T22:14:00Z"}**simple**[]{.comment-end id="1"} comment from me.
 

@@ -1,9 +1,9 @@
 ---
-title: Track changes in LaTeX
+title: Track changes in LaTeX and HTML
 ---
 
-Track changes in LaTeX
-======================
+Track changes in LaTeX and HTML
+===============================
 
 A **simple** comment from me.
 
