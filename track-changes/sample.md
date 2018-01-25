@@ -16,6 +16,12 @@ This is/was a text with a [*short*]{.deletion author="SWS" date="2014-06-25T10:4
 
 Here is a [Why?]{.comment-start id="2" author="JFK" date="2016-07-29T16:50:00Z"}com[m]{.insertion author="SWS" date="2016-07-29T16:50:00Z"}ent with nest[t]{.deletion author="FKA" date="2016-04-16T08:20:00Z"}ed changes[]{.comment-end id="2"}.
 
+Here is a multi-line paragraph containing some text and a long deletion [short insertion]{.deletion author="MCW" date="2016-04-16T08:20:00Z"} wrapping over two lines.
+
+This is [A comment across paragraphs.]{.comment-start id="4" author="MCW" date="2016-05-09T16:13:00Z"}a new paragraph.
+
+And so[]{.comment-end id="4"} is this.
+
 # A header with a [Note]{.comment-start id="3" author="Mathias F. Walter" date="2017-08-24T22:14:00Z"}comment[]{.comment-end id="3"}
 
 Some unmodified text.

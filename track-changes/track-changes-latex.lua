@@ -19,11 +19,15 @@ M.header_track_changes = [[
 \setremarkmarkup{\todo[color=Changes@Color#1!20]{\textbf{#1:}~#2}}
 \makeatother
 \newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
-\newcommand\hl{%
+\newcommand\hlnotesingle{%
   \bgroup
   \expandafter\def\csname sout\space\endcsname{\bgroup \ULdepth =-.8ex \ULset}%
   \markoverwith{\textcolor{yellow}{\rule[-.5ex]{.1pt}{2.5ex}}}%
   \ULon}
+\newcommand\hl[1]{\let\helpcmd\hlnotesingle\parhelp#1\par\relax\relax}
+\long\def\parhelp#1\par#2\relax{%
+  \helpcmd{#1}\ifx\relax#2\else\par\parhelp#2\relax\fi%
+}
 ]]
 
 local function initials(s)
@@ -88,9 +92,11 @@ function M.add_track_changes(meta)
     return meta
 end
 
-M[1] = {
-    Span = M.TrackingSpanToTex,
-    Meta = is_tex(FORMAT) and M.add_track_changes or nil
-}
+if is_tex(FORMAT) then
+    M[1] = {
+        Span = M.TrackingSpanToTex,
+        Meta = M.add_track_changes
+    }
+end
 
 return M

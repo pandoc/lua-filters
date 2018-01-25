@@ -65,11 +65,15 @@
 \setremarkmarkup{\todo[color=Changes@Color#1!20]{\textbf{#1:}~#2}}
 \makeatother
 \newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
-\newcommand\hl{%
+\newcommand\hlnotesingle{%
   \bgroup
   \expandafter\def\csname sout\space\endcsname{\bgroup \ULdepth =-.8ex \ULset}%
   \markoverwith{\textcolor{yellow}{\rule[-.5ex]{.1pt}{2.5ex}}}%
   \ULon}
+\newcommand\hl[1]{\let\helpcmd\hlnotesingle\parhelp#1\par\relax\relax}
+\long\def\parhelp#1\par#2\relax{%
+  \helpcmd{#1}\ifx\relax#2\else\par\parhelp#2\relax\fi%
+}
 \definechangesauthor[name={FKA}, color=auth1]{FKA}
 \definechangesauthor[name={JFK}, color=auth2]{JFK}
 \definechangesauthor[name={MCW}, color=auth3]{MCW}
@@ -85,8 +89,7 @@
 \hypertarget{track-changes-in-latex}{%
 \section{Track changes in LaTeX}\label{track-changes-in-latex}}
 
-A \protect\note[id=MCW]{I agree!}\protect\hl{\textbf{simple}} comment
-from me.
+A \protect\note[id=MCW]{I agree!}\protect\hl{\textbf{simple}} comment from me.
 
 This is a text with \added[id=MCW]{an exciting} insertion.
 
@@ -96,12 +99,16 @@ This is/was a text with a \deleted[id=SWS]{short} deletion.
 
 \deleted[id=JFK]{Here is the text to be moved.}
 
-Here is a \protect\note[id=JFK]{Why?}\protect\hl{com\added[id=SWS]{m}ent
-with nest\deleted[id=FKA]{t}ed changes}.
+Here is a \protect\note[id=JFK]{Why?}\protect\hl{com\added[id=SWS]{m}ent with nest\deleted[id=FKA]{t}ed changes}.
+
+Here is a multi-line paragraph containing some text and a long deletion \deleted[id=MCW]{short insertion} wrapping over two lines.
+
+This is \protect\note[id=MCW]{A comment across paragraphs.}\protect\hl{a new paragraph.
+
+And so} is this.
 
 \hypertarget{a-header-with-a-notecomment}{%
-\section{\texorpdfstring{A header with a
-\protect\note[id=MFW]{Note}\protect\hl{comment}}{A header with a comment}}\label{a-header-with-a-notecomment}}
+\section{\texorpdfstring{A header with a \protect\note[id=MFW]{Note}\protect\hl{comment}}{A header with a comment}}\label{a-header-with-a-notecomment}}
 
 Some unmodified text.
 
