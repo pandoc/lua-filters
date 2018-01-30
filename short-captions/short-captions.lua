@@ -8,8 +8,8 @@ if FORMAT == "latex" then
       if (#figure.content == 1) and (figure.content[1].t == 'Image')  and (figure.content[1].title == "fig:") then
          local img = figure.content[1]
          if img.caption and img.attributes['short-caption'] then
-            local caption_cmd = string.format('\n\\caption[%s]',img.attributes['short-caption'])
-            local hypertarget = latex("{%%\n")
+            local short_caption = pandoc.Span(pandoc.read(img.attributes['short-caption']).blocks[1].c)
+            local hypertarget = "{%%\n"
             local label = "\n"
             if img.identifier ~= img.title then
                hypertarget = string.format("\\hypertarget{%s}{%%\n",img.identifier)
@@ -18,8 +18,7 @@ if FORMAT == "latex" then
             return pandoc.Para {
                latex(hypertarget .. "\\begin{figure}\n\\centering\n"),
                img,
-               latex(caption_cmd),
-               pandoc.Span(img.caption),
+               latex("\n\\caption["), short_caption, latex("]"), pandoc.Span(img.caption),
                latex(label .."\n\\end{figure}\n}\n")
             }
          end
