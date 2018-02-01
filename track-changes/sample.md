@@ -1,5 +1,6 @@
 ---
 title: Track changes in LaTeX and HTML
+#trackChanges: reject
 ...
 
 # Track changes in LaTeX and HTML
@@ -22,7 +23,7 @@ This is [A comment across paragraphs.]{.comment-start id="4" author="MCW" date="
 
 And so[]{.comment-end id="4"} is this.
 
-One [This one has multiple paragraphs. ¶ See?]{.comment-start id="5" author="Jesse Rosenthal" date="2016-05-09T16:14:00Z"}more[]{.comment-end id="5"}.
+One [This one has multiple paragraphs. ¶ ¶ See?]{.comment-start id="5" author="Jesse Rosenthal" date="2016-05-09T16:14:00Z"}more[]{.comment-end id="5"}.
 
 # A header with a [Note]{.comment-start id="3" author="Mathias F. Walter" date="2017-08-24T22:14:00Z"}comment[]{.comment-end id="3"}
 

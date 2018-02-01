@@ -1,4 +1,3 @@
-local M = {}
 local authors = {}
 
 local function is_tex(format)
@@ -9,7 +8,7 @@ local function is_html (format)
     return format == 'html' or format == 'html4' or format == 'html5'
 end
 
-M.header_track_changes = [[
+header_track_changes = [[
 \usepackage[markup=underlined,authormarkup=none]{changes}
 \definecolor{auth1}{HTML}{4477AA}
 \definecolor{auth2}{HTML}{117733}
@@ -65,7 +64,7 @@ relinerTex = {
 
 local toTex = {["comment-start"] = "\\protect\\note", insertion = "\\added", deletion = "\\deleted"}
 
-function M.TrackingSpanToTex(elem)
+local function TrackingSpanToTex(elem)
     if toTex[elem.classes[1]] ~= nil then
         local author = elem.attributes.author
         local inits = author:find' ' and initials(author) or author
@@ -95,7 +94,7 @@ local function pairsByKeys(t, f)
 end
 
 --- Add packages to the header includes.
-function M.add_track_changes(meta)
+local function add_track_changes(meta)
     local header_includes
     if meta['header-includes'] and meta['header-includes'].t == 'MetaList' then
         header_includes = meta['header-includes']
@@ -103,7 +102,7 @@ function M.add_track_changes(meta)
         header_includes = pandoc.MetaList{meta.header_includes}
     end
     header_includes[#header_includes + 1] =
-        pandoc.MetaBlocks{pandoc.RawBlock('latex', M.header_track_changes)}
+        pandoc.MetaBlocks{pandoc.RawBlock('latex', header_track_changes)}
     local a = 1
     for key,value in pairsByKeys(authors) do -- sorted author list; otherwise make test may fail
         header_includes[#header_includes + 1] =
@@ -116,7 +115,7 @@ end
 
 local toHtml = {["comment-start"] = "mark", insertion = "ins", deletion = "del"}
 
-function M.TrackingSpanToHtml(elem)
+local function TrackingSpanToHtml(elem)
     if toHtml[elem.classes[1]] ~= nil then
         local author = elem.attributes.author
         local inits = author:find' ' and initials(author) or author
@@ -141,7 +140,7 @@ function M.TrackingSpanToHtml(elem)
     end
 end
 
-function M.SpanAcceptChanges(elem)
+local function SpanAcceptChanges(elem)
     if elem.classes[1] == "comment-start" or elem.classes[1] == "comment-end" then
         return {}
     elseif elem.classes[1] == "insertion" then
@@ -151,7 +150,7 @@ function M.SpanAcceptChanges(elem)
     end
 end
 
-function M.SpanRejectChanges(elem)
+local function SpanRejectChanges(elem)
     if elem.classes[1] == "comment-start" or elem.classes[1] == "comment-end" then
         return {}
     elseif elem.classes[1] == "insertion" then
@@ -161,21 +160,39 @@ function M.SpanRejectChanges(elem)
     end
 end
 
-if PANDOC_READER_OPTIONS.trackChanges == 'AcceptChanges' then
-    M[1] = { Span = M.SpanAcceptChanges }
-elseif PANDOC_READER_OPTIONS.trackChanges == 'RejectChanges' then
-    M[1] = { Span = M.SpanRejectChanges }
-else -- assumes AllChanges
-    if is_html(FORMAT) then
-        M[1] = {
-            Span = M.TrackingSpanToHtml
-        }
-    elseif is_tex(FORMAT) then
-        M[1] = {
-            Span = M.TrackingSpanToTex,
-            Meta = M.add_track_changes
-        }
+function Pandoc(doc)
+    local meta = doc.meta
+    local trackChangesOptions = {all = 'AllChanges', accept = 'AcceptChanges', reject = 'RejectChanges' }
+    local trackChanges = PANDOC_READER_OPTIONS and PANDOC_READER_OPTIONS.trackChanges
+        or meta and meta['trackChanges'] and (
+                type(meta['trackChanges']) == 'table' and trackChangesOptions[meta['trackChanges'][1].c] -- in case it is provided in a yaml block
+                or trackChangesOptions[meta['trackChanges']] -- in case it is provided at the command line as -M trackChanges:<value>
+        ) or 'AcceptChanges'
+    meta.trackChanges = nil -- remove it from the matadata
+
+    local M = {}
+    if trackChanges == 'AllChanges' then
+        if is_html(FORMAT) then
+            M[1] = {
+                Span = TrackingSpanToHtml
+            }
+        elseif is_tex(FORMAT) then
+            M[1] = {
+                Span = TrackingSpanToTex,
+                Meta = add_track_changes
+            }
+        end
+    elseif trackChanges == 'RejectChanges' then
+        M[1] = { Span = SpanRejectChanges }
+    else -- otherwise assumes AcceptChanges
+        M[1] = { Span = SpanAcceptChanges }
+    end
+
+    if M[1] then
+        local blocks = pandoc.walk_block(pandoc.Div(doc.blocks), M[1]).content
+        if trackChanges == 'AllChanges' and is_tex(FORMAT) then
+            meta = add_track_changes(meta)
+        end
+        return pandoc.Pandoc(blocks, meta)
     end
 end
-
-return M
