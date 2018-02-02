@@ -27,7 +27,7 @@ header_track_changes = [[
   \expandafter\def\csname sout\space\endcsname{\bgroup \ULdepth =-.8ex \ULset}%
   \markoverwith{\textcolor{yellow}{\rule[-.5ex]{.1pt}{2.5ex}}}%
   \ULon}
-\newcommand\hl[1]{\let\helpcmd\hlnotesingle\parhelp#1\par\relax\relax}
+\newcommand\hlnote[1]{\let\helpcmd\hlnotesingle\parhelp#1\par\relax\relax}
 \long\def\parhelp#1\par#2\relax{%
   \helpcmd{#1}\ifx\relax#2\else\par\parhelp#2\relax\fi%
 }
@@ -71,7 +71,7 @@ local function TrackingSpanToTex(elem)
         authors[inits] = author
         local s = toTex[elem.classes[1]] .. '[id=' .. inits .. ']{'
         if elem.classes[1] == "comment-start" then
-            s = s .. pandoc.utils.stringify(pandoc.walk_inline(elem, relinerTex)) .. '}\\protect\\hl{'
+            s = s .. pandoc.utils.stringify(pandoc.walk_inline(elem, relinerTex)) .. '}\\protect\\hlnote{'
         else
             s = s .. pandoc.utils.stringify(elem.content) .. '}'
         end
