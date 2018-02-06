@@ -163,13 +163,11 @@ end
 function Pandoc(doc)
     local meta = doc.meta
     local trackChangesOptions = {all = 'AllChanges', accept = 'AcceptChanges', reject = 'RejectChanges' }
-    local trackChanges = PANDOC_READER_OPTIONS and PANDOC_READER_OPTIONS.trackChanges
-        or meta and meta['trackChanges'] and (
-                type(meta['trackChanges']) == 'table' and trackChangesOptions[meta['trackChanges'][1].c] -- in case it is provided in a yaml block
-                or trackChangesOptions[meta['trackChanges']] -- in case it is provided at the command line as -M trackChanges:<value>
-        ) or 'AcceptChanges'
+    local tc = meta and meta['trackChanges']
+    tc = type(meta['trackChanges']) == 'table' and pandoc.utils.stringify(meta['trackChanges']) or meta['trackChanges'] or 'accept'
+    local trackChanges = PANDOC_READER_OPTIONS and PANDOC_READER_OPTIONS.trackChanges or trackChangesOptions[tc]
     meta.trackChanges = nil -- remove it from the matadata
-
+    
     local M = {}
     if trackChanges == 'AllChanges' then
         if is_html(FORMAT) then
