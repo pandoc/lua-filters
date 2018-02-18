@@ -5,7 +5,8 @@ lof: true
 
 # Short captions in \LaTeX\ output
 
-For latex output, this filter uses the attribute `short-caption` for figures so that the attribute value appears in the List of Figures, if one is desired. It does not work for tables and listings yet. But it works with pandoc-crossref, regardless of the order of application.
+For latex output, this filter uses the attribute `short-caption` for figures so that the attribute value appears in the List of Figures, if one is desired.
+
 
 
 # Usage
@@ -36,4 +37,5 @@ If the document metadata includes `lof:true`,  then the List of Figures will use
 # Limitations
 
 - The filter will process the `short-caption` attribute value as pandoc markdown, regardless of the input format.
-
+- It does not work for tables and listings yet.
+- But it works with pandoc-crossref, regardless of the order of application.
