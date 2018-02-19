@@ -7,8 +7,6 @@ lof: true
 
 For latex output, this filter uses the attribute `short-caption` for figures so that the attribute value appears in the List of Figures, if one is desired.
 
-
-
 # Usage
 
 Where you would have a figure in, say, markdown as 
