@@ -35,4 +35,5 @@ If the document metadata includes `lof:true`,  then the List of Figures will use
 # Limitations
 
 - The filter will process the `short-caption` attribute value as pandoc markdown, regardless of the input format.
-
+- It does not work for tables and listings yet.
+- But it works with pandoc-crossref, regardless of the order of application.
