@@ -5,8 +5,9 @@
 - [ ] implement `paragraph-insertion`, `paragraph-deletion`
 - [ ] implement multiple classes (see https://github.com/jgm/pandoc/issues/4270#issuecomment-358996343)
 - [x] treat comments with multiple paragraphs (see [#4270](https://github.com/jgm/pandoc/issues/4270))
-- [ ] track changes in chapter titles
+- [x] track changes in chapter titles
 - [ ] remove notes from automatic section identifiers
+- [ ] track changes in captions (figure, table, etc.)
 - [ ] color comments with authors color
 - [ ] docx sample
 - [x] `PANDOC_READER_OPTIONS.trackChanges`

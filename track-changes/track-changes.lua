@@ -31,6 +31,26 @@ header_track_changes = [[
 \long\def\parhelp#1\par#2\relax{%
   \helpcmd{#1}\ifx\relax#2\else\par\parhelp#2\relax\fi%
 }
+
+\makeatletter
+\newcommand\ifmoving{%
+  \ifx\protect\@unexpandable@protect
+      \expandafter\@firstoftwo
+  \else
+      \expandafter\@secondoftwo
+  \fi
+}
+
+\let\oldadded\added
+\let\oldhlnote\hlnote
+\let\oldtodo\todo
+\let\oldtexorpdfstring\texorpdfstring
+% If you used \DeclareRobustCommand or \protected\def it would not work.
+\renewcommand{\added}{\ifmoving{\@gobble}{\oldadded}}
+\renewcommand\hlnote{\ifmoving{}{\oldhlnote}}
+\renewcommand{\texorpdfstring}{\ifmoving{\@gobble}{\oldtexorpdfstring}}
+\renewcommand{\todo}{\ifmoving{\@gobble}{\oldtodo}}
+\makeatother
 ]]
 
 local function initials(s)
@@ -62,7 +82,7 @@ relinerTex = {
     end
 }
 
-local toTex = {["comment-start"] = "\\protect\\note", insertion = "\\added", deletion = "\\deleted"}
+local toTex = {["comment-start"] = "\\note", insertion = "\\added", deletion = "\\deleted"}
 
 local function TrackingSpanToTex(elem)
     if toTex[elem.classes[1]] ~= nil then
@@ -71,7 +91,7 @@ local function TrackingSpanToTex(elem)
         authors[inits] = author
         local s = toTex[elem.classes[1]] .. '[id=' .. inits .. ']{'
         if elem.classes[1] == "comment-start" then
-            s = s .. pandoc.utils.stringify(pandoc.walk_inline(elem, relinerTex)) .. '}\\protect\\hlnote{'
+            s = s .. pandoc.utils.stringify(pandoc.walk_inline(elem, relinerTex)) .. '}\\hlnote{'
         else
             s = s .. pandoc.utils.stringify(elem.content) .. '}'
         end
@@ -99,7 +119,7 @@ local function add_track_changes(meta)
     if meta['header-includes'] and meta['header-includes'].t == 'MetaList' then
         header_includes = meta['header-includes']
     else
-        header_includes = pandoc.MetaList{meta.header_includes}
+        header_includes = pandoc.MetaList{meta['header-includes']}
     end
     header_includes[#header_includes + 1] =
         pandoc.MetaBlocks{pandoc.RawBlock('latex', header_track_changes)}
@@ -177,7 +197,6 @@ function Pandoc(doc)
         elseif is_tex(FORMAT) then
             M[1] = {
                 Span = TrackingSpanToTex,
-                Meta = add_track_changes
             }
         end
     elseif trackChanges == 'RejectChanges' then

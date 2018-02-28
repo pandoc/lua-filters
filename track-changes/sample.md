@@ -1,6 +1,14 @@
 ---
 title: Track changes in LaTeX and HTML
 #trackChanges: reject
+toc: true
+header-includes: |
+  ```{=latex}
+  \usepackage{fancyhdr}
+  \pagestyle{fancy}
+  \fancyhf{}
+  \fancyhead[C]{\leftmark}
+  ```
 ...
 
 # Track changes in LaTeX and HTML
@@ -27,4 +35,8 @@ One [This one has multiple paragraphs. ¶ ¶ See?]{.comment-start id="5" author=
 
 # A header with a [Note]{.comment-start id="3" author="Mathias F. Walter" date="2017-08-24T22:14:00Z"}comment[]{.comment-end id="3"}
 
-Some unmodified text.
+Some unmodified text ...
+
+\newpage
+
+... continued from previous page just to test page headers in supporting formats (LaTeX, DOCX, etc.).

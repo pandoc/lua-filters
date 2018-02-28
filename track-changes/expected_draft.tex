@@ -52,6 +52,10 @@
 \def\fps@figure{htbp}
 \makeatother
 
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\leftmark}
 \usepackage[markup=underlined,authormarkup=none]{changes}
 \definecolor{auth1}{HTML}{4477AA}
 \definecolor{auth2}{HTML}{117733}
@@ -74,6 +78,26 @@
 \long\def\parhelp#1\par#2\relax{%
   \helpcmd{#1}\ifx\relax#2\else\par\parhelp#2\relax\fi%
 }
+
+\makeatletter
+\newcommand\ifmoving{%
+  \ifx\protect\@unexpandable@protect
+      \expandafter\@firstoftwo
+  \else
+      \expandafter\@secondoftwo
+  \fi
+}
+
+\let\oldadded\added
+\let\oldhlnote\hlnote
+\let\oldtodo\todo
+\let\oldtexorpdfstring\texorpdfstring
+% If you used \DeclareRobustCommand or \protected\def it would not work.
+\renewcommand{\added}{\ifmoving{\@gobble}{\oldadded}}
+\renewcommand\hlnote{\ifmoving{}{\oldhlnote}}
+\renewcommand{\texorpdfstring}{\ifmoving{\@gobble}{\oldtexorpdfstring}}
+\renewcommand{\todo}{\ifmoving{\@gobble}{\oldtodo}}
+\makeatother
 \definechangesauthor[name={FKA}, color=auth1]{FKA}
 \definechangesauthor[name={JFK}, color=auth2]{JFK}
 \definechangesauthor[name={Jesse Rosenthal}, color=auth3]{JR}
@@ -87,10 +111,14 @@
 \begin{document}
 \maketitle
 
+{
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
 \hypertarget{track-changes-in-latex-and-html}{%
 \section{Track changes in LaTeX and HTML}\label{track-changes-in-latex-and-html}}
 
-A \protect\note[id=MCW]{I agree!}\protect\hlnote{\textbf{simple}} comment from me.
+A \note[id=MCW]{I agree!}\hlnote{\textbf{simple}} comment from me.
 
 This is a text with \added[id=MCW]{an exciting} insertion.
 
@@ -100,19 +128,23 @@ This is/was a text with a \deleted[id=SWS]{short} deletion.
 
 \deleted[id=JFK]{Here is the text to be moved.}
 
-Here is a \protect\note[id=JFK]{Why?}\protect\hlnote{com\added[id=SWS]{m}ent with nest\deleted[id=FKA]{t}ed changes}.
+Here is a \note[id=JFK]{Why?}\hlnote{com\added[id=SWS]{m}ent with nest\deleted[id=FKA]{t}ed changes}.
 
 Here is a multi-line paragraph containing some text and a long deletion \deleted[id=MCW]{short insertion} wrapping over two lines.
 
-This is \protect\note[id=MCW]{A comment across paragraphs.}\protect\hlnote{a new paragraph.
+This is \note[id=MCW]{A comment across paragraphs.}\hlnote{a new paragraph.
 
 And so} is this.
 
-One \protect\note[id=JR]{This one has multiple paragraphs. \newline \newline See?}\protect\hlnote{more}.
+One \note[id=JR]{This one has multiple paragraphs. \newline \newline See?}\hlnote{more}.
 
 \hypertarget{a-header-with-a-notecomment}{%
-\section{\texorpdfstring{A header with a \protect\note[id=MFW]{Note}\protect\hlnote{comment}}{A header with a comment}}\label{a-header-with-a-notecomment}}
+\section{\texorpdfstring{A header with a \note[id=MFW]{Note}\hlnote{comment}}{A header with a comment}}\label{a-header-with-a-notecomment}}
 
-Some unmodified text.
+Some unmodified text \ldots{}
+
+\newpage
+
+\ldots{} continued from previous page just to test page headers in supporting formats (LaTeX, DOCX, etc.).
 
 \end{document}

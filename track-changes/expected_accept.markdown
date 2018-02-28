@@ -1,7 +1,3 @@
----
-title: Track changes in LaTeX and HTML
----
-
 Track changes in LaTeX and HTML
 ===============================
 
@@ -26,4 +22,7 @@ One more.
 A header with a comment {#a-header-with-a-notecomment}
 =======================
 
-Some unmodified text.
+Some unmodified text ...
+
+\newpage
+... continued from previous page just to test page headers in supporting formats (LaTeX, DOCX, etc.).
