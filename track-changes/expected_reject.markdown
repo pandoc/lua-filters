@@ -19,8 +19,8 @@ And so is this.
 
 One more.
 
-A header with a comment {#a-header-with-a-notecomment}
-=======================
+A *header* width  comment {#a-header-width-a-notecomment}
+========================
 
 Some unmodified text ...
 

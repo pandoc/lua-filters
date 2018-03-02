@@ -6,7 +6,7 @@
 - [ ] implement multiple classes (see https://github.com/jgm/pandoc/issues/4270#issuecomment-358996343)
 - [x] treat comments with multiple paragraphs (see [#4270](https://github.com/jgm/pandoc/issues/4270))
 - [x] track changes in chapter titles
-- [ ] remove notes from automatic section identifiers
+- [ ] remove track changes from automatic section identifiers
 - [ ] track changes in captions (figure, table, etc.)
 - [ ] color comments with authors color
 - [ ] docx sample

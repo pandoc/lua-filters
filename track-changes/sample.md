@@ -4,6 +4,8 @@ title: Track changes in LaTeX and HTML
 toc: true
 header-includes: |
   ```{=latex}
+  \RequirePackage[debrief]{silence}
+  \ErrorsOff
   \usepackage{fancyhdr}
   \pagestyle{fancy}
   \fancyhf{}
@@ -33,7 +35,7 @@ And so[]{.comment-end id="4"} is this.
 
 One [This one has multiple paragraphs. ¶ ¶ See?]{.comment-start id="5" author="Jesse Rosenthal" date="2016-05-09T16:14:00Z"}more[]{.comment-end id="5"}.
 
-# A header with a [Note]{.comment-start id="3" author="Mathias F. Walter" date="2017-08-24T22:14:00Z"}comment[]{.comment-end id="3"}
+# A *header* wi[d]{.deletion author="FKA" date="2018-03-02T23:07:00Z"}th [a]{.insertion author="JFK" date="2018-03-02T23:07:00Z"} [Note]{.comment-start id="3" author="FKA" date="2017-08-24T22:14:00Z"}comment[]{.comment-end id="3"}
 
 Some unmodified text ...
 

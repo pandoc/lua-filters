@@ -52,6 +52,8 @@
 \def\fps@figure{htbp}
 \makeatother
 
+\RequirePackage[debrief]{silence}
+\ErrorsOff
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
@@ -88,22 +90,23 @@
   \fi
 }
 
+\newcommand{\gobbletwo}[2][]{\@bsphack\@esphack}
+\newcommand{\gobbleone}[1][]{\@bsphack\@esphack}
+
 \let\oldadded\added
+\let\olddeleted\deleted
 \let\oldhlnote\hlnote
-\let\oldtodo\todo
-\let\oldtexorpdfstring\texorpdfstring
-% If you used \DeclareRobustCommand or \protected\def it would not work.
-\renewcommand{\added}{\ifmoving{\@gobble}{\oldadded}}
-\renewcommand\hlnote{\ifmoving{}{\oldhlnote}}
-\renewcommand{\texorpdfstring}{\ifmoving{\@gobble}{\oldtexorpdfstring}}
-\renewcommand{\todo}{\ifmoving{\@gobble}{\oldtodo}}
+\let\oldnote\note
+\renewcommand{\added}{\ifmoving{\gobbleone}{\oldadded}}
+\renewcommand{\deleted}{\ifmoving{\gobbletwo}{\olddeleted}}
+\renewcommand{\hlnote}{\ifmoving{}{\oldhlnote}}
+\renewcommand{\note}{\ifmoving{\gobbletwo}{\oldnote}}
 \makeatother
 \definechangesauthor[name={FKA}, color=auth1]{FKA}
 \definechangesauthor[name={JFK}, color=auth2]{JFK}
 \definechangesauthor[name={Jesse Rosenthal}, color=auth3]{JR}
 \definechangesauthor[name={MCW}, color=auth4]{MCW}
-\definechangesauthor[name={Mathias F. Walter}, color=auth5]{MFW}
-\definechangesauthor[name={SWS}, color=auth6]{SWS}
+\definechangesauthor[name={SWS}, color=auth5]{SWS}
 
 \title{Track changes in LaTeX and HTML}
 \date{}
@@ -138,8 +141,8 @@ And so} is this.
 
 One \note[id=JR]{This one has multiple paragraphs. \newline \newline See?}\hlnote{more}.
 
-\hypertarget{a-header-with-a-notecomment}{%
-\section{\texorpdfstring{A header with a \note[id=MFW]{Note}\hlnote{comment}}{A header with a comment}}\label{a-header-with-a-notecomment}}
+\hypertarget{a-header-width-a-notecomment}{%
+\section{\texorpdfstring{A \emph{header} wi\deleted[id=FKA]{d}th \added[id=JFK]{a} \note[id=FKA]{Note}\hlnote{comment}}{A header with  comment}}\label{a-header-width-a-notecomment}}
 
 Some unmodified text \ldots{}
 

@@ -41,15 +41,17 @@ header_track_changes = [[
   \fi
 }
 
+\newcommand{\gobbletwo}[2][]{\@bsphack\@esphack}
+\newcommand{\gobbleone}[1][]{\@bsphack\@esphack}
+
 \let\oldadded\added
+\let\olddeleted\deleted
 \let\oldhlnote\hlnote
-\let\oldtodo\todo
-\let\oldtexorpdfstring\texorpdfstring
-% If you used \DeclareRobustCommand or \protected\def it would not work.
-\renewcommand{\added}{\ifmoving{\@gobble}{\oldadded}}
-\renewcommand\hlnote{\ifmoving{}{\oldhlnote}}
-\renewcommand{\texorpdfstring}{\ifmoving{\@gobble}{\oldtexorpdfstring}}
-\renewcommand{\todo}{\ifmoving{\@gobble}{\oldtodo}}
+\let\oldnote\note
+\renewcommand{\added}{\ifmoving{\gobbleone}{\oldadded}}
+\renewcommand{\deleted}{\ifmoving{\gobbletwo}{\olddeleted}}
+\renewcommand{\hlnote}{\ifmoving{}{\oldhlnote}}
+\renewcommand{\note}{\ifmoving{\gobbletwo}{\oldnote}}
 \makeatother
 ]]
 
