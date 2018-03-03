@@ -74,10 +74,10 @@ M.css_styles = [[
 --- Add task-list CSS styles to the header.
 function M.add_task_list_css(meta)
   local header_includes
-  if meta['header-includes'] and meta['header-includes'].t ~= 'MetaList' then
+  if meta['header-includes'] and meta['header-includes'].t == 'MetaList' then
     header_includes = meta['header-includes']
   else
-    header_includes = pandoc.MetaList{meta.header_includes}
+    header_includes = pandoc.MetaList{meta['header-includes']}
   end
   header_includes[#header_includes + 1] =
     pandoc.MetaBlocks{pandoc.RawBlock('html', M.css_styles)}
