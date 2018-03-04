@@ -111,13 +111,13 @@ local function TrackingSpanToTex(elem)
         local inits = author:find' ' and initials(author) or author
         authors[inits] = author
         local s = toTex[elem.classes[1]] .. '[id=' .. inits .. ']{'
-        if elem.classes[1] == "comment-start" then
+        if elem.classes:includes("comment-start") then
             s = s .. pandoc.utils.stringify(pandoc.walk_inline(elem, relinerTex)) .. '}\\hlnote{'
         else
             s = s .. pandoc.utils.stringify(elem.content) .. '}'
         end
         return pandoc.RawInline('latex', s)
-    elseif elem.classes[1] == "comment-end" then
+    elseif elem.classes:includes("comment-end") then
         return pandoc.RawInline('latex', '}')
     end
 end
@@ -167,7 +167,7 @@ local function TrackingSpanToHtml(elem)
             if hattr ~= 'date' then hattr = 'data-' .. hattr end
             s = s .. ' ' .. hattr .. '="' .. v .. '"'
         end
-        if elem.classes[1] == "comment-start" then
+        if elem.classes:includes("comment-start") then
             if elem.identifier then
                 s = s .. ' data-id="' .. elem.identifier .. '"'
             end
@@ -176,27 +176,27 @@ local function TrackingSpanToHtml(elem)
             s = s .. '>' .. pandoc.utils.stringify(elem.content) .. '</' .. toHtml[elem.classes[1]] .. '>'
         end
         return pandoc.RawInline('html', s)
-    elseif elem.classes[1] == "comment-end" then
+    elseif elem.classes:includes("comment-end") then
         return pandoc.RawInline('html', '</mark>')
     end
 end
 
 local function SpanAcceptChanges(elem)
-    if elem.classes[1] == "comment-start" or elem.classes[1] == "comment-end" then
+    if elem.classes:includes("comment-start") or elem.classes:includes("comment-end") then
         return {}
-    elseif elem.classes[1] == "insertion" then
+    elseif elem.classes:includes("insertion") then
         return elem.content
-    elseif elem.classes[1] == "deletion" then
+    elseif elem.classes:includes("deletion") then
         return {}
     end
 end
 
 local function SpanRejectChanges(elem)
-    if elem.classes[1] == "comment-start" or elem.classes[1] == "comment-end" then
+    if elem.classes:includes("comment-start") or elem.classes:includes("comment-end") then
         return {}
-    elseif elem.classes[1] == "insertion" then
+    elseif elem.classes:includes("insertion") then
         return {}
-    elseif elem.classes[1] == "deletion" then
+    elseif elem.classes:includes("deletion") then
         return elem.content
     end
 end
