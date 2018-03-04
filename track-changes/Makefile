@@ -1,4 +1,7 @@
-.PHONY: test
+.PHONY: test sampe
+
+sample:
+	@pandoc -t docx --wrap=preserve --track-changes=all -M trackChanges:all --lua-filter=track-changes.lua sample.md -o sample.docx
 
 test:
 	@pandoc -t markdown --wrap=preserve --lua-filter=track-changes.lua sample.md | diff --strip-trailing-cr -u - expected_accept.markdown
