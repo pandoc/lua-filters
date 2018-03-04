@@ -8,6 +8,10 @@ local function is_html (format)
     return format == 'html' or format == 'html4' or format == 'html5'
 end
 
+local function is_wordprocessing (format)
+    return format == 'docx' or format == 'odt'
+end
+
 header_track_changes = [[
 \usepackage[markup=underlined,authormarkup=none]{changes}
 \definecolor{auth1}{HTML}{4477AA}
@@ -83,6 +87,21 @@ relinerTex = {
         end
     end
 }
+
+reliner = {
+    Str = function (s)
+        if s.text == "¶" then
+           return pandoc.LineBreak()
+        end
+    end
+}
+
+function SpanReliner(elem)
+    local classes = elem.classes or elem.attr.classes
+    if classes:includes("comment-start") then
+        return pandoc.walk_inline(elem, reliner)
+    end
+end
 
 local toTex = {["comment-start"] = "\\note", insertion = "\\added", deletion = "\\deleted"}
 
@@ -193,22 +212,27 @@ function Pandoc(doc)
     local M = {}
     if trackChanges == 'AllChanges' then
         if is_html(FORMAT) then
-            M[1] = {
+            M[#M + 1] = {
                 Span = TrackingSpanToHtml
             }
         elseif is_tex(FORMAT) then
-            M[1] = {
+            M[#M + 1] = {
                 Span = TrackingSpanToTex,
             }
+        elseif is_wordprocessing(FORMAT) then
+            M[#M + 1] = { Span = SpanReliner }
         end
     elseif trackChanges == 'RejectChanges' then
-        M[1] = { Span = SpanRejectChanges }
+        M[#M + 1] = { Span = SpanRejectChanges }
     else -- otherwise assumes AcceptChanges
-        M[1] = { Span = SpanAcceptChanges }
+        M[#M + 1] = { Span = SpanAcceptChanges }
     end
 
-    if M[1] then
-        local blocks = pandoc.walk_block(pandoc.Div(doc.blocks), M[1]).content
+    if #M then
+        local blocks = doc.blocks
+        for i = 1, #M do
+            blocks = pandoc.walk_block(pandoc.Div(blocks), M[i]).content
+        end
         if trackChanges == 'AllChanges' and is_tex(FORMAT) then
             meta = add_track_changes(meta)
         end
