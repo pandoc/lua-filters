@@ -1,0 +1,5 @@
+Pandoc (Meta {unMeta = fromList [("author",MetaInlines [Str "Jane",Space,Str "Doe",Superscript [Str "*",Str ",",Str "1",Str ",",Str "\9993"],Str ",",Space,Str "John",Space,Str "Q.",Space,Str "Doe",Superscript [Str "*",Str ",",Str "1",Str ",",Str "2"],Str ",",Space,Str "and",Space,Str "Juan",Space,Str "P\233rez",Superscript [Str "2"]]),("title",MetaInlines [Str "Affiliation",Space,Str "Blocks",Space,Str "Example"])]})
+[Para [Superscript [Str "*"],Space,Str "These authors contributed equally to this work."]
+,Para [Superscript [Str "1"],Space,Str "Federation",Space,Str "of",Space,Str "Planets",LineBreak,Superscript [Str "2"],Space,Str "Acme",Space,Str "Corporation"]
+,Para [Superscript [Str "\9993"],Space,Str "Correspondence:",Space,Link ("",[],[]) [Str "Jane",Space,Str "Doe",Space,Str "<",Str "jane.doe@example.com",Str ">"] ("mailto:jane.doe@example.com","")]
+,Para [Str "Lorem",Space,Str "ipsum",Space,Str "dolor",Space,Str "sit",Space,Str "amet."]]
