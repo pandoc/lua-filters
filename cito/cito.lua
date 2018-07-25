@@ -17,6 +17,8 @@ local properties_and_aliases = {
     'authority'
   },
   cites_as_data_source = {
+    "as_data_source",
+    "data_source"
   },
   cites_as_evidence = {
     'as_evidence',
