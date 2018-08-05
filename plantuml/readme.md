@@ -20,7 +20,7 @@ pandoc --self-contained --lua-filter=plantuml.lua readme.md -o output.htm
 * install PlantUML from http://plantuml.com (needs JAVA)
 * change path to plantuml.jar in plantuml.lua
 
-## Contributing
+
 This script based on the example "Converting ABC code to music notation" from https://pandoc.org/lua-filters.html
 
-**This script was only tested with markdown to html on a windows environment!**
+This script was only tested with markdown to html on a windows environment!
