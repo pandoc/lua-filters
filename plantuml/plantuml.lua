@@ -20,9 +20,7 @@ pandoc --self-contained --lua-filter=plantuml.lua readme.md -o output.htm
 * install PlantUML from http://plantuml.com (needs JAVA)
 * change path to plantuml.jar in plantuml.lua
 
-## Contributing
 This script based on the example "Converting ABC code to music notation" from https://pandoc.org/lua-filters.html
-
 **This script was only tested with markdown to html on a windows environment!**
 ]]
 
@@ -35,11 +33,13 @@ local plantumlPath = "c:\\tool\\WBENCH\\lib\\apps\\bench\\plantuml\\plantuml.jar
 local filetype = "svg"
 local mimetype = "image/svg+xml"
 
+-- call plantuml.jar wit some parameters (see plantuml help)
 local function plantuml(puml, filetype, plantumlPath)
     local final = pandoc.pipe("java", {"-jar", plantumlPath, "-t" .. filetype, "-pipe", "-charset", "UTF8"}, puml)
     return final
 end
 
+-- search for class "plantuml" and replace with image
 function CodeBlock(block)
     if block.classes[1] == "plantuml" then
         local img = plantuml(block.text, filetype, plantumlPath)
