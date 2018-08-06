@@ -28,8 +28,16 @@
 <pre><code>pandoc --self-contained --lua-filter=plantuml.lua readme.md -o output.htm</code></pre>
 <h2 id="prerequisites">Prerequisites</h2>
 <ul>
-<li>install PlantUML from http://plantuml.com (needs JAVA)</li>
+<li>download PlantUML from http://plantuml.com (needs JAVA)</li>
+<li>3 ways to set the environment
+<ol type="1">
+<li>plantuml.lua and plantuml.jar in the same folder and start pandoc always from this folder</li>
+<li>set a Environment Variable PLANTUML with the path to plantuml.jar
+<ul>
+<li>Windows - with powershell: Set-Item env:PLANTUML “c:.jar”</li>
+</ul></li>
 <li>change path to plantuml.jar in plantuml.lua</li>
+</ol></li>
 </ul>
 <p>This script based on the example “Converting ABC code to music notation” from https://pandoc.org/lua-filters.html</p>
 <p>This script was only tested with markdown to html on a windows environment!</p>
