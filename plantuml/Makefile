@@ -1,2 +1,3 @@
 test:
-	@pandoc --self-contained --lua-filter=plantuml.lua readme.md -o output.htm.                            
+	@pandoc --self-contained --lua-filter=plantuml.lua readme.md -o output.html
+	
