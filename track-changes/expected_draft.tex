@@ -1,0 +1,153 @@
+\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provides euro and other symbols
+\else % if luatex or xelatex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\usepackage{hyperref}
+\hypersetup{
+            pdftitle={Track changes in LaTeX and HTML},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\RequirePackage[debrief]{silence}
+\ErrorsOff
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\leftmark}
+\usepackage[markup=underlined,authormarkup=none]{changes}
+\definecolor{auth1}{HTML}{4477AA}
+\definecolor{auth2}{HTML}{117733}
+\definecolor{auth3}{HTML}{999933}
+\definecolor{auth4}{HTML}{CC6677}
+\definecolor{auth5}{HTML}{AA4499}
+\definecolor{auth6}{HTML}{332288}
+\usepackage[textsize=scriptsize]{todonotes}
+\setlength{\marginparwidth}{3cm}
+\makeatletter
+\setremarkmarkup{\todo[color=Changes@Color#1!20]{\sffamily\textbf{#1:}~#2}}
+\makeatother
+\newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
+\newcommand\hlnotesingle{%
+  \bgroup
+  \expandafter\def\csname sout\space\endcsname{\bgroup \ULdepth =-.8ex \ULset}%
+  \markoverwith{\textcolor{yellow}{\rule[-.5ex]{.1pt}{2.5ex}}}%
+  \ULon}
+\newcommand\hlnote[1]{\let\helpcmd\hlnotesingle\parhelp#1\par\relax\relax}
+\long\def\parhelp#1\par#2\relax{%
+  \helpcmd{#1}\ifx\relax#2\else\par\parhelp#2\relax\fi%
+}
+
+\makeatletter
+\newcommand\ifmoving{%
+  \ifx\protect\@unexpandable@protect
+      \expandafter\@firstoftwo
+  \else
+      \expandafter\@secondoftwo
+  \fi
+}
+
+\newcommand{\gobbletwo}[2][]{\@bsphack\@esphack}
+\newcommand{\gobbleone}[1][]{\@bsphack\@esphack}
+
+\let\oldadded\added
+\let\olddeleted\deleted
+\let\oldhlnote\hlnote
+\let\oldnote\note
+\renewcommand{\added}{\ifmoving{\gobbleone}{\oldadded}}
+\renewcommand{\deleted}{\ifmoving{\gobbletwo}{\olddeleted}}
+\renewcommand{\hlnote}{\ifmoving{}{\oldhlnote}}
+\renewcommand{\note}{\ifmoving{\gobbletwo}{\oldnote}}
+\makeatother
+\definechangesauthor[name={FKA}, color=auth1]{FKA}
+\definechangesauthor[name={JFK}, color=auth2]{JFK}
+\definechangesauthor[name={Jesse Rosenthal}, color=auth3]{JR}
+\definechangesauthor[name={MCW}, color=auth4]{MCW}
+\definechangesauthor[name={SWS}, color=auth5]{SWS}
+
+\title{Track changes in LaTeX and HTML}
+\date{}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+\hypertarget{track-changes-in-latex-and-html}{%
+\section{Track changes in LaTeX and HTML}\label{track-changes-in-latex-and-html}}
+
+A \note[id=MCW]{I agree!}\hlnote{\textbf{simple}} comment from me.
+
+This is a text with \added[id=MCW]{an exciting} insertion.
+
+This is/was a text with a \deleted[id=SWS]{short} deletion.
+
+\added[id=FKA]{Here is the text to be moved.}
+
+\deleted[id=JFK]{Here is the text to be moved.}
+
+Here is a \note[id=JFK]{Why?}\hlnote{com\added[id=SWS]{m}ent with nest\deleted[id=FKA]{t}ed changes}.
+
+Here is a multi-line paragraph containing some text and a long deletion \deleted[id=MCW]{short insertion} wrapping over two lines.
+
+This is \note[id=MCW]{A comment across paragraphs.}\hlnote{a new paragraph.
+
+And so} is this.
+
+One \note[id=JR]{This one has multiple paragraphs. \newline \newline See?}\hlnote{more}.
+
+\hypertarget{a-header-width-a-notecomment}{%
+\section{\texorpdfstring{A \emph{header} wi\deleted[id=FKA]{d}th \added[id=JFK]{a} \note[id=FKA]{Note}\hlnote{comment}}{A header with  comment}}\label{a-header-width-a-notecomment}}
+
+Some unmodified text \ldots{}
+
+\newpage
+
+\ldots{} continued from previous page just to test page headers in supporting formats (LaTeX, DOCX, etc.).
+
+\end{document}
