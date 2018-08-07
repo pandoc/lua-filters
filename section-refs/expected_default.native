@@ -7,7 +7,7 @@
  [Div ("ref-ainsworth:sheppard",[],[])
   [Para [Str "Ainsworth,",Space,Str "William",Space,Str "Harrison.",Space,Str "1900.",Space,Emph [Str "Jack",Space,Str "Sheppard:",Space,Str "A",Space,Str "Romance"],Str ".",Space,Str "London:",Space,Str "George",Space,Str "Routledge",Space,Str "&",Space,Str "Sons."]]
  ,Div ("ref-altick:aldine",[],[])
-  [Para [Str "Altick,",Space,Str "Richard",Space,Str "D.",Space,Str "1958.",Space,Str "\8220From",Space,Str "Aldine",Space,Str "to",Space,Str "Everyman:",Space,Str "Cheap",Space,Str "Reprint",Space,Str "Series",Space,Str "of",Space,Str "the",Space,Str "English",Space,Str "Classics",Space,Str "1830\8211\&1906.\8221",Space,Emph [Str "Studies",Space,Str "in",Space,Str "Bibliography"],Space,Str "11:3\8211\&24."]]
+  [Para [Str "Altick,",Space,Str "Richard",Space,Str "D.",Space,Str "1958.",Space,Str "\8220From",Space,Str "Aldine",Space,Str "to",Space,Str "Everyman:",Space,Str "Cheap",Space,Str "Reprint",Space,Str "Series",Space,Str "of",Space,Str "the",Space,Str "English",Space,Str "Classics",Space,Str "1830\8211\&1906.\8221",Space,Emph [Str "Studies",Space,Str "in",Space,Str "Bibliography"],Space,Str "11:",Space,Str "3\8211\&24."]]
  ,Div ("ref-dames:physiology",[],[])
   [Para [Str "Dames,",Space,Str "Nicholas.",Space,Str "2007.",Space,Emph [Str "The",Space,Str "Physiology",Space,Str "of",Space,Str "the",Space,Str "Novel:",Space,Str "Reading,",Space,Str "Neural",Space,Str "Science,",Space,Str "and",Space,Str "the",Space,Str "Form",Space,Str "of",Space,Str "Victorian",Space,Str "Fiction"],Str ".",Space,Str "Oxford:",Space,Str "Oxford",Space,Str "University",Space,Str "Press."]]
  ,Div ("ref-dames:physiology",[],[])
