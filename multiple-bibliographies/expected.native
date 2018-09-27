@@ -1,0 +1,14 @@
+Pandoc (Meta {unMeta = fromList [("bibliography_recommended_reading",MetaInlines [Str "secondary.bib"]),("bibliography_sources",MetaInlines [Str "primary.bib"]),("nocite",MetaInlines [Cite [Citation {citationId = "Knu86", citationPrefix = [], citationSuffix = [], citationMode = AuthorInText, citationNoteNum = 0, citationHash = 0}] [Str "@Knu86"],Str ",",Space,Cite [Citation {citationId = "Bae", citationPrefix = [], citationSuffix = [], citationMode = AuthorInText, citationNoteNum = 0, citationHash = 0}] [Str "@Bae"]]),("title",MetaInlines [Str "Multiple",Space,Str "Bibliographies",Space,Str "Demo"])]})
+[Para [Cite [Citation {citationId = "Nie72", citationPrefix = [], citationSuffix = [], citationMode = AuthorInText, citationNoteNum = 0, citationHash = 1}] [Str "Nietzsche",Space,Str "(1872)"],Str ",",Space,Cite [Citation {citationId = "Bel", citationPrefix = [], citationSuffix = [], citationMode = AuthorInText, citationNoteNum = 0, citationHash = 2}] [Str "Bellori",Space,Str "(1672)"]]
+,Header 1 ("references",[],[]) [Str "References"]
+,Div ("refs_sources",[],[])
+ [Div ("ref-Bel",[],[])
+  [Para [Str "Bellori.",Space,Str "1672.",Space,Emph [Str "Le",Space,Str "Vite",Space,Str "de\8217",Space,Str "Pittori,",Space,Str "Scultori",Space,Str "E",Space,Str "Architetti",Space,Str "Moderni"],Str "."]]
+ ,Div ("ref-Nie72",[],[])
+  [Para [Str "Nietzsche,",Space,Str "Friedrich.",Space,Str "1872.",Space,Emph [Str "Die",Space,Str "Geburt",Space,Str "Der",Space,Str "Trag\246die",Space,Str "Aus",Space,Str "Dem",Space,Str "Geiste",Space,Str "Der",Space,Str "Musik"],Str "."]]]
+,Header 1 ("recommended-reading",[],[]) [Str "Recommended",Space,Str "Reading"]
+,Div ("refs_recommended_reading",[],[])
+ [Div ("ref-Bae",[],[])
+  [Para [Str "B\228tschmann,",Space,Str "Oskar.",Space,Str "1985.",Space,Emph [Str "Pygmalion",Space,Str "Als",Space,Str "Betrachter"],Str "."]]
+ ,Div ("ref-Knu86",[],[])
+  [Para [Str "Knuth,",Space,Str "Donald",Space,Str "E.",Space,Str "1986.",Space,Emph [Str "The",Space,Str "Texbook"],Str "."]]]]
