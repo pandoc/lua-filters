@@ -53,8 +53,14 @@ local function author_inline_generator (get_mark)
     if author.equal_contributor then
       author_marks[#author_marks + 1] = get_mark 'equal_contributor'
     end
+    local idx_str
     for _, idx in ipairs(author.institute) do
-      author_marks[#author_marks + 1] = {pandoc.Str(stringify(idx))}
+      if type(idx) ~= 'table' then
+        idx_str = tostring(idx)
+      else
+        idx_str = stringify(idx)
+      end
+      author_marks[#author_marks + 1] = {pandoc.Str(idx_str)}
     end
     if is_corresponding_author(author) then
       author_marks[#author_marks + 1] = get_mark 'corresponding_author'
