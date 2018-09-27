@@ -35,7 +35,9 @@ local function intercalate(lists, elem)
     result:extend(lists[i])
     result:extend(elem)
   end
-  result:extend(lists[#lists])
+  if #lists > 0 then
+    result:extend(lists[#lists])
+  end
   return result
 end
 
@@ -52,7 +54,7 @@ local function author_inline_generator (get_mark)
       author_marks[#author_marks + 1] = get_mark 'equal_contributor'
     end
     for _, idx in ipairs(author.institute) do
-      author_marks[#author_marks + 1] = {pandoc.Str(idx)}
+      author_marks[#author_marks + 1] = {pandoc.Str(stringify(idx))}
     end
     if is_corresponding_author(author) then
       author_marks[#author_marks + 1] = get_mark 'corresponding_author'
