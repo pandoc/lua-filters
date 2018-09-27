@@ -10,10 +10,12 @@ language: minimal
 
 matrix:
   include:
+  - env: PANDOCVERSION=2.3
+    addons: {apt: {packages: [texlive-bibtex-extra,aspell,aspell-fr,aspell-en,imagemagick,default-jre]}}
   - env: PANDOCVERSION=2.2.2.1
     addons: {apt: {packages: [texlive-bibtex-extra,aspell,aspell-fr,aspell-en,imagemagick,default-jre]}}
 
-  allow_failures: []
+  allow_failures: [2.2.2.1]
 
   fast_finish: true
 
