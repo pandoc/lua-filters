@@ -4,20 +4,25 @@ sudo: false
 # Do not choose a language; we provide our own build tools.
 language: minimal
 
-matrix:
-  include:
-  - env: PANDOCVERSION=2.3
-    addons: {apt: {packages: [texlive-bibtex-extra,aspell,aspell-fr,aspell-en,imagemagick,default-jre]}}
+addons:
+  apt:
+    packages:
+      - texlive-bibtex-extra
+      - aspell
+      - aspell-fr
+      - aspell-en
+      - imagemagick
+      - default-jre
 
 before_install:
 - unset CC
-- export PATH=$HOME/pandoc-$PANDOCVERSION/bin:$PATH
-- export PLANTUML=$HOME/plantuml.1.2018.9.jar
 # Download and unpack the pandoc binary
 - |
   pushd $HOME
   RELEASES_URL='https://github.com/jgm/pandoc/releases'
-  wget $RELEASES/download/$PANDOCVERSION/pandoc-$PANDOCVERSION-linux.tar.gz
+  export PANDOCVERSION=$(curl -I "$RELEASES_URL/latest" | sed -ne 's#Location:.*tag/\(.*\)$#\1#p' | tr -d "\n\r")
+  echo $PANDOCVERSION
+  wget $RELEASES_URL/download/$PANDOCVERSION/pandoc-$PANDOCVERSION-linux.tar.gz
   tar xvzf pandoc-$PANDOCVERSION-linux.tar.gz
   popd
 # Download plantuml.jar for plantuml filter
@@ -25,6 +30,8 @@ before_install:
   pushd $HOME
   wget http://sourceforge.net/projects/plantuml/files/plantuml.1.2018.9.jar
   popd
+- export PATH=$HOME/pandoc-$PANDOCVERSION/bin:$PATH
+- export PLANTUML=$HOME/plantuml.1.2018.9.jar
 
 install: []
 
