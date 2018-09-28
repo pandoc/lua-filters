@@ -4,20 +4,10 @@ sudo: false
 # Do not choose a language; we provide our own build tools.
 language: minimal
 
-# Caching so the next build will be fast too.
-#cache:
-#  directories: []
-
 matrix:
   include:
   - env: PANDOCVERSION=2.3
     addons: {apt: {packages: [texlive-bibtex-extra,aspell,aspell-fr,aspell-en,imagemagick,default-jre]}}
-  - env: PANDOCVERSION=2.2.2.1
-    addons: {apt: {packages: [texlive-bibtex-extra,aspell,aspell-fr,aspell-en,imagemagick,default-jre]}}
-
-  allow_failures: [2.2.2.1]
-
-  fast_finish: true
 
 before_install:
 - unset CC
@@ -26,7 +16,8 @@ before_install:
 # Download and unpack the pandoc binary
 - |
   pushd $HOME
-  wget https://github.com/jgm/pandoc/releases/download/$PANDOCVERSION/pandoc-$PANDOCVERSION-linux.tar.gz
+  RELEASES_URL='https://github.com/jgm/pandoc/releases'
+  wget $RELEASES/download/$PANDOCVERSION/pandoc-$PANDOCVERSION-linux.tar.gz
   tar xvzf pandoc-$PANDOCVERSION-linux.tar.gz
   popd
 # Download plantuml.jar for plantuml filter
