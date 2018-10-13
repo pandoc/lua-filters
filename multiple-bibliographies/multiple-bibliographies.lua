@@ -28,6 +28,15 @@ local doc_meta = pandoc.Meta{}
 --- Div used by pandoc-citeproc to insert the bibliography.
 local refs_div = pandoc.Div({}, pandoc.Attr('refs'))
 
+local supports_quiet_flag = (function ()
+  local version = pandoc.pipe('pandoc-citeproc', {'--version'}, '')
+  local major, minor, patch = version:match 'pandoc%-citeproc (%d+)%.(%d+)%.?(%d*)'
+  major, minor, patch = tonumber(major), tonumber(minor), tonumber(patch)
+  return major > 0
+    or minor > 14
+    or (minor == 14 and patch >= 5)
+end)()
+
 --- Resolve citations in the document by combining all bibliographies
 -- before running pandoc-citeproc on the full document.
 local function resolve_doc_citations (doc)
@@ -82,7 +91,8 @@ local function create_topic_bibliography (div)
   local tmp_blocks = {pandoc.Para(all_cites), refs_div}
   local tmp_meta = meta_for_pandoc_citeproc(bibfile)
   local tmp_doc = pandoc.Pandoc(tmp_blocks, tmp_meta)
-  local res = run_json_filter(tmp_doc, 'pandoc-citeproc')
+  local filter_args = {FORMAT, supports_quiet_flag and '-q' or nil}
+  local res = run_json_filter(tmp_doc, 'pandoc-citeproc', filter_args)
   -- First block of the result contains the dummy paragraph, second is
   -- the refs Div filled by pandoc-citeproc.
   div.content = res.blocks[2].content
