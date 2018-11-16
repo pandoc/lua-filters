@@ -1,7 +1,7 @@
 --[[
 pagebreak – convert raw LaTeX page breaks to other formats
 
-Copyright © 2018 Albert Krewinkel
+Copyright © 2017-2018 Benct Philip Jonsson, Albert Krewinkel
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -15,19 +15,41 @@ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ]]
+
+--- configs – these are populated in the Meta filter.
+local pagebreak = {
+  epub = '<p style="page-break-after: always;"> </p>',
+  html = '<div style="style="page-break-after: always;"></div>',
+  latex = '\\newpage{}',
+  ooxml = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>',
+}
+
+local function pagebreaks_from_config (meta)
+  local html_class =
+    (meta.newpage_html_class and stringify(meta.newpage_html_class))
+    or os.getenv 'PANDOC_NEWPAGE_HTML_CLASS'
+  if html_class and html_class ~= '' then
+    pagebreak.html = string.format('<div class="%s"></div>', html_class)
+  end
+
+  local odt_style =
+    (meta.newpage_odt_style and stringify(meta.newpage_odt_style))
+    or os.getenv 'PANDOC_NEWPAGE_ODT_STYLE'
+  if odt_style and odt_style ~= '' then
+    pagebreak.odt = string.format('<text:p text:style-name="%s"/>', odt_style)
+  end
+end
+
 --- Return a block element causing a page break in the given format.
 local function newpage(format)
   if format == 'docx' then
-    local pagebreak = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>'
-    return pandoc.RawBlock('openxml', pagebreak)
+    return pandoc.RawBlock('openxml', pagebreak.ooxml)
   elseif format:match 'latex' then
-    return pandoc.RawBlock('tex', '\\newpage{}')
+    return pandoc.RawBlock('tex', pagebreak.latex)
   elseif format:match 'html.*' then
-    local pagebreak = '<div style="style="page-break-after: always;"></div>'
-    return pandoc.RawBlock('html', pagebreak)
+    return pandoc.RawBlock('html', pagebreak.html)
   elseif format:match 'epub' then
-    local pagebreak = '<p style="page-break-after: always;"> </p>'
-    return pandoc.RawBlock('html', pagebreak)
+    return pandoc.RawBlock('html', pagebreak.epub)
   else
     -- fall back to insert a form feed character
     return pandoc.Para{pandoc.Str '\f'}
@@ -36,12 +58,17 @@ end
 
 local function is_newpage_command(command)
   return command:match '^\\newpage%{?%}?$'
+    or command:match '^\\pagebreak%{?%}?$'
 end
 
 -- Filter function called on each RawBlock element.
 function RawBlock (el)
+  -- Don't do anything if the output is TeX
+  if FORMAT:match 'tex$' then
+    return nil
+  end
   -- check that the block is TeX or LaTeX and contains only
-  -- \newpage or \newpage{}
+  -- \newpage or \pagebreak.
   if el.format:match 'tex' and is_newpage_command(el.text) then
     -- use format-specific pagebreak marker. FORMAT is set by pandoc to
     -- the targeted output format.
@@ -58,3 +85,8 @@ function Para (el)
     return newpage(FORMAT)
   end
 end
+
+return {
+  {Meta = pagebreaks_from_config},
+  {RawBlock = RawBlock, Para = Para}
+}
