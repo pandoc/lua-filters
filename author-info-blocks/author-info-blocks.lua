@@ -25,7 +25,7 @@ local default_marks = {
     and {pandoc.RawInline('latex', '*')}
     or {pandoc.Str '✉'},
   equal_contributor = FORMAT == 'latex'
-    and {pandoc.RawInline('latex', '\\dagger{}')}
+    and {pandoc.RawInline('latex', '$\\dagger{}$')}
     or {pandoc.Str '*'},
 }
 
