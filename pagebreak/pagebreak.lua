@@ -19,7 +19,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 --- configs – these are populated in the Meta filter.
 local pagebreak = {
   epub = '<p style="page-break-after: always;"> </p>',
-  html = '<div style="style="page-break-after: always;"></div>',
+  html = '<div style="page-break-after: always;"></div>',
   latex = '\\newpage{}',
   ooxml = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>',
 }
