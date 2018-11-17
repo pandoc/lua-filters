@@ -15,6 +15,11 @@ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ]]
+local stringify_orig = (require 'pandoc.utils').stringify
+
+local function stringify(x)
+  return type(x) == 'string' and x or stringify_orig(x)
+end
 
 --- configs – these are populated in the Meta filter.
 local pagebreak = {
