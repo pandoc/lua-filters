@@ -159,10 +159,13 @@ return {
       body:extend(create_correspondence_blocks(doc.meta.author, mark) or {})
       body:extend(doc.blocks)
 
-      -- Overwrite and unset some metadata values
-      meta.author = pandoc.MetaInlines(
-        create_authors_inlines(doc.meta.author, mark)
-      )
+      -- Overwrite authors with formatted values. We use a single, formatted
+      -- string for most formats. LaTeX output, however, looks nicer if we
+      -- provide a authors as a list.
+      meta.author = FORMAT:match 'latex'
+        and pandoc.MetaList(List:new(doc.meta.author):map(author_inline_generator(mark)))
+        or pandoc.MetaInlines(create_authors_inlines(doc.meta.author, mark))
+      -- Institute info is now baked into the affiliations block.
       meta.institute = nil
 
       return pandoc.Pandoc(body, meta)
