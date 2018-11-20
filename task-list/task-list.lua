@@ -87,7 +87,7 @@ end
 
 --- Replace the todo marker in the given block, if any.
 function M.replace_todo_markers (blk, format)
-  if blk.t ~= 'Para' and blk.t ~= 'Plain' then
+  if not blk or blk.t ~= 'Para' and blk.t ~= 'Plain' then
     return blk
   end
   local inlines = blk.content
