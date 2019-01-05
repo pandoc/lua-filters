@@ -3,9 +3,10 @@ PlantUML Pandoc filter to process code blocks with class "plantuml" containing P
 
 * For textual output formats, use --extract-media=DIR
 * For HTML formats, you may alternatively use --self-contained
+* This filter works also with e.g. Microsoft Word, as long as the image format is e.g. PNG.
 
 ## Example in markdown-file
-```plantuml
+```{.plantuml caption="This is my caption."}
 @startuml
 Alice -> Bob: Authentication Request Bob --> Alice: Authentication Response
 Alice -> Bob: Another authentication Request Alice <-- Bob: another authentication Response
@@ -27,4 +28,4 @@ pandoc --self-contained --lua-filter=plantuml.lua readme.md -o output.htm
 
 This script based on the example "Converting ABC code to music notation" from https://pandoc.org/lua-filters.html
 
-This script was only tested with markdown to html on a windows environment!
+This script was only tested with markdown to html and Microsoft Word on a Microsoft Windows environment!
