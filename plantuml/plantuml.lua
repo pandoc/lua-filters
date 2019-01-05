@@ -6,7 +6,7 @@ PlantUML Pandoc filter to process code blocks with class "plantuml" containing P
 * For HTML formats, you may alternatively use --self-contained
 
 ## Example in markdown-file
-```plantuml
+```{.plantuml caption="This is my caption."}
 @startuml
 Alice -> Bob: Authentication Request Bob --> Alice: Authentication Response
 Alice -> Bob: Another authentication Request Alice <-- Bob: another authentication Response @enduml
@@ -51,6 +51,7 @@ function CodeBlock(block)
         local img = plantuml(block.text, filetype, plantumlPath)
         local fname = pandoc.sha1(img) .. "." .. filetype
         pandoc.mediabag.insert(fname, mimetype, img)
-        return pandoc.Para{ pandoc.Image({pandoc.Str("PlantUML Diagramm")}, fname) }
+        return pandoc.Para{ pandoc.Image({pandoc.Str(block.attributes["caption"])}, fname, "fig:") }
     end
 end
+
