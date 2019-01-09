@@ -13,6 +13,7 @@ addons:
       - aspell-en
       - imagemagick
       - default-jre
+      - graphviz
 
 before_install:
 - unset CC
