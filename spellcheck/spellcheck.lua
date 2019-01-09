@@ -1,5 +1,5 @@
 -- lua filter for spell checking: requires 'aspell'.
--- (C) 2017 John MacFarlane, released under MIT license
+-- Copyright (C) 2017-2019 John MacFarlane, released under MIT license
 
 local text = require('text')
 local words = {}

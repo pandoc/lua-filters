@@ -1,7 +1,7 @@
 --[[
 ScholarlyMeta – normalize author/affiliation meta variables
 
-Copyright (c) 2017-2018 Albert Krewinkel, Robert Winkler
+Copyright (c) 2017-2019 Albert Krewinkel, Robert Winkler
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
 with or without fee is hereby granted, provided that the above copyright notice

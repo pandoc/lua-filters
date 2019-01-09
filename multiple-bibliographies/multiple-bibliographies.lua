@@ -1,7 +1,7 @@
 --[[
 multiple-bibliographies – create multiple bibliographies
 
-Copyright © 2018 Albert Krewinkel
+Copyright © 2018-2019 Albert Krewinkel
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above

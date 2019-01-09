@@ -1,7 +1,7 @@
 --[[
 pagebreak – convert raw LaTeX page breaks to other formats
 
-Copyright © 2017-2018 Benct Philip Jonsson, Albert Krewinkel
+Copyright © 2017-2019 Benct Philip Jonsson, Albert Krewinkel
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
