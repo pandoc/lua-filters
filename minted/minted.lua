@@ -107,20 +107,20 @@ local MintedBlock  = 1
 --------------------------------------------------------------------------------
 -- Return the string lexer class to be used with minted.  `elem` should be
 -- either a Code or CodeBlock element (whose `classes` list will be inspected
--- first).  `type` is assumed to be either `MintedInline` or `MintedBlock` in
+-- first).  `kind` is assumed to be either `MintedInline` or `MintedBlock` in
 -- order to choose the appropriate fallback lexer when unspecified.
-local function minted_language(elem, type)
+local function minted_language(elem, kind)
   -- If the code [block] attached classes, we assume the first one is the
   -- lexer class to use.
   if #elem.classes > 0 then
     return elem.classes[1]
   end
   -- Allow user-level metadata to override the inline language.
-  if type == MintedInline then
+  if kind == MintedInline then
     return minted_default_inline_language
   end
   -- Allow user-level metadata to override the block language.
-  if type == MintedBlock then
+  if kind == MintedBlock then
     return minted_default_block_language
   end
 
@@ -179,10 +179,10 @@ end
 -- provided in the document metadata will be included _only_ if they do not
 -- override the element-level attributes.
 --
--- `elem` should either be a Code or CodeBlock element, and `type` is assumed to
--- be either `MintedInline` or `MintedBlock`.  The `type` determines which
+-- `elem` should either be a Code or CodeBlock element, and `kind` is assumed to
+-- be either `MintedInline` or `MintedBlock`.  The `kind` determines which
 -- global default attribute list to use.
-local function minted_attributes(elem, type)
+local function minted_attributes(elem, kind)
   -- The full listing of attributes that will be joined and returned.
   local minted_attributes = {}
 
@@ -200,10 +200,10 @@ local function minted_attributes(elem, type)
     end
   end
 
-  -- Value options using xxx=value (e.g., ```{.bash fontsize=\scriptsize}) show
+  -- Value options using key=value (e.g., ```{.bash fontsize=\scriptsize}) show
   -- up in the list of attributes.
-  for _, attr_table in ipairs(elem.attr[3]) do
-    cls, value = attr_table[1], attr_table[2]
+  for _, attr in ipairs(elem.attributes) do
+    cls, value = attr[1], attr[2]
     if is_minted_class(cls) then
       table.insert(minted_attributes, cls .. "=" .. value)
       table.insert(minted_keys, cls)
@@ -215,9 +215,9 @@ local function minted_attributes(elem, type)
   -- specified, these do conflict in the minted sense, but this filter makes no
   -- checks on validity ;)
   local global_defaults = nil
-  if type == MintedInline then
+  if kind == MintedInline then
     global_defaults = minted_inline_attributes
-  elseif type == MintedBlock then
+  elseif kind == MintedBlock then
     global_defaults = minted_block_attributes
   end
   for _, global_attr in ipairs(global_defaults) do
@@ -257,13 +257,13 @@ local function remove_minted_attibutes(elem)
 
   -- Remove any minted items from the attributes.
   extra_attrs = {}
-  for _, attr_table in ipairs(elem.attr[3]) do
-    cls, value = attr_table[1], attr_table[2]
+  for _, attr in ipairs(elem.attributes) do
+    cls, value = attr[1], attr[2]
     if not is_minted_class(cls) then
       table.insert(extra_attrs, {cls, value})
     end
   end
-  elem.attr[3] = extra_attrs
+  elem.attributes = extra_attrs
 
   -- Return the (potentially modified) element for pandoc to take over.
   return elem
