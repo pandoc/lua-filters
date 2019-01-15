@@ -89,6 +89,7 @@ You can also set `header-includes` in the metadata of your document.  The above
 example could be set as (noting the escaped backslashes):
 
 ```yaml
+colorlinks: true
 header-includes:
   # Include the minted package, set global style, define colors, etc.
   - "\\usepackage{minted}"
@@ -283,3 +284,8 @@ Options for monokai (choose *one*):
                    |
                    +--> You can rename this too :)
 ```
+
+See the contents of [`sample.md`](sample.md) (click on "View Raw" to see the
+comments in the metadata section).  Notably, in order to use `\definecolor` you
+should make sure that the `xcolor` package is actually included.  Comments in
+the file explain the options.

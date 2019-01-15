@@ -1,5 +1,12 @@
 ---
 title: Pandoc Minted Sample
+# NOTE: If you want to use `\definecolor` commands in your `header-includes`
+# section, setting `colorlinks: true` will `\usepackage{xcolor}` which is needed
+# for `\definecolor`.  You can alternatively `\usepackage{xcolor}` explicitly in
+# in the `header-includes` section if you do not want everything else that
+# `colorlinks: true` will bring in.  See `pandoc -D latex` output to see
+# everything that `colorlinks: true` will do _in addition_ to including xcolor.
+colorlinks: true
 header-includes:
   # Include the minted package, set global style, define colors, etc.
   - "\\usepackage{minted}"
