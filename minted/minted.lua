@@ -193,12 +193,10 @@ local function minted_attributes(elem, type)
 
   -- Boolean style options for minted (e.g., ```{.bash .autogobble}) will appear
   -- in the list of classes.
-  if #elem.classes > 0 then
-    for _, cls in ipairs(elem.classes) do
-      if is_minted_class(cls) then
-        table.insert(minted_attributes, cls)
-        table.insert(minted_keys, cls)
-      end
+  for _, cls in ipairs(elem.classes) do
+    if is_minted_class(cls) then
+      table.insert(minted_attributes, cls)
+      table.insert(minted_keys, cls)
     end
   end
 
