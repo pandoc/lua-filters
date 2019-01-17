@@ -143,6 +143,13 @@ def run_tex_tests(args, fmt):
         output = run_pandoc(args + ["-t", fmt], md)
         if fmt == "beamer":
             ensure_fragile(test_name, output)
+        elif "fragile" in output:  # latex writer
+            fail_test(
+                test_name,
+                "`fragile` should not be in latex output:\n{output}".format(
+                    output=output
+                )
+            )
         ensure_present(test_name, string, output)
 
     ############################################################################
@@ -382,6 +389,13 @@ def run_html_tests(args):
             fail_test(
                 test_name,
                 "`mint` should not be in html output:\n{output}".format(
+                    output=output
+                )
+            )
+        if "fragile" in output:
+            fail_test(
+                test_name,
+                "`fragile` should not be in html output:\n{output}".format(
                     output=output
                 )
             )

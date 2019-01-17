@@ -406,8 +406,6 @@ function Header(elem)
     -- may duplicate the 'fragile' specifier.  Duplicated fragile does *not*
     -- cause compile errors.
     return elem
-  else
-    return elem
   end
 end
 
