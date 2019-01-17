@@ -128,6 +128,28 @@ def ensure_present(test_name, string, pandoc_output):
         )
 
 
+def ensure_not_present(test_name, string, pandoc_output):
+    """
+    Assert that ``string`` is **not** found in ``pandoc_output``.
+
+    ``test_name`` (str)
+        The name of the test (forwards to ``fail_test``).
+
+    ``string`` (str)
+        The string to check verbatim ``string not in pandoc_output``.
+
+    ``pandoc_output`` (str)
+        The pandoc output for the test case.
+    """
+    if string in pandoc_output:
+        fail_test(
+            test_name,
+            "The forbidden string '{string}' was found in:\n{pout}".format(
+                string=string, pout=pandoc_output
+            )
+        )
+
+
 def run_tex_tests(args, fmt):
     """
     Run same tests for latex writers.
@@ -143,13 +165,8 @@ def run_tex_tests(args, fmt):
         output = run_pandoc(args + ["-t", fmt], md)
         if fmt == "beamer":
             ensure_fragile(test_name, output)
-        elif "fragile" in output:  # latex writer
-            fail_test(
-                test_name,
-                "`fragile` should not be in latex output:\n{output}".format(
-                    output=output
-                )
-            )
+        else:  # latex writer
+            ensure_not_present(test_name, "fragile", output)
         ensure_present(test_name, string, output)
 
     ############################################################################
@@ -385,29 +402,11 @@ def run_html_tests(args):
     def verify(test_name, md, attrs=[]):
         """Verify minted and any strings in attrs not produced"""
         output = run_pandoc(args + ["-t", "html5"], md)
-        if "mint" in output:
-            fail_test(
-                test_name,
-                "`mint` should not be in html output:\n{output}".format(
-                    output=output
-                )
-            )
-        if "fragile" in output:
-            fail_test(
-                test_name,
-                "`fragile` should not be in html output:\n{output}".format(
-                    output=output
-                )
-            )
+        ensure_not_present(test_name, "mint", output)
+        ensure_not_present(test_name, "fragile", output)
         if attrs:
             for a in attrs:
-                if a in output:
-                    fail_test(
-                        test_name,
-                        "`{a}` should not be in html output:\n{output}".format(
-                            a=a, output=output
-                        )
-                    )
+                ensure_not_present(test_name, a, output)
 
     verify(r"[html] no \begin{minted}", code_block)
     verify(r"[html] no \mintinline", inline_code)
