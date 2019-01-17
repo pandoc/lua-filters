@@ -281,15 +281,17 @@ function Meta(m)
     end
 
     -- Parse and set the default block language.
-    local default_block_language = minted["default_block_language"]
+    local default_block_language = minted.default_block_language
+      and pandoc.utils.stringify(minted.default_block_language)
     if default_block_language ~= nil then
-      minted_default_block_language = default_block_language[1].text
+      minted_default_block_language = default_block_language
     end
 
     -- Parse and set the default inline language.
-    local default_inline_language = minted["default_inline_language"]
+    local default_inline_language = minted.default_inline_language
+      and pandoc.utils.stringify(minted.default_inline_language)
     if default_inline_language ~= nil then
-      minted_default_inline_language = default_inline_language[1].text
+      minted_default_inline_language = default_inline_language
     end
 
     -- Parse the global default minted attributes to use on every block.

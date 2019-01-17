@@ -168,6 +168,8 @@ def run_tex_tests(args, fmt):
         else:  # latex writer
             ensure_not_present(test_name, "fragile", output)
         ensure_present(test_name, string, output)
+        # if `nil` is present, that likely means a problem parsing the metadata
+        ensure_not_present(test_name, "nil", output)
 
     ############################################################################
     # CodeBlock tests.                                                         #
@@ -407,6 +409,8 @@ def run_html_tests(args):
         if attrs:
             for a in attrs:
                 ensure_not_present(test_name, a, output)
+        # if `nil` is present, that likely means a problem parsing the metadata
+        ensure_not_present(test_name, "nil", output)
 
     verify(r"[html] no \begin{minted}", code_block)
     verify(r"[html] no \mintinline", inline_code)
