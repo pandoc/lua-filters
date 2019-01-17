@@ -87,6 +87,8 @@ overriden on a per-code basis.  See section 5.3 of the
 [minted_docs]: http://mirrors.ctan.org/macros/latex/contrib/minted/minted.pdf
 ]]
 
+local List = require('pandoc.List')
+
 --------------------------------------------------------------------------------
 -- Potential metadata elements to override.                                   --
 --------------------------------------------------------------------------------
@@ -137,7 +139,7 @@ local function is_minted_class(cls)
   -- `autogobble` and `gobble` at the same time is a usage error.
   --
   -- http://mirrors.ctan.org/macros/latex/contrib/minted/minted.pdf
-  local all_minted_options = {
+  local all_minted_options = List:new{
     "autogobble", "baselinestretch", "beameroverlays", "breakafter",
     "breakaftergroup", "breakaftersymbolpre", "breakaftersymbolpost",
     "breakanywhere", "breakanywheresymbolpre", "breakanywheresymbolpost",
@@ -161,16 +163,7 @@ local function is_minted_class(cls)
     "stepnumberoffsetvalues", "stripall", "stripnl", "tab", "tabcolor",
     "tabsize", "texcl", "texcomments", "xleftmargin", "xrightmargin"
   }
-
-  -- Try and find the specified `cls` in `all_minted_options`.
-  for _, minted_option in ipairs(all_minted_options) do
-    if cls == minted_option then
-      return true
-    end
-  end
-
-  -- Otherwise, it is not recognized as a minted option.
-  return false
+  return all_minted_options:includes(cls, 0)
 end
 
 -- Return a string for the minted attributes `\begin{minted}[attributes]` or
