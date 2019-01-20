@@ -30,28 +30,30 @@ minted:
 - Raw inline code:
 
     ```md
-    `#include <type_traits>`
+    `#include <type_traits>` `if (i == 0) {`
     ```
 
-  \vspace*{-3ex} produces: `#include <type_traits>`
+  \vspace*{-3ex} produces: `#include <type_traits>` `if (i == 0) {`
 
 - Apply just a lexer:
 
     ```md
-    `#include <type_traits>`{.cpp}
+    `#include <type_traits>`{.cpp} `if (i == 0) {`{.cpp}
     ```
 
-    \vspace*{-3ex} produces: `#include <type_traits>`{.cpp}
+    \vspace*{-3ex} produces: `#include <type_traits>`{.cpp} `if (i == 0) {`{.cpp}
 
 - Change the background color and highlighting style:
 
     ```{.md fontsize=\scriptsize}
-    <!-- Note: we defined monkai_bg in the metadata! -->
+    <!-- Note: we defined monokai_bg in the metadata! -->
     `#include <type_traits>`{.cpp bgcolor=monokai_bg style=monokai}
+    `if (i == 0) {`{.cpp bgcolor=monokai_bg style=monokai}
     ```
 
     \vspace*{-3ex} produces:
     `#include <type_traits>`{.cpp bgcolor=monokai_bg style=monokai}
+    `if (i == 0) {`{.cpp bgcolor=monokai_bg style=monokai}
 
     - Must **always** include language (`.cpp` here) **first**, always!
 

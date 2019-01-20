@@ -349,13 +349,37 @@ function Code(elem)
       return pandoc.RawInline("latex", string.format("\\texttt{%s}", elem.text))
     end
 
+    local start_delim, end_delim
+    if elem.text:find('[{}]') then
+      -- Try some other delimiter (the alphanumeric digits are in Python's
+      -- string.digits + string.ascii_letters order)
+      local possible_delims = ('|!@#^&*-=+' .. '0123456789' ..
+                               'abcdefghijklmnopqrstuvwxyz' ..
+                               'ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+      for char in possible_delims:gmatch('.') do
+        if not elem.text:find(char, 1, true) then
+          start_delim = char
+          end_delim = char
+          break
+        end
+      end
+      if not start_delim then
+        local msg = 'Unable to determine delimiter to use around inline code %q'
+        error(msg:format(elem.text))
+      end
+    else
+      start_delim = '{'
+      end_delim = '}'
+    end
     local language   = minted_language(elem, MintedInline)
     local attributes = minted_attributes(elem, MintedInline)
     local raw_minted = string.format(
-      "\\mintinline[%s]{%s}{%s}",
+      "\\mintinline[%s]{%s}%s%s%s",
       attributes,
       language,
-      elem.text
+      start_delim,
+      elem.text,
+      end_delim
     )
     -- NOTE: prior to pandoc commit 24a0d61, `beamer` cannot be used as the
     -- RawBlock format.  Using `latex` should not cause any problems.

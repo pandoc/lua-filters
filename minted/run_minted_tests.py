@@ -6,6 +6,7 @@ Unit tests for the pandoc minted.lua filter.
 
 # Lint this file with: flake8 --max-line-length=80
 import os
+import string
 import subprocess
 import sys
 import textwrap
@@ -23,11 +24,16 @@ code_block = textwrap.dedent('''
 The base CodeBlock code.  {.cpp} is used as a replacement marker in most tests!
 """
 
+inline_delims = '|!@#^&*-=+' + string.digits + string.ascii_letters
 inline_code = textwrap.dedent('''
     ## Inline Code
 
     `#include <type_traits>`{.cpp}
-''')
+    C and C++ use `{` and `}` to delimit scopes.
+    Some other special characters:
+    ''' + ' '.join(
+    '`{' + inline_delims[:i] + '`' for i in range(len(inline_delims))
+))
 """
 The base Code code.  {.cpp} is used as a replacement marker in most tests!
 """
@@ -160,14 +166,15 @@ def run_tex_tests(args, fmt):
     ``fmt`` (str)
         The format is assumed to be either 'latex' or 'beamer'.
     """
-    def verify(test_name, md, string):
+    def verify(test_name, md, *strings):
         """Run pandoc, ensure fragile, and string in output."""
         output = run_pandoc(args + ["-t", fmt], md)
         if fmt == "beamer":
             ensure_fragile(test_name, output)
         else:  # latex writer
             ensure_not_present(test_name, "fragile", output)
-        ensure_present(test_name, string, output)
+        for s in strings:
+            ensure_present(test_name, s, output)
         # if `nil` is present, that likely means a problem parsing the metadata
         ensure_not_present(test_name, "nil", output)
 
@@ -297,12 +304,20 @@ def run_tex_tests(args, fmt):
     verify(
         "[inline-code] default",
         inline_code,
-        mintinline.format(attrs="", lang="cpp")
+        mintinline.format(attrs="", lang="cpp"),
+        "|{|",
+        "|}|",
+        *[
+            delim + '{' + inline_delims[:i] + delim
+            for i, delim in enumerate(inline_delims)
+        ]
     )
     verify(
         "[inline-code] default language is text",
-        inline_code.replace("{.cpp}", ""),
-        mintinline.format(attrs="", lang="text")
+        inline_code,
+        mintinline.format(attrs="", lang="text"),
+        "|{|",
+        "|}|"
     )
     verify(
         "[inline-code] no_mintinline globally turned off",
@@ -313,17 +328,16 @@ def run_tex_tests(args, fmt):
             ---
             {inline_code}
         ''').format(inline_code=inline_code),
-        r"\texttt{#include <type_traits>}"
+        r"\texttt{#include <type_traits>}",
+        r"\texttt{{}",
+        r"\texttt{}}"
     )
     verify(
         "[inline-code] .no_minted class bypasses single inline code element",
         inline_code.replace("{.cpp}", "{.cpp .no_minted}"),
-        r"\texttt{#include <type_traits>}"
-    )
-    verify(
-        "[inline-code] default inline language is 'text'",
-        inline_code.replace("{.cpp}", ""),
-        mintinline.format(attrs="", lang="text")
+        r"\texttt{#include <type_traits>}",
+        "|{|",
+        "|}|"
     )
     verify(
         "[inline-code] user provided default_inline_language",
@@ -333,7 +347,7 @@ def run_tex_tests(args, fmt):
               default_inline_language: "haskell"
             ---
             {inline_code}
-        ''').format(inline_code=inline_code.replace("{.cpp}", "")),
+        ''').format(inline_code=inline_code),
         mintinline.format(attrs="", lang="haskell")
     )
     verify(
@@ -349,6 +363,9 @@ def run_tex_tests(args, fmt):
         ''').format(inline_code=inline_code),
         mintinline.format(
             attrs=",".join(["showspaces", "space=."]), lang="cpp"
+        ),
+        mintinline.format(
+            attrs=",".join(["showspaces", "space=."]), lang="text"
         )
     )
     verify(
