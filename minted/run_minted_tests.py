@@ -31,7 +31,8 @@ inline_code = textwrap.dedent('''
     `#include <type_traits>`{.cpp}
     C and C++ use `{` and `}` to delimit scopes.
     Some other special characters:
-    ''' + ' '.join(
+    These check bypass: `~!@#$%^&*()-=_+[]\\{}|;\':",./<>?`
+    These check regular inline: ''' + ' '.join(
     '`{' + inline_delims[:i] + '`' for i in range(len(inline_delims))
 ))
 """
@@ -328,14 +329,17 @@ def run_tex_tests(args, fmt):
             ---
             {inline_code}
         ''').format(inline_code=inline_code),
-        r"\texttt{#include <type_traits>}",
-        r"\texttt{{}",
-        r"\texttt{}}"
+        r"\VERB|\PreprocessorTok{#include }\ImportTok{<type_traits>}|",
+        r"\texttt{\{}",
+        r"\texttt{\}}",
+        (r"\texttt{"
+         r"\textasciitilde{}!@\#\$\%\^{}\&*()-=\_+{[}{]}\textbackslash{}\{\}"
+         r"""\textbar{};\textquotesingle{}:",./\textless{}\textgreater{}?}"""),
     )
     verify(
         "[inline-code] .no_minted class bypasses single inline code element",
         inline_code.replace("{.cpp}", "{.cpp .no_minted}"),
-        r"\texttt{#include <type_traits>}",
+        r"\VERB|\PreprocessorTok{#include }\ImportTok{<type_traits>}|",
         "|{|",
         "|}|"
     )

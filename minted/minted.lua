@@ -346,7 +346,7 @@ function Code(elem)
 
     -- Check for local or global bypass to turn off \mintinline
     if minted_no_mintinline or found_no_minted_class then
-      return pandoc.RawInline("latex", string.format("\\texttt{%s}", elem.text))
+      return elem
     end
 
     local start_delim, end_delim

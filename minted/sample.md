@@ -30,30 +30,28 @@ minted:
 - Raw inline code:
 
     ```md
-    `#include <type_traits>` `if (i == 0) {`
+    `#include <type_traits>`
     ```
 
-  \vspace*{-3ex} produces: `#include <type_traits>` `if (i == 0) {`
+  \vspace*{-3ex} produces: `#include <type_traits>`
 
 - Apply just a lexer:
 
     ```md
-    `#include <type_traits>`{.cpp} `if (i == 0) {`{.cpp}
+    `#include <type_traits>`{.cpp}
     ```
 
-    \vspace*{-3ex} produces: `#include <type_traits>`{.cpp} `if (i == 0) {`{.cpp}
+    \vspace*{-3ex} produces: `#include <type_traits>`{.cpp}
 
 - Change the background color and highlighting style:
 
     ```{.md fontsize=\scriptsize}
     <!-- Note: we defined monokai_bg in the metadata! -->
     `#include <type_traits>`{.cpp bgcolor=monokai_bg style=monokai}
-    `if (i == 0) {`{.cpp bgcolor=monokai_bg style=monokai}
     ```
 
     \vspace*{-3ex} produces:
     `#include <type_traits>`{.cpp bgcolor=monokai_bg style=monokai}
-    `if (i == 0) {`{.cpp bgcolor=monokai_bg style=monokai}
 
     - Must **always** include language (`.cpp` here) **first**, always!
 
@@ -108,3 +106,26 @@ minted:
     \vspace*{-3ex}
 
     - Must **always** include language (`.bash` here) **first**, always!
+
+
+## Special Characters
+
+Special characters should be supported in all cases:
+
+- Code blocks:
+
+    ```md
+    `~!@#$%^&*()-=_+[]}{|;':",.\/<>?
+    ```
+
+- Inline code
+
+    ``with mintinline `~!@#$%^&*()-=_+[]}{|;':",.\/<>?``
+
+  Note: If you use almost all special characters *and* all alphanumeric
+  characters in a single inline code fragment, minted may not be able to find a
+  suitable delimiter to place around the \LaTeX\ inline command.
+
+- Inline code with bypass
+
+    ``no mintinline `~!@#$%^&*()-=_+[]}{|;':",.\/<>?``{.text .no_minted}
