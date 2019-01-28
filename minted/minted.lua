@@ -262,6 +262,38 @@ local function remove_minted_attibutes(elem)
   return elem
 end
 
+-- Return a `start_delim` and `end_delim` that can safely wrap around the
+-- specified `text` when used inline. If no special characters occur in `text`,
+-- then a pair of braces are returned. Otherwise, if any character of
+-- `possible_delims` are not in `text`, then it is returned. If no delimiter
+-- could be found, an error is raised.
+local function minted_inline_delims(text)
+  local start_delim, end_delim
+  if text:find('[{}]') then
+    -- Try some other delimiter (the alphanumeric digits are in Python's
+    -- string.digits + string.ascii_letters order)
+    possible_delims = ('|!@#^&*-=+' .. '0123456789' ..
+                       'abcdefghijklmnopqrstuvwxyz' ..
+                       'ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    for char in possible_delims:gmatch('.') do
+      if not text:find(char, 1, true) then
+        start_delim = char
+        end_delim = char
+        break
+      end
+    end
+    if not start_delim then
+      local msg = 'Unable to determine delimiter to use around inline code %q'
+      error(msg:format(text))
+    end
+  else
+    start_delim = '{'
+    end_delim = '}'
+  end
+
+  return start_delim, end_delim
+end
+
 --------------------------------------------------------------------------------
 -- Pandoc overrides.                                                          --
 --------------------------------------------------------------------------------
@@ -349,28 +381,7 @@ function Code(elem)
       return elem
     end
 
-    local start_delim, end_delim
-    if elem.text:find('[{}]') then
-      -- Try some other delimiter (the alphanumeric digits are in Python's
-      -- string.digits + string.ascii_letters order)
-      local possible_delims = ('|!@#^&*-=+' .. '0123456789' ..
-                               'abcdefghijklmnopqrstuvwxyz' ..
-                               'ABCDEFGHIJKLMNOPQRSTUVWXYZ')
-      for char in possible_delims:gmatch('.') do
-        if not elem.text:find(char, 1, true) then
-          start_delim = char
-          end_delim = char
-          break
-        end
-      end
-      if not start_delim then
-        local msg = 'Unable to determine delimiter to use around inline code %q'
-        error(msg:format(elem.text))
-      end
-    else
-      start_delim = '{'
-      end_delim = '}'
-    end
+    local start_delim, end_delim = minted_inline_delims(elem.text)
     local language   = minted_language(elem, MintedInline)
     local attributes = minted_attributes(elem, MintedInline)
     local raw_minted = string.format(
