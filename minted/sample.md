@@ -46,7 +46,7 @@ minted:
 - Change the background color and highlighting style:
 
     ```{.md fontsize=\scriptsize}
-    <!-- Note: we defined monkai_bg in the metadata! -->
+    <!-- Note: we defined monokai_bg in the metadata! -->
     `#include <type_traits>`{.cpp bgcolor=monokai_bg style=monokai}
     ```
 
@@ -106,3 +106,26 @@ minted:
     \vspace*{-3ex}
 
     - Must **always** include language (`.bash` here) **first**, always!
+
+
+## Special Characters
+
+Special characters should be supported in all cases:
+
+- Code blocks:
+
+    ```md
+    `~!@#$%^&*()-=_+[]}{|;':",.\/<>?
+    ```
+
+- Inline code
+
+    ``with mintinline `~!@#$%^&*()-=_+[]}{|;':",.\/<>?``
+
+  Note: If you use almost all special characters *and* all alphanumeric
+  characters in a single inline code fragment, minted may not be able to find a
+  suitable delimiter to place around the \LaTeX\ inline command.
+
+- Inline code with bypass
+
+    ``no mintinline `~!@#$%^&*()-=_+[]}{|;':",.\/<>?``{.text .no_minted}
