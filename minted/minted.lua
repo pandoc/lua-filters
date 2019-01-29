@@ -378,7 +378,7 @@ function Code(elem)
 
     -- Check for local or global bypass to turn off \mintinline
     if minted_no_mintinline or found_no_minted_class then
-      return elem
+      return nil -- Return `nil` signals to `pandoc` that elem is not changed.
     end
 
     local start_delim, end_delim = minted_inline_delims(elem.text)

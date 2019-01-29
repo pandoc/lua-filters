@@ -266,6 +266,31 @@ There are two rules that must not be violated:
    If you violate this, then `pandoc` will likely not produce an actual inline
    `Code` or `CodeBlock` element, but instead something else (undefined).
 
+Last, but not least, you will see that the `--no-highlight` flag is used in the
+`Makefile` for the latex targets.  This is added in the spirit of the filter
+being a "full replacement" for `pandoc` highlighting with `minted`.  This only
+affects inline code elements that meet the following criteria:
+
+1. The inline code element has a lexer, e.g., `{.cpp}`.
+2. The inline code element can actually be parsed for that language by `pandoc`.
+
+If these two conditions are met, and you do **not** specify `--no-highlight`,
+the `pandoc` highlighting engine will take over.  Users are encouraged to build
+the samples (`make` in this directory) and look at the end of the
+`Special Characters are Supported` section.  If you remove `--no-highlight`,
+`make realclean`, and then `make` again, you will see that the pandoc
+highlighting engine will colorize the `auto foo = [](){};`.
+
+Simply put: if you do not want any pandoc highlighting in your LaTeX, **make
+sure you add `--no-highlight`** and it will not happen.
+
+It is advantageous for this filter to rely on this behavior, because it means
+that the filter does not need to worry about escaping special characters for
+LaTeX -- `pandoc` will do that for us.  Inspect the generated `sample_*.tex`
+files (near the end) to see the difference.  `--no-highlight` will produce
+`\texttt` commands, but omitting this flag will result in some `\VERB` commands
+from `pandoc`.
+
 # Bonus
 
 Included here is a simple python script to help you get the right color

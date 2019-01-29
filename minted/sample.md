@@ -108,15 +108,15 @@ minted:
     - Must **always** include language (`.bash` here) **first**, always!
 
 
-## Special Characters
-
-Special characters should be supported in all cases:
+## Special Characters are Supported
 
 - Code blocks:
 
     ```md
     `~!@#$%^&*()-=_+[]}{|;':",.\/<>?
     ```
+
+    \vspace*{-3ex}
 
 - Inline code
 
@@ -129,3 +129,7 @@ Special characters should be supported in all cases:
 - Inline code with bypass
 
     ``no mintinline `~!@#$%^&*()-=_+[]}{|;':",.\/<>?``{.text .no_minted}
+
+- Specific lexer with mintinline: `auto foo = [](){};`{.cpp}
+- Without mintinline: `auto foo = [](){};`{.cpp .no_minted}
+    - Output color depends on `--no-highlight` flag for `pandoc`.
