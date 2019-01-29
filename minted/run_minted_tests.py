@@ -157,17 +157,19 @@ def ensure_not_present(test_name, string, pandoc_output):
         )
 
 
-def run_tex_tests(args, fmt):
+def run_tex_tests(pandoc_args, fmt):
     """
     Run same tests for latex writers.
 
-    ``args`` (list of str)
-        The base list of arguments to forward to pandoc.
+    ``pandoc_args`` (list of str)
+        The base list of arguments to forward to pandoc.  Some tests may remove
+        the ``--no-highlight`` flag to validate whether or not pandoc
+        highlighting macros appear as expected (or not at all).
 
     ``fmt`` (str)
         The format is assumed to be either 'latex' or 'beamer'.
     """
-    def verify(test_name, md, *strings):
+    def verify(test_name, args, md, *strings):
         """Run pandoc, ensure fragile, and string in output."""
         output = run_pandoc(args + ["-t", fmt], md)
         if fmt == "beamer":
@@ -176,6 +178,9 @@ def run_tex_tests(args, fmt):
             ensure_not_present(test_name, "fragile", output)
         for s in strings:
             ensure_present(test_name, s, output)
+        # Make sure the pandoc highlighting is not being used
+        if "--no-highlight" in args:
+            ensure_not_present(test_name, r"\VERB", output)
         # if `nil` is present, that likely means a problem parsing the metadata
         ensure_not_present(test_name, "nil", output)
 
@@ -185,11 +190,13 @@ def run_tex_tests(args, fmt):
     begin_minted = r"\begin{{minted}}[{attrs}]{{{lang}}}"
     verify(
         "[code-block] default",
+        pandoc_args,
         code_block,
         begin_minted.format(attrs="autogobble", lang="cpp")
     )
     verify(
         "[code-block] no_default_autogobble",
+        pandoc_args,
         textwrap.dedent('''
             ---
             minted:
@@ -201,11 +208,13 @@ def run_tex_tests(args, fmt):
     )
     verify(
         "[code-block] default block language is 'text'",
+        pandoc_args,
         code_block.replace("{.cpp}", ""),
         begin_minted.format(attrs="autogobble", lang="text")
     )
     verify(
         "[code-block] user provided default_block_language",
+        pandoc_args,
         textwrap.dedent('''
             ---
             minted:
@@ -217,6 +226,7 @@ def run_tex_tests(args, fmt):
     )
     verify(
         "[code-block] user provided block_attributes",
+        pandoc_args,
         textwrap.dedent('''
             ---
             minted:
@@ -233,6 +243,7 @@ def run_tex_tests(args, fmt):
     )
     verify(
         "[code-block] user provided block_attributes and no_default_autogobble",
+        pandoc_args,
         textwrap.dedent('''
             ---
             minted:
@@ -249,6 +260,7 @@ def run_tex_tests(args, fmt):
     )
     verify(
         "[code-block] attributes on code block",
+        pandoc_args,
         code_block.replace(
             "{.cpp}", "{.cpp .showspaces bgcolor=tango_bg style=tango}"
         ),
@@ -261,6 +273,7 @@ def run_tex_tests(args, fmt):
     )
     verify(
         "[code-block] attributes on code block + user block_attributes",
+        pandoc_args,
         textwrap.dedent('''
             ---
             minted:
@@ -287,11 +300,13 @@ def run_tex_tests(args, fmt):
     )
     verify(
         "[code-block] traditional fenced code block",
+        pandoc_args,
         code_block.replace("{.cpp}", "cpp"),
         begin_minted.format(attrs="autogobble", lang="cpp")
     )
     verify(
         "[code-block] non-minted attributes not forwarded",
+        pandoc_args,
         code_block.replace("{.cpp}", "{.cpp .showspaces .hello}"),
         begin_minted.format(
             attrs=",".join(["showspaces", "autogobble"]), lang="cpp"
@@ -304,6 +319,7 @@ def run_tex_tests(args, fmt):
     mintinline = r"\mintinline[{attrs}]{{{lang}}}"
     verify(
         "[inline-code] default",
+        pandoc_args,
         inline_code,
         mintinline.format(attrs="", lang="cpp"),
         "|{|",
@@ -315,36 +331,63 @@ def run_tex_tests(args, fmt):
     )
     verify(
         "[inline-code] default language is text",
+        pandoc_args,
         inline_code,
         mintinline.format(attrs="", lang="text"),
         "|{|",
         "|}|"
     )
-    verify(
-        "[inline-code] no_mintinline globally turned off",
-        textwrap.dedent('''
-            ---
-            minted:
-              no_mintinline: true
-            ---
-            {inline_code}
-        ''').format(inline_code=inline_code),
-        r"\VERB|\PreprocessorTok{#include }\ImportTok{<type_traits>}|",
+    # begin: global no_mintinline shared testing with / without --no-highlight
+    inline_no_mintinline_globally_md = textwrap.dedent('''
+        ---
+        minted:
+          no_mintinline: true
+        ---
+        {inline_code}
+    ''').format(inline_code=inline_code)
+    inline_no_mintinline_globally_strings = [
         r"\texttt{\{}",
         r"\texttt{\}}",
-        (r"\texttt{"
-         r"\textasciitilde{}!@\#\$\%\^{}\&*()-=\_+{[}{]}\textbackslash{}\{\}"
-         r"""\textbar{};\textquotesingle{}:",./\textless{}\textgreater{}?}"""),
+        (r"\texttt{" +
+         r"\textasciitilde{}!@\#\$\%\^{}\&*()-=\_+{[}{]}\textbackslash{}\{\}" +
+         r"""\textbar{};\textquotesingle{}:",./\textless{}\textgreater{}?}""")
+    ]
+    verify(
+        "[inline-code] no_mintinline off globally",
+        pandoc_args,
+        inline_no_mintinline_globally_md,
+        r"\texttt{\#include\ \textless{}type\_traits\textgreater{}}",
+        *inline_no_mintinline_globally_strings
     )
     verify(
-        "[inline-code] .no_minted class bypasses single inline code element",
-        inline_code.replace("{.cpp}", "{.cpp .no_minted}"),
+        "[inline-code] no_mintinline off globally, remove --no-highlight",
+        [arg for arg in pandoc_args if arg != "--no-highlight"],
+        inline_no_mintinline_globally_md,
         r"\VERB|\PreprocessorTok{#include }\ImportTok{<type_traits>}|",
-        "|{|",
-        "|}|"
+        *inline_no_mintinline_globally_strings
     )
+    # end: global no_mintinline shared testing with / without --no-highlight
+    # begin: no_minted shared testing with / without --no-highlight
+    inline_no_minted_md = inline_code.replace("{.cpp}", "{.cpp .no_minted}")
+    inline_no_minted_strings = ["|{|", "|}|"]
+    verify(
+        "[inline-code] .no_minted on single inline Code",
+        pandoc_args,
+        inline_no_minted_md,
+        r"texttt{\#include\ \textless{}type\_traits\textgreater{}}",
+        *inline_no_minted_strings
+    )
+    verify(
+        "[inline-code] .no_minted on single inline Code, remove --no-highlight",
+        [arg for arg in pandoc_args if arg != "--no-highlight"],
+        inline_no_minted_md,
+        r"\VERB|\PreprocessorTok{#include }\ImportTok{<type_traits>}|",
+        *inline_no_minted_strings
+    )
+    # end: no_minted shared testing with / without --no-highlight
     verify(
         "[inline-code] user provided default_inline_language",
+        pandoc_args,
         textwrap.dedent('''
             ---
             minted:
@@ -356,6 +399,7 @@ def run_tex_tests(args, fmt):
     )
     verify(
         "[inline-code] user provided inline_attributes",
+        pandoc_args,
         textwrap.dedent('''
             ---
             minted:
@@ -374,6 +418,7 @@ def run_tex_tests(args, fmt):
     )
     verify(
         "[inline-code] attributes on inline code",
+        pandoc_args,
         inline_code.replace(
             "{.cpp}", "{.cpp .showspaces bgcolor=tango_bg style=tango}"
         ),
@@ -384,6 +429,7 @@ def run_tex_tests(args, fmt):
     )
     verify(
         "[inline-code] attributes on inline code + user inline_attributes",
+        pandoc_args,
         textwrap.dedent('''
             ---
             minted:
@@ -409,6 +455,7 @@ def run_tex_tests(args, fmt):
     )
     verify(
         "[inline-code] non-minted attributes not forwarded",
+        pandoc_args,
         inline_code.replace("{.cpp}", "{.cpp .showspaces .hello}"),
         mintinline.format(attrs="showspaces", lang="cpp")
     )
@@ -469,7 +516,7 @@ if __name__ == "__main__":
         ))
         sys.exit(1)
 
-    args = ["--fail-if-warnings", "--lua-filter", minted_lua]
+    args = ["--fail-if-warnings", "--no-highlight", "--lua-filter", minted_lua]
     run_tex_tests(args, "beamer")
     run_tex_tests(args, "latex")
     run_html_tests(args)
