@@ -123,7 +123,7 @@ end
 function rewrite_longtable_caption(tbl)
   -- Escape if there is no caption present.
   if not tbl.caption then
-    return {}
+    return nil
   end
 
   -- Try split the caption into (caption, properties)
@@ -139,7 +139,7 @@ function rewrite_longtable_caption(tbl)
 
   -- If we couldn't find brackets, escape.
   if not (_b and _e) then
-    return {}
+    return nil
   end
 
   -- Otherwise, bisect the caption
