@@ -1,6 +1,7 @@
---[[
-LaTeXTableShortCapts – enable .unlisted and short-caption="" properties on conversion to LaTeX
+---LaTeXTableShortCapts – enable `.unlisted` and `short-caption=""` properties 
+--                        for Pandoc conversion to LaTeX
 
+--[[
 Copyright (c) 2019 Blake Riley
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
@@ -22,7 +23,8 @@ if FORMAT ~= "latex" then
   return {}
 end
 
---- Code for injection into the LaTeX header, to overwrite a macro in longtable captions.
+--- Code for injection into the LaTeX header,
+--  to overwrite a macro in longtable captions.
 longtable_caption_mod = [[
 % -- begin:latex-table-short-captions --
 \makeatletter\AtBeginDocument{%
@@ -42,8 +44,8 @@ longtable_caption_mod = [[
 ]]
 
 --- Creates a def shortcaption block to be placed before the table
--- @param sc: nil or a List of RawInlines
--- @return (Plain): The def shortcaption block
+-- @tparam ?List[RawInlines] sc : The Pandoc-parsed shortcaption
+-- @treturn Plain : The def shortcaption block
 local function defshortcapt(sc)
   local scblock = List:new{}
   scblock:extend {pandoc.RawInline('tex', "\\def\\pandoctableshortcapt{")}
@@ -60,12 +62,15 @@ end
 --- The undef shortcaption block to be placed after the table
 local undefshortcapt = pandoc.RawBlock('tex', "\\undef\\pandoctableshortcapt")
 
---- Treats a Span's Attr as Table Attr, and extracts what is needed to build short-caption
--- @param (Attr): The Attr of the property Span in the table caption
--- @return[1] (nil or string): The identifier
--- @return[2] (nil or List of Inlines): The "short-caption" property if present, as a List of Inlines.
--- @return[3] (bool): Whether ".unlisted" appeared in the classes
-function parse_table_attrs(attr)
+--- Parses a mock "Table Attr".
+-- We use the Attr of an empty Span as if it were Table Attr.
+-- This function extracts what is needed to build a short-caption.
+-- @tparam Attr attr : The Attr of the property Span in the table caption
+-- @treturn ?string : The identifier
+-- @treturn ?List[Inlines] : The "short-caption" property, if present,
+--                           parsed by Pandoc to a List of Inlines.
+-- @treturn bool : Whether ".unlisted" appeared in the classes
+local function parse_table_attrs(attr)
   -- Find label
   local label = nil
   if attr.identifier and (#attr.identifier > 0) then
@@ -80,8 +85,7 @@ function parse_table_attrs(attr)
     end
   end
 
-  -- If not unlisted, then find the index of the property short-caption.
-  -- This does not attempt to parse all table properties, we ignore them.
+  -- If not unlisted, then find the property short-caption.
   local short_caption = nil
   if not unlisted then
     if attr.attributes["short-caption"] and (#attr.attributes["short-caption"] > 0) then
@@ -93,8 +97,9 @@ function parse_table_attrs(attr)
 end
 
 --- Wraps a table with shortcaption code
--- @param tbl (Table): The table with {}-wrapped properties in the caption
--- @return (List of Blocks): The table with {label} in the caption, optionally wrapped in shortcaption code
+-- @tparam Table tbl : The table with {}-wrapped properties in the caption
+-- @treturn List[Blocks] : The table with {label} in the caption, 
+--                         optionally wrapped in shortcaption code
 function rewrite_longtable_caption(tbl)
   -- Escape if there is no caption present.
   if not tbl.caption then
@@ -137,8 +142,9 @@ function rewrite_longtable_caption(tbl)
 end
 
 --- Inserts longtable_caption_mod into the header_includes
--- @param meta (Meta): The document metadata
--- @return (Meta): The document metadata, with latex function inserted in header_includes
+-- @tparam Meta meta : The document metadata
+-- @treturn Meta : The document metadata, with replacement LaTeX macro
+--                 in header_includes
 function add_longtable_caption_mod(meta)
   local header_includes
   if meta['header-includes'] and meta['header-includes'].t == 'MetaList' then
