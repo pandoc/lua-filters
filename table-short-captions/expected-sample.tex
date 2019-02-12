@@ -106,6 +106,14 @@
 These tests are written so that if \textbf{bold font} appears in the
 LOT, something is wrong.
 
+The tests are split into two: expected uses, and non-standard
+uses/errors.\\
+The non-standard uses are presented in this document for troubleshooting
+purposes, and to ensure the filter doesn't crash in corner cases.
+
+\hypertarget{standard-usage}{%
+\section{Standard usage}\label{standard-usage}}
+
 \begin{longtable}[]{@{}ll@{}}
 \caption{This is the \emph{italicised long caption} of tbl1, which does
 not have a label.}\tabularnewline
@@ -122,25 +130,11 @@ a2 & b2\tabularnewline
 \bottomrule
 \end{longtable}
 
+\hypertarget{tbl:tbl-label2}{}
 \begin{longtable}[]{@{}ll@{}}
-\caption{This is the \emph{italicised long caption} of tbl2, which does
-not have a label, but does have empty braces at the end.}\tabularnewline
-\toprule
-cola & colb\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-cola & colb\tabularnewline
-\midrule
-\endhead
-a1 & b1\tabularnewline
-a2 & b2\tabularnewline
-\bottomrule
-\end{longtable}
-
-\begin{longtable}[]{@{}ll@{}}
-\caption{This is the \emph{italicised long caption} of
-tbl3.}\tabularnewline
+\caption{\label{tbl:tbl-label2}This is the \emph{italicised long
+caption} of tbl2, in standard \texttt{pandoc-crossref}
+form.}\tabularnewline
 \toprule
 cola & colb\tabularnewline
 \midrule
@@ -156,11 +150,10 @@ a2 & b2\tabularnewline
 
 \def\pandoctableshortcapt{}  % .unlisted
 
-\hypertarget{tbl:tbl-label4}{}
+\hypertarget{tbl:tbl-label3}{}
 \begin{longtable}[]{@{}ll@{}}
-\caption{\label{tbl:tbl-label4}This is the \emph{italicised long
-caption} of tbl4, which is \textbf{unlisted}. This is expected
-usage.}\tabularnewline
+\caption{\label{tbl:tbl-label3}This is the \emph{italicised long
+caption} of tbl3, which is \textbf{unlisted}.}\tabularnewline
 \toprule
 cola & colb\tabularnewline
 \midrule
@@ -176,12 +169,12 @@ a2 & b2\tabularnewline
 
 \undef\pandoctableshortcapt
 
-\def\pandoctableshortcapt{Table 5 \emph{short} capt.}
+\def\pandoctableshortcapt{Table 4 \emph{short} capt.}
 
-\hypertarget{tbl:tbl-label5}{}
+\hypertarget{tbl:tbl-label4}{}
 \begin{longtable}[]{@{}ll@{}}
-\caption{\label{tbl:tbl-label5}This is the \emph{italicised long
-caption} of tbl5, which has an \textbf{overriding} short-caption. This
+\caption{\label{tbl:tbl-label4}This is the \emph{italicised long
+caption} of tbl4, which has an \textbf{overriding} short-caption. This
 is the expected usage.}\tabularnewline
 \toprule
 cola & colb\tabularnewline
@@ -198,13 +191,13 @@ a2 & b2\tabularnewline
 
 \undef\pandoctableshortcapt
 
-\def\pandoctableshortcapt{}  % .unlisted
+\hypertarget{non-standard-usageerrors}{%
+\section{Non-standard usage/errors}\label{non-standard-usageerrors}}
 
-\hypertarget{tbl:tbl-label6}{}
 \begin{longtable}[]{@{}ll@{}}
-\caption{\label{tbl:tbl-label6}This is the \emph{italicised long
-caption} of tbl6, which is \textbf{unlisted}, yet has a
-short-caption.}\tabularnewline
+\caption{This is the \emph{italicised long caption} of tbl5, which does
+not have a label, but does have empty braces at the end.
+\{\}}\tabularnewline
 \toprule
 cola & colb\tabularnewline
 \midrule
@@ -218,15 +211,10 @@ a2 & b2\tabularnewline
 \bottomrule
 \end{longtable}
 
-\undef\pandoctableshortcapt
-
-\def\pandoctableshortcapt{}  % .unlisted
-
-\hypertarget{tbl:tbl-label7}{}
 \begin{longtable}[]{@{}ll@{}}
-\caption{\label{tbl:tbl-label7}This is the \emph{italicised long
-caption} of tbl7, which is \textbf{unlisted}, yet has a short-caption
-and other bogus classes}\tabularnewline
+\caption{This is the \emph{italicised long caption} of tbl6, which does
+not have a label, but does have an empty span at the end.
+}\tabularnewline
 \toprule
 cola & colb\tabularnewline
 \midrule
@@ -240,7 +228,23 @@ a2 & b2\tabularnewline
 \bottomrule
 \end{longtable}
 
-\undef\pandoctableshortcapt
+\begin{longtable}[]{@{}ll@{}}
+\caption{This is the \emph{italicised long caption} of tbl7, which is
+improperly formatted, and will appear in the list of tables. This filter
+requires that \texttt{.unlisted} is placed in a span. \{\#tbl:tbl-label7
+.unlisted\}}\tabularnewline
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endhead
+a1 & b1\tabularnewline
+a2 & b2\tabularnewline
+\bottomrule
+\end{longtable}
 
 \hypertarget{tbl:tbl-label8}{}
 \begin{longtable}[]{@{}ll@{}}
@@ -261,6 +265,26 @@ a2 & b2\tabularnewline
 \bottomrule
 \end{longtable}
 
-This is the last paragraph, just to tie things up.
+\def\pandoctableshortcapt{}  % .unlisted
+
+\hypertarget{tbl:tbl-label9}{}
+\begin{longtable}[]{@{}ll@{}}
+\caption{\label{tbl:tbl-label9}This is the \emph{italicised long
+caption} of tbl9, which is \textbf{unlisted}, yet has a
+short-caption.}\tabularnewline
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endhead
+a1 & b1\tabularnewline
+a2 & b2\tabularnewline
+\bottomrule
+\end{longtable}
+
+\undef\pandoctableshortcapt
 
 \end{document}
