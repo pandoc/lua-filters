@@ -86,7 +86,8 @@ local function parse_table_attrs(attr)
   -- If not unlisted, then find the property short-caption.
   local short_caption = nil
   if not unlisted then
-    if attr.attributes["short-caption"] and (#attr.attributes["short-caption"] > 0) then
+    if (attr.attributes["short-caption"]) and 
+       (#attr.attributes["short-caption"] > 0) then
       short_caption = pandoc.read(attr.attributes['short-caption']).blocks[1].c
     end
   end
