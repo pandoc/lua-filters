@@ -27,7 +27,7 @@ Table: This is the *italicised long caption* of tbl2, which does not have a labe
 | a1   | b1   |
 | a2   | b2   |
 
-Table: This is the *italicised long caption* of tbl3.  {#tbl:tbl-label3}
+Table: This is the *italicised long caption* of tbl3, which does not have a label, but does have an empty span at the end.  []{}
 
 
 | cola | colb |
@@ -35,7 +35,7 @@ Table: This is the *italicised long caption* of tbl3.  {#tbl:tbl-label3}
 | a1   | b1   |
 | a2   | b2   |
 
-Table: This is the *italicised long caption* of tbl4, which is **unlisted**. This is expected usage.  {#tbl:tbl-label4 .unlisted}
+Table: This is the *italicised long caption* of tbl4, in standard `pandoc-crossref` form.  {#tbl:tbl-label4}
 
 
 | cola | colb |
@@ -43,7 +43,7 @@ Table: This is the *italicised long caption* of tbl4, which is **unlisted**. Thi
 | a1   | b1   |
 | a2   | b2   |
 
-Table: This is the *italicised long caption* of tbl5, which has an **overriding** short-caption. This is the expected usage. {#tbl:tbl-label5 short-caption="Table 5 *short* capt."}
+Table: This is the *italicised long caption* of tbl5, which is improperly formatted, and will appear in the list of tables. This filter requires that `.unlisted` is placed in a span.  {#tbl:tbl-label5 .unlisted}
 
 
 | cola | colb |
@@ -51,7 +51,7 @@ Table: This is the *italicised long caption* of tbl5, which has an **overriding*
 | a1   | b1   |
 | a2   | b2   |
 
-Table: This is the *italicised long caption* of tbl6, which is **unlisted**, yet has a short-caption.  {#tbl:tbl-label6 .unlisted short-caption="Table 6 **unlisted** *short* capt."}
+Table: This is the *italicised long caption* of tbl6, which has an empty short-caption. An empty short-caption does nothing. The long caption will still be used.  []{#tbl:tbl-label6 short-caption=""}
 
 
 | cola | colb |
@@ -59,7 +59,7 @@ Table: This is the *italicised long caption* of tbl6, which is **unlisted**, yet
 | a1   | b1   |
 | a2   | b2   |
 
-Table: This is the *italicised long caption* of tbl7, which is **unlisted**, yet has a short-caption and other bogus classes {#tbl:tbl-label7 .unused-class .unlisted short-caption="Table 7 **unlisted** *short* capt." .more-classes}
+Table: This is the *italicised long caption* of tbl7, which is **unlisted**. This is expected usage.  []{#tbl:tbl-label7 .unlisted}
 
 
 | cola | colb |
@@ -67,7 +67,15 @@ Table: This is the *italicised long caption* of tbl7, which is **unlisted**, yet
 | a1   | b1   |
 | a2   | b2   |
 
-Table: This is the *italicised long caption* of tbl8, which has an empty short-caption. An empty short-caption does nothing. The long caption will still be used. {#tbl:tbl-label8 short-caption=""}
+Table: This is the *italicised long caption* of tbl8, which has an **overriding** short-caption. This is the expected usage.  []{#tbl:tbl-label8 short-caption="Table 8 *short* capt."}
+
+
+| cola | colb |
+| ---- | ---- |
+| a1   | b1   |
+| a2   | b2   |
+
+Table: This is the *italicised long caption* of tbl9, which is **unlisted**, yet has a short-caption.  []{#tbl:tbl-label9 .unlisted short-caption="Table 9 **unlisted** *short* capt."}
 
 
 This is the last paragraph, just to tie things up.
