@@ -73,23 +73,22 @@ end
 --- The undef shortcaption block to be placed after the table
 local undefshortcapt = pandoc.RawBlock('tex', "\\undef\\pandoctableshortcapt")
 
---- Search through a messy list of pandoc-parsed Inlines into what we need to build short-caption
--- @param (List of Inlines): A mess of Inlines containing the table properties
--- @return[1] (nil or string): The first word starting with "#tbl:"
+--- Treats a Span's Attr as Table Attr, and extracts what is needed to build short-caption
+-- @param (Attr): The Attr of the property Span in the table caption
+-- @return[1] (nil or string): The identifier
 -- @return[2] (nil or List of Inlines): The "short-caption" property if present, as a List of Inlines.
--- @return[3] (bool): Whether ".unlisted" appeared in the properties
-function parse_table_properties(props)
-  -- Flatten the string, because this will make our job much easier (except for short-caption hunting)
-  local flatprops = pandoc.utils.stringify(props)
-
+-- @return[3] (bool): Whether ".unlisted" appeared in the classes
+function parse_table_attrs(attr)
   -- Find label
-  local label = flatprops:match("(#tbl:%g-)%s")
+  local label = nil
+  if attr.identifier and (#attr.identifier > 0) then
+    label = attr.identifier
+  end
 
-  -- Find classes, particularly look for ".unlisted"
+  -- Look for ".unlisted" in classes
   local unlisted = false
-  classes = flatprops:gmatch("(%.[%w%-]-)[%s}]")
-  for c in classes do
-    if c == ".unlisted" then
+  for _, c in ipairs(attr.classes) do
+    if c == "unlisted" then
       unlisted = true
     end
   end
@@ -98,19 +97,8 @@ function parse_table_properties(props)
   -- This does not attempt to parse all table properties, we ignore them.
   local short_caption = nil
   if not unlisted then
-    -- Try to find that index
-    local has_short_caption = function(inl)
-      return inl.text and (inl.text:match("short%-caption=\"?"))
-    end
-    local _, idx_sc = props:find_if(has_short_caption)
-
-    -- We're really interested in the next Inline.
-    -- If the next Inline exists, and is a "Quoted" type, this is our short caption, otherwise ignore it.
-    if idx_sc and props[idx_sc+1] then
-      maybe_sc = props[idx_sc+1]
-      if maybe_sc.t == "Quoted" then
-        short_caption = maybe_sc.content
-      end
+    if attr.attributes["short-caption"] and (#attr.attributes["short-caption"] > 0) then
+      short_caption = pandoc.read(attr.attributes['short-caption']).blocks[1].c
     end
   end
 
@@ -126,40 +114,27 @@ function rewrite_longtable_caption(tbl)
     return nil
   end
 
-  -- Try split the caption into (caption, properties)
-  local has_start_bracket = function (inl)
-    return inl.text and (inl.text:sub(1, 1) == "{")
+  -- Try find the properties block
+  local is_properties_span = function (inl)
+    return (inl.t) and (inl.t == "Span")                      -- is span
+                   and (inl.content) and (#inl.content == 0)  -- is empty span
   end
-  local has_end_bracket = function (inl)
-    return inl.text and (inl.text:sub(#inl.text, -1) == "}")
-  end
+  local propspan, idx = tbl.caption:find_if(is_properties_span)
 
-  local _b, idx_left = tbl.caption:find_if(has_start_bracket)
-  local _e, idx_right = tbl.caption:find_if(has_end_bracket)
-
-  -- If we couldn't find brackets, escape.
-  if not (_b and _e) then
+  -- If we couldn't find properties, escape.
+  if not propspan then
     return nil
   end
 
-  -- Otherwise, bisect the caption
-  local long_caption = table.slice(tbl.caption, 1, idx_left-1)
-  local props        = table.slice(tbl.caption, idx_left, idx_right)
+  -- Otherwise, parse it all
+  local label, short_caption, unlisted = parse_table_attrs(propspan.attr)
 
-  -- Tidy up long_caption
-  if long_caption[#long_caption] == pandoc.Space() then
-    table.remove(long_caption)
-  end
-
-  -- Parse it all
-  long_caption = List:new(long_caption)
-  props = List:new(props)
-  local label, short_caption, unlisted = parse_table_properties(props)
+  -- Excise the span from the caption
+  tbl.caption[idx] = nil
 
   -- Put label back into caption for pandoc-crossref
-  
   if label then
-    long_caption:extend {pandoc.Space(), pandoc.Str("{"..label.."}")}
+    tbl.caption:extend {pandoc.Str("{#"..label.."}")}
   end
 
   -- Place new table
@@ -167,7 +142,7 @@ function rewrite_longtable_caption(tbl)
   if short_caption or unlisted then
     result:extend {defshortcapt(short_caption)}
   end
-  result:extend {pandoc.Table(long_caption, tbl.aligns, tbl.widths, tbl.headers, tbl.rows)}
+  result:extend {tbl}
   if short_caption or unlisted then
     result:extend {undefshortcapt}
   end
