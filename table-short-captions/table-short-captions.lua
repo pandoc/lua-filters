@@ -44,13 +44,13 @@ longtable_caption_mod = [[
 ]]
 
 --- Creates a def shortcaption block to be placed before the table
--- @tparam ?List[RawInlines] sc : The Pandoc-parsed shortcaption
+-- @tparam ?string sc : The short-caption property value
 -- @treturn Plain : The def shortcaption block
 local function defshortcapt(sc)
   local scblock = List:new{}
   scblock:extend {pandoc.RawInline('tex', "\\def\\pandoctableshortcapt{")}
   if sc then
-    scblock:extend (sc)
+    scblock:extend (pandoc.read(sc).blocks[1].c)
   end
   scblock:extend {pandoc.RawInline('tex', "}")}
   if not sc then
@@ -67,8 +67,7 @@ local undefshortcapt = pandoc.RawBlock('tex', "\\undef\\pandoctableshortcapt")
 -- This function extracts what is needed to build a short-caption.
 -- @tparam Attr attr : The Attr of the property Span in the table caption
 -- @treturn ?string : The identifier
--- @treturn ?List[Inlines] : The "short-caption" property, if present,
---                           parsed by Pandoc to a List of Inlines.
+-- @treturn ?string : The "short-caption" property, if present.
 -- @treturn bool : Whether ".unlisted" appeared in the classes
 local function parse_table_attrs(attr)
   -- Find label
@@ -88,7 +87,7 @@ local function parse_table_attrs(attr)
   if not unlisted then
     if (attr.attributes["short-caption"]) and 
        (#attr.attributes["short-caption"] > 0) then
-      short_caption = pandoc.read(attr.attributes['short-caption']).blocks[1].c
+      short_caption = attr.attributes['short-caption']
     end
   end
 
