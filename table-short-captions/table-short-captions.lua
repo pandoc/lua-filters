@@ -41,19 +41,6 @@ longtable_caption_mod = [[
 % -- end:latex-table-short-captions --
 ]]
 
---- Creates an (inclusive) slice of a table
--- @param tbl: The table to be sliced
--- @param first: The starting index
--- @param last: The ending index (inclusive)
--- @return (table): The sliced table
-function table.slice(tbl, first, last)
-  local sliced = {}
-  for i = first or 1, last or #tbl do
-    sliced[#sliced+1] = tbl[i]
-  end
-  return sliced
-end
-
 --- Creates a def shortcaption block to be placed before the table
 -- @param sc: nil or a List of RawInlines
 -- @return (Plain): The def shortcaption block
