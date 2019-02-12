@@ -79,10 +79,8 @@ local function parse_table_attrs(attr)
 
   -- Look for ".unlisted" in classes
   local unlisted = false
-  for _, c in ipairs(attr.classes) do
-    if c == "unlisted" then
-      unlisted = true
-    end
+  if attr.classes:includes("unlisted") then
+    unlisted = true
   end
 
   -- If not unlisted, then find the property short-caption.
