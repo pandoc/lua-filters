@@ -23,7 +23,13 @@ The [pandoc-crossref](http://lierdakil.github.io/pandoc-crossref/) filter extend
 
 This filter, when run _before_ pandoc-crossref, allows you to add short captions to the table as a `short-caption` attribute. What is between the quotes will be parsed as Markdown.
 
-    Table: This is the *italicised long caption* of my table, which has a very long caption. {#tbl:full-of-juicy-data short-caption="Short caption for *juicy* data table."}
+**Important!:** You _must_ use empty square brackets before the attributes tag.
+
+    Table: This is the *italicised long caption* of my table, which has a very long caption. []{#tbl:full-of-juicy-data short-caption="Short caption for *juicy* data table."}
+
+Alternatively, if you wish to create a table which is unlisted in the List of Tables, you can use the `.unlisted` class in the attributes tag.
+
+    Table: This is the *italicised long caption* of my table, which will not appear in the List of Tables. []{#tbl:full-of-juicy-data .unlisted}
 
 This filter should prove useful for students writing dissertations, who often have to include a List of Tables in the front matter, but where table captions themselves can be quite lengthy.
 
