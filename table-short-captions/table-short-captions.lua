@@ -146,7 +146,7 @@ end
 --                 in header_includes
 function add_longtable_caption_mod(meta)
   local header_includes = -- test ? a : b
-    (meta['header-includes']) and (meta['header-includes'].t == 'MetaList')
+    (meta['header-includes'] and meta['header-includes'].t == 'MetaList')
     and meta['header-includes']
     or pandoc.MetaList{meta['header-includes']}
   header_includes[#header_includes + 1] =
