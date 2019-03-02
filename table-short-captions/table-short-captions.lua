@@ -1,4 +1,4 @@
----LaTeXTableShortCapts – enable `.unlisted` and `short-caption=""` properties 
+---LaTeXTableShortCapts – enable `.unlisted` and `short-caption=""` properties
 --                        for Pandoc conversion to LaTeX
 
 --[[
@@ -85,7 +85,7 @@ local function parse_table_attrs(attr)
   -- If not unlisted, then find the property short-caption.
   local short_caption = nil
   if not unlisted then
-    if (attr.attributes["short-caption"]) and 
+    if (attr.attributes["short-caption"]) and
        (#attr.attributes["short-caption"] > 0) then
       short_caption = attr.attributes['short-caption']
     end
@@ -96,7 +96,7 @@ end
 
 --- Wraps a table with shortcaption code
 -- @tparam Table tbl : The table with {}-wrapped properties in the caption
--- @treturn List[Blocks] : The table with {label} in the caption, 
+-- @treturn List[Blocks] : The table with {label} in the caption,
 --                         optionally wrapped in shortcaption code
 function rewrite_longtable_caption(tbl)
   -- Escape if there is no caption present.
