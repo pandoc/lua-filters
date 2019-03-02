@@ -1,15 +1,24 @@
 LF	=	--lua-filter=table-short-captions.lua
 F	=	-F pandoc-crossref
 
-readme:
-	@pandoc -s $(LF) $(F)  README.md -o README.pdf
+test: sample.md
+	@pandoc -s $(LF) -t native $< | \
+		diff -u expected-sample.native -
 
-sample:
-	@pandoc -s $(LF) $(F) -t latex sample.md -o sample.tex
-	@pandoc -s $(LF) $(F) -t latex sample.md -o sample.pdf
+test-with-crossref: sample.md
+	@pandoc -s $(LF) $(F) -t latex $< | \
+		diff -u expected-sample.tex -
 
-test: sample
-	diff --strip-trailing-cr expected-sample.tex sample.tex
+README.pdf: README.md
+	@pandoc $(LF) $(F) $< -o $@
+
+sample.tex: sample.md
+	@pandoc -s $(LF) $(F) -t latex $< -o $@
+
+sample.pdf: sample.md
+	@pandoc -s $(LF) $(F) -t latex $< -o $@
 
 clean:
 	rm -v *.aux *.dvi *.fdb_latexmk *.fls *.log *.lot *.ps *.pdf sample.tex | true
+
+.PHONY: test test-with-crossref clean
