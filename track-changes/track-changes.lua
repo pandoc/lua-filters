@@ -208,7 +208,7 @@ function Pandoc(doc)
     tc = type(meta['trackChanges']) == 'table' and pandoc.utils.stringify(meta['trackChanges']) or meta['trackChanges'] or 'accept'
     local trackChanges = PANDOC_READER_OPTIONS and PANDOC_READER_OPTIONS.trackChanges or trackChangesOptions[tc]
     meta.trackChanges = nil -- remove it from the matadata
-    
+
     local M = {}
     if trackChanges == 'AllChanges' then
         if is_html(FORMAT) then

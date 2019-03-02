@@ -1,6 +1,5 @@
 ---
 title: Track changes in LaTeX and HTML
-#trackChanges: reject
 toc: true
 header-includes: |
   ```{=latex}
