@@ -1,0 +1,71 @@
+version: 2.1
+jobs:
+  test_filters:
+    description: Test all Lua filters
+    docker:
+      - image: pandoc/latex:latest
+    steps:
+      - checkout
+      - run: |
+          apk --no-cache add \
+              alpine-sdk \
+              aspell \
+              aspell-en \
+              aspell-fr \
+              bash \
+              fontconfig \
+              freetype-dev \
+              graphviz \
+              inkscape \
+              libpng \
+              openjdk8-jre \
+              pkgconf \
+              python \
+              python3 \
+              python3-dev \
+              ttf-dejavu \
+              wget
+      - run: |
+          tlmgr install \
+              adjustbox \
+              bibexport \
+              changes \
+              collectbox \
+              ifmtarg \
+              silence \
+              standalone \
+              todonotes \
+              truncate \
+              xifthen \
+              xstring
+      - run: |
+          pip3 install --user matplotlib
+      # Download plantuml.jar for plantuml filter
+      - run: |
+          cd $HOME && \
+          wget https://sourceforge.net/projects/plantuml/files/plantuml.1.2018.9.jar && \
+          cd -
+      - run: 'PLANTUML=$HOME/plantuml.1.2018.9.jar DIFF="diff -u" make test'
+
+# Setup builds for each commit, as well as weekly cron job.
+workflows:
+  version: 2.1
+  test:
+    jobs:
+      - test_filters
+  weekly:
+    jobs:
+      - test_filters
+    triggers:
+      - schedule:
+          # http://pubs.opengroup.org/onlinepubs/7908799/xcu/crontab.html
+          # Minute: 48
+          # Hour: 2
+          # Day of month: * (any)
+          # Month of year: * (any)
+          # Day of week: 0 (Sunday)
+          cron: "48 2 * * 0"
+          filters:
+            branches:
+              only:
+                - master
