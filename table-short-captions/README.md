@@ -1,6 +1,5 @@
 ---
 title: "table-short-captions.lua"
-lot: true
 ---
 
 # Short captions in \LaTeX\ tables output
