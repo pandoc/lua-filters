@@ -30,11 +30,9 @@ longtable_caption_mod = [[
 \makeatletter\AtBeginDocument{%
 \def\LT@c@ption#1[#2]#3{%                 % Overwrite the workhorse macro used in formatting a longtable caption.
   \LT@makecaption#1\fnum@table{#3}%
-  \ifdefined\pandoctableshortcapt         % If pandoctableshortcapt is defined (even if blank), we should override default behaviour.
-     \let\@tempa\pandoctableshortcapt%    % (Use let, we don't want to expand pandoctableshortcapt!)
-  \else                                   % If not, fall back to default behaviour
-     \def\@tempa{#2}%                     % (Use the argument in square brackets)
-  \fi
+  \@ifundefined{pandoctableshortcapt}
+     {\def\@tempa{#2}}                    % Use default behaviour: argument in square brackets
+     {\let\@tempa\pandoctableshortcapt}   % If defined (even if blank), use to override
   \ifx\@tempa\@empty\else                 % If @tempa is blank, no lot entry! Otherwise, @tempa becomes the lot title.
      {\let\\\space
      \addcontentsline{lot}{table}{\protect\numberline{\thetable}{\@tempa}}}%
@@ -60,7 +58,7 @@ local function defshortcapt(sc)
 end
 
 --- The undef shortcaption block to be placed after the table
-local undefshortcapt = pandoc.RawBlock('tex', "\\undef\\pandoctableshortcapt")
+local undefshortcapt = pandoc.RawBlock('tex', "\\let\\pandoctableshortcapt\\relax")
 
 --- Parses a mock "Table Attr".
 -- We use the Attr of an empty Span as if it were Table Attr.
