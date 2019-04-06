@@ -20,6 +20,23 @@ local convertPath = os.getenv("CONVERT") or "convert"
 -- use the meta data to define the key "python_path".
 local pythonPath = os.getenv("PYTHON") or "python"
 
+-- The Java path. In order to define a Java version per pandoc document,
+-- use the meta data to define the key "java_path".
+local javaPath = os.getenv("JAVA_HOME")
+if javaPath then
+    javaPath = javaPath .. package.config:sub(1,1) .. "java"
+else
+    javaPath = "java"
+end
+
+-- The dot (Graphviz) path. In order to define a dot version per pandoc document,
+-- use the meta data to define the key "dot_path".
+local dotPath = os.getenv("DOT") or "dot"
+
+-- The pdflatex path. In order to define a pdflatex version per pandoc document,
+-- use the meta data to define the key "pdflatex_path".
+local pdflatexPath = os.getenv("PDFLATEX") or "pdflatex"
+
 -- The default format is SVG i.e. vector graphics:
 local filetype = "svg"
 local mimetype = "image/svg+xml"
@@ -54,18 +71,30 @@ function Meta(meta)
     if meta.python_path then
         pythonPath = meta.python_path
     end
+
+    if meta.java_path then
+        javaPath = meta.java_path
+    end
+
+    if meta.dot_path then
+        dotPath = meta.dot_path
+    end
+
+    if meta.pdflatex_path then
+        pdflatexPath = meta.pdflatex_path
+    end
 end
 
 -- Call plantuml.jar with some parameters (cf. PlantUML help):
 local function plantuml(puml, filetype, plantumlPath)
-    local final = pandoc.pipe("java", {"-jar", plantumlPath, "-t" .. filetype, "-pipe", "-charset", "UTF8"}, puml)
+    local final = pandoc.pipe(javaPath, {"-jar", plantumlPath, "-t" .. filetype, "-pipe", "-charset", "UTF8"}, puml)
     return final
 end
 
 -- Call dot (GraphViz) in order to generate the image
 -- (thanks @muxueqz for this code):
 local function graphviz(code, filetype)
-    local final = pandoc.pipe("dot", {"-T" .. filetype}, code)
+    local final = pandoc.pipe(dotPath, {"-T" .. filetype}, code)
     return final
 end
 
@@ -88,7 +117,7 @@ local function tikz2image(src, filetype)
     f:close()
 
     -- Execute the LaTeX compiler:
-    os.execute("pdflatex -output-directory " .. tmpDir .. " " .. tmp)
+    os.execute(pdflatexPath .. " -output-directory " .. tmpDir .. " " .. tmp)
 
     -- Convert the PDF file to an image by means of ImageMagick:
     local img_data = pandoc.pipe(convertPath, { "-density", "300", tmp .. ".pdf", filetype .. ":-" }, "")
