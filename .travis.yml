@@ -7,12 +7,16 @@ language: minimal
 addons:
   apt:
     packages:
-      - texlive-bibtex-extra
       - aspell
       - aspell-fr
       - aspell-en
       - imagemagick
       - default-jre
+      - latex-xcolor
+      - lmodern
+      - texlive-bibtex-extra
+      - texlive-fonts-recommended
+      - texlive-latex-recommended
 
 before_install:
 - unset CC
