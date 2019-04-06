@@ -12,9 +12,9 @@
 -- In order to define a PlantUML version per pandoc document, use the meta data to define the key "plantuml_path".
 local plantumlPath = os.getenv("PLANTUML") or "plantuml.jar"
 
--- The ImageMagick's convert tool's path. In order to define a ImageMagick version
--- per pandoc document, use the meta data to define the key "convert_path".
-local convertPath = os.getenv("CONVERT") or "convert"
+-- The Inkscape path. In order to define an Inkscape version
+-- per pandoc document, use the meta data to define the key "inkscape_path".
+local inkscapePath = os.getenv("INKSCAPE") or "inkscape"
 
 -- The Python path. In order to define a Python version per pandoc document,
 -- use the meta data to define the key "python_path".
@@ -64,8 +64,8 @@ function Meta(meta)
         plantumlPath = meta.plantuml_path
     end
 
-    if meta.convert_path then
-        convertPath = meta.convert_path
+    if meta.inkscape_path then
+        inkscapePath = meta.inkscape_path
     end
 
     if meta.python_path then
@@ -120,14 +120,37 @@ local function tikz2image(src, filetype)
     os.execute(pdflatexPath .. " -output-directory " .. tmpDir .. " " .. tmp)
 
     -- Convert the PDF file to an image by means of ImageMagick:
-    local img_data = pandoc.pipe(convertPath, { "-density", "300", tmp .. ".pdf", filetype .. ":-" }, "")
+    local baseCommand = " --without-gui --file=" .. tmp .. ".pdf"
+    local knownFormat = false
+
+    if filetype == "png" then
+        
+        baseCommand = baseCommand .. " --export-png=" .. tmp .. ".png --export-dpi=300"
+        knownFormat = true
+
+    elseif filetype == "svg" then
+        
+        baseCommand = baseCommand .. "--export-plain-svg=" .. tmp .. ".svg"
+        knownFormat = true
+
+    end
+
+    local img_data = nil
+    if knownFormat then
+        os.execute("\"" .. inkscapePath .. "\"" .. baseCommand)
+        
+        local r = io.open(tmp .. "." .. filetype, 'rb')
+        img_data = r:read("*all")
+        
+        r:close()
+        os.remove(outfile)
+    end
 
     -- Remove the temporary files:
     os.remove(tmp .. ".tex")
     os.remove(tmp .. ".pdf")
     os.remove(tmp .. ".log")
     os.remove(tmp .. ".aux")
-    os.remove(outfile)
 
     return img_data
 end
