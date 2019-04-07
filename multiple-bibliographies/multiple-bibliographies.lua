@@ -1,7 +1,7 @@
 --[[
 multiple-bibliographies – create multiple bibliographies
 
-Copyright © 2018 Albert Krewinkel
+Copyright © 2018-2019 Albert Krewinkel
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -63,7 +63,7 @@ end
 --- Explicitly create a new meta object with all fields relevant for
 --- pandoc-citeproc.
 local function meta_for_pandoc_citeproc (bibliography)
-  -- We could just indistinctively copy all meta fields, but let's be
+  -- We could just indiscriminately copy all meta fields, but let's be
   -- explicit about what's important.
   local fields = {
     'bibliography', 'references', 'csl', 'citation-style',

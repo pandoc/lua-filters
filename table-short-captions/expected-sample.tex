@@ -1,0 +1,291 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode=true}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provides euro and other symbols
+\else % if luatex or xelatex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Tests for table-short-captions.lua},
+  hidelinks,
+}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage{longtable,booktabs}
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+% -- begin:latex-table-short-captions --
+\makeatletter\AtBeginDocument{%
+\def\LT@c@ption#1[#2]#3{%                 % Overwrite the workhorse macro used in formatting a longtable caption.
+  \LT@makecaption#1\fnum@table{#3}%
+  \ifdefined\pandoctableshortcapt         % If pandoctableshortcapt is defined (even if blank), we should override default behaviour.
+     \let\@tempa\pandoctableshortcapt%    % (Use let, we don't want to expand pandoctableshortcapt!)
+  \else                                   % If not, fall back to default behaviour
+     \def\@tempa{#2}%                     % (Use the argument in square brackets)
+  \fi
+  \ifx\@tempa\@empty\else                 % If @tempa is blank, no lot entry! Otherwise, @tempa becomes the lot title.
+     {\let\\\space
+     \addcontentsline{lot}{table}{\protect\numberline{\thetable}{\@tempa}}}%
+  \fi}
+}\makeatother
+% -- end:latex-table-short-captions --
+\makeatletter
+\@ifpackageloaded{subfig}{}{\usepackage{subfig}}
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\captionsetup[subfloat]{margin=0.5em}
+\AtBeginDocument{%
+\renewcommand*\figurename{Figure}
+\renewcommand*\tablename{Table}
+}
+\AtBeginDocument{%
+\renewcommand*\listfigurename{List of Figures}
+\renewcommand*\listtablename{List of Tables}
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+
+\title{Tests for table-short-captions.lua}
+\date{}
+
+\begin{document}
+\maketitle
+
+\listoftables
+These tests are written so that if \textbf{bold font} appears in the
+LOT, something is wrong.
+
+The tests are split into two: expected uses, and non-standard
+uses/errors.\\
+The non-standard uses are presented in this document for troubleshooting
+purposes, and to ensure the filter doesn't crash in corner cases.
+
+\hypertarget{standard-usage}{%
+\section{Standard usage}\label{standard-usage}}
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{This is the \emph{italicised long caption} of tbl1, which does
+not have a label.}\tabularnewline
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endhead
+a1 & b1\tabularnewline
+a2 & b2\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{tbl:tbl-label2}{}
+\begin{longtable}[]{@{}ll@{}}
+\caption{\label{tbl:tbl-label2}This is the \emph{italicised long
+caption} of tbl2, in standard \texttt{pandoc-crossref}
+form.}\tabularnewline
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endhead
+a1 & b1\tabularnewline
+a2 & b2\tabularnewline
+\bottomrule
+\end{longtable}
+
+\def\pandoctableshortcapt{}  % .unlisted
+
+\hypertarget{tbl:tbl-label3}{}
+\begin{longtable}[]{@{}ll@{}}
+\caption{\label{tbl:tbl-label3}This is the \emph{italicised long
+caption} of tbl3, which is \textbf{unlisted}.}\tabularnewline
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endhead
+a1 & b1\tabularnewline
+a2 & b2\tabularnewline
+\bottomrule
+\end{longtable}
+
+\undef\pandoctableshortcapt
+
+\def\pandoctableshortcapt{Table 4 \emph{short} capt.}
+
+\hypertarget{tbl:tbl-label4}{}
+\begin{longtable}[]{@{}ll@{}}
+\caption{\label{tbl:tbl-label4}This is the \emph{italicised long
+caption} of tbl4, which has an \textbf{overriding} short-caption. This
+is the expected usage.}\tabularnewline
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endhead
+a1 & b1\tabularnewline
+a2 & b2\tabularnewline
+\bottomrule
+\end{longtable}
+
+\undef\pandoctableshortcapt
+
+\hypertarget{non-standard-usageerrors}{%
+\section{Non-standard usage/errors}\label{non-standard-usageerrors}}
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{This is the \emph{italicised long caption} of tbl5, which does
+not have a label, but does have empty braces at the end.
+\{\}}\tabularnewline
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endhead
+a1 & b1\tabularnewline
+a2 & b2\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{This is the \emph{italicised long caption} of tbl6, which does
+not have a label, but does have an empty span at the end.
+}\tabularnewline
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endhead
+a1 & b1\tabularnewline
+a2 & b2\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{longtable}[]{@{}ll@{}}
+\caption{This is the \emph{italicised long caption} of tbl7, which is
+improperly formatted, and will appear in the list of tables. This filter
+requires that \texttt{.unlisted} is placed in a span. \{\#tbl:tbl-label7
+.unlisted\}}\tabularnewline
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endhead
+a1 & b1\tabularnewline
+a2 & b2\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{tbl:tbl-label8}{}
+\begin{longtable}[]{@{}ll@{}}
+\caption{\label{tbl:tbl-label8}This is the \emph{italicised long
+caption} of tbl8, which has an empty short-caption. An empty
+short-caption does nothing. The long caption will still be
+used.}\tabularnewline
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endhead
+a1 & b1\tabularnewline
+a2 & b2\tabularnewline
+\bottomrule
+\end{longtable}
+
+\def\pandoctableshortcapt{}  % .unlisted
+
+\hypertarget{tbl:tbl-label9}{}
+\begin{longtable}[]{@{}ll@{}}
+\caption{\label{tbl:tbl-label9}This is the \emph{italicised long
+caption} of tbl9, which is \textbf{unlisted}, yet has a
+short-caption.}\tabularnewline
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+cola & colb\tabularnewline
+\midrule
+\endhead
+a1 & b1\tabularnewline
+a2 & b2\tabularnewline
+\bottomrule
+\end{longtable}
+
+\undef\pandoctableshortcapt
+
+\end{document}
