@@ -20,6 +20,10 @@ local inkscapePath = os.getenv("INKSCAPE") or "inkscape"
 -- use the meta data to define the key "python_path".
 local pythonPath = os.getenv("PYTHON") or "python"
 
+-- The Python environment's activate script. Can be set on a per document basis
+-- by using the meta data key "activate_python_path".
+local pythonActivatePath = os.getenv("PYTHON_ACTIVATE")
+
 -- The Java path. In order to define a Java version per pandoc document,
 -- use the meta data to define the key "java_path".
 local javaPath = os.getenv("JAVA_HOME")
@@ -70,6 +74,10 @@ function Meta(meta)
 
     if meta.python_path then
         pythonPath = meta.python_path
+    end
+
+    if meta.activate_python_path then
+        pythonActivatePath = meta.activate_python_path
     end
 
     if meta.java_path then
@@ -157,9 +165,44 @@ end
 
 -- Run Python to generate an image:
 local function py2image(code, filetype)
-    local extendedCode = string.format("%s\nplt.savefig(sys.stdout.buffer, dpi=300, fomat=%s)", code, filetype)
-    local final = pandoc.pipe(pythonPath, {"-"}, extendedCode)
-    return final
+    
+    -- Define the temp files:
+    local outfile = string.format("./tmp-python/file.%s", filetype)
+    local tmp = "./tmp-python/file"
+    local tmpDir = "./tmp-python/"
+
+    -- Replace the desired destination's file type in the Python code:
+    local extendedCode = string.gsub(code, "%$FORMAT%$", filetype)
+
+    -- Replace the desired destination's path in the Python code:
+    extendedCode = string.gsub(extendedCode, "%$DESTINATION%$", outfile)
+
+    -- Ensure, that the tmp directory exists:
+    os.execute("mkdir tmp-python")
+
+    -- Write the Python code:
+    local f = io.open(tmp .. ".py", 'w')
+    f:write(extendedCode)
+    f:close()
+
+    -- Execute Python in the desired environment:
+    os.execute(pythonActivatePath .. " && " .. pythonPath .. " " .. tmp .. ".py")
+
+    -- Try to open the written image:
+    local r = io.open(outfile, 'rb')
+    local img_data = nil
+
+    -- When the image exist, read it:
+    if r then
+        img_data = r:read("*all")
+        r:close()
+    end
+
+    -- Delete the tmp files:
+    os.remove(tmp .. ".py")
+    os.remove(outfile)
+
+    return img_data
 end
 
 -- Executes each document's code block to find matching code blocks:
