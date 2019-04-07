@@ -127,30 +127,41 @@ local function tikz2image(src, filetype)
     -- Execute the LaTeX compiler:
     os.execute(pdflatexPath .. " -output-directory " .. tmpDir .. " " .. tmp)
 
-    -- Convert the PDF file to an image by means of ImageMagick:
+    -- Build the basic Inkscape command for the conversion:
     local baseCommand = " --without-gui --file=" .. tmp .. ".pdf"
     local knownFormat = false
 
     if filetype == "png" then
         
+        -- Append the subcommands to convert into a PNG file:
         baseCommand = baseCommand .. " --export-png=" .. tmp .. ".png --export-dpi=300"
         knownFormat = true
 
     elseif filetype == "svg" then
         
+        -- Append the subcommands to convert into a SVG file:
         baseCommand = baseCommand .. "--export-plain-svg=" .. tmp .. ".svg"
         knownFormat = true
 
     end
 
+    -- Unfortunately, continuation is only possible, if we know the actual format:
     local img_data = nil
     if knownFormat then
+
+        -- We know the desired format. Thus, execute Inkscape:
         os.execute("\"" .. inkscapePath .. "\"" .. baseCommand)
         
+        -- Try to open the image:
         local r = io.open(tmp .. "." .. filetype, 'rb')
-        img_data = r:read("*all")
         
-        r:close()
+        -- Read the image, if available:
+        if r then
+            img_data = r:read("*all")
+            r:close()
+        end
+        
+        -- Delete the image tmp file:
         os.remove(outfile)
     end
 
