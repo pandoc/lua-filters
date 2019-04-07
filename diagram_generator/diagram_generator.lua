@@ -216,29 +216,37 @@ function CodeBlock(block)
 
         -- Generate the PlantUML diagram and store the yielded graphics in the media bag:
         local img = plantuml(block.text, filetype, plantumlPath)
-        fname = pandoc.sha1(img) .. "." .. filetype
-        pandoc.mediabag.insert(fname, mimetype, img)
+        if img then
+            fname = pandoc.sha1(img) .. "." .. filetype
+            pandoc.mediabag.insert(fname, mimetype, img)
+        end
 
     elseif block.classes[1] == "graphviz" then
 
         -- Generate the dot diagram and store the yielded graphics in the media bag:
         local img = graphviz(block.text, filetype)
-        fname = pandoc.sha1(img) .. "." .. filetype
-        pandoc.mediabag.insert(fname, mimetype, img)
+        if img then
+            fname = pandoc.sha1(img) .. "." .. filetype
+            pandoc.mediabag.insert(fname, mimetype, img)
+        end
 
     elseif block.classes[1] == "tikz" then
 
         -- Generate the Tikz diagram and store it in the media bag:
         local img = tikz2image(block.text, filetype)
-        fname = pandoc.sha1(img) .. "." .. filetype
-        pandoc.mediabag.insert(fname, mimetype, img)
+        if img then
+            fname = pandoc.sha1(img) .. "." .. filetype
+            pandoc.mediabag.insert(fname, mimetype, img)
+        end
 
     elseif block.classes[1] == "py2image" then
 
         -- Generate the Python diagram and store it in the media bag:
         local img = py2image(block.text, filetype)
-        fname = pandoc.sha1(img) .. "." .. filetype
-        pandoc.mediabag.insert(fname, mimetype, img)
+        if img then
+            fname = pandoc.sha1(img) .. "." .. filetype
+            pandoc.mediabag.insert(fname, mimetype, img)
+        end
 
     end
 
