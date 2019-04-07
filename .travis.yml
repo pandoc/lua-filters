@@ -23,6 +23,7 @@ addons:
       - texlive-fonts-recommended
       - texlive-latex-recommended
       - texlive-latex-extra
+      - pgf
 
 before_install:
 - unset CC
