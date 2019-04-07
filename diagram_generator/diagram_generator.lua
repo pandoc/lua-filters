@@ -140,7 +140,7 @@ local function tikz2image(src, filetype)
     elseif filetype == "svg" then
         
         -- Append the subcommands to convert into a SVG file:
-        baseCommand = baseCommand .. "--export-plain-svg=" .. tmp .. ".svg"
+        baseCommand = baseCommand .. " --export-plain-svg=" .. tmp .. ".svg"
         knownFormat = true
 
     end
