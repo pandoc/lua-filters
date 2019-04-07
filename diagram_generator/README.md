@@ -31,7 +31,7 @@ pandoc document, use the `java_path` meta variable.
 
 Example usage:
 
-```{.plantuml caption="This is an image, created by PlantUML."}
+```{.plantuml caption="This is an image, created by **PlantUML**."}
 @startuml
 Alice -> Bob: Authentication Request Bob --> Alice: Authentication Response
 Alice -> Bob: Another authentication Request Alice <-- Bob: another authentication Response
@@ -50,7 +50,7 @@ set the environment variable `DOT` or use the pandoc's meta variable
 
 Example usage from [the Graphviz gallery](https://graphviz.gitlab.io/_pages/Gallery/directed/fsm.html):
 
-```{.graphviz caption="This is an image, created by Graphviz's dot."}
+```{.graphviz caption="This is an image, created by **Graphviz**'s dot."}
 digraph finite_state_machine {
 	rankdir=LR;
 	size="8,5"
@@ -104,7 +104,7 @@ meta-variable can be set.
 
 Example usage from [TikZ examples](http://www.texample.net/tikz/examples/parallelepiped/):
 
-```{.tikz caption="This is an image, created by Tikz i.e. LaTeX."}
+```{.tikz caption="This is an image, created by **Tikz i.e. LaTeX**."}
 \begin{tikzpicture}[font=\LARGE] 
 
 % Figure parameters (tta and k needs to have the same sign)
@@ -211,7 +211,7 @@ plt.savefig("$DESTINATION$", dpi=300, fomat="$FORMAT$")
 
 The placeholder `$FORMAT$` gets replace by the necessary format. Most of the time, this will be `png` or `svg`. The second placeholder, `$DESTINATION$` gets replaced by the path and file name of the destination. Both placeholders can be used as many times as you want. Example usage from the (Matplotlib examples)[https://matplotlib.org/gallery/lines_bars_and_markers/cohere.html#sphx-glr-gallery-lines-bars-and-markers-cohere-py]:
 
-```{.py2image caption="This is an image, created by Python."}
+```{.py2image caption="This is an image, created by **Python**."}
 import sys
 import numpy as np
 import matplotlib.pyplot as plt

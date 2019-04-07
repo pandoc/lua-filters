@@ -270,7 +270,7 @@ function CodeBlock(block)
 
         -- If the user defines a caption, use it:
         if block.attributes["caption"] then
-            caption = pandoc.Str(block.attributes["caption"])
+            caption = pandoc.read(block.attributes.caption).blocks[1].content
 
             -- This is pandoc's current hack to enforce a caption:
             enable_caption = "fig:"
