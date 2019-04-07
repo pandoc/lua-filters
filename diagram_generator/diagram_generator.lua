@@ -28,7 +28,7 @@ local pythonActivatePath = os.getenv("PYTHON_ACTIVATE")
 -- use the meta data to define the key "java_path".
 local javaPath = os.getenv("JAVA_HOME")
 if javaPath then
-    javaPath = javaPath .. package.config:sub(1,1) .. "java"
+    javaPath = javaPath .. package.config:sub(1,1) .. "bin" .. package.config:sub(1,1) .. "java"
 else
     javaPath = "java"
 end
