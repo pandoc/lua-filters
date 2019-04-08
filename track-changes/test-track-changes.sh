@@ -1,8 +1,6 @@
 #!/bin/sh
 
-latex_result="$(pandoc -M trackChanges:all --track-changes=all --wrap=preserve \
-                       --to=latex --lua-filter=track-changes.lua \
-                       --standalone sample.md)"
+latex_result="$(cat -)"
 
 assert_contains ()
 {
@@ -14,7 +12,9 @@ assert_contains ()
 }
 
 # whether we are using the change package
-assert_contains '\usepackage[markup=underlined,authormarkup=none]{changes}'
+assert_contains <<EOF
+\usepackage[markup=underlined,authormarkup=none,commentmarkup=todo]{changes}
+EOF
 
 # Author colors
 assert_contains '\definechangesauthor[name={JFK}, color=auth2]{JFK}'

@@ -11,7 +11,10 @@ test: sample.md test-track-changes.sh
 	@pandoc -s -t html --wrap=preserve --track-changes=all \
 	        -M trackChanges:all --lua-filter=track-changes.lua sample.md | \
 	    diff -u - expected_draft.html
-	@sh test-track-changes.sh
+	@pandoc -M trackChanges:all --track-changes=all --wrap=preserve \
+	        --to=latex --lua-filter=track-changes.lua \
+	        --standalone sample.md | \
+	    sh test-track-changes.sh
 
 sample.pdf: sample.md track-changes.lua
 	@pandoc -M trackChanges:all --track-changes=all \
