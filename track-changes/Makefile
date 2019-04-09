@@ -1,7 +1,7 @@
 .PHONY: test clean
 
 ## PENDING: ensure that LaTeX output can be compiled to PDF.
-test: sample.md test-track-changes.sh
+test: sample.md test-track-changes.sh sample.pdf
 	@pandoc -t markdown --wrap=preserve \
 	        --lua-filter=track-changes.lua sample.md | \
 	    diff -u - expected_accept.markdown
@@ -15,11 +15,11 @@ test: sample.md test-track-changes.sh
 	        --to=latex --lua-filter=track-changes.lua \
 	        --standalone sample.md | \
 	    sh test-track-changes.sh
+	@rm sample.pdf
 
 sample.pdf: sample.md track-changes.lua
 	@pandoc -M trackChanges:all --track-changes=all \
 	        --lua-filter=track-changes.lua \
-	        --pdf-engine=xelatex \
 	        --output $@ $<
 
 clean:
