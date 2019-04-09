@@ -14,7 +14,7 @@ assert_contains ()
 }
 
 # whether we are using the change package
-assert_contains '\usepackage[markup=underlined,authormarkup=none]{changes}'
+assert_contains '\usepackage{changes}'
 
 # Author colors
 assert_contains '\definechangesauthor[name={JFK}, color=auth2]{JFK}'
