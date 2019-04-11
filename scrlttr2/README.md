@@ -32,6 +32,7 @@ variables:
 - `invoice`: invoice number
 - `myref`: sender's reference
 - `place`: sender's place used near date
+- `signature`: sender's signature
 - `subject`: letter's subject
 - `title`: letter title
 - `yourref`: addressee's reference
