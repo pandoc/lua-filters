@@ -27,7 +27,9 @@ Furthermore, this filter assumes that Java is located in the
 system or user path. This means that from any place of the system
 the `java` command is understood. Alternatively, the `JAVA_HOME`
 environment variable gets used. To use a specific Java version per
-pandoc document, use the `java_path` meta variable.
+pandoc document, use the `java_path` meta variable. Please notice
+that `JAVA_HOME` must be set to the java's home directory e.g. `c:\Program Files\Java\jre1.8.0_201\` whereas 
+`java_path` must be set to the absolute path of `java.exe` e.g. `c:\Program Files\Java\jre1.8.0_201\bin\java.exe`.
 
 Example usage:
 
