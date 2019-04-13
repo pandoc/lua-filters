@@ -13,6 +13,7 @@ local function is_wordprocessing (format)
 end
 
 header_track_changes = [[
+
 \makeatletter
 \PassOptionsToPackage{textsize=scriptsize}{todonotes}
 \PassOptionsToPackage{markup=underlined,authormarkup=none,commentmarkup=todo}{changes}

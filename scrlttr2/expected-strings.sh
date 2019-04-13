@@ -1,12 +1,12 @@
 #!/bin/sh
 
-latex_result="$(pandoc --to=latex --lua-filter=scrlttr2.lua -s sample.md)"
+latex_result="$(cat -)"
 
 assert_contains ()
 {
     printf '%s' "$latex_result" | grep -qF "$1" -
     if [ $? -ne 0 ]; then
-        printf 'Output does not contain `%s`.' "$1" >&2
+        printf 'Output does not contain `%s`.\n' "$1" >&2
         exit 1
     fi
 }

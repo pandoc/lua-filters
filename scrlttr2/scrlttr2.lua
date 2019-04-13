@@ -29,9 +29,11 @@ end
 
 --- Convert the given meta-value to a list of inlines
 local function ensure_inlines (val)
-  if type(val) == 'table' and getmetatable(val) == pandoc.MetaInlines.behavior then
-    return val
-  elseif type(val) == 'table' and getmetatable(val) == pandoc.MetaList.behavior then
+  if not val or type(val) == 'string' or type(val) == 'boolean' then
+    return pandoc.MetaInlines{pandoc.Str(tostring(val))}
+  elseif type(val) == 'table' and val.t == 'MetaInlines' then
+      return val
+  elseif type(val) == 'table' then
     local res = List:new{}
     for i = 1, #val do
       res:extend(val[i])
@@ -39,8 +41,6 @@ local function ensure_inlines (val)
     end
     res[#res] = nil -- drop last linebreak
     return pandoc.MetaInlines(res)
-  elseif not val or type(val) == 'string' or type(val) == 'boolean' then
-    return pandoc.MetaInlines{pandoc.Str(tostring(val))}
   else
     return pandoc.MetaInlines{pandoc.Str(pandoc.utils.stringify(val))}
   end
