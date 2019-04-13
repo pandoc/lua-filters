@@ -14,3 +14,5 @@
 - [x] `PANDOC_READER_OPTIONS.trackChanges`
 - [x] HTML support with `<ins>`, `<del>` (requested with jgm/pandoc#1560) and `<mark>` with title attribute or spans with CSS
 - [ ] HTML track changes decorations like explaind at [Comparing and contrasting ins, del, and s](http://html5doctor.com/ins-del-s) or https://github.com/jgm/pandoc/issues/2884#issuecomment-240263921
+- [ ] auto identifiers, be careful on nested/overlapping comments
+- [ ] citations in comment text

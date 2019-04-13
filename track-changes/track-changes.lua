@@ -15,7 +15,7 @@ end
 header_track_changes = [[
 \makeatletter
 \PassOptionsToPackage{textsize=scriptsize}{todonotes}
-\PassOptionsToPackage{textsize=scriptsize}{changes}
+\PassOptionsToPackage{markup=underlined,authormarkup=none,commentmarkup=todo}{changes}
 \usepackage{changes}
 \@ifpackagelater{changes}{2018/11/03}{%
 }{%
