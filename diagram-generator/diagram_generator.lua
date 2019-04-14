@@ -9,23 +9,23 @@
 ]]
 
 -- The PlantUML path. If set, uses the environment variable PLANTUML or the value "plantuml.jar" (local PlantUML version).
--- In order to define a PlantUML version per pandoc document, use the meta data to define the key "plantuml_path".
+-- In order to define a PlantUML version per pandoc document, use the meta data to define the key "plantumlPath".
 local plantumlPath = os.getenv("PLANTUML") or "plantuml.jar"
 
 -- The Inkscape path. In order to define an Inkscape version
--- per pandoc document, use the meta data to define the key "inkscape_path".
+-- per pandoc document, use the meta data to define the key "inkscapePath".
 local inkscapePath = os.getenv("INKSCAPE") or "inkscape"
 
 -- The Python path. In order to define a Python version per pandoc document,
--- use the meta data to define the key "python_path".
+-- use the meta data to define the key "pythonPath".
 local pythonPath = os.getenv("PYTHON")
 
 -- The Python environment's activate script. Can be set on a per document basis
--- by using the meta data key "activate_python_path".
+-- by using the meta data key "activatePythonPath".
 local pythonActivatePath = os.getenv("PYTHON_ACTIVATE")
 
 -- The Java path. In order to define a Java version per pandoc document,
--- use the meta data to define the key "java_path".
+-- use the meta data to define the key "javaPath".
 local javaPath = os.getenv("JAVA_HOME")
 if javaPath then
     javaPath = javaPath .. package.config:sub(1,1) .. "bin" .. package.config:sub(1,1) .. "java"
@@ -34,11 +34,11 @@ else
 end
 
 -- The dot (Graphviz) path. In order to define a dot version per pandoc document,
--- use the meta data to define the key "dot_path".
+-- use the meta data to define the key "dotPath".
 local dotPath = os.getenv("DOT") or "dot"
 
 -- The pdflatex path. In order to define a pdflatex version per pandoc document,
--- use the meta data to define the key "pdflatex_path".
+-- use the meta data to define the key "pdflatexPath".
 local pdflatexPath = os.getenv("PDFLATEX") or "pdflatex"
 
 -- The default format is SVG i.e. vector graphics:
@@ -64,13 +64,13 @@ end
 -- meta options was set, it gets used instead of the corresponding
 -- environment variable:
 function Meta(meta)
-    plantumlPath = meta.plantuml_path or plantumlPath
-    inkscapePath = meta.inkscape_path or inkscapePath
-    pythonPath = meta.python_path or pythonPath
-    pythonActivatePath = meta.activate_python_path or pythonActivatePath
-    javaPath = meta.java_path or javaPath
-    dotPath = meta.dot_path or dotPath
-    pdflatexPath = meta.pdflatex_path or pdflatexPath
+    plantumlPath = meta.plantumlPath or plantumlPath
+    inkscapePath = meta.inkscapePath or inkscapePath
+    pythonPath = meta.pythonPath or pythonPath
+    pythonActivatePath = meta.activatePythonPath or pythonActivatePath
+    javaPath = meta.javaPath or javaPath
+    dotPath = meta.dotPath or dotPath
+    pdflatexPath = meta.pdflatexPath or pdflatexPath
 end
 
 -- Call plantuml.jar with some parameters (cf. PlantUML help):
@@ -133,7 +133,7 @@ local function tikz2image(src, filetype, additionalPackages)
     end
 
     -- Unfortunately, continuation is only possible, if we know the actual format:
-    local img_data = nil
+    local imgData = nil
     if knownFormat then
 
         -- We know the desired format. Thus, execute Inkscape:
@@ -144,7 +144,7 @@ local function tikz2image(src, filetype, additionalPackages)
         
         -- Read the image, if available:
         if r then
-            img_data = r:read("*all")
+            imgData = r:read("*all")
             r:close()
         end
         
@@ -158,7 +158,7 @@ local function tikz2image(src, filetype, additionalPackages)
     os.remove(tmp .. ".log")
     os.remove(tmp .. ".aux")
 
-    return img_data
+    return imgData
 end
 
 -- Run Python to generate an image:
@@ -188,11 +188,11 @@ local function py2image(code, filetype)
 
     -- Try to open the written image:
     local r = io.open(outfile, 'rb')
-    local img_data = nil
+    local imgData = nil
 
     -- When the image exist, read it:
     if r then
-        img_data = r:read("*all")
+        imgData = r:read("*all")
         r:close()
     end
 
@@ -200,7 +200,7 @@ local function py2image(code, filetype)
     os.remove(tmp .. ".py")
     os.remove(outfile)
 
-    return img_data
+    return imgData
 end
 
 -- Executes each document's code block to find matching code blocks:
@@ -255,20 +255,20 @@ function CodeBlock(block)
 
         -- Define the default caption:
         local caption = {}
-        local enable_caption = nil
+        local enableCaption = nil
 
         -- If the user defines a caption, use it:
         if block.attributes["caption"] then
             caption = pandoc.read(block.attributes.caption).blocks[1].content
 
             -- This is pandoc's current hack to enforce a caption:
-            enable_caption = "fig:"
+            enableCaption = "fig:"
         end
 
         -- Create a new image for the document's structure. Attach the user's caption.
         -- Also use a hack (fig:) to enforce pandoc to create a figure i.e. attach
         -- a caption to the image.
-        local imgObj = pandoc.Image(caption, fname, enable_caption)
+        local imgObj = pandoc.Image(caption, fname, enableCaption)
 
         -- Now, transfer the attribute "name" from the code block to the new image block.
         -- It might gets used by the figure numbering lua filter. If the figure numbering
