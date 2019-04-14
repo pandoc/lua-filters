@@ -2,7 +2,7 @@
 
 ## Introduction
 This Lua filter is used to create images with or without captions from code
-blocks. Currently PlantUML, Graphviz, Tikz and Python can be processed.
+blocks. Currently PlantUML, Graphviz, Ti*k*Z and Python can be processed.
 This document also serves as a test document, which is why the subsequent
 test diagrams are integrated in every supported language.
 
@@ -75,17 +75,17 @@ digraph finite_state_machine {
 }
 ```
 
-### Tikz
-Tikz (cf. [Wikipedia](https://en.wikipedia.org/wiki/PGF/TikZ)) is a
+### Ti*k*Z
+Ti*k*Z (cf. [Wikipedia](https://en.wikipedia.org/wiki/PGF/TikZ)) is a
 description language for graphics of any kind that can be used within
 LaTeX (cf. [Wikipedia](https://en.wikipedia.org/wiki/LaTeX)).
 
-Therefore a LaTeX system must be installed on the system. The Tikz code is
+Therefore a LaTeX system must be installed on the system. The Ti*k*Z code is
 embedded into a dynamic LaTeX document. This temporary document gets
 translated into a PDF document using LaTeX (`pdflatex`). Finally,
 Inkscape is used to convert the PDF file to the desired format.
 
-Due to this more complicated process, the use of Tikz is also more
+Due to this more complicated process, the use of Ti*k*Z is also more
 complicated overall. The process is error-prone: An insufficiently
 configured LaTeX installation or an insufficiently configured
 Inkscape installation can lead to errors. Overall, this results in the following dependencies:
@@ -106,7 +106,7 @@ meta-variable can be set.
 
 Example usage from [TikZ examples](http://www.texample.net/tikz/examples/parallelepiped/):
 
-```{.tikz caption="This is an image, created by **Tikz i.e. LaTeX**."}
+```{.tikz caption="This is an image, created by **TikZ i.e. LaTeX**."}
 \begin{tikzpicture}[font=\LARGE] 
 
 % Figure parameters (tta and k needs to have the same sign)
