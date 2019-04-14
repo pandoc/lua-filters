@@ -74,7 +74,7 @@ function Meta(meta)
 end
 
 -- Call plantuml.jar with some parameters (cf. PlantUML help):
-local function plantuml(puml, filetype, plantumlPath)
+local function plantuml(puml, filetype)
     local final = pandoc.pipe(javaPath, {"-jar", plantumlPath, "-t" .. filetype, "-pipe", "-charset", "UTF8"}, puml)
     return final
 end
@@ -213,7 +213,7 @@ function CodeBlock(block)
     if block.classes[1] == "plantuml" then
 
         -- Generate the PlantUML diagram and store the yielded graphics in the media bag:
-        local img = plantuml(block.text, filetype, plantumlPath)
+        local img = plantuml(block.text, filetype)
         if img then
             fname = pandoc.sha1(img) .. "." .. filetype
             pandoc.mediabag.insert(fname, mimetype, img)
