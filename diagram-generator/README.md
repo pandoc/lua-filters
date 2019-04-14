@@ -28,15 +28,17 @@ system or user path. This means that from any place of the system
 the `java` command is understood. Alternatively, the `JAVA_HOME`
 environment variable gets used. To use a specific Java version per
 pandoc document, use the `java_path` meta variable. Please notice
-that `JAVA_HOME` must be set to the java's home directory e.g. `c:\Program Files\Java\jre1.8.0_201\` whereas 
-`java_path` must be set to the absolute path of `java.exe` e.g. `c:\Program Files\Java\jre1.8.0_201\bin\java.exe`.
+that `JAVA_HOME` must be set to the java's home directory e.g.
+`c:\Program Files\Java\jre1.8.0_201\` whereas `java_path` must be
+set to the absolute path of `java.exe` e.g.
+`c:\Program Files\Java\jre1.8.0_201\bin\java.exe`.
 
 Example usage:
 
 ```{.plantuml caption="This is an image, created by **PlantUML**."}
 @startuml
 Alice -> Bob: Authentication Request Bob --> Alice: Authentication Response
-Alice -> Bob: Another authentication Request Alice <-- Bob: another authentication Response
+Alice -> Bob: Another authentication Request Alice <-- Bob: another Response
 @enduml
 ```
 
@@ -50,7 +52,8 @@ and therefore can be used from any location. Alternatively, you can
 set the environment variable `DOT` or use the pandoc's meta variable
 `dot_path`.
 
-Example usage from [the Graphviz gallery](https://graphviz.gitlab.io/_pages/Gallery/directed/fsm.html):
+Example usage from [the Graphviz
+gallery](https://graphviz.gitlab.io/_pages/Gallery/directed/fsm.html):
 
 ```{.graphviz caption="This is an image, created by **Graphviz**'s dot."}
 digraph finite_state_machine {
@@ -88,7 +91,8 @@ Inkscape is used to convert the PDF file to the desired format.
 Due to this more complicated process, the use of Ti*k*Z is also more
 complicated overall. The process is error-prone: An insufficiently
 configured LaTeX installation or an insufficiently configured
-Inkscape installation can lead to errors. Overall, this results in the following dependencies:
+Inkscape installation can lead to errors. Overall, this results in
+the following dependencies:
 
 - Any LaTeX installation. This should be configured so that
 missing packages are installed automatically. This filter uses the
@@ -104,7 +108,9 @@ variable `INKSCAPE` can be set with a path. If a specific
 version per pandoc document is to be used, the `inkscape_path`
 meta-variable can be set.
 
-Example usage from [TikZ examples](http://www.texample.net/tikz/examples/parallelepiped/) by [Kjell Magne Fauske](http://www.texample.net/tikz/examples/nav1d/):
+Example usage from [TikZ
+examples](http://www.texample.net/tikz/examples/parallelepiped/) by
+[Kjell Magne Fauske](http://www.texample.net/tikz/examples/nav1d/):
 
 ```{.tikz caption="This is an image, created by **TikZ i.e. LaTeX**."}
 \usetikzlibrary{arrows}
@@ -123,13 +129,19 @@ Example usage from [TikZ examples](http://www.texample.net/tikz/examples/paralle
 ```
 
 ### Python
-In order to use Python to generate an diagram, your Python code must store the final image data in a temporary file with the correct format. In case you use matplotlib for a diagram, add the following line to do so:
+In order to use Python to generate an diagram, your Python code must store the
+final image data in a temporary file with the correct format. In case you use
+matplotlib for a diagram, add the following line to do so:
 
 ```python
 plt.savefig("$DESTINATION$", dpi=300, fomat="$FORMAT$")
 ```
 
-The placeholder `$FORMAT$` gets replace by the necessary format. Most of the time, this will be `png` or `svg`. The second placeholder, `$DESTINATION$` gets replaced by the path and file name of the destination. Both placeholders can be used as many times as you want. Example usage from the (Matplotlib examples)[https://matplotlib.org/gallery/lines_bars_and_markers/cohere.html#sphx-glr-gallery-lines-bars-and-markers-cohere-py]:
+The placeholder `$FORMAT$` gets replace by the necessary format. Most of the
+time, this will be `png` or `svg`. The second placeholder, `$DESTINATION$`
+gets replaced by the path and file name of the destination. Both placeholders
+can be used as many times as you want. Example usage from the (Matplotlib
+examples)[https://matplotlib.org/gallery/lines_bars_and_markers/cohere.html#sphx-glr-gallery-lines-bars-and-markers-cohere-py]:
 
 ```{.py2image caption="This is an image, created by **Python**."}
 import matplotlib
@@ -165,21 +177,33 @@ fig.tight_layout()
 plt.savefig("$DESTINATION$", dpi=300, fomat="$FORMAT$")
 ```
 
-Precondition to use Python is a Python environment which contains all necessary libraries you want to use. To use, for example, the standard [Anaconda Python](https://www.anaconda.com/distribution/) environment on a Microsoft Windows system ...
+Precondition to use Python is a Python environment which contains all
+necessary libraries you want to use. To use, for example, the standard
+[Anaconda Python](https://www.anaconda.com/distribution/) environment
+on a Microsoft Windows system ...
 
-- set the environment variable `PYTHON` or the meta key `python_path` to `c:\ProgramData\Anaconda3\python.exe`
+- set the environment variable `PYTHON` or the meta key `python_path`
+to `c:\ProgramData\Anaconda3\python.exe`
 
-- set the environment variable `PYTHON_ACTIVATE` or the meta key `activate_python_path` to `c:\ProgramData\Anaconda3\Scripts\activate.bat`.
+- set the environment variable `PYTHON_ACTIVATE` or the meta
+key `activate_python_path` to `c:\ProgramData\Anaconda3\Scripts\activate.bat`.
 
 Pandoc will activate this Python environment and starts Python with your code.
 
 ## How to run pandoc
-This section will show, how to call Pandoc in order to use this filter with meta keys. The following command assume, that the filters are stored in the subdirectory `filters`. Further, this is a example for a Microsoft Windows system.
+This section will show, how to call Pandoc in order to use this filter with
+meta keys. The following command assume, that the filters are stored in the
+subdirectory `filters`. Further, this is a example for a Microsoft Windows
+system.
 
-Command to use PlantUML:
+Command to use PlantUML (a single line):
 
 ```
-pandoc.exe README.md -f markdown -t docx --self-contained --standalone --lua-filter=filters\diagram_generator.lua --metadata=plantuml_path:"c:\ProgramData\chocolatey\lib\plantuml\tools\plantuml.jar" --metadata=java_path:"c:\Program Files\Java\jre1.8.0_201\bin\java.exe" -o README.docx
+pandoc.exe README.md -f markdown -t docx --self-contained --standalone
+--lua-filter=filters\diagram_generator.lua
+--metadata=plantuml_path:"c:\ProgramData\chocolatey\lib\plantuml\tools\plantuml.jar"
+--metadata=java_path:"c:\Program Files\Java\jre1.8.0_201\bin\java.exe"
+-o README.docx
 ```
 
 All available environment variables:
