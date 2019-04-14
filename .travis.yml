@@ -17,6 +17,7 @@ addons:
       - texlive-bibtex-extra
       - texlive-fonts-recommended
       - texlive-latex-recommended
+      - pgf
 
 before_install:
 - unset CC

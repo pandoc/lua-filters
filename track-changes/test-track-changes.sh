@@ -14,7 +14,9 @@ assert_contains ()
 }
 
 # whether we are using the change package
-assert_contains '\usepackage{changes}'
+assert_contains <<EOF
+\usepackage{changes}
+EOF
 
 # Author colors
 assert_contains '\definechangesauthor[name={JFK}, color=auth2]{JFK}'
