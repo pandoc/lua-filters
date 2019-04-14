@@ -88,6 +88,17 @@ embedded into a dynamic LaTeX document. This temporary document gets
 translated into a PDF document using LaTeX (`pdflatex`). Finally,
 Inkscape is used to convert the PDF file to the desired format.
 
+Note: We are using Inkscape here to use a stable solution for the
+convertion. Formerly ImageMagick was used instead. ImageMagick is
+not able to convert PDF files. Hence, it uses Ghostscript to do
+so, cf. [1](https://stackoverflow.com/a/6599718/2258393).
+Unfortunately, Ghostscript behaves unpredictable during Windows and
+Linux tests cases, cf. [2](https://stackoverflow.com/questions/21774561/some-pdfs-are-converted-improperly-using-imagemagick),
+[3](https://stackoverflow.com/questions/9064706/imagemagic-convert-command-pdf-convertion-with-bad-size-orientation), [4](https://stackoverflow.com/questions/18837093/imagemagic-renders-image-with-black-background),
+[5](https://stackoverflow.com/questions/37392798/pdf-to-svg-is-not-perfect),
+[6](https://stackoverflow.com/q/10288065/2258393), etc. By using Inkscape,
+we need one dependency less and get rid of unexpected Ghostscript issues.
+
 Due to this more complicated process, the use of Ti*k*Z is also more
 complicated overall. The process is error-prone: An insufficiently
 configured LaTeX installation or an insufficiently configured
