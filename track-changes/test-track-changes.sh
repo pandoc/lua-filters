@@ -1,8 +1,6 @@
 #!/bin/sh
 
-latex_result="$(pandoc -M trackChanges:all --track-changes=all --wrap=preserve \
-                       --to=latex --lua-filter=track-changes.lua \
-                       --standalone sample.md)"
+latex_result="$(cat -)"
 
 assert_contains ()
 {

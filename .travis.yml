@@ -16,8 +16,9 @@ addons:
       - lmodern
       - texlive-bibtex-extra
       - texlive-fonts-recommended
+      - texlive-generic-recommended
       - texlive-latex-recommended
-      - pgf
+      - texlive-latex-extra
 
 before_install:
 - unset CC
