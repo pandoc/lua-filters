@@ -64,33 +64,13 @@ end
 -- meta options was set, it gets used instead of the corresponding
 -- environment variable:
 function Meta(meta)
-    if meta.plantuml_path then
-        plantumlPath = meta.plantuml_path
-    end
-
-    if meta.inkscape_path then
-        inkscapePath = meta.inkscape_path
-    end
-
-    if meta.python_path then
-        pythonPath = meta.python_path
-    end
-
-    if meta.activate_python_path then
-        pythonActivatePath = meta.activate_python_path
-    end
-
-    if meta.java_path then
-        javaPath = meta.java_path
-    end
-
-    if meta.dot_path then
-        dotPath = meta.dot_path
-    end
-
-    if meta.pdflatex_path then
-        pdflatexPath = meta.pdflatex_path
-    end
+    plantumlPath = meta.plantuml_path or plantumlPath
+    inkscapePath = meta.inkscape_path or inkscapePath
+    pythonPath = meta.python_path or pythonPath
+    pythonActivatePath = meta.activate_python_path or pythonActivatePath
+    javaPath = meta.java_path or javaPath
+    dotPath = meta.dot_path or dotPath
+    pdflatexPath = meta.pdflatex_path or pdflatexPath
 end
 
 -- Call plantuml.jar with some parameters (cf. PlantUML help):
