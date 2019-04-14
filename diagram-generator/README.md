@@ -220,11 +220,7 @@ system.
 Command to use PlantUML (a single line):
 
 ```
-pandoc.exe README.md -f markdown -t docx --self-contained --standalone
---lua-filter=filters\diagram_generator.lua
---metadata=plantumlPath:"c:\ProgramData\chocolatey\lib\plantuml\tools\plantuml.jar"
---metadata=javaPath:"c:\Program Files\Java\jre1.8.0_201\bin\java.exe"
--o README.docx
+pandoc.exe README.md -f markdown -t docx --self-contained --standalone --lua-filter=filters\diagram-generator.lua --metadata=plantumlPath:"c:\ProgramData\chocolatey\lib\plantuml\tools\plantuml.jar" --metadata=javaPath:"c:\Program Files\Java\jre1.8.0_201\bin\java.exe" -o README.docx
 ```
 
 All available environment variables:
