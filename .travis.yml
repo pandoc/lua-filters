@@ -12,11 +12,20 @@ addons:
       - aspell-en
       - imagemagick
       - default-jre
+      - graphviz
+      - inkscape
+      - python3
+      - python3-pip
+      - python3-tk
+      - python3-numpy
+      - python3-matplotlib
       - latex-xcolor
       - lmodern
       - texlive-bibtex-extra
       - texlive-fonts-recommended
       - texlive-latex-recommended
+      - texlive-latex-extra
+      - pgf
 
 before_install:
 - unset CC
@@ -32,10 +41,10 @@ before_install:
 # Download plantuml.jar for plantuml filter
 - |
   pushd $HOME
-  wget http://sourceforge.net/projects/plantuml/files/plantuml.1.2018.9.jar
+  wget http://sourceforge.net/projects/plantuml/files/plantuml.jar
   popd
 - export PATH=$HOME/pandoc-$PANDOCVERSION/bin:$PATH
-- export PLANTUML=$HOME/plantuml.1.2018.9.jar
+- export PLANTUML=$HOME/plantuml.jar
 
 install: []
 
