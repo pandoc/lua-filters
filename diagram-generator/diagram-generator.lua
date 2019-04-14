@@ -222,17 +222,13 @@ function CodeBlock(block)
         filetype, block.attributes["additionalPackages"] or nil)
     
     -- Was ok?
-    if img then
+    if success and img then
         
         -- Hash the figure name and content:
         fname = pandoc.sha1(img) .. "." .. filetype
         
         -- Store the data in the media bag:
         pandoc.mediabag.insert(fname, mimetype, img)
-    else
-        local nameOfError = block.classes[1] or "unknown"
-        print("Something went wrong while generating " ..
-            nameOfError .. " figure.")
     end
 
     -- Case: This code block was an image e.g. PlantUML or dot/Graphviz, etc.:
