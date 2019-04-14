@@ -107,7 +107,7 @@ local function graphviz(code, filetype)
 end
 
 -- Compile LaTeX with Tikz code to an image:
-local function tikz2image(src, filetype)
+local function tikz2image(src, filetype, additionalPackages)
 
     -- Define file names:
     local outfile = string.format("./tmp-latex/file.%s", filetype)
@@ -119,7 +119,14 @@ local function tikz2image(src, filetype)
 
     -- Build and write the LaTeX document:
     local f = io.open(tmp .. ".tex", 'w')
-    f:write("\\documentclass{standalone}\n\\usepackage{tikz}\n\\begin{document}\n")
+    f:write("\\documentclass{standalone}\n\\usepackage{tikz}\n")
+    
+    -- Any additional package(s) are desired?
+    if additionalPackages then
+        f:write(additionalPackages)
+    end
+
+    f:write("\\begin{document}\n")
     f:write(src)
     f:write("\n\\end{document}\n")
     f:close()
@@ -243,8 +250,10 @@ function CodeBlock(block)
 
     elseif block.classes[1] == "tikz" then
 
-        -- Generate the Tikz diagram and store it in the media bag:
-        local img = tikz2image(block.text, filetype)
+        -- Generate the Tikz diagram and store it in the media bag.
+        -- If available, use additional LaTeX packages:
+        local img = tikz2image(block.text, filetype,
+            block.attributes["additionalPackages"] or nil)
         if img then
             fname = pandoc.sha1(img) .. "." .. filetype
             pandoc.mediabag.insert(fname, mimetype, img)
