@@ -35,12 +35,14 @@ set to the absolute path of `java.exe` e.g.
 
 Example usage:
 
+~~~~~~~~~~~~~~~~
 ```{.plantuml caption="This is an image, created by **PlantUML**."}
 @startuml
 Alice -> Bob: Authentication Request Bob --> Alice: Authentication Response
 Alice -> Bob: Another authentication Request Alice <-- Bob: another Response
 @enduml
 ```
+~~~~~~~~~~~~~~~~
 
 ### Graphviz
 To use Graphviz you only need to install Graphviz, as you can read
@@ -55,6 +57,7 @@ set the environment variable `DOT` or use the pandoc's meta variable
 Example usage from [the Graphviz
 gallery](https://graphviz.gitlab.io/_pages/Gallery/directed/fsm.html):
 
+~~~~~~~~~~~~~~~~
 ```{.graphviz caption="This is an image, created by **Graphviz**'s dot."}
 digraph finite_state_machine {
 	rankdir=LR;
@@ -77,6 +80,7 @@ digraph finite_state_machine {
 	LR_8 -> LR_5 [ label = "S(a)" ];
 }
 ```
+~~~~~~~~~~~~~~~~
 
 ### Ti*k*Z
 Ti*k*Z (cf. [Wikipedia](https://en.wikipedia.org/wiki/PGF/TikZ)) is a
@@ -127,6 +131,7 @@ Example usage from [TikZ
 examples](http://www.texample.net/tikz/examples/parallelepiped/) by
 [Kjell Magne Fauske](http://www.texample.net/tikz/examples/nav1d/):
 
+~~~~~~~~~~~~~~~~
 ```{.tikz caption="This is an image, created by **TikZ i.e. LaTeX**."
      additionalPackages="\usepackage{adjustbox}"}
 \usetikzlibrary{arrows}
@@ -148,6 +153,7 @@ examples](http://www.texample.net/tikz/examples/parallelepiped/) by
   }
 }
 ```
+~~~~~~~~~~~~~~~~
 
 ### Python
 In order to use Python to generate an diagram, your Python code must store the
@@ -164,6 +170,7 @@ gets replaced by the path and file name of the destination. Both placeholders
 can be used as many times as you want. Example usage from the [Matplotlib 
 examples](https://matplotlib.org/gallery/lines_bars_and_markers/cohere.html#sphx-glr-gallery-lines-bars-and-markers-cohere-py):
 
+~~~~~~~~~~~~~~~~
 ```{.py2image caption="This is an image, created by **Python**."}
 import matplotlib
 matplotlib.use('Agg')
@@ -197,6 +204,7 @@ axs[1].set_ylabel('coherence')
 fig.tight_layout()
 plt.savefig("$DESTINATION$", dpi=300, fomat="$FORMAT$")
 ```
+~~~~~~~~~~~~~~~~
 
 Precondition to use Python is a Python environment which contains all
 necessary libraries you want to use. To use, for example, the standard
