@@ -161,8 +161,8 @@ plt.savefig("$DESTINATION$", dpi=300, fomat="$FORMAT$")
 The placeholder `$FORMAT$` gets replace by the necessary format. Most of the
 time, this will be `png` or `svg`. The second placeholder, `$DESTINATION$`
 gets replaced by the path and file name of the destination. Both placeholders
-can be used as many times as you want. Example usage from the (Matplotlib
-examples)[https://matplotlib.org/gallery/lines_bars_and_markers/cohere.html#sphx-glr-gallery-lines-bars-and-markers-cohere-py]:
+can be used as many times as you want. Example usage from the [Matplotlib
+examples](https://matplotlib.org/gallery/lines_bars_and_markers/cohere.html#sphx-glr-gallery-lines-bars-and-markers-cohere-py):
 
 ```{.py2image caption="This is an image, created by **Python**."}
 import matplotlib
