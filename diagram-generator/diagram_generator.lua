@@ -209,45 +209,30 @@ function CodeBlock(block)
     -- Predefine a potential image:
     local fname = nil
 
-    -- Filter code blocks which codes we support:
-    if block.classes[1] == "plantuml" then
+    -- Using a table with all known generators i.e. converters:
+    local converters = {
+        plantuml = plantuml,
+        graphviz = graphviz,
+        tikz = tikz2image,
+        py2image = py2image,
+    }
 
-        -- Generate the PlantUML diagram and store the yielded graphics in the media bag:
-        local img = plantuml(block.text, filetype)
-        if img then
-            fname = pandoc.sha1(img) .. "." .. filetype
-            pandoc.mediabag.insert(fname, mimetype, img)
-        end
-
-    elseif block.classes[1] == "graphviz" then
-
-        -- Generate the dot diagram and store the yielded graphics in the media bag:
-        local img = graphviz(block.text, filetype)
-        if img then
-            fname = pandoc.sha1(img) .. "." .. filetype
-            pandoc.mediabag.insert(fname, mimetype, img)
-        end
-
-    elseif block.classes[1] == "tikz" then
-
-        -- Generate the Tikz diagram and store it in the media bag.
-        -- If available, use additional LaTeX packages:
-        local img = tikz2image(block.text, filetype,
-            block.attributes["additionalPackages"] or nil)
-        if img then
-            fname = pandoc.sha1(img) .. "." .. filetype
-            pandoc.mediabag.insert(fname, mimetype, img)
-        end
-
-    elseif block.classes[1] == "py2image" then
-
-        -- Generate the Python diagram and store it in the media bag:
-        local img = py2image(block.text, filetype)
-        if img then
-            fname = pandoc.sha1(img) .. "." .. filetype
-            pandoc.mediabag.insert(fname, mimetype, img)
-        end
-
+    -- Call the correct converter which belongs to the used class:
+    local success, img = pcall(converters[block.classes[1]], block.text,
+        filetype, block.attributes["additionalPackages"] or nil)
+    
+    -- Was ok?
+    if img then
+        
+        -- Hash the figure name and content:
+        fname = pandoc.sha1(img) .. "." .. filetype
+        
+        -- Store the data in the media bag:
+        pandoc.mediabag.insert(fname, mimetype, img)
+    else
+        local nameOfError = block.classes[1] or "unknown"
+        print("Something went wrong while generating " ..
+            nameOfError .. " figure.")
     end
 
     -- Case: This code block was an image e.g. PlantUML or dot/Graphviz, etc.:
