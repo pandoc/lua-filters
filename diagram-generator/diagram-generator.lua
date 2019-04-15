@@ -220,18 +220,31 @@ function CodeBlock(block)
         py2image = py2image,
     }
 
+    -- Check if a converter exists for this block. If not, return the block
+    -- unchanged.
+    local img_converter = converters[block.classes[1]]
+    if not img_converter then
+      return nil
+    end
+
     -- Call the correct converter which belongs to the used class:
-    local success, img = pcall(converters[block.classes[1]], block.text,
+    local success, img = pcall(img_converter, block.text,
         filetype, block.attributes["additionalPackages"] or nil)
 
     -- Was ok?
     if success and img then
-
         -- Hash the figure name and content:
         fname = pandoc.sha1(img) .. "." .. filetype
 
         -- Store the data in the media bag:
         pandoc.mediabag.insert(fname, mimetype, img)
+
+    else
+
+        -- an error occured; img contains the error message
+        io.stderr:write(tostring(img))
+        io.stderr:write('\n')
+
     end
 
     -- Case: This code block was an image e.g. PlantUML or dot/Graphviz, etc.:

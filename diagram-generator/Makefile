@@ -11,4 +11,4 @@ sample.html: sample.md
 
 clean:
 	rm -f sample.html
-	rmdir tmp-latex || true
+	rm -rf tmp-latex
