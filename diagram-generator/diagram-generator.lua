@@ -170,9 +170,8 @@ end
 local function py2image(code, filetype)
 
     -- Define the temp files:
-    local outfile = string.format("./tmp-python/file.%s", filetype)
-    local tmp = "./tmp-python/file"
-    local tmpDir = "./tmp-python/"
+    local outfile = os.tmpname()
+    local pyfile = os.tmpname()
 
     -- Replace the desired destination's file type in the Python code:
     local extendedCode = string.gsub(code, "%$FORMAT%$", filetype)
@@ -180,17 +179,14 @@ local function py2image(code, filetype)
     -- Replace the desired destination's path in the Python code:
     extendedCode = string.gsub(extendedCode, "%$DESTINATION%$", outfile)
 
-    -- Ensure, that the tmp directory exists:
-    os.execute("mkdir tmp-python")
-
     -- Write the Python code:
-    local f = io.open(tmp .. ".py", 'w')
+    local f = io.open(pyfile, 'w')
     f:write(extendedCode)
     f:close()
 
     -- Execute Python in the desired environment:
     os.execute(
-        pythonActivatePath .. " && " .. pythonPath .. " " .. tmp .. ".py"
+        pythonActivatePath .. " && " .. pythonPath .. " " .. pyfile
     )
 
     -- Try to open the written image:
@@ -204,7 +200,7 @@ local function py2image(code, filetype)
     end
 
     -- Delete the tmp files:
-    os.remove(tmp .. ".py")
+    os.remove(pyfile)
     os.remove(outfile)
 
     return imgData

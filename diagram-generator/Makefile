@@ -9,3 +9,6 @@ sample.html: sample.md
 	    --metadata=title:"README" \
 	    --output=$@ $<
 
+clean:
+	rm -f sample.html
+	rmdir tmp-latex || true
