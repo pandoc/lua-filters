@@ -8,37 +8,40 @@
     for the code to generate a GraphViz image.
 ]]
 
--- The PlantUML path. If set, uses the environment variable PLANTUML or the value "plantuml.jar" (local PlantUML version).
--- In order to define a PlantUML version per pandoc document, use the meta data to define the key "plantumlPath".
+-- The PlantUML path. If set, uses the environment variable PLANTUML or the
+-- value "plantuml.jar" (local PlantUML version). In order to define a
+-- PlantUML version per pandoc document, use the meta data to define the key
+-- "plantumlPath".
 local plantumlPath = os.getenv("PLANTUML") or "plantuml.jar"
 
--- The Inkscape path. In order to define an Inkscape version
--- per pandoc document, use the meta data to define the key "inkscapePath".
+-- The Inkscape path. In order to define an Inkscape version per pandoc
+-- document, use the meta data to define the key "inkscapePath".
 local inkscapePath = os.getenv("INKSCAPE") or "inkscape"
 
 -- The Python path. In order to define a Python version per pandoc document,
 -- use the meta data to define the key "pythonPath".
 local pythonPath = os.getenv("PYTHON")
 
--- The Python environment's activate script. Can be set on a per document basis
--- by using the meta data key "activatePythonPath".
+-- The Python environment's activate script. Can be set on a per document
+-- basis by using the meta data key "activatePythonPath".
 local pythonActivatePath = os.getenv("PYTHON_ACTIVATE")
 
 -- The Java path. In order to define a Java version per pandoc document,
 -- use the meta data to define the key "javaPath".
 local javaPath = os.getenv("JAVA_HOME")
 if javaPath then
-    javaPath = javaPath .. package.config:sub(1,1) .. "bin" .. package.config:sub(1,1) .. "java"
+    javaPath = javaPath .. package.config:sub(1,1) .. "bin"
+        .. package.config:sub(1,1) .. "java"
 else
     javaPath = "java"
 end
 
--- The dot (Graphviz) path. In order to define a dot version per pandoc document,
--- use the meta data to define the key "dotPath".
+-- The dot (Graphviz) path. In order to define a dot version per pandoc
+-- document, use the meta data to define the key "dotPath".
 local dotPath = os.getenv("DOT") or "dot"
 
--- The pdflatex path. In order to define a pdflatex version per pandoc document,
--- use the meta data to define the key "pdflatexPath".
+-- The pdflatex path. In order to define a pdflatex version per pandoc
+-- document, use the meta data to define the key "pdflatexPath".
 local pdflatexPath = os.getenv("PDFLATEX") or "pdflatex"
 
 -- The default format is SVG i.e. vector graphics:
@@ -100,7 +103,7 @@ local function tikz2image(src, filetype, additionalPackages)
     -- Build and write the LaTeX document:
     local f = io.open(tmp .. ".tex", 'w')
     f:write("\\documentclass{standalone}\n\\usepackage{tikz}\n")
-    
+
     -- Any additional package(s) are desired?
     if additionalPackages then
         f:write(additionalPackages)
@@ -119,35 +122,37 @@ local function tikz2image(src, filetype, additionalPackages)
     local knownFormat = false
 
     if filetype == "png" then
-        
+
         -- Append the subcommands to convert into a PNG file:
-        baseCommand = baseCommand .. " --export-png=" .. tmp .. ".png --export-dpi=300"
+        baseCommand = baseCommand .. " --export-png="
+            .. tmp .. ".png --export-dpi=300"
         knownFormat = true
 
     elseif filetype == "svg" then
-        
+
         -- Append the subcommands to convert into a SVG file:
         baseCommand = baseCommand .. " --export-plain-svg=" .. tmp .. ".svg"
         knownFormat = true
 
     end
 
-    -- Unfortunately, continuation is only possible, if we know the actual format:
+    -- Unfortunately, continuation is only possible, if we know the actual
+    -- format:
     local imgData = nil
     if knownFormat then
 
         -- We know the desired format. Thus, execute Inkscape:
         os.execute("\"" .. inkscapePath .. "\"" .. baseCommand)
-        
+
         -- Try to open the image:
         local r = io.open(tmp .. "." .. filetype, 'rb')
-        
+
         -- Read the image, if available:
         if r then
             imgData = r:read("*all")
             r:close()
         end
-        
+
         -- Delete the image tmp file:
         os.remove(outfile)
     end
@@ -163,7 +168,7 @@ end
 
 -- Run Python to generate an image:
 local function py2image(code, filetype)
-    
+
     -- Define the temp files:
     local outfile = string.format("./tmp-python/file.%s", filetype)
     local tmp = "./tmp-python/file"
@@ -184,7 +189,9 @@ local function py2image(code, filetype)
     f:close()
 
     -- Execute Python in the desired environment:
-    os.execute(pythonActivatePath .. " && " .. pythonPath .. " " .. tmp .. ".py")
+    os.execute(
+        pythonActivatePath .. " && " .. pythonPath .. " " .. tmp .. ".py"
+    )
 
     -- Try to open the written image:
     local r = io.open(outfile, 'rb')
@@ -220,13 +227,13 @@ function CodeBlock(block)
     -- Call the correct converter which belongs to the used class:
     local success, img = pcall(converters[block.classes[1]], block.text,
         filetype, block.attributes["additionalPackages"] or nil)
-    
+
     -- Was ok?
     if success and img then
-        
+
         -- Hash the figure name and content:
         fname = pandoc.sha1(img) .. "." .. filetype
-        
+
         -- Store the data in the media bag:
         pandoc.mediabag.insert(fname, mimetype, img)
     end
@@ -246,26 +253,29 @@ function CodeBlock(block)
             enableCaption = "fig:"
         end
 
-        -- Create a new image for the document's structure. Attach the user's caption.
-        -- Also use a hack (fig:) to enforce pandoc to create a figure i.e. attach
-        -- a caption to the image.
+        -- Create a new image for the document's structure. Attach the user's
+        -- caption. Also use a hack (fig:) to enforce pandoc to create a
+        -- figure i.e. attach a caption to the image.
         local imgObj = pandoc.Image(caption, fname, enableCaption)
 
-        -- Now, transfer the attribute "name" from the code block to the new image block.
-        -- It might gets used by the figure numbering lua filter. If the figure numbering
-        -- gets not used, this additional attribute gets ignored as well.
+        -- Now, transfer the attribute "name" from the code block to the new
+        -- image block. It might gets used by the figure numbering lua filter.
+        -- If the figure numbering gets not used, this additional attribute
+        -- gets ignored as well.
         if block.attributes["name"] then
             imgObj.attributes["name"] = block.attributes["name"]
         end
 
-        -- Finally, put the image inside an empty paragraph. By returning the resulting
-        -- paragraph object, the source code block gets replaced by the image:
+        -- Finally, put the image inside an empty paragraph. By returning the
+        -- resulting paragraph object, the source code block gets replaced by
+        -- the image:
         return pandoc.Para{ imgObj }
     end
 end
 
--- Normally, pandoc will run the function in the built-in order Inlines -> Blocks -> Meta -> Pandoc.
--- We instead want Meta -> Blocks. Thus, we must define our custom order:
+-- Normally, pandoc will run the function in the built-in order Inlines ->
+-- Blocks -> Meta -> Pandoc. We instead want Meta -> Blocks. Thus, we must
+-- define our custom order:
 return {
     {Meta = Meta},
     {CodeBlock = CodeBlock},
