@@ -115,7 +115,7 @@ local function tikz2image(src, filetype, additionalPackages)
     f:close()
 
     -- Execute the LaTeX compiler:
-    os.execute(pdflatexPath .. " -output-directory " .. tmpDir .. " " .. tmp)
+    pandoc.pipe(pdflatexPath, {'-output-directory', tmpDir, tmp}, '')
 
     -- Build the basic Inkscape command for the conversion:
     local baseCommand = " --without-gui --file=" .. tmp .. ".pdf"
