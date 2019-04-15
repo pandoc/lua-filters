@@ -170,7 +170,7 @@ end
 local function py2image(code, filetype)
 
     -- Define the temp files:
-    local outfile = os.tmpname()
+    local outfile = string.format('%s.%s', os.tmpname(), filetype)
     local pyfile = os.tmpname()
 
     -- Replace the desired destination's file type in the Python code:
@@ -197,6 +197,8 @@ local function py2image(code, filetype)
     if r then
         imgData = r:read("*all")
         r:close()
+    else
+        io.stderr:write(string.format("File '%s' could not be opened", outfile))
     end
 
     -- Delete the tmp files:
