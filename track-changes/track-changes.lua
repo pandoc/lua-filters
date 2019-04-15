@@ -13,8 +13,17 @@ local function is_wordprocessing (format)
 end
 
 header_track_changes = [[
+
+\makeatletter
 \PassOptionsToPackage{textsize=scriptsize}{todonotes}
-\usepackage[markup=underlined,authormarkup=none,commentmarkup=todo]{changes}
+\PassOptionsToPackage{markup=underlined,authormarkup=none,commentmarkup=todo}{changes}
+\usepackage{changes}
+\@ifpackagelater{changes}{2018/11/03}{%
+}{%
+  \usepackage{todonotes}
+  \setremarkmarkup{\todo[color=Changes@Color#1!20]{\sffamily\textbf{#1:}~#2}}
+}%
+\makeatother
 \definecolor{auth1}{HTML}{4477AA}
 \definecolor{auth2}{HTML}{117733}
 \definecolor{auth3}{HTML}{999933}
@@ -22,12 +31,6 @@ header_track_changes = [[
 \definecolor{auth5}{HTML}{AA4499}
 \definecolor{auth6}{HTML}{332288}
 \setlength{\marginparwidth}{3cm}
-\makeatletter
-\@ifpackagelater{changes}{2018/11/03}{%
-}{%
-  \setremarkmarkup{\todo[color=Changes@Color#1!20]{\sffamily\textbf{#1:}~#2}}
-}%
-\makeatother
 \newcommand{\note}[2][]{\added[#1,remark={#2}]{}}
 \newcommand\hlnotesingle{%
   \bgroup
@@ -211,7 +214,7 @@ function Pandoc(doc)
     tc = type(meta['trackChanges']) == 'table' and pandoc.utils.stringify(meta['trackChanges']) or meta['trackChanges'] or 'accept'
     local trackChanges = PANDOC_READER_OPTIONS and PANDOC_READER_OPTIONS.trackChanges or trackChangesOptions[tc]
     meta.trackChanges = nil -- remove it from the matadata
-
+    
     local M = {}
     if trackChanges == 'AllChanges' then
         if is_html(FORMAT) then

@@ -13,7 +13,7 @@ assert_contains ()
 
 # whether we are using the change package
 assert_contains <<EOF
-\usepackage[markup=underlined,authormarkup=none,commentmarkup=todo]{changes}
+\usepackage{changes}
 EOF
 
 # Author colors

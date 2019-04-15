@@ -23,6 +23,7 @@ addons:
       - lmodern
       - texlive-bibtex-extra
       - texlive-fonts-recommended
+      - texlive-generic-recommended
       - texlive-latex-recommended
       - texlive-latex-extra
       - pgf
