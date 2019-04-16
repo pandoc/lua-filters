@@ -98,7 +98,7 @@ local function tikz2image(src, filetype, additionalPackages)
     local tmpDir = "./tmp-latex/"
 
     -- Ensure, that the tmp directory exists:
-    os.execute("mkdir tmp-latex")
+    os.execute("mkdir -p tmp-latex")
 
     -- Build and write the LaTeX document:
     local f = io.open(tmp .. ".tex", 'w')
@@ -185,9 +185,11 @@ local function py2image(code, filetype)
     f:close()
 
     -- Execute Python in the desired environment:
-    os.execute(
-        pythonActivatePath .. " && " .. pythonPath .. " " .. pyfile
-    )
+    local pycmd = pythonPath .. ' ' .. pyfile
+    local command = pythonActivatePath
+      and pythonActivatePath .. ' && ' .. pycmd
+      or pycmd
+    os.execute(command)
 
     -- Try to open the written image:
     local r = io.open(outfile, 'rb')

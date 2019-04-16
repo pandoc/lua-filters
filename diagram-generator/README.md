@@ -156,7 +156,7 @@ examples](http://www.texample.net/tikz/examples/parallelepiped/) by
 ~~~~~~~~~~~~~~~~
 
 ### Python
-In order to use Python to generate an diagram, your Python code must store the
+In order to use Python to generate a diagram, your Python code must store the
 final image data in a temporary file with the correct format. In case you use
 matplotlib for a diagram, add the following line to do so:
 
