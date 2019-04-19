@@ -1,16 +1,17 @@
+DIFF ?= diff --strip-trailing-cr -u
 .PHONY: test clean
 
 ## PENDING: ensure that LaTeX output can be compiled to PDF.
 test: sample.md test-track-changes.sh sample.pdf
 	@pandoc -t markdown --wrap=preserve \
 	        --lua-filter=track-changes.lua sample.md | \
-	    diff --strip-trailing-cr -u - expected_accept.markdown
+	    $(DIFF) - expected_accept.markdown
 	@pandoc -t markdown --wrap=preserve --track-changes=reject \
 	        -M trackChanges:reject --lua-filter=track-changes.lua sample.md | \
-	    diff --strip-trailing-cr -u - expected_reject.markdown
+	    $(DIFF) - expected_reject.markdown
 	@pandoc -s -t html --wrap=preserve --track-changes=all \
 	        -M trackChanges:all --lua-filter=track-changes.lua sample.md | \
-	    diff --strip-trailing-cr -u - expected_draft.html
+	    $(DIFF) - expected_draft.html
 	@pandoc -M trackChanges:all --track-changes=all --wrap=preserve \
 	        --to=latex --lua-filter=track-changes.lua \
 	        --standalone sample.md | \

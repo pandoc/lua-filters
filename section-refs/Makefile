@@ -1,3 +1,5 @@
+DIFF ?= diff --strip-trailing-cr -u
+
 OPTIONS_test_default := -t native \
 	-M bibliography=bibliography.bib \
 	-F pandoc-citeproc \
@@ -23,4 +25,4 @@ OPTIONS_test_section_level := -t native \
 test: test_default test_no_citeproc test_refs_name test_section_level
 
 test_%: expected_%.native sample.md bibliography.bib
-	@pandoc sample.md $(OPTIONS_$@) | diff --strip-trailing-cr -u $< -
+	@pandoc sample.md $(OPTIONS_$@) | $(DIFF) $< -

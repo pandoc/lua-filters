@@ -1,13 +1,14 @@
+DIFF ?= diff --strip-trailing-cr -u
 LF	=	--lua-filter=table-short-captions.lua
 F	=	-F pandoc-crossref
 
 test: sample.md
 	@pandoc -s $(LF) -t native $< | \
-		diff -u expected-sample.native -
+		$(DIFF) expected-sample.native -
 
 test-with-crossref: sample.md
 	@pandoc -s $(LF) $(F) -t latex $< | \
-		diff -u expected-sample.tex -
+		$(DIFF) expected-sample.tex -
 
 README.pdf: README.md
 	@pandoc $(LF) $(F) $< -o $@
