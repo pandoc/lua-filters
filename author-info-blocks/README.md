@@ -56,4 +56,4 @@ This will mark Jane Doe and John Q. Doe as equal contributors and
 Jane Doe as the sole corresponding author. Below is a screenshot
 of a document header created from this metadata.
 
-![example document screenshot](document-screenshot.jpg)
+![sample output](sample.png)
