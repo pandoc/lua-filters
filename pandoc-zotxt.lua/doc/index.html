@@ -1,0 +1,786 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>pandoc-zoxt.lua</h1>
+
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+<li><a href="#Fields">Fields</a></li>
+</ul>
+
+
+<h2>Scripts</h2>
+<ul class="nowrap">
+  <li><strong>pandoc-zotxt.lua</strong></li>
+</ul>
+<h2>Topics</h2>
+<ul class="">
+  <li><a href="topics/README.md.html">README</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Script <code>pandoc-zotxt.lua</code></h1>
+<p>pandoc-zotxt.lua &ndash; Looks up citations in Zotero and adds references.</p>
+<p> # SYNOPSIS</p>
+
+<pre>
+pandoc <span class="comment">--lua-filter pandoc-zotxt.lua -F pandoc-citeproc</span>
+</pre>
+
+
+<p> # DESCRIPTION</p>
+
+<p> pandoc-zotxt.lua looks up sources of citations in Zotero and adds
+ them either to a document&rsquo;s <code>references</code> metadata field or to its
+ bibliography, where pandoc-citeproc can pick them up.</p>
+
+<p> You cite your sources using so-called &ldquo;easy citekeys&rdquo; (provided by zotxt) or
+ &ldquo;Better BibTeX Citation Keys&rdquo; (provided by Better BibTeX for Zotero) and
+ then tell pandoc to run pandoc-zotxt.lua before pandoc-citeproc.
+ That&rsquo;s all all there is to it. (See the documentation of zotxt and
+ Better BibTeX for Zotero respectively for details.)</p>
+
+<p> You can also use pandoc-zotxt.lua to manage a bibliography file. This is
+ usually a lot faster. Simply set the <code>zotero-bibliography</code> metadata field
+ to a filename. pandoc-zotxt.lua will then add the sources you cite to that
+ file, rather than to the <code>references</code> metadata field. It will also add
+ that file to the document&rsquo;s <code>bibliography</code> metadata field, so that
+ pandoc-zotxt.lua picks it up. The biblography is stored in CSL JSON,
+ so the filename must end in &ldquo;.json&rdquo;.</p>
+
+<p> pandoc-zotxt.lua takes relative filenames to be relative to the directory
+ of the first input file you pass to pandoc or, if you don&rsquo;t pass any input
+ files, as relative to the current working directory.</p>
+
+<p> Note, pandoc-zotxt.lua only ever adds sources to bibliography files.
+ It doesn&rsquo;t update or delete them. To update your bibliography file,
+ delete it. pandoc-zotxt.lua will then regenerate it from scratch.</p>
+
+<p> # CAVEATS</p>
+
+<p> pandoc-zotxt.lua is Unicode-agnostic.</p>
+
+<p> # SEE ALSO</p>
+
+<p> pandoc(1), pandoc-citeproc(1)</p>
+    <h3>Info:</h3>
+    <ul>
+        <li><strong>Copyright</strong>: 2018, 2019 Odin Kroeger</li>
+        <li><strong>Release</strong>: 0.3.15b</li>
+        <li><strong>License</strong>: MIT</li>
+        <li><strong>Author</strong>: Odin Kroeger</li>
+    </ul>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#split_path">split_path (path)</a></td>
+	<td class="summary">Splits a file&rsquo;s path into a directory and a filename part.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#warn">warn (...)</a></td>
+	<td class="summary">Prints warnings to STDERR.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#map">map (f, list)</a></td>
+	<td class="summary">Applies a function to every element of a list.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_position">get_position (elem, list)</a></td>
+	<td class="summary">Returns the position of an element in a list.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#is_path_absolute">is_path_absolute (path)</a></td>
+	<td class="summary">Checks if a path is absolute.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_input_directory">get_input_directory ()</a></td>
+	<td class="summary">Returns the directory of the first input file or &lsquo;.&rsquo;.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#convert_numbers_to_strings">convert_numbers_to_strings (data)</a></td>
+	<td class="summary">Converts all numbers in a multi-dimensional table to strings.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_source">get_source (citekey)</a></td>
+	<td class="summary">Retrieves bibliographic data for a source from Zotero.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#read_json_file">read_json_file (fname)</a></td>
+	<td class="summary">Reads a JSON file.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#write_json_file">write_json_file (data, fname)</a></td>
+	<td class="summary">Writes data to a file in JSON.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#update_bibliography">update_bibliography (fname, citekeys)</a></td>
+	<td class="summary">Adds cited sources to a bibliography file.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#collect_sources">collect_sources (citations)</a></td>
+	<td class="summary">Collects all citekeys used in a document.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#add_references">add_references (meta)</a></td>
+	<td class="summary">Adds sources to the metadata block of a document.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#add_bibliography">add_bibliography (meta)</a></td>
+	<td class="summary">Adds sources to a bibliography and the biblography to the document.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#add_sources">add_sources (meta)</a></td>
+	<td class="summary">Adds sources to the document&rsquo;s metadata or to the bibliography.</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#ZOTXT_KEYTYPES">ZOTXT_KEYTYPES</a></td>
+	<td class="summary">Types of citation keys.</td>
+	</tr>
+</table>
+<h2><a href="#Fields">Fields</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#ZOTXT_QUERY_URL_BASE">ZOTXT_QUERY_URL_BASE</a></td>
+	<td class="summary">The URL to lookup citation data.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#NAME">NAME</a></td>
+	<td class="summary">The name of this script.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#VERSION">VERSION</a></td>
+	<td class="summary">The version of this script.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#PATH_SEP">PATH_SEP</a></td>
+	<td class="summary">The path seperator of the operating system.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "split_path"></a>
+    <strong>split_path (path)</strong>
+    </dt>
+    <dd>
+    Splits a file&rsquo;s path into a directory and a filename part.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         The path to the file.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+        The file&rsquo;s path.</li>
+        <li>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         The file&rsquo;s name.</p>
+
+<p> This function makes an educated guess given the string it&rsquo;s passed.
+ It doesn&rsquo;t look at the filesystem. The guess is educated enough though.</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "warn"></a>
+    <strong>warn (...)</strong>
+    </dt>
+    <dd>
+    Prints warnings to STDERR.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Strings to be written to STDERR.</p>
+
+<p> Prefixes every line with the global <a href="index.html#NAME">NAME</a> and &ldquo;: &rdquo;.
+ Also, appends a single linefeed if needed.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "map"></a>
+    <strong>map (f, list)</strong>
+    </dt>
+    <dd>
+    Applies a function to every element of a list.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">f</span>
+            <span class="types"><span class="type">func</span></span>
+         The function.
+        </li>
+        <li><span class="parameter">list</span>
+            <span class="types"><span class="type">tab</span></span>
+         The list.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">tab</span></span>
+        The return values of <code>f</code>.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_position"></a>
+    <strong>get_position (elem, list)</strong>
+    </dt>
+    <dd>
+    Returns the position of an element in a list.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">elem</span>
+         The element.
+        </li>
+        <li><span class="parameter">list</span>
+            <span class="types"><span class="type">tab</span></span>
+         The list.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">integer</span></span>
+        The index of the element,
+  <code>nil</code> if the list doesn&rsquo;t contain the element.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "is_path_absolute"></a>
+    <strong>is_path_absolute (path)</strong>
+    </dt>
+    <dd>
+    Checks if a path is absolute.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         A path.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        <code>true</code> if the path is absolute, <code>false</code> otherwise.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_input_directory"></a>
+    <strong>get_input_directory ()</strong>
+    </dt>
+    <dd>
+    Returns the directory of the first input file or &lsquo;.&rsquo;.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+        The directory of that file.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "convert_numbers_to_strings"></a>
+    <strong>convert_numbers_to_strings (data)</strong>
+    </dt>
+    <dd>
+    Converts all numbers in a multi-dimensional table to strings. </p>
+
+<p> Also converts floating point numbers to integers. This is needed
+ because all numbers are floating point numbers in JSON, but older
+ versions of Pandoc expect integers.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">data</span>
+         Data of any type.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        The given data, with all numbers converted into strings.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_source"></a>
+    <strong>get_source (citekey)</strong>
+    </dt>
+    <dd>
+    Retrieves bibliographic data for a source from Zotero. </p>
+
+<p> Retrieves bibliographic data by citation key, trying different
+ types of citation keys, starting with the last one a lookup was
+ successful for.</p>
+
+<p> The global <code>ZOTXT_QUERY_URL</code> defines where to get data from.
+ The global <a href="index.html#ZOTXT_KEYTYPES">ZOTXT_KEYTYPES</a> defines what keytypes to try.
+ See <a href="https://github.com/egh/zotxt">https://github.com/egh/zotxt</a> for details.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">citekey</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         The citation key of the source,
+  e.g., &lsquo;name:2019word&rsquo;, &lsquo;name2019WordWordWord&rsquo;.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.6">table</a></span>
+        Bibliographic data in CSL format,
+  <code>nil</code> if the source wasn&rsquo;t found or an error occurred.</li>
+        <li>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+        An error message, if applicable.</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "read_json_file"></a>
+    <strong>read_json_file (fname)</strong>
+    </dt>
+    <dd>
+    Reads a JSON file.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">fname</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Name of the file.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+        The parsed data, <code>nil</code> if an error occurred.</li>
+        <li>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+        An error message, if applicable.</li>
+        <li>
+           <span class="types"><span class="type">number</span></span>
+        An error number. Positive numbers are OS error numbers,
+  negative numbers indicate a JSON decoding error.</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "write_json_file"></a>
+    <strong>write_json_file (data, fname)</strong>
+    </dt>
+    <dd>
+    Writes data to a file in JSON.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">data</span>
+         Data.
+        </li>
+        <li><span class="parameter">fname</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         Name of the file.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">bool</span></span>
+        <code>true</code> if the data was written to the file, <code>nil</code> otherwise.</li>
+        <li>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+        An error message, if applicable.</li>
+        <li>
+           <span class="types"><span class="type">integer</span></span>
+        An error number. Positive numbers are OS error numbers,
+  negative numbers indicate a JSON encoding error.</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "update_bibliography"></a>
+    <strong>update_bibliography (fname, citekeys)</strong>
+    </dt>
+    <dd>
+    Adds cited sources to a bibliography file.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">fname</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+         The filename of the biblography.
+        </li>
+        <li><span class="parameter">citekeys</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">{string,...}</a></span>
+         The citation keys of the sources to add,
+  e.g., &lsquo;name:2019word&rsquo;, &lsquo;name2019WordWordWord&rsquo;.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">bool</span></span>
+        <code>true</code> if the bibliography was updated
+   or no update was needed, <code>nil</code> if an error occurred.</li>
+        <li>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+        An error message, if applicable.</p>
+
+<p> Prints an error message to STDERR for every source that cannot be found.</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "collect_sources"></a>
+    <strong>collect_sources (citations)</strong>
+    </dt>
+    <dd>
+    Collects all citekeys used in a document. </p>
+
+<p> Saves them into the variable <code>CITEKEYS</code>, which is shared with
+ <a href="index.html#add_references">add_references</a> and <a href="index.html#add_bibliography">add_bibliography</a>.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">citations</span>
+            <span class="types"><span class="type">pandoc.Cite</span></span>
+         A citation.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "add_references"></a>
+    <strong>add_references (meta)</strong>
+    </dt>
+    <dd>
+    Adds sources to the metadata block of a document. </p>
+
+<p> Reads citekeys of cited sources from the variable <code>CITEKEYS</code>,
+ which is shared with <a href="index.html#collect_sources">collect_sources</a>.  Never modifies <code>CITEKEYS</code>.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">meta</span>
+            <span class="types"><span class="type">pandoc.Meta</span></span>
+         A metadata block.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">pandoc.Meta</span></span>
+         An updated metadata block, with the field
+  <code>references</code> added if needed, <code>nil</code> if no sources were found.</p>
+
+<p> Prints an error message to STDERR for every source that cannot be found.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "add_bibliography"></a>
+    <strong>add_bibliography (meta)</strong>
+    </dt>
+    <dd>
+    Adds sources to a bibliography and the biblography to the document. </p>
+
+<p> Reads citekeys of cited sources from the variable <code>CITEKEYS</code>,
+ which is shared with <a href="index.html#collect_sources">collect_sources</a>. Never modifies <code>CITEKEYS</code>.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">meta</span>
+            <span class="types"><span class="type">pandoc.Meta</span></span>
+         A metadata block.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">pandoc.Meta</span></span>
+         An updated metadata block, with the field
+  <code>bibliography</code> added when needed, <code>nil</code> if no sources were found,
+  <code>zotero-bibliography</code> is not set, or an error occurred.</li>
+        <li>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.3/manual.html#6.4">string</a></span>
+        An error message, if applicable.</p>
+
+<p> Prints an error message to STDERR for every source that cannot be found.</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "add_sources"></a>
+    <strong>add_sources (meta)</strong>
+    </dt>
+    <dd>
+    Adds sources to the document&rsquo;s metadata or to the bibliography. </p>
+
+<p> Checks whether the current documents uses a bibliography. If so, adds cited
+ sources that aren&rsquo;t in it yet to the file. Otherwise, adds all cited
+ sources to the document&rsquo;s metadata.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">meta</span>
+            <span class="types"><span class="type">pandoc.Meta</span></span>
+         A metadata block.
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">pandoc.Meta</span></span>
+         An updated metadata block, with references or
+  a pointer to the bibliography file, <code>nil</code> if nothing
+  was done or an error occurred.</p>
+
+<p> Prints messages to STDERR if errors occur.
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "ZOTXT_KEYTYPES"></a>
+    <strong>ZOTXT_KEYTYPES</strong>
+    </dt>
+    <dd>
+    Types of citation keys. </p>
+
+<p> See <a href="https://github.com/egh/zotxt">https://github.com/egh/zotxt</a> for details.
+
+
+    <h3>Fields:</h3>
+    <ul>
+        <li><span class="parameter">easykey</span>
+        zotxt easy citekey
+        </li>
+        <li><span class="parameter">betterbibtexkey</span>
+        Better BibTeX citation key
+        </li>
+        <li><span class="parameter">key</span>
+        Zotero item ID
+        </li>
+    </ul>
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="index.html#get_source">get_source</a>
+    </ul>
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Fields"></a>Fields</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "ZOTXT_QUERY_URL_BASE"></a>
+    <strong>ZOTXT_QUERY_URL_BASE</strong>
+    </dt>
+    <dd>
+    The URL to lookup citation data. </p>
+
+<p> See <a href="https://github.com/egh/zotxt">https://github.com/egh/zotxt</a> for details.
+
+
+
+
+
+    <h3>See also:</h3>
+    <ul>
+         <a href="index.html#get_source">get_source</a>
+    </ul>
+
+
+</dd>
+    <dt>
+    <a name = "NAME"></a>
+    <strong>NAME</strong>
+    </dt>
+    <dd>
+    The name of this script.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "VERSION"></a>
+    <strong>VERSION</strong>
+    </dt>
+    <dd>
+    The version of this script.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "PATH_SEP"></a>
+    <strong>PATH_SEP</strong>
+    </dt>
+    <dd>
+    The path seperator of the operating system.
+
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2019-05-08 20:44:26 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
