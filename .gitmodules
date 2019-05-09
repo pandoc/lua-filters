@@ -1,3 +1,0 @@
-[submodule "pandoc-quotes.lua"]
-	path = pandoc-quotes.lua
-	url = git@github.com:odkr/pandoc-quotes.lua.git
