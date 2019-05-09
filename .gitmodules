@@ -1,3 +1,0 @@
-[submodule "pandoc-zotxt.lua"]
-	path = pandoc-zotxt.lua
-	url = git@github.com:odkr/pandoc-zotxt.lua.git
