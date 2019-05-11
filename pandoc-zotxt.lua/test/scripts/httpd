@@ -82,12 +82,12 @@ MAX_SHUTDOWN_TIME = 5
 
 try:
     import SimpleHTTPServer as server
-except ModuleNotFoundError:
+except ImportError:
     import http.server as server
 
 try:
     import SocketServer as socketserver
-except ModuleNotFoundError:
+except ImportError:
     import socketserver
 
 import argparse
