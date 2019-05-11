@@ -71,7 +71,7 @@
 --
 --
 -- @script pandoc-zotxt.lua
--- @release 0.3.15
+-- @release 0.3.16
 -- @author Odin Kroeger
 -- @copyright 2018, 2019 Odin Kroeger
 -- @license MIT
@@ -79,13 +79,14 @@
 
 -- # INITIALISATION
 
-local pandoc_zotxt = {}
+local M = {}
 
 local assert = assert
 local ipairs = ipairs
 local pairs = pairs
 local pcall = pcall
 local require = require
+local select = select
 local tostring = tostring
 local type = type
 
@@ -104,7 +105,7 @@ local PANDOC_STATE = PANDOC_STATE
 local PANDOC_SCRIPT_FILE = PANDOC_SCRIPT_FILE
 local stringify = pandoc.utils.stringify
 
-local _ENV = pandoc_zotxt
+local _ENV = M
 
 local text = require 'text'
 local sub = text.sub
@@ -117,7 +118,7 @@ local sub = text.sub
 -- See <https://github.com/egh/zotxt> for details.
 --
 -- @see get_source
-ZOTXT_QUERY_URL_BASE = 'http://localhost:23119/zotxt/items?'
+ZOTXT_QUERY_BASE_URL = 'http://localhost:23119/zotxt/items?'
 
 --- Types of citation keys.
 --
@@ -135,7 +136,7 @@ ZOTXT_KEYTYPES = {
 NAME = 'pandoc-zotxt.lua'
 
 --- The version of this script.
-VERSION = '0.3.15'
+VERSION = '0.3.16'
 
 
 -- # LIBRARIES
@@ -278,7 +279,7 @@ end
 
 
 do
-    local query_url_base = ZOTXT_QUERY_URL_BASE
+    local base_url = ZOTXT_QUERY_BASE_URL
     local keytypes = ZOTXT_KEYTYPES
     local fetch = pandoc.mediabag.fetch
     local pcall = pcall
@@ -307,9 +308,9 @@ do
         assert(citekey ~= '', 'given citekey is the empty string')
         local _, reply
         for i = 1, #keytypes do
-            local query_url = concat({query_url_base,
+            local query_url = concat({ZOTXT_QUERY_BASE_URL, 
                 keytypes[i], '=', citekey})
-            _, reply = fetch(query_url, '.')
+            reply = select(2, fetch(query_url, '.'))
             local ok, data = pcall(decode, reply)
             if ok then
                 insert(keytypes, 1, remove(keytypes, i))
@@ -418,7 +419,7 @@ do
         function collect_sources (citations)
             local c = citations.citations
             for i = 1, #c do
-                id = c[i].id
+                local id = c[i].id
                 if not seen[id] then
                     seen[id] = true
                     insert(CITEKEYS, id)
@@ -519,9 +520,9 @@ end
 -- Pandoc data types to functions, allows for unit testing.
 
 -- First pass. Collect citations.
-pandoc_zotxt[1] = {Cite = collect_sources}
+M[1] = {Cite = collect_sources}
 
 -- Second pass. Add cited sources.
-pandoc_zotxt[2] = {Meta = add_sources}
+M[2] = {Meta = add_sources}
 
-return pandoc_zotxt
+return M

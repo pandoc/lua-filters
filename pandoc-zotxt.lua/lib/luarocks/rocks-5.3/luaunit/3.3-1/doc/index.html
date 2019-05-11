@@ -1,0 +1,2325 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to LuaUnit’s documentation! &#8212; LuaUnit 3.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="LuaUnit 3.3 documentation" href="#" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="#">LuaUnit 3.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-luaunit-s-documentation">
+<h1>Welcome to LuaUnit&#8217;s documentation!<a class="headerlink" href="#welcome-to-luaunit-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>LuaUnit is a popular unit-testing framework for Lua, with an interface typical
+of xUnit libraries (Python unittest, Junit, NUnit, ...). It supports
+several output formats (Text, TAP, JUnit, ...) to be used directly or work with Continuous Integration platforms
+(Jenkins, Hudson, ...).</p>
+<p>For simplicity, LuaUnit is contained into a single-file and has no external dependency. To start using it,
+just add the file <em>luaunit.lua</em> to your project. A <a class="reference external" href="https://luarocks.org/modules/bluebird75/luaunit">LuaRocks package</a>  is also available.</p>
+<p>Tutorial and reference documentation is available on <a class="reference external" href="http://luaunit.readthedocs.org/en/latest/">Read-the-docs</a> .</p>
+<p>LuaUnit also provides some dedicated support to scientific computing. See the section <a class="reference internal" href="#scientific-computing-and-luaunit">Scientific computing and LuaUnit</a></p>
+<p>LuaUnit may also be used as an assertion library. In that case, you will call the assertion functions, which generate errors
+when the assertion fails. The error includes a detailed analysis of the failed assertion, like when executing a test suite.</p>
+<p>LuaUnit provides another generic usage function: <a class="reference internal" href="#prettystr" title="prettystr"><code class="xref py py-func docutils literal"><span class="pre">prettystr()</span></code></a> which converts any value to a nicely
+formatted string. It supports in particular tables, nested table and even recursive tables.</p>
+</div>
+<div class="section" id="more-details">
+<h2>More details<a class="headerlink" href="#more-details" title="Permalink to this headline">¶</a></h2>
+<p>LuaUnit provides a wide range of assertions and goes into great efforts to provide the most useful output. For example
+since version 3.3 , comparing lists will provide a detailed difference analysis:</p>
+<div class="highlight-lua"><div class="highlight"><pre><span></span>-- lua test code. Can you spot the difference ?
+function TestListCompare:test1()
+    local A = { 121221, 122211, 121221, 122211, 121221, 122212, 121212, 122112, 122121, 121212, 122121 }
+    local B = { 121221, 122211, 121221, 122211, 121221, 122212, 121212, 122112, 121221, 121212, 122121 }
+    lu.assertEquals( A, B )
+end
+
+$ lua test_some_lists_comparison.lua
+
+TestListCompare.test1 ... FAIL
+test/some_lists_comparisons.lua:22: expected:
+
+List difference analysis:
+* lists A (actual) and B (expected) have the same size
+* lists A and B start differing at index 9
+* lists A and B are equal again from index 10
+* Common parts:
+  = A[1], B[1]: 121221
+  = A[2], B[2]: 122211
+  = A[3], B[3]: 121221
+  = A[4], B[4]: 122211
+  = A[5], B[5]: 121221
+  = A[6], B[6]: 122212
+  = A[7], B[7]: 121212
+  = A[8], B[8]: 122112
+* Differing parts:
+  - A[9]: 122121
+  + B[9]: 121221
+* Common parts at the end of the lists
+  = A[10], B[10]: 121212
+  = A[11], B[11]: 122121
+</pre></div>
+</div>
+<p>The command-line options provide a flexible interface to select tests by name or patterns, control output
+format, set verbosity and more. See <a class="reference internal" href="#using-the-command-line">Using the command-line</a> .</p>
+<p>LuaUnit is very well tested: code coverage is 99.5% . The test suite is run on every version of Lua (Lua 5.1 to 5.3, LuaJIT 2.0 and 2.1 beta)
+and on many OS (Windows Seven, Windows Server 2012, MacOs X and Ubuntu). You can check the continuous build results on <a class="reference external" href="https://travis-ci.org/bluebird75/luaunit">Travis-CI</a> and <a class="reference external" href="https://ci.appveyor.com/project/bluebird75/luaunit/history">AppVeyor</a> .</p>
+<p>LuaUnit is maintained on GitHub: <a class="reference external" href="https://github.com/bluebird75/luaunit">https://github.com/bluebird75/luaunit</a> . We gladly accept feature requests and even better Pull Requests.</p>
+<p>LuaUnit is released under the BSD license.</p>
+<div class="section" id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<p>LuaUnit is packed into a single-file. To make start using it, just add the file to your project.</p>
+<p>Several installation methods are available.</p>
+<div class="section" id="luarocks">
+<h4>LuaRocks<a class="headerlink" href="#luarocks" title="Permalink to this headline">¶</a></h4>
+<p>LuaUnit v3.3 is available as a <a class="reference external" href="https://luarocks.org/modules/bluebird75/luaunit">LuaRocks package</a> .</p>
+</div>
+<div class="section" id="github">
+<h4>GitHub<a class="headerlink" href="#github" title="Permalink to this headline">¶</a></h4>
+<p>The simplest way to install LuaUnit is to fetch the GitHub version:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>git clone git@github.com:bluebird75/luaunit.git
+</pre></div>
+</div>
+<p>Then copy the file luaunit.lua into your project or the Lua libs directory.</p>
+<p>The version in development on GitHub is always stable and can be used safely.</p>
+<p>On Linux, you can also install it into your Lua directories</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>sudo python doit.py install
+</pre></div>
+</div>
+<p>If that fail, edit the function <em>install()</em> in the file <em>doit.py</em> to adjust
+the Lua version and installation directory. It uses, by default, Linux paths that depend on the version.</p>
+</div>
+</div>
+<div class="section" id="upgrade-note">
+<h3>Upgrade note<a class="headerlink" href="#upgrade-note" title="Permalink to this headline">¶</a></h3>
+<p><strong>Important note when upgrading to version 3.1 and above</strong> : there is a break of backward compatibility in version 3.1, assertions functions are no longer exported directly to the global namespace. See <a class="reference internal" href="#luaunit-global-asserts"><span class="std std-ref">Enabling global or module-level functions</span></a> on how to adjust or restore previous behavior.</p>
+</div>
+<div class="section" id="luaunit-development">
+<h3>LuaUnit development<a class="headerlink" href="#luaunit-development" title="Permalink to this headline">¶</a></h3>
+<p>See <a class="reference internal" href="#developing-luaunit">Developing luaunit</a></p>
+</div>
+<div class="section" id="version-and-changelog">
+<h3>Version and Changelog<a class="headerlink" href="#version-and-changelog" title="Permalink to this headline">¶</a></h3>
+<p>This documentation describes the functionality of LuaUnit v3.2 .</p>
+<div class="section" id="new-in-version-3-3-6-mar-2018">
+<h4>New in version 3.3 - 6. Mar 2018<a class="headerlink" href="#new-in-version-3-3-6-mar-2018" title="Permalink to this headline">¶</a></h4>
+<ul>
+<li><dl class="first docutils">
+<dt>General</dt>
+<dd><ul class="first last simple">
+<li>when comparing lists with <a class="reference internal" href="#assertEquals" title="assertEquals"><code class="xref py py-func docutils literal"><span class="pre">assertEquals()</span></code></a>, failure message provides an advanced comparison of the lists</li>
+<li><a class="reference internal" href="#assertErrorMsgEquals" title="assertErrorMsgEquals"><code class="xref py py-func docutils literal"><span class="pre">assertErrorMsgEquals()</span></code></a> can check for error raised as tables</li>
+<li>tests may be finished early with <a class="reference internal" href="#fail" title="fail"><code class="xref py py-func docutils literal"><span class="pre">fail()</span></code></a>, <a class="reference internal" href="#failIf" title="failIf"><code class="xref py py-func docutils literal"><span class="pre">failIf()</span></code></a>, <a class="reference internal" href="#success" title="success"><code class="xref py py-func docutils literal"><span class="pre">success()</span></code></a> or <a class="reference internal" href="#successIf" title="successIf"><code class="xref py py-func docutils literal"><span class="pre">successIf()</span></code></a></li>
+<li>improve printing of recursive tables</li>
+<li>improvements and fixes to JUnit and TAP output</li>
+<li>stricter <a class="reference internal" href="#assertTrue" title="assertTrue"><code class="xref py py-func docutils literal"><span class="pre">assertTrue()</span></code></a> and <a class="reference internal" href="#assertFalse" title="assertFalse"><code class="xref py py-func docutils literal"><span class="pre">assertFalse()</span></code></a>: they only succeed with boolean values</li>
+<li>add <a class="reference internal" href="#assertEvalToTrue" title="assertEvalToTrue"><code class="xref py py-func docutils literal"><span class="pre">assertEvalToTrue()</span></code></a> and <a class="reference internal" href="#assertEvalToFalse" title="assertEvalToFalse"><code class="xref py py-func docutils literal"><span class="pre">assertEvalToFalse()</span></code></a> with previous <a class="reference internal" href="#assertTrue" title="assertTrue"><code class="xref py py-func docutils literal"><span class="pre">assertTrue()</span></code></a>/<a class="reference internal" href="#assertFalse" title="assertFalse"><code class="xref py py-func docutils literal"><span class="pre">assertFalse()</span></code></a> behavior of coercing to boolean before asserting</li>
+<li>all assertion functions accept an optional extra message, to be printed along the failure</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>New command-line arguments:</dt>
+<dd><ul class="first last simple">
+<li>can now shuffle tests with <code class="docutils literal"><span class="pre">--shuffle</span></code> or <code class="docutils literal"><span class="pre">-s</span></code></li>
+<li>possibility to repeat tests (for example to trigger a JIT), with <code class="docutils literal"><span class="pre">--repeat</span> <span class="pre">NUM</span></code> or <code class="docutils literal"><span class="pre">-r</span> <span class="pre">NUM</span></code></li>
+<li>more flexible test selection with inclusion (<code class="docutils literal"><span class="pre">--pattern</span></code> / <code class="docutils literal"><span class="pre">-p</span></code>) or exclusion (<code class="docutils literal"><span class="pre">--exclude</span></code> / <code class="docutils literal"><span class="pre">-x</span></code>) or combination of both</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Scientific computing dedicated support (see documentation):</dt>
+<dd><ul class="first last simple">
+<li>provide the machine epsilon in EPS</li>
+<li>new functions: <a class="reference internal" href="#assertNan" title="assertNan"><code class="xref py py-func docutils literal"><span class="pre">assertNan()</span></code></a>, <a class="reference internal" href="#assertInf" title="assertInf"><code class="xref py py-func docutils literal"><span class="pre">assertInf()</span></code></a>, <a class="reference internal" href="#assertPlusInf" title="assertPlusInf"><code class="xref py py-func docutils literal"><span class="pre">assertPlusInf()</span></code></a>, <a class="reference internal" href="#assertMinusInf" title="assertMinusInf"><code class="xref py py-func docutils literal"><span class="pre">assertMinusInf()</span></code></a>, <a class="reference internal" href="#assertPlusZero" title="assertPlusZero"><code class="xref py py-func docutils literal"><span class="pre">assertPlusZero()</span></code></a>, <a class="reference internal" href="#assertMinusZero" title="assertMinusZero"><code class="xref py py-func docutils literal"><span class="pre">assertMinusZero()</span></code></a> and
+their negative version</li>
+<li>in <a class="reference internal" href="#assertAlmostEquals" title="assertAlmostEquals"><code class="xref py py-func docutils literal"><span class="pre">assertAlmostEquals()</span></code></a>, margin no longer provides a default value of 1E-11, the machine epsilon is used instead</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Platform and continuous integration support:</dt>
+<dd><ul class="first last simple">
+<li>validate LuaUnit on MacOs platform (thank to Travis CI)</li>
+<li>validate LuaUnit with 32 bits numbers (floats) and 64 bits numbers (double)</li>
+<li>add test coverage measurements thank to coveralls.io . Status: 99.76% of the code is verified.</li>
+<li>use cache for AppVeyor and Travis builds</li>
+<li>support for <code class="docutils literal"><span class="pre">luarocks</span> <span class="pre">doc</span></code> command</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">General doc improvements (detailed description of all output, more cross-linking between sections)</p>
+</li>
+</ul>
+</div>
+<div class="section" id="new-in-version-3-2-12-jul-2016">
+<h4>New in version 3.2 - 12. Jul 2016<a class="headerlink" href="#new-in-version-3-2-12-jul-2016" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>Add command-line option to stop on first error or failure. See <a class="reference internal" href="#other-options">Other options</a></li>
+<li>Distinguish between failures (failed assertion) and errors</li>
+<li>Support for new versions: Lua 5.3 and LuaJIT (2.0, 2.1 beta)</li>
+<li>Validation of all lua versions on Travis CI and AppVeyor</li>
+<li>Add compatibility layer with forked luaunit v2.x</li>
+<li>Added documentation about development process. See <a class="reference internal" href="#developing-luaunit">Developing luaUnit</a></li>
+<li>Improved support for table containing keys of type table. See <a class="reference internal" href="#comparing-table-keys-table"><span class="std std-ref">Annex B: Comparing tables with keys of type table</span></a></li>
+<li>Small bug fixes, several internal improvements</li>
+<li>Availability of a Luarock package. See <cite>https://luarocks.org/modules/bluebird75/luaunit</cite> .</li>
+</ul>
+</div>
+<div class="section" id="new-in-version-3-1-10-mar-2015">
+<h4>New in version 3.1 - 10. Mar 2015<a class="headerlink" href="#new-in-version-3-1-10-mar-2015" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>luaunit no longer pollutes global namespace, unless defining EXPORT_ASSERT_TO_GLOBALS to true. See  <a class="reference internal" href="#luaunit-global-asserts"><span class="std std-ref">Enabling global or module-level functions</span></a></li>
+<li>fixes and validation of JUnit XML generation</li>
+<li>strip luaunit internal information from stacktrace</li>
+<li>general improvements of test results with duration and other details</li>
+<li>improve printing for tables, with an option to always print table id. See <a class="reference internal" href="#table-printing"><span class="std std-ref">Annex A: More on table printing</span></a></li>
+<li>fix printing of recursive tables</li>
+</ul>
+<p><strong>Important note when upgrading to version 3.1</strong> : assertions functions are
+no longer exported directly to the global namespace. See <a class="reference internal" href="#luaunit-global-asserts"><span class="std std-ref">Enabling global or module-level functions</span></a></p>
+</div>
+<div class="section" id="new-in-version-3-0-9-oct-2014">
+<h4>New in version 3.0 - 9. Oct 2014<a class="headerlink" href="#new-in-version-3-0-9-oct-2014" title="Permalink to this headline">¶</a></h4>
+<p>Because LuaUnit was forked and released as some 2.x version, version number
+is now jumping to 3.0 .</p>
+<ul class="simple">
+<li>full documentation available in text, html and pdf at <a class="reference external" href="http://luaunit.read-the-docs.org">http://luaunit.read-the-docs.org</a></li>
+<li>new output format: JUnit, compatible with Bamboo and other CI platforms. See <a class="reference internal" href="#output-formats">Output formats</a></li>
+<li>much better table assertions</li>
+<li>new assertions for strings, with patterns and case insensitivity: assertStrContains,
+assertNotStrContains, assertNotStrIContains, assertStrIContains, assertStrMatches</li>
+<li>new assertions for floats: assertAlmostEquals, assertNotAlmostEquals</li>
+<li>type assertions: assertIsString, assertIsNumber, ...</li>
+<li>error assertions: assertErrorMsgEquals, assertErrorMsgContains, assertErrorMsgMatches</li>
+<li>improved error messages for several assertions</li>
+<li>command-line options to select test, control output type and verbosity</li>
+</ul>
+</div>
+<div class="section" id="new-in-version-1-5-8-nov-2012">
+<h4>New in version 1.5 - 8. Nov 2012<a class="headerlink" href="#new-in-version-1-5-8-nov-2012" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>compatibility with Lua 5.1 and 5.2</li>
+<li>better object model internally</li>
+<li>a lot more of internal tests</li>
+<li>several internal bug fixes</li>
+<li>make it easy to customize the test output</li>
+<li>running test functions no longer requires a wrapper</li>
+<li>several level of verbosity</li>
+</ul>
+</div>
+<div class="section" id="new-in-version-1-4-26-jul-2012">
+<h4>New in version 1.4 - 26. Jul 2012<a class="headerlink" href="#new-in-version-1-4-26-jul-2012" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>switch from X11 to more popular BSD license</li>
+<li>add TAP output format for integration into Jenkins. See <a class="reference internal" href="#output-formats">Output formats</a></li>
+<li>official repository now on GitHub</li>
+</ul>
+</div>
+<div class="section" id="new-in-version-1-3-30-oct-2007">
+<h4>New in version 1.3 - 30. Oct 2007<a class="headerlink" href="#new-in-version-1-3-30-oct-2007" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>port to lua 5.1</li>
+<li>iterate over the test classes, methods and functions in the alphabetical order</li>
+<li>change the default order of expected, actual in assertEquals.  See <a class="reference internal" href="#equality-assertions">Equality assertions</a></li>
+</ul>
+</div>
+<div class="section" id="version-1-2-13-jun-2005">
+<h4>Version 1.2 - 13. Jun 2005<a class="headerlink" href="#version-1-2-13-jun-2005" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>first public release</li>
+</ul>
+</div>
+<div class="section" id="version-1-1">
+<h4>Version 1.1<a class="headerlink" href="#version-1-1" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>move global variables to internal variables</li>
+<li>assertion order is configurable between expected/actual or actual/expected. See <a class="reference internal" href="#equality-assertions">Equality assertions</a></li>
+<li>new assertion to check that a function call returns an error</li>
+<li>display the calling stack when an error is spotted</li>
+<li>two verbosity level, like in python unittest</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="getting-started-with-luaunit">
+<h2>Getting started with LuaUnit<a class="headerlink" href="#getting-started-with-luaunit" title="Permalink to this headline">¶</a></h2>
+<p>This section will guide you through a step by step usage of <em>LuaUnit</em> . The full source code
+of the example below is available in the : <a class="reference internal" href="#source-code-example"><span class="std std-ref">Annex C: Source code of example</span></a> or in the file <em>my_test_suite.lua</em>
+in the doc directory.</p>
+<div class="section" id="setting-up-your-test-script">
+<h3>Setting up your test script<a class="headerlink" href="#setting-up-your-test-script" title="Permalink to this headline">¶</a></h3>
+<p>To get started, create your file <em>my_test_suite.lua</em> .</p>
+<p>The script should import LuaUnit:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">lu</span> <span class="o">=</span> <span class="n">require</span><span class="p">(</span><span class="s1">&#39;luaunit&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The last line executes your script with LuaUnit and exit with the
+proper error code:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span> <span class="n">lu</span><span class="o">.</span><span class="n">LuaUnit</span><span class="o">.</span><span class="n">run</span><span class="p">()</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, run your file with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">lua</span> <span class="n">my_test_suite</span><span class="o">.</span><span class="n">lua</span>
+</pre></div>
+</div>
+<p>It prints something like:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Ran</span> <span class="mi">0</span> <span class="n">tests</span> <span class="ow">in</span> <span class="mf">0.000</span> <span class="n">seconds</span><span class="p">,</span> <span class="mi">0</span> <span class="n">successes</span><span class="p">,</span> <span class="mi">0</span> <span class="n">failures</span>
+<span class="n">OK</span>
+</pre></div>
+</div>
+<p>Now, your testing framework is in place, you can start writing tests.</p>
+</div>
+<div class="section" id="writing-tests">
+<h3>Writing tests<a class="headerlink" href="#writing-tests" title="Permalink to this headline">¶</a></h3>
+<p>LuaUnit scans all variables that start with <em>test</em> or <em>Test</em>.
+If they are functions, or if they are tables that contain
+functions that start with <em>test</em> or <em>Test</em>, they are run as part of the test suite.</p>
+<p>So just write a function whose name starts with test. Inside test functions, use the assertions functions provided by LuaUnit, such
+as <a class="reference internal" href="#assertEquals" title="assertEquals"><code class="xref py py-func docutils literal"><span class="pre">assertEquals()</span></code></a>.</p>
+<p>Let&#8217;s see that in practice.</p>
+<p>Suppose you want to test the following add function:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">add</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">)</span>
+    <span class="o">--</span> <span class="n">add</span> <span class="n">positive</span> <span class="n">numbers</span>
+    <span class="o">--</span> <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="nb">any</span> <span class="n">of</span> <span class="n">the</span> <span class="n">numbers</span> <span class="n">are</span> <span class="mi">0</span>
+    <span class="o">--</span> <span class="n">error</span> <span class="k">if</span> <span class="nb">any</span> <span class="n">of</span> <span class="n">the</span> <span class="n">two</span> <span class="n">numbers</span> <span class="n">are</span> <span class="n">negative</span>
+    <span class="k">if</span> <span class="n">v1</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">v2</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="n">then</span>
+        <span class="n">error</span><span class="p">(</span><span class="s1">&#39;Can only add positive or null numbers, received &#39;</span><span class="o">..</span><span class="n">v1</span><span class="o">..</span><span class="s1">&#39; and &#39;</span><span class="o">..</span><span class="n">v2</span><span class="p">)</span>
+    <span class="n">end</span>
+    <span class="k">if</span> <span class="n">v1</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">v2</span> <span class="o">==</span> <span class="mi">0</span> <span class="n">then</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="n">end</span>
+    <span class="k">return</span> <span class="n">v1</span><span class="o">+</span><span class="n">v2</span>
+<span class="n">end</span>
+</pre></div>
+</div>
+<p>You write the following tests:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">testAddPositive</span><span class="p">()</span>
+    <span class="n">lu</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">end</span>
+
+<span class="n">function</span> <span class="n">testAddZero</span><span class="p">()</span>
+    <span class="n">lu</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">lu</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">lu</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">end</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="#assertEquals" title="assertEquals"><code class="xref py py-func docutils literal"><span class="pre">assertEquals()</span></code></a> is the most commonly used assertion function. It
+verifies that both argument are equals, in the order actual value, expected value.</p>
+<p>Rerun your test script (<code class="docutils literal"><span class="pre">-v</span></code> is to activate a more verbose output):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ lua my_test_suite.lua -v
+</pre></div>
+</div>
+<p>It now prints:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Started</span> <span class="n">on</span> <span class="mi">02</span><span class="o">/</span><span class="mi">19</span><span class="o">/</span><span class="mi">17</span> <span class="mi">22</span><span class="p">:</span><span class="mi">15</span><span class="p">:</span><span class="mi">53</span>
+    <span class="n">TestAdd</span><span class="o">.</span><span class="n">testAddPositive</span> <span class="o">...</span> <span class="n">Ok</span>
+    <span class="n">TestAdd</span><span class="o">.</span><span class="n">testAddZero</span> <span class="o">...</span> <span class="n">Ok</span>
+<span class="o">=========================================================</span>
+<span class="n">Ran</span> <span class="mi">2</span> <span class="n">tests</span> <span class="ow">in</span> <span class="mf">0.003</span> <span class="n">seconds</span><span class="p">,</span> <span class="mi">2</span> <span class="n">successes</span><span class="p">,</span> <span class="mi">0</span> <span class="n">failures</span>
+<span class="n">OK</span>
+</pre></div>
+</div>
+<p>You always have:</p>
+<ul class="simple">
+<li>the date at which the test suite was started</li>
+<li>the group to which the function belongs (usually, the name of the function table, and <em>&lt;TestFunctions&gt;</em> for all direct test functions)</li>
+<li>the name of the function being executed</li>
+<li>a report at the end, with number of executed test, number of non selected tests if any, number of failures, number of errors (if any) and duration.</li>
+</ul>
+<p>The difference between failures and errors are:</p>
+<ul class="simple">
+<li>luaunit assertion functions generate failures</li>
+<li>any unexpected error during execution generates an error</li>
+<li>failures or errors during setup() or teardown() always generate errors</li>
+</ul>
+<p>If we continue with our example, we also want to test that when the function receives negative numbers, it generates an error. Use
+<a class="reference internal" href="#assertError" title="assertError"><code class="xref py py-func docutils literal"><span class="pre">assertError()</span></code></a> or even better, <a class="reference internal" href="#assertErrorMsgContains" title="assertErrorMsgContains"><code class="xref py py-func docutils literal"><span class="pre">assertErrorMsgContains()</span></code></a> to also validate the content
+of the error message. There are other types or error checking functions, see <a class="reference internal" href="#error-assertions">Error assertions</a> . Here
+we use <a class="reference internal" href="#assertErrorMsgContains" title="assertErrorMsgContains"><code class="xref py py-func docutils literal"><span class="pre">assertErrorMsgContains()</span></code></a> . First argument is the expected message, then the function to call
+and the optional arguments:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">testAddError</span><span class="p">()</span>
+    <span class="n">lu</span><span class="o">.</span><span class="n">assertErrorMsgContains</span><span class="p">(</span><span class="s1">&#39;Can only add positive or null numbers, received 2 and -3&#39;</span><span class="p">,</span> <span class="n">add</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">end</span>
+</pre></div>
+</div>
+<p>Now, suppose we also have the following function to test:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">adder</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="o">--</span> <span class="k">return</span> <span class="n">a</span> <span class="n">function</span> <span class="n">that</span> <span class="n">adds</span> <span class="n">v</span> <span class="n">to</span> <span class="n">its</span> <span class="n">argument</span> <span class="n">using</span> <span class="n">add</span>
+    <span class="n">function</span> <span class="n">closure</span><span class="p">(</span> <span class="n">x</span> <span class="p">)</span> <span class="k">return</span> <span class="n">x</span><span class="o">+</span><span class="n">v</span> <span class="n">end</span>
+    <span class="k">return</span> <span class="n">closure</span>
+<span class="n">end</span>
+</pre></div>
+</div>
+<p>We want to test the type of the value returned by adder and its behavior. LuaUnit
+provides assertion for type testing (see <a class="reference internal" href="#type-assertions">Type assertions</a> ). In this case, we use
+<a class="reference internal" href="#assertIsFunction" title="assertIsFunction"><code class="xref py py-func docutils literal"><span class="pre">assertIsFunction()</span></code></a>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">testAdder</span><span class="p">()</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">adder</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">lu</span><span class="o">.</span><span class="n">assertIsFunction</span><span class="p">(</span> <span class="n">f</span> <span class="p">)</span>
+    <span class="n">lu</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span> <span class="n">f</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">5</span> <span class="p">)</span>
+<span class="n">end</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="grouping-tests-setup-teardown-functionality">
+<h3>Grouping tests, setup/teardown functionality<a class="headerlink" href="#grouping-tests-setup-teardown-functionality" title="Permalink to this headline">¶</a></h3>
+<p>When the number of tests starts to grow, you usually organise them
+into separate groups. You can do that with LuaUnit by putting them
+inside a table (whose name must start with <em>Test</em> or <em>test</em> ).</p>
+<p>For example, assume we have a second function to test:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">div</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">)</span>
+    <span class="o">--</span> <span class="n">divide</span> <span class="n">positive</span> <span class="n">numbers</span>
+    <span class="o">--</span> <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="nb">any</span> <span class="n">of</span> <span class="n">the</span> <span class="n">numbers</span> <span class="n">are</span> <span class="mi">0</span>
+    <span class="o">--</span> <span class="n">error</span> <span class="k">if</span> <span class="nb">any</span> <span class="n">of</span> <span class="n">the</span> <span class="n">two</span> <span class="n">numbers</span> <span class="n">are</span> <span class="n">negative</span>
+    <span class="k">if</span> <span class="n">v1</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">v2</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="n">then</span>
+        <span class="n">error</span><span class="p">(</span><span class="s1">&#39;Can only divide positive or null numbers, received &#39;</span><span class="o">..</span><span class="n">v1</span><span class="o">..</span><span class="s1">&#39; and &#39;</span><span class="o">..</span><span class="n">v2</span><span class="p">)</span>
+    <span class="n">end</span>
+    <span class="k">if</span> <span class="n">v1</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">v2</span> <span class="o">==</span> <span class="mi">0</span> <span class="n">then</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="n">end</span>
+    <span class="k">return</span> <span class="n">v1</span><span class="o">/</span><span class="n">v2</span>
+<span class="n">end</span>
+</pre></div>
+</div>
+<p>We move the tests related to the function add into their own table:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">TestAdd</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">function</span> <span class="n">TestAdd</span><span class="p">:</span><span class="n">testAddPositive</span><span class="p">()</span>
+        <span class="n">lu</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">end</span>
+
+    <span class="n">function</span> <span class="n">TestAdd</span><span class="p">:</span><span class="n">testAddZero</span><span class="p">()</span>
+        <span class="n">lu</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lu</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lu</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">end</span>
+
+    <span class="n">function</span> <span class="n">TestAdd</span><span class="p">:</span><span class="n">testAddError</span><span class="p">()</span>
+        <span class="n">lu</span><span class="o">.</span><span class="n">assertErrorMsgContains</span><span class="p">(</span><span class="s1">&#39;Can only add positive or null numbers, received 2 and -3&#39;</span><span class="p">,</span> <span class="n">add</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">end</span>
+
+    <span class="n">function</span> <span class="n">TestAdd</span><span class="p">:</span><span class="n">testAdder</span><span class="p">()</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">adder</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">lu</span><span class="o">.</span><span class="n">assertIsFunction</span><span class="p">(</span> <span class="n">f</span> <span class="p">)</span>
+        <span class="n">lu</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span> <span class="n">f</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">5</span> <span class="p">)</span>
+    <span class="n">end</span>
+<span class="o">--</span> <span class="n">end</span> <span class="n">of</span> <span class="n">table</span> <span class="n">TestAdd</span>
+</pre></div>
+</div>
+<p>Then we create a second set of tests for div:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">TestDiv</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">function</span> <span class="n">TestDiv</span><span class="p">:</span><span class="n">testDivPositive</span><span class="p">()</span>
+        <span class="n">lu</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">div</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">end</span>
+
+    <span class="n">function</span> <span class="n">TestDiv</span><span class="p">:</span><span class="n">testDivZero</span><span class="p">()</span>
+        <span class="n">lu</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">div</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lu</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">div</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lu</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">div</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">end</span>
+
+    <span class="n">function</span> <span class="n">TestDiv</span><span class="p">:</span><span class="n">testDivError</span><span class="p">()</span>
+        <span class="n">lu</span><span class="o">.</span><span class="n">assertErrorMsgContains</span><span class="p">(</span><span class="s1">&#39;Can only divide positive or null numbers, received 2 and -3&#39;</span><span class="p">,</span> <span class="n">div</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">end</span>
+<span class="o">--</span> <span class="n">end</span> <span class="n">of</span> <span class="n">table</span> <span class="n">TestDiv</span>
+</pre></div>
+</div>
+<p>Execution of the test suite now looks like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Started</span> <span class="n">on</span> <span class="mi">02</span><span class="o">/</span><span class="mi">19</span><span class="o">/</span><span class="mi">17</span> <span class="mi">22</span><span class="p">:</span><span class="mi">15</span><span class="p">:</span><span class="mi">53</span>
+    <span class="n">TestAdd</span><span class="o">.</span><span class="n">testAddError</span> <span class="o">...</span> <span class="n">Ok</span>
+    <span class="n">TestAdd</span><span class="o">.</span><span class="n">testAddPositive</span> <span class="o">...</span> <span class="n">Ok</span>
+    <span class="n">TestAdd</span><span class="o">.</span><span class="n">testAddZero</span> <span class="o">...</span> <span class="n">Ok</span>
+    <span class="n">TestAdd</span><span class="o">.</span><span class="n">testAdder</span> <span class="o">...</span> <span class="n">Ok</span>
+    <span class="n">TestDiv</span><span class="o">.</span><span class="n">testDivError</span> <span class="o">...</span> <span class="n">Ok</span>
+    <span class="n">TestDiv</span><span class="o">.</span><span class="n">testDivPositive</span> <span class="o">...</span> <span class="n">Ok</span>
+    <span class="n">TestDiv</span><span class="o">.</span><span class="n">testDivZero</span> <span class="o">...</span> <span class="n">Ok</span>
+<span class="o">=========================================================</span>
+<span class="n">Ran</span> <span class="mi">7</span> <span class="n">tests</span> <span class="ow">in</span> <span class="mf">0.006</span> <span class="n">seconds</span><span class="p">,</span> <span class="mi">7</span> <span class="n">successes</span><span class="p">,</span> <span class="mi">0</span> <span class="n">failures</span>
+<span class="n">OK</span>
+</pre></div>
+</div>
+<p>When tests are defined in tables, you can optionally define two special
+functions, <em>setUp()</em> and <em>tearDown()</em>, which will be executed
+respectively before and after every test.</p>
+<p>These function may be used to create specific resources for the
+test being executed and cleanup the test environment.</p>
+<p>For a practical example, imagine that we have a <em>log()</em> function
+that writes strings to a log file on disk. The file is created
+upon first usage of the function, and the filename is defined
+by calling the function <em>initLog()</em>.</p>
+<p>The tests for these functions would take advantage of the <em>setup/teardown</em>
+functionality to prepare a log filename shared
+by all tests, make sure that all tests start with a non existing
+log file name, and delete the log filename after every test:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">TestLogger</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">function</span> <span class="n">TestLogger</span><span class="p">:</span><span class="n">setUp</span><span class="p">()</span>
+        <span class="o">--</span> <span class="n">define</span> <span class="n">the</span> <span class="n">fname</span> <span class="n">to</span> <span class="n">use</span> <span class="k">for</span> <span class="n">logging</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fname</span> <span class="o">=</span> <span class="s1">&#39;mytmplog.log&#39;</span>
+        <span class="o">--</span> <span class="n">make</span> <span class="n">sure</span> <span class="n">the</span> <span class="n">file</span> <span class="n">does</span> <span class="ow">not</span> <span class="n">already</span> <span class="n">exists</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fname</span><span class="p">)</span>
+    <span class="n">end</span>
+
+    <span class="n">function</span> <span class="n">TestLogger</span><span class="p">:</span><span class="n">testLoggerCreatesFile</span><span class="p">()</span>
+        <span class="n">initLog</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fname</span><span class="p">)</span>
+        <span class="n">log</span><span class="p">(</span><span class="s1">&#39;toto&#39;</span><span class="p">)</span>
+        <span class="o">--</span> <span class="n">make</span> <span class="n">sure</span> <span class="n">that</span> <span class="n">our</span> <span class="n">log</span> <span class="n">file</span> <span class="n">was</span> <span class="n">created</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">lu</span><span class="o">.</span><span class="n">assertNotNil</span><span class="p">(</span> <span class="n">f</span> <span class="p">)</span>
+        <span class="n">f</span><span class="p">:</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">end</span>
+
+    <span class="n">function</span> <span class="n">TestLogger</span><span class="p">:</span><span class="n">tearDown</span><span class="p">()</span>
+        <span class="o">--</span> <span class="n">cleanup</span> <span class="n">our</span> <span class="n">log</span> <span class="n">file</span> <span class="n">after</span> <span class="nb">all</span> <span class="n">tests</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fname</span><span class="p">)</span>
+    <span class="n">end</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><em>Errors generated during execution of setUp() or tearDown()
+functions are considered test failures.</em></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><em>For compatibility with luaunit v2 and other lua unit-test frameworks,
+setUp() and tearDown() may also be named setup(), SetUp(), Setup() and teardown(), TearDown(), Teardown().</em></p>
+</div>
+</div>
+<div class="section" id="using-the-command-line">
+<h3>Using the command-line<a class="headerlink" href="#using-the-command-line" title="Permalink to this headline">¶</a></h3>
+<p>You can control the LuaUnit execution from the command-line:</p>
+<p><strong>Output format</strong></p>
+<p>Choose the test output format with <code class="docutils literal"><span class="pre">-o</span></code> or <code class="docutils literal"><span class="pre">--output</span></code>. Available formats are:</p>
+<ul class="simple">
+<li>text: the default output format</li>
+<li>nil: no output at all</li>
+<li>tap: TAP format</li>
+<li>junit: output junit xml</li>
+</ul>
+<p>Example of non-verbose text format:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ lua doc/my_test_suite.lua
+.......
+Ran 7 tests in 0.003 seconds, 7 successes, 0 failures
+OK
+</pre></div>
+</div>
+<p>Example of TAP format:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ lua doc/my_test_suite.lua -o TAP
+1..7
+# Started on 02/19/17 22:15:53
+# Starting class: TestAdd
+ok     1        TestAdd.testAddError
+ok     2        TestAdd.testAddPositive
+ok     3        TestAdd.testAddZero
+ok     4        TestAdd.testAdder
+# Starting class: TestDiv
+ok     5        TestDiv.testDivError
+ok     6        TestDiv.testDivPositive
+ok     7        TestDiv.testDivZero
+# Ran 7 tests in 0.007 seconds, 7 successes, 0 failures
+</pre></div>
+</div>
+<p>For a more detailed overview of all formats and their verbosity see the section <a class="reference internal" href="#output-formats">Output formats</a> .</p>
+<p><strong>List of tests to run</strong></p>
+<p>You can list some test names on the command-line to run only those tests.
+The name must be the exact match of either the test table, the test function or the test table
+and the test method. The option may be repeated.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>-- Run all TestAdd table tests and one test of TestDiv table.
+$ lua doc/my_test_suite.lua TestAdd TestDiv.testDivError -v
+Started on 02/19/17 22:15:53
+    TestAdd.testAddError ... Ok
+    TestAdd.testAddPositive ... Ok
+    TestAdd.testAddZero ... Ok
+    TestAdd.testAdder ... Ok
+    TestDiv.testDivError ... Ok
+=========================================================
+Ran 5 tests in 0.003 seconds, 5 successes, 0 failures
+OK
+</pre></div>
+</div>
+<p><strong>Including / excluding tests</strong></p>
+<p>The most flexible approach for selecting tests to use the include and exclude functionality.
+With <code class="docutils literal"><span class="pre">--pattern</span></code> or <code class="docutils literal"><span class="pre">-p</span></code>, you can provide a lua pattern and only the tests that contain
+the pattern will actually be run.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>-- Run all tests of zero testing and error testing
+-- by using the magic character .
+$ lua my_test_suite.lua -v -p Err.r -p Z.ro
+</pre></div>
+</div>
+<p>For our test suite, it gives the following output:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Started</span> <span class="n">on</span> <span class="mi">02</span><span class="o">/</span><span class="mi">19</span><span class="o">/</span><span class="mi">17</span> <span class="mi">22</span><span class="p">:</span><span class="mi">15</span><span class="p">:</span><span class="mi">53</span>
+    <span class="n">TestAdd</span><span class="o">.</span><span class="n">testAddError</span> <span class="o">...</span> <span class="n">Ok</span>
+    <span class="n">TestAdd</span><span class="o">.</span><span class="n">testAddZero</span> <span class="o">...</span> <span class="n">Ok</span>
+    <span class="n">TestDiv</span><span class="o">.</span><span class="n">testDivError</span> <span class="o">...</span> <span class="n">Ok</span>
+    <span class="n">TestDiv</span><span class="o">.</span><span class="n">testDivZero</span> <span class="o">...</span> <span class="n">Ok</span>
+<span class="o">=========================================================</span>
+<span class="n">Ran</span> <span class="mi">4</span> <span class="n">tests</span> <span class="ow">in</span> <span class="mf">0.003</span> <span class="n">seconds</span><span class="p">,</span> <span class="mi">4</span> <span class="n">successes</span><span class="p">,</span> <span class="mi">0</span> <span class="n">failures</span><span class="p">,</span> <span class="mi">3</span> <span class="n">non</span><span class="o">-</span><span class="n">selected</span>
+<span class="n">OK</span>
+</pre></div>
+</div>
+<p>The number of tests ignored by the selection is printed, along
+with the test result. The pattern can be any lua pattern. Be sure to exclude all magic
+characters with % (like -+?*) and protect your pattern from the shell
+interpretation by putting it in quotes.</p>
+<p>You can also exclude tests that match some patterns:</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>-- Run all tests except zero testing and except error testing
+$ lua my_test_suite.lua -v -x Error -x Zero
+</pre></div>
+</div>
+<p>For our test suite, it gives the following output:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Started</span> <span class="n">on</span> <span class="mi">02</span><span class="o">/</span><span class="mi">19</span><span class="o">/</span><span class="mi">17</span> <span class="mi">22</span><span class="p">:</span><span class="mi">29</span><span class="p">:</span><span class="mi">45</span>
+    <span class="n">TestAdd</span><span class="o">.</span><span class="n">testAddPositive</span> <span class="o">...</span> <span class="n">Ok</span>
+    <span class="n">TestAdd</span><span class="o">.</span><span class="n">testAdder</span> <span class="o">...</span> <span class="n">Ok</span>
+    <span class="n">TestDiv</span><span class="o">.</span><span class="n">testDivPositive</span> <span class="o">...</span> <span class="n">Ok</span>
+<span class="o">=========================================================</span>
+<span class="n">Ran</span> <span class="mi">3</span> <span class="n">tests</span> <span class="ow">in</span> <span class="mf">0.003</span> <span class="n">seconds</span><span class="p">,</span> <span class="mi">3</span> <span class="n">successes</span><span class="p">,</span> <span class="mi">0</span> <span class="n">failures</span><span class="p">,</span> <span class="mi">4</span> <span class="n">non</span><span class="o">-</span><span class="n">selected</span>
+<span class="n">OK</span>
+</pre></div>
+</div>
+<p>You can also combine test selection and test exclusion. See <a class="reference internal" href="#flexible-test-selection">Flexible test selection</a></p>
+</div>
+<div class="section" id="conclusion">
+<h3>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">¶</a></h3>
+<p>You now know enough of LuaUnit to start writing your test suite. Check
+the reference documentation for a complete list of
+assertions, command-line options and specific behavior.</p>
+</div>
+</div>
+<div class="section" id="reference-documentation">
+<h2>Reference documentation<a class="headerlink" href="#reference-documentation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="enabling-global-or-module-level-functions">
+<span id="luaunit-global-asserts"></span><h3>Enabling global or module-level functions<a class="headerlink" href="#enabling-global-or-module-level-functions" title="Permalink to this headline">¶</a></h3>
+<p>Versions of LuaUnit before version 3.1 would export all assertions functions to the global namespace. A typical
+lua test file would look like this:</p>
+<div class="highlight-lua"><div class="highlight"><pre><span></span><span class="nb">require</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">luaunit&#39;</span><span class="p">)</span>
+
+<span class="n">TestToto</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1">--class</span>
+
+    <span class="k">function</span> <span class="nf">TestToto</span><span class="p">:</span><span class="n">test1_withFailure</span><span class="p">()</span>
+        <span class="kd">local</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">assertEquals</span><span class="p">(</span> <span class="n">a</span> <span class="p">,</span> <span class="mi">1</span> <span class="p">)</span>
+        <span class="c1">-- will fail</span>
+        <span class="n">assertEquals</span><span class="p">(</span> <span class="n">a</span> <span class="p">,</span> <span class="mi">2</span> <span class="p">)</span>
+    <span class="k">end</span>
+
+<span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>However, this is an obsolete practice in Lua. It is now recommended to keep all functions inside the module. Starting
+from version 3.1 LuaUnit follows this practice and the code should be adapted to look like this:</p>
+<div class="highlight-lua"><div class="highlight"><pre><span></span><span class="c1">-- the imported module must be stored</span>
+<span class="n">lu</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">luaunit&#39;</span><span class="p">)</span>
+
+<span class="n">TestToto</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1">--class</span>
+
+    <span class="k">function</span> <span class="nf">TestToto</span><span class="p">:</span><span class="n">test1_withFailure</span><span class="p">()</span>
+        <span class="kd">local</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">lu</span><span class="p">.</span><span class="n">assertEquals</span><span class="p">(</span> <span class="n">a</span> <span class="p">,</span> <span class="mi">1</span> <span class="p">)</span>
+        <span class="c1">-- will fail</span>
+        <span class="n">lu</span><span class="p">.</span><span class="n">assertEquals</span><span class="p">(</span> <span class="n">a</span> <span class="p">,</span> <span class="mi">2</span> <span class="p">)</span>
+    <span class="k">end</span>
+
+<span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>If you prefer the old way, LuaUnit can continue to export assertions functions if you set the following
+global variable <strong>prior</strong> to importing LuaUnit:</p>
+<div class="highlight-lua"><div class="highlight"><pre><span></span><span class="c1">-- this works</span>
+<span class="n">EXPORT_ASSERT_TO_GLOBALS</span> <span class="o">=</span> <span class="kc">true</span>
+<span class="nb">require</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">luaunit&#39;</span><span class="p">)</span>
+
+<span class="n">TestToto</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1">--class</span>
+
+    <span class="k">function</span> <span class="nf">TestToto</span><span class="p">:</span><span class="n">test1_withFailure</span><span class="p">()</span>
+        <span class="kd">local</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">assertEquals</span><span class="p">(</span> <span class="n">a</span> <span class="p">,</span> <span class="mi">1</span> <span class="p">)</span>
+        <span class="c1">-- will fail</span>
+        <span class="n">assertEquals</span><span class="p">(</span> <span class="n">a</span> <span class="p">,</span> <span class="mi">2</span> <span class="p">)</span>
+    <span class="k">end</span>
+
+<span class="p">[</span><span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="luaunit-run-function">
+<h3>LuaUnit.run() function<a class="headerlink" href="#luaunit-run-function" title="Permalink to this headline">¶</a></h3>
+<p><strong>Return value</strong></p>
+<p>Run your test suite with the following line:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">lu</span><span class="o">.</span><span class="n">LauaUnit</span><span class="o">.</span><span class="n">run</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>The <em>run()</em> function returns the number of failures of the test suite. This is
+good for an exit code, 0 meaning success.</p>
+<p><strong>Arguments</strong></p>
+<p>If no arguments are supplied, it parses the command-line arguments of the script
+and interpret them. If arguments are supplied to the function, they are parsed
+instead of the command-line. It uses the same syntax.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">--</span> <span class="n">execute</span> <span class="n">tests</span> <span class="n">matching</span> <span class="n">the</span> <span class="s1">&#39;withXY&#39;</span> <span class="n">pattern</span>
+<span class="n">os</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">lu</span><span class="o">.</span><span class="n">LuaUnit</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;--pattern&#39;</span><span class="p">,</span> <span class="s1">&#39;withXY&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><strong>Choice of tests</strong></p>
+<p>If test names were supplied, only those
+tests are executed. When test names are supplied as arguments, they don&#8217;t have
+to start with <em>test</em>, they are run anyway.</p>
+<p>If no test names were supplied, a general test collection process starts
+under the following rules:</p>
+<ul>
+<li><p class="first">all variable starting with <em>test</em> or <em>Test</em> are scanned.</p>
+</li>
+<li><p class="first">if the variable is a function it is collected for testing</p>
+</li>
+<li><p class="first">if the variable is a table:</p>
+<blockquote>
+<div><ul class="simple">
+<li>all keys starting with <em>test</em> or <em>Test</em> are collected (provided that they are functions)</li>
+<li>keys with name <em>setUp</em> and <em>tearDown</em> are also collected</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>If one or more pattern were supplied, the test are then filtered according the
+pattern(s). Only the test that match the pattern(s) are actually executed.</p>
+<p><strong>setup and teardown</strong></p>
+<p>The function <em>setUp()</em> is executed before each test if it exists in the table.
+The function <em>tearDown()</em> is executed after every test if it exists in the table.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><em>tearDown()</em> is always executed if it exists, even if there was a failure in the test or in the <em>setUp()</em> function.
+Failures in <em>setUp()</em> or <em>tearDown()</em> are considered as a general test failures.</p>
+</div>
+</div>
+<div class="section" id="luaunit-runsuite-function">
+<h3>LuaUnit.runSuite() function<a class="headerlink" href="#luaunit-runsuite-function" title="Permalink to this headline">¶</a></h3>
+<p>If you want to keep the flexibility of the command-line parsing, but want to force
+some parameters, like the output format, you must use a slightly different syntax:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">runner</span> <span class="o">=</span> <span class="n">lu</span><span class="o">.</span><span class="n">LuaUnit</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+<span class="n">runner</span><span class="p">:</span><span class="n">setOutputType</span><span class="p">(</span><span class="s2">&quot;tap&quot;</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span> <span class="n">runner</span><span class="p">:</span><span class="n">runSuite</span><span class="p">()</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p><em>runSuite()</em> behaves like <em>run()</em> except that it must be started
+with a LuaUnit instance as first argument, and it will use the LuaUnit
+instance settings.</p>
+</div>
+<div class="section" id="command-line-options">
+<h3>Command-line options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h3>
+<p>Usage: lua &lt;your_test_suite.lua&gt; [options] [testname1 [testname2] ...]</p>
+<p><strong>Test names</strong></p>
+<p>When no test names are supplied, all tests are collected.</p>
+<p>The syntax for supplying test names can be either: name of the function, name of the table
+or [name of the table].[name of the function]. Only the supplied tests will be executed.</p>
+<p>Selecting tests with &#8211;pattern and &#8211;exclude is usually more flexible. See <a class="reference internal" href="#flexible-test-selection">Flexible test selection</a></p>
+<p><strong>Options</strong></p>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--output</span>, <span class="option">-o <var>FORMAT</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Set output format to FORMAT. Possible values: text, tap, junit, nil . See <a class="reference internal" href="#output-formats">Output formats</a></td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--name</span>, <span class="option">-n <var>FILENAME</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>For junit format only, mandatory name of xml file. Ignored for other formats.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--pattern</span>, <span class="option">-p <var>PATTERN</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Execute all test names matching the Lua PATTERN. May be repeated to include severals patterns. See <a class="reference internal" href="#flexible-test-selection">Flexible test selection</a></td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--exclude</span>, <span class="option">-x <var>PATTERN</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Exclude all test names matching the Lua PATTERN. May be repeated to exclude severals patterns. See <a class="reference internal" href="#flexible-test-selection">Flexible test selection</a></td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--repeat</span>, <span class="option">-r <var>NUM</var></span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Repeat all tests NUM times, e.g. to trigger the JIT. See <a class="reference internal" href="#other-options">Other options</a></td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--shuffle</span>, <span class="option">-s</span></kbd></td>
+<td>Shuffle tests before running them. See <a class="reference internal" href="#other-options">Other options</a></td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--error</span>, <span class="option">-e</span></kbd></td>
+<td>Stop on first error. See <a class="reference internal" href="#other-options">Other options</a></td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--failure</span>, <span class="option">-f</span></kbd></td>
+<td>Stop on first failure or error. See <a class="reference internal" href="#other-options">Other options</a></td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--verbose</span>, <span class="option">-v</span></kbd></td>
+<td>Increase verbosity</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--quiet</span>, <span class="option">-q</span></kbd></td>
+<td>Set verbosity to minimum</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--help</span>, <span class="option">-h</span></kbd></td>
+<td>Print help</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--version</span></kbd></td>
+<td>Version information of LuaUnit</td></tr>
+</tbody>
+</table>
+<div class="section" id="output-formats">
+<h4>Output formats<a class="headerlink" href="#output-formats" title="Permalink to this headline">¶</a></h4>
+<p>Choose the output format with the syntax <code class="docutils literal"><span class="pre">-o</span> <span class="pre">FORMAT</span></code> or <code class="docutils literal"><span class="pre">--output</span> <span class="pre">FORMAT</span></code>.</p>
+<p>Formats available:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">text</span></code>: the default output format of LuaUnit</li>
+<li><code class="docutils literal"><span class="pre">tap</span></code>: output compatible with the <a class="reference external" href="http://testanything.org/">Test Anything Protocol</a></li>
+<li><code class="docutils literal"><span class="pre">junit</span></code>: output compatible with the <em>JUnit XML</em> format (used by many CI
+platforms). The XML is written to the file provided with the <code class="docutils literal"><span class="pre">--name</span></code> or <code class="docutils literal"><span class="pre">-n</span></code> option.</li>
+<li><code class="docutils literal"><span class="pre">nil</span></code>: no output at all</li>
+</ul>
+<p>To demonstrate the different output formats, we will take the example of the <a class="reference internal" href="#getting-started-with-luaunit">Getting started with LuaUnit</a>
+section and add the following two failing cases:</p>
+<div class="highlight-lua"><div class="highlight"><pre><span></span><span class="n">TestWithFailures</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c1">-- two failing tests</span>
+
+    <span class="k">function</span> <span class="nf">TestWithFailures</span><span class="p">:</span><span class="n">testFail1</span><span class="p">()</span>
+        <span class="kd">local</span> <span class="n">a</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">toto&quot;</span>
+        <span class="kd">local</span> <span class="n">b</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">titi&quot;</span>
+        <span class="n">lu</span><span class="p">.</span><span class="n">assertEquals</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="p">)</span> <span class="c1">--oops, two values are not equal</span>
+    <span class="k">end</span>
+
+    <span class="k">function</span> <span class="nf">TestWithFailures</span><span class="p">:</span><span class="n">testFail2</span><span class="p">()</span>
+        <span class="kd">local</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span>
+        <span class="kd">local</span> <span class="n">b</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">toto&#39;</span>
+        <span class="kd">local</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="c1">--oops, can not add string and numbers</span>
+        <span class="k">return</span> <span class="n">c</span>
+    <span class="k">end</span>
+</pre></div>
+</div>
+<p><strong>Text format</strong></p>
+<p>By default, LuaUnit uses the output format TEXT, with minimum verbosity:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ lua my_test_suite.lua
+.......FE
+Failed tests:
+-------------
+1) TestWithFailures.testFail1
+doc\my_test_suite_with_failures.lua:79: expected: &quot;titi&quot;
+actual: &quot;toto&quot;
+stack traceback:
+        doc\my_test_suite_with_failures.lua:79: in function &#39;TestWithFailures.testFail1&#39;
+
+2) TestWithFailures.testFail2
+doc\my_test_suite_with_failures.lua:85: attempt to perform arithmetic on local &#39;b&#39; (a string value)
+stack traceback:
+        [C]: in function &#39;xpcall&#39;
+
+Ran 9 tests in 0.001 seconds, 7 successes, 1 failure, 1 error
+</pre></div>
+</div>
+<p>This format is heavily inspired by python unit-test library. One character is printed
+for every test executed, a dot for a successful test, a <strong>F</strong> for a test with failure and
+a <strong>E</strong> for a test with an error.</p>
+<p>At the end of the test suite execution, the details of the failures or errors are given, with an
+informative message and a full stack trace.</p>
+<p>The last line sums up the number of test executed, successful, failed, in error and not selected if any.
+When all tests are successful, a line with just OK is added:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ lua doc\my_test_suite.lua
+.......
+Ran 7 tests in 0.002 seconds, 7 successes, 0 failures
+OK
+</pre></div>
+</div>
+<p>The text format is also available as a more verbose version, by adding the <code class="docutils literal"><span class="pre">--verbose</span></code> flag:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ lua doc\my_test_suite_with_failures.lua --verbose
+Started on 02/20/17 21:47:21
+    TestAdd.testAddError ... Ok
+    TestAdd.testAddPositive ... Ok
+    TestAdd.testAddZero ... Ok
+    TestAdd.testAdder ... Ok
+    TestDiv.testDivError ... Ok
+    TestDiv.testDivPositive ... Ok
+    TestDiv.testDivZero ... Ok
+    TestWithFailures.testFail1 ... FAIL
+doc\my_test_suite_with_failures.lua:79: expected: &quot;titi&quot;
+actual: &quot;toto&quot;
+    TestWithFailures.testFail2 ... ERROR
+doc\my_test_suite_with_failures.lua:85: attempt to perform arithmetic on local &#39;b&#39; (a string value)
+=========================================================
+Failed tests:
+-------------
+1) TestWithFailures.testFail1
+doc\my_test_suite_with_failures.lua:79: expected: &quot;titi&quot;
+actual: &quot;toto&quot;
+stack traceback:
+        doc\my_test_suite_with_failures.lua:79: in function &#39;TestWithFailures.testFail1&#39;
+
+2) TestWithFailures.testFail2
+doc\my_test_suite_with_failures.lua:85: attempt to perform arithmetic on local &#39;b&#39; (a string value)
+stack traceback:
+        [C]: in function &#39;xpcall&#39;
+
+Ran 9 tests in 0.008 seconds, 7 successes, 1 failure, 1 error
+</pre></div>
+</div>
+<p>In this format, you get:</p>
+<ul class="simple">
+<li>a first line with date-time at which the test was started</li>
+<li>one line per test executed</li>
+<li>the test line is ended by <strong>Ok</strong>, <strong>FAIL</strong>, or <strong>ERROR</strong> in case the test is not successful</li>
+<li>a summary of the failed tests with all details, like in the compact version.</li>
+</ul>
+<p>This format is usually interesting if some tests print debug output, to match the output to the test.</p>
+<p><strong>JUNIT format</strong></p>
+<p>The Junit XML format was introduced by the <a class="reference external" href="http://junit.org/junit4/">Java testing framework JUnit</a> and has been then used by many continuous
+integration platform as an interoperability format between test suites and the platform.</p>
+<p>To output in the JUnit XML format, you use the format junit with <code class="docutils literal"><span class="pre">--output</span> <span class="pre">junit</span></code> and specify the XML filename with <code class="docutils literal"><span class="pre">--name</span> <span class="pre">&lt;filename&gt;</span></code> . On
+the standard output, LuaUnit will print information about the test progress in a simple format.</p>
+<p>Let&#8217;s see with a simple example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ lua my_test_suite_with_failures.lua -o junit -n toto.xml
+# XML output to toto.xml
+# Started on 02/24/17 09:54:59
+# Starting class: TestAdd
+# Starting test: TestAdd.testAddError
+# Starting test: TestAdd.testAddPositive
+# Starting test: TestAdd.testAddZero
+# Starting test: TestAdd.testAdder
+# Starting class: TestDiv
+# Starting test: TestDiv.testDivError
+# Starting test: TestDiv.testDivPositive
+# Starting test: TestDiv.testDivZero
+# Starting class: TestWithFailures
+# Starting test: TestWithFailures.testFail1
+# Failure: doc/my_test_suite_with_failures.lua:79: expected: &quot;titi&quot;
+# actual: &quot;toto&quot;
+# Starting test: TestWithFailures.testFail2
+# Error: doc/my_test_suite_with_failures.lua:85: attempt to perform arithmetic on local &#39;b&#39; (a string value)
+# Ran 9 tests in 0.007 seconds, 7 successes, 1 failure, 1 error
+</pre></div>
+</div>
+<p>On the standard output, you will see the date-time, the name of the XML file, one line for each test started, a summary
+of the failure or errors when they occurs and the usual one line summary of the test execution: number of tests run, successful, failed,
+in error and number of non selected tests if any.</p>
+<p>The XML file generated by this execution is the following:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;testsuites&gt;
+    &lt;testsuite name=&quot;LuaUnit&quot; id=&quot;00001&quot; package=&quot;&quot; hostname=&quot;localhost&quot; tests=&quot;9&quot; timestamp=&quot;2017-02-24T09:54:59&quot; time=&quot;0.007&quot; errors=&quot;1&quot; failures=&quot;1&quot;&gt;
+        &lt;properties&gt;
+            &lt;property name=&quot;Lua Version&quot; value=&quot;Lua 5.2&quot;/&gt;
+            &lt;property name=&quot;LuaUnit Version&quot; value=&quot;3.2&quot;/&gt;
+        &lt;/properties&gt;
+        &lt;testcase classname=&quot;TestAdd&quot; name=&quot;TestAdd.testAddError&quot; time=&quot;0.001&quot;&gt;
+        &lt;/testcase&gt;
+        &lt;testcase classname=&quot;TestAdd&quot; name=&quot;TestAdd.testAddPositive&quot; time=&quot;0.001&quot;&gt;
+        &lt;/testcase&gt;
+        &lt;testcase classname=&quot;TestAdd&quot; name=&quot;TestAdd.testAddZero&quot; time=&quot;0.000&quot;&gt;
+        &lt;/testcase&gt;
+        &lt;testcase classname=&quot;TestAdd&quot; name=&quot;TestAdd.testAdder&quot; time=&quot;0.000&quot;&gt;
+        &lt;/testcase&gt;
+        &lt;testcase classname=&quot;TestDiv&quot; name=&quot;TestDiv.testDivError&quot; time=&quot;0.000&quot;&gt;
+        &lt;/testcase&gt;
+        &lt;testcase classname=&quot;TestDiv&quot; name=&quot;TestDiv.testDivPositive&quot; time=&quot;0.000&quot;&gt;
+        &lt;/testcase&gt;
+        &lt;testcase classname=&quot;TestDiv&quot; name=&quot;TestDiv.testDivZero&quot; time=&quot;0.001&quot;&gt;
+        &lt;/testcase&gt;
+        &lt;testcase classname=&quot;TestWithFailures&quot; name=&quot;TestWithFailures.testFail1&quot; time=&quot;0.000&quot;&gt;
+            &lt;failure type=&quot;doc/my_test_suite_with_failures.lua:79: expected: &amp;quot;titi&amp;quot;
+actual: &amp;quot;toto&amp;quot;&quot;&gt;
+                &lt;![CDATA[stack traceback:
+        doc/my_test_suite_with_failures.lua:79: in function &#39;TestWithFailures.testFail1&#39;]]&gt;&lt;/failure&gt;
+        &lt;/testcase&gt;
+        &lt;testcase classname=&quot;TestWithFailures&quot; name=&quot;TestWithFailures.testFail2&quot; time=&quot;0.000&quot;&gt;
+            &lt;error type=&quot;doc/my_test_suite_with_failures.lua:85: attempt to perform arithmetic on local &amp;apos;b&amp;apos; (a string value)&quot;&gt;
+                &lt;![CDATA[stack traceback:
+        [C]: in function &#39;xpcall&#39;]]&gt;&lt;/error&gt;
+        &lt;/testcase&gt;
+    &lt;system-out/&gt;
+    &lt;system-err/&gt;
+    &lt;/testsuite&gt;
+&lt;/testsuites&gt;
+</pre></div>
+</div>
+<p>As you can see, the XML file is quite rich in terms of information. The verbosity level has no effect on junit output, all verbosity give the same output.</p>
+<p>Slight inconsistencies exist in the exact XML format in the different continuous integration suites. LuaUnit provides a compatible output which
+is validated against <a class="reference external" href="https://github.com/bluebird75/luaunit/blob/LUAUNIT_V3_2_1/junitxml/junit-jenkins.xsd">Jenkins/Hudson schema</a>
+and <a class="reference external" href="https://github.com/bluebird75/luaunit/blob/LUAUNIT_V3_2_1/junitxml/junit-apache-ant.xsd">Ant/Maven schema</a> . If you ever find an problem in the XML formats, please report a bug to us, more testing is always welcome.</p>
+<p><strong>TAP format</strong></p>
+<p>The <a class="reference external" href="https://testanything.org/">TAP format</a> for test results has been around since 1988. LuaUnit produces TAP reports compatible with version 12 of
+the specification.</p>
+<p>Example with minimal verbosiy:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ lua my_test_suite_with_failures.lua -o tap --quiet
+1..9
+# Started on 02/24/17 22:09:31
+# Starting class: TestAdd
+ok     1        TestAdd.testAddError
+ok     2        TestAdd.testAddPositive
+ok     3        TestAdd.testAddZero
+ok     4        TestAdd.testAdder
+# Starting class: TestDiv
+ok     5        TestDiv.testDivError
+ok     6        TestDiv.testDivPositive
+ok     7        TestDiv.testDivZero
+# Starting class: TestWithFailures
+not ok 8        TestWithFailures.testFail1
+not ok 9        TestWithFailures.testFail2
+# Ran 9 tests in 0.003 seconds, 7 successes, 1 failure, 1 error
+</pre></div>
+</div>
+<p>With minimal verbosity, you have one line for each test run, with the status of the test, and one comment line
+when starting the test suite, when starting a new class or when finishing the test.</p>
+<p>Example with default verbosiy:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ lua my_test_suite_with_failures.lua -o tap
+1..9
+# Started on 02/24/17 22:09:31
+# Starting class: TestAdd
+ok     1        TestAdd.testAddError
+ok     2        TestAdd.testAddPositive
+ok     3        TestAdd.testAddZero
+ok     4        TestAdd.testAdder
+# Starting class: TestDiv
+ok     5        TestDiv.testDivError
+ok     6        TestDiv.testDivPositive
+ok     7        TestDiv.testDivZero
+# Starting class: TestWithFailures
+not ok 8        TestWithFailures.testFail1
+    doc/my_test_suite_with_failures.lua:79: expected: &quot;titi&quot;
+    actual: &quot;toto&quot;
+not ok 9        TestWithFailures.testFail2
+    doc/my_test_suite_with_failures.lua:85: attempt to perform arithmetic on local &#39;b&#39; (a string value)
+# Ran 9 tests in 0.005 seconds, 7 successes, 1 failure, 1 error
+</pre></div>
+</div>
+<p>In the default mode, the failure or error message is displayed in the failing test diagnostic part.</p>
+<p>Example with full verbosiy:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ lua my_test_suite_with_failures.lua -o tap --verbose
+1..9
+# Started on 02/24/17 22:09:31
+# Starting class: TestAdd
+ok     1        TestAdd.testAddError
+ok     2        TestAdd.testAddPositive
+ok     3        TestAdd.testAddZero
+ok     4        TestAdd.testAdder
+# Starting class: TestDiv
+ok     5        TestDiv.testDivError
+ok     6        TestDiv.testDivPositive
+ok     7        TestDiv.testDivZero
+# Starting class: TestWithFailures
+not ok 8        TestWithFailures.testFail1
+    doc/my_test_suite_with_failures.lua:79: expected: &quot;titi&quot;
+    actual: &quot;toto&quot;
+    stack traceback:
+        doc/my_test_suite_with_failures.lua:79: in function &#39;TestWithFailures.testFail1&#39;
+not ok 9        TestWithFailures.testFail2
+    doc/my_test_suite_with_failures.lua:85: attempt to perform arithmetic on local &#39;b&#39; (a string value)
+    stack traceback:
+        [C]: in function &#39;xpcall&#39;
+# Ran 9 tests in 0.007 seconds, 7 successes, 1 failure, 1 error
+</pre></div>
+</div>
+<p>With maximum verbosity, the stack trace is also displayed in the test diagnostic.</p>
+<p><strong>NIL format</strong></p>
+<p>With the nil format output, absolutely nothing is displayed while running the tests. Only the
+exit code of the command can tell whether the test was successful or not:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ lua my_test_suite_with_failures.lua -o nil --verbose
+$
+</pre></div>
+</div>
+<p>This mode is used by LuaUnit for its internal validation.</p>
+</div>
+<div class="section" id="other-options">
+<h4>Other options<a class="headerlink" href="#other-options" title="Permalink to this headline">¶</a></h4>
+<p><strong>Stopping on first error or failure</strong></p>
+<p>If <code class="docutils literal"><span class="pre">--failure</span></code> or <code class="docutils literal"><span class="pre">-f</span></code> is passed as an option, LuaUnit will stop on the first failure or error and display the test results.</p>
+<p>If <code class="docutils literal"><span class="pre">--error</span></code> or <code class="docutils literal"><span class="pre">-e</span></code> is passed as an option, LuaUnit will stop on the first error (but continue on failures).</p>
+<p><strong>Randomize test order</strong></p>
+<p>If <code class="docutils literal"><span class="pre">--shuffle</span></code> or <code class="docutils literal"><span class="pre">-s</span></code> is passed as an option, LuaUnit will execute tests in random order. The randomisation works on all test functions
+and methods. As a consequence test methods of a given class may be splitted into multiple location, generating several test class creation and destruction.</p>
+<p><strong>Repeat test</strong></p>
+<p>When using luajit, the just-in-time compiler will kick in only after a given function has been executed a sufficient number of times. To make sure
+that the JIT is not introducing any bug, LuaUnit provides a way to repeat a test may times, with <code class="docutils literal"><span class="pre">--repeat</span></code> or <code class="docutils literal"><span class="pre">-r</span></code> followed by a number.</p>
+</div>
+<div class="section" id="flexible-test-selection">
+<h4>Flexible test selection<a class="headerlink" href="#flexible-test-selection" title="Permalink to this headline">¶</a></h4>
+<p>LuaUnit provides very flexible way to select which tests to execute. We will illustrate this with several examples.</p>
+<p>In the examples, we use a test suite composed of the following test funcions:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">--</span> <span class="n">class</span><span class="p">:</span> <span class="n">TestAdd</span>
+<span class="n">TestAdd</span><span class="o">.</span><span class="n">testAddError</span>
+<span class="n">TestAdd</span><span class="o">.</span><span class="n">testAddPositive</span>
+<span class="n">TestAdd</span><span class="o">.</span><span class="n">testAddZero</span>
+<span class="n">TestAdd</span><span class="o">.</span><span class="n">testAdder</span>
+
+<span class="o">--</span> <span class="n">class</span><span class="p">:</span> <span class="n">TestDiv</span>
+<span class="n">TestDiv</span><span class="o">.</span><span class="n">testDivError</span>
+<span class="n">TestDiv</span><span class="o">.</span><span class="n">testDivPositive</span>
+<span class="n">TestDiv</span><span class="o">.</span><span class="n">testDivZero</span>
+</pre></div>
+</div>
+<p>With <code class="docutils literal"><span class="pre">--pattern</span></code> or <code class="docutils literal"><span class="pre">-p</span></code>, you can provide a lua pattern and only the tests that contain
+the pattern will actually be run.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>-- Run all tests of zero testing and error testing
+-- by using the magic character .
+$ lua mytest_suite.lua -v -p Err.r -p Z.ro
+Started on 02/19/17 22:29:45
+    TestAdd.testAddError ... Ok
+    TestAdd.testAddZero ... Ok
+    TestDiv.testDivError ... Ok
+    TestDiv.testDivZero ... Ok
+=========================================================
+Ran 4 tests in 0.004 seconds, 4 successes, 0 failures, 3 non-selected
+OK
+</pre></div>
+</div>
+<p>The number of tests ignored by the selection is printed, along
+with the test result. The tests <em>TestAdd.testAdder testAdd.testPositive and
+testDiv.testDivPositive</em> have been correctly ignored.</p>
+<p>The pattern can be any lua pattern. Be sure to exclude all magic
+characters with % (like <code class="docutils literal"><span class="pre">-+?*</span></code>) and protect your pattern from the shell
+interpretation by putting it in quotes.</p>
+<p>With <code class="docutils literal"><span class="pre">--exclude</span></code> or <code class="docutils literal"><span class="pre">-x</span></code>, you can provide a lua pattern of tests which should
+be excluded from execution.</p>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>-- Run all tests except zero testing and except error testing
+$ lua mytest_suite.lua -v -x Error -x Zero
+Started on 02/19/17 22:29:45
+    TestAdd.testAddPositive ... Ok
+    TestAdd.testAdder ... Ok
+    TestDiv.testDivPositive ... Ok
+=========================================================
+Ran 3 tests in 0.003 seconds, 3 successes, 0 failures, 4 non-selected
+OK
+</pre></div>
+</div>
+<p>You can also combine test selection and test exclusion. The rules are the following:</p>
+<ul class="simple">
+<li>if the first argument encountered is a inclusion pattern, the list of tests start empty</li>
+<li>if the first argument encountered is an exclusion pattern, the list of tests start with all tests of the suite</li>
+<li>each subsequent inclusion pattern will add new tests to the list</li>
+<li>each subsequent exclusion pattern will remove test from the list</li>
+<li>the final list is the list of tests executed</li>
+</ul>
+<p>In pure logic term, inclusion is the equivalent of <code class="docutils literal"><span class="pre">or</span> <span class="pre">match(pattern)</span></code> and exclusion is <code class="docutils literal"><span class="pre">and</span> <span class="pre">not</span> <span class="pre">match(pattern)</span></code> .</p>
+<p>Let&#8217;s look at some practical examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>-- Add all tests which include the word Add
+-- except the test Adder
+-- and also include the Zero tests
+$ lua my_test_suite.lua -v --pattern Add --exclude Adder --pattern Zero
+Started on 02/19/17 22:29:45
+    TestAdd.testAddError ... Ok
+    TestAdd.testAddPositive ... Ok
+    TestAdd.testAddZero ... Ok
+    TestDiv.testDivZero ... Ok
+=========================================================
+Ran 4 tests in 0.003 seconds, 4 successes, 0 failures, 3 non-selected
+OK
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="assertions-functions">
+<h3>Assertions functions<a class="headerlink" href="#assertions-functions" title="Permalink to this headline">¶</a></h3>
+<p>We will now list all assertion functions. For every functions, the failure
+message tries to be as informative as possible, by displaying the expectation and value that caused the failure. It
+relies on the <a class="reference internal" href="#prettystr" title="prettystr"><code class="xref py py-func docutils literal"><span class="pre">prettystr()</span></code></a> for printing nicely formatted values.</p>
+<p>All function accept an optional extra message which if provided, is printed along with the failure message.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">see <a class="reference internal" href="#table-printing"><span class="std std-ref">Annex A: More on table printing</span></a> and <a class="reference internal" href="#comparing-table-keys-table"><span class="std std-ref">Annex B: Comparing tables with keys of type table</span></a> for more dealing with recursive tables and tables containing keys of type table.</p>
+</div>
+<div class="section" id="equality-assertions">
+<h4>Equality assertions<a class="headerlink" href="#equality-assertions" title="Permalink to this headline">¶</a></h4>
+<p>All equality assertions functions take two arguments, in the order
+<em>actual value</em> then <em>expected value</em>. Some people are more familiar
+with the order <em>expected value</em> then <em>actual value</em>. It is possible to configure
+LuaUnit to use the opposite order for all equality assertions, by setting up a module
+variable:</p>
+<div class="highlight-lua"><div class="highlight"><pre><span></span><span class="n">lu</span><span class="p">.</span><span class="n">ORDER_ACTUAL_EXPECTED</span><span class="o">=</span><span class="kc">false</span>
+</pre></div>
+</div>
+<p>The order only matters for the message that is displayed in case of failures. It does
+not influence the test itself.</p>
+<dl class="function">
+<dt id="assertEquals">
+<code class="descname">assertEquals</code><span class="sig-paren">(</span><em>actual</em>, <em>expected</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertEquals" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_equals()</em></p>
+<p>Assert that two values are equal.</p>
+<p>For tables, the comparison is a deep comparison :</p>
+<ul class="simple">
+<li>number of elements must be the same</li>
+<li>tables must contain the same keys</li>
+<li>each key must contain the same values. The values
+are also compared recursively with deep comparison.</li>
+</ul>
+<p>If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+<p>LuaUnit provides other table-related assertions, see <a class="reference internal" href="#assert-table"><span class="std std-ref">Table assertions</span></a> .</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertNotEquals">
+<code class="descname">assertNotEquals</code><span class="sig-paren">(</span><em>actual</em>, <em>expected</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertNotEquals" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_not_equals()</em></p>
+<p>Assert that two values are different. The assertion
+fails if the two values are identical. Like the previous function, it uses table deep comparison.</p>
+<p>If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="value-assertions">
+<h4>Value assertions<a class="headerlink" href="#value-assertions" title="Permalink to this headline">¶</a></h4>
+<p>LuaUnit contains several flavours of true/false assertions, to be used in different contexts.
+Usually, when asserting for <em>true</em> or <em>false</em>, you want strict assertions (<em>nil</em> should not
+assert to <em>false</em>); <em>assertTrue()</em> and <em>assertFalse()</em> are the functions for this purpose. In some cases though,
+you want Lua coercion rules to apply (e.g. value <em>1</em> or string <em>&#8220;hello&#8221;</em> yields <em>true</em>) and the right functions to use
+are <em>assertEvalToTrue()</em> and <em>assertEvalToFalse()</em>. Finally, you have the <em>assertNotTrue()</em> and <em>assertNotFalse()</em> to verify
+that a value is anything but the boolean <em>true</em> or <em>false</em>.</p>
+<p>The below table sums it up:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="11%" />
+<col width="18%" />
+<col width="15%" />
+<col width="12%" />
+<col width="18%" />
+<col width="14%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head" colspan="4"><strong>True assertion family</strong></th>
+<th class="head" colspan="3"><strong>False assertion family</strong></th>
+</tr>
+<tr class="row-even"><th class="head">Input Value</th>
+<th class="head">assertTrue()</th>
+<th class="head">assertEvalToTrue()</th>
+<th class="head">assertNotFalse()</th>
+<th class="head">assertFalse()</th>
+<th class="head">assertEvalToFalse()</th>
+<th class="head">assertNotTrue()</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-odd"><td><em>true</em></td>
+<td>OK</td>
+<td>OK</td>
+<td>OK</td>
+<td>Fail</td>
+<td>Fail</td>
+<td>Fail</td>
+</tr>
+<tr class="row-even"><td><em>false</em></td>
+<td>Fail</td>
+<td>Fail</td>
+<td>Fail</td>
+<td>OK</td>
+<td>OK</td>
+<td>OK</td>
+</tr>
+<tr class="row-odd"><td><em>nil</em></td>
+<td>Fail</td>
+<td>Fail</td>
+<td>OK</td>
+<td>Fail</td>
+<td>OK</td>
+<td>OK</td>
+</tr>
+<tr class="row-even"><td><em>0</em></td>
+<td>Fail</td>
+<td>OK</td>
+<td>OK</td>
+<td>Fail</td>
+<td>Fail</td>
+<td>Fail</td>
+</tr>
+<tr class="row-odd"><td><em>1</em></td>
+<td>Fail</td>
+<td>OK</td>
+<td>OK</td>
+<td>Fail</td>
+<td>Fail</td>
+<td>Fail</td>
+</tr>
+<tr class="row-even"><td><em>&#8220;hello&#8221;</em></td>
+<td>Fail</td>
+<td>OK</td>
+<td>OK</td>
+<td>Fail</td>
+<td>Fail</td>
+<td>Fail</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="assertEvalToTrue">
+<code class="descname">assertEvalToTrue</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertEvalToTrue" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_eval_to_true()</em></p>
+<p>Assert that a given value evals to <code class="docutils literal"><span class="pre">true</span></code>. Lua coercion rules are applied
+so that values like <code class="docutils literal"><span class="pre">0</span></code>, <code class="docutils literal"><span class="pre">&quot;&quot;</span></code>, <code class="docutils literal"><span class="pre">1.17</span></code> <strong>succeed</strong> in this assertion. If provided,
+extra_msg is a string which will be printed along with the failure message.</p>
+<p>See <a class="reference internal" href="#assertTrue" title="assertTrue"><code class="xref py py-func docutils literal"><span class="pre">assertTrue()</span></code></a> for a strict assertion to boolean <code class="docutils literal"><span class="pre">true</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertEvalToFalse">
+<code class="descname">assertEvalToFalse</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertEvalToFalse" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_eval_to_false()</em></p>
+<p>Assert that a given value eval to <code class="docutils literal"><span class="pre">false</span></code>. Lua coercion rules are applied
+so that <code class="docutils literal"><span class="pre">nil</span></code> and <code class="docutils literal"><span class="pre">false</span></code>  <strong>succeed</strong> in this assertion. If provided, extra_msg
+is a string which will be printed along with the failure message.</p>
+<p>See <a class="reference internal" href="#assertFalse" title="assertFalse"><code class="xref py py-func docutils literal"><span class="pre">assertFalse()</span></code></a> for a strict assertion to boolean <code class="docutils literal"><span class="pre">false</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertTrue">
+<code class="descname">assertTrue</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertTrue" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_true()</em></p>
+<p>Assert that a given value is strictly <code class="docutils literal"><span class="pre">true</span></code>. Lua coercion rules do not apply
+so that values like <code class="docutils literal"><span class="pre">0</span></code>, <code class="docutils literal"><span class="pre">&quot;&quot;</span></code>, <code class="docutils literal"><span class="pre">1.17</span></code> <strong>fail</strong> in this assertion. If provided,
+extra_msg is a string which will be printed along with the failure message.</p>
+<p>See <a class="reference internal" href="#assertEvalToTrue" title="assertEvalToTrue"><code class="xref py py-func docutils literal"><span class="pre">assertEvalToTrue()</span></code></a> for an assertion to <code class="docutils literal"><span class="pre">true</span></code> where Lua coercion rules apply.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertFalse">
+<code class="descname">assertFalse</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertFalse" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_false()</em></p>
+<p>Assert that a given value is strictly <code class="docutils literal"><span class="pre">false</span></code>. Lua coercion rules do not apply
+so that <code class="docutils literal"><span class="pre">nil</span></code> <strong>fails</strong> in this assertion. If provided, <em>extra_msg</em> is a string
+which will be printed along with the failure message.</p>
+<p>See <a class="reference internal" href="#assertEvalToFalse" title="assertEvalToFalse"><code class="xref py py-func docutils literal"><span class="pre">assertEvalToFalse()</span></code></a> for an assertion to <code class="docutils literal"><span class="pre">false</span></code> where Lua coertion fules apply.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertNil">
+<code class="descname">assertNil</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertNil" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Aliases</strong>: <em>assert_nil()</em>, <em>assertIsNil()</em>, <em>assert_is_nil()</em></p>
+<p>Assert that a given value is <em>nil</em> . If provided, <em>extra_msg</em> is
+a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertNotNil">
+<code class="descname">assertNotNil</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertNotNil" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Aliases</strong>: <em>assert_not_nil()</em>, <em>assertNotIsNil()</em>, <em>assert_not_is_nil()</em></p>
+<p>Assert that a given value is not <em>nil</em> . Lua coercion rules are applied
+so that values like <code class="docutils literal"><span class="pre">0</span></code>, <code class="docutils literal"><span class="pre">&quot;&quot;</span></code>, <code class="docutils literal"><span class="pre">false</span></code> all validate the assertion.
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertIs">
+<code class="descname">assertIs</code><span class="sig-paren">(</span><em>actual</em>, <em>expected</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertIs" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_is()</em></p>
+<p>Assert that two variables are identical. For string, numbers, boolean and for nil,
+this gives the same result as <a class="reference internal" href="#assertEquals" title="assertEquals"><code class="xref py py-func docutils literal"><span class="pre">assertEquals()</span></code></a> . For the other types, identity
+means that the two variables refer to the same object.
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+<p><strong>Example :</strong></p>
+</dd></dl>
+
+<div class="highlight-lua"><div class="highlight"><pre><span></span><span class="n">s1</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">toto&#39;</span>
+<span class="n">s2</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">to&#39;</span><span class="o">..</span><span class="s1">&#39;</span><span class="s">to&#39;</span>
+<span class="n">t1</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">}</span>
+<span class="n">t2</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">}</span>
+<span class="n">v1</span><span class="o">=</span><span class="kc">nil</span>
+<span class="n">v2</span><span class="o">=</span><span class="kc">false</span>
+
+<span class="n">lu</span><span class="p">.</span><span class="n">assertIs</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span><span class="n">s1</span><span class="p">)</span> <span class="c1">-- ok</span>
+<span class="n">lu</span><span class="p">.</span><span class="n">assertIs</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span><span class="n">s2</span><span class="p">)</span> <span class="c1">-- ok</span>
+<span class="n">lu</span><span class="p">.</span><span class="n">assertIs</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span><span class="n">t1</span><span class="p">)</span> <span class="c1">-- ok</span>
+<span class="n">lu</span><span class="p">.</span><span class="n">assertIs</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span><span class="n">t2</span><span class="p">)</span> <span class="c1">-- fail</span>
+<span class="n">lu</span><span class="p">.</span><span class="n">assertIs</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">)</span> <span class="c1">-- fail</span>
+</pre></div>
+</div>
+<dl class="function">
+<dt id="assertNotIs">
+<code class="descname">assertNotIs</code><span class="sig-paren">(</span><em>actual</em>, <em>expected</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertNotIs" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_not_is()</em></p>
+<p>Assert that two variables are not identical, in the sense that they do not
+refer to the same value. If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+<p>See <a class="reference internal" href="#assertIs" title="assertIs"><code class="xref py py-func docutils literal"><span class="pre">assertIs()</span></code></a> for more details.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="string-assertions">
+<h4>String assertions<a class="headerlink" href="#string-assertions" title="Permalink to this headline">¶</a></h4>
+<p>Assertions related to string and patterns.</p>
+<dl class="function">
+<dt id="assertStrContains">
+<code class="descname">assertStrContains</code><span class="sig-paren">(</span><em>str</em>, <em>sub</em><span class="optional">[</span>, <em>isPattern</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertStrContains" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_str_contains()</em></p>
+<p>Assert that the string <em>str</em> contains the substring or pattern <em>sub</em>.
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+<p>By default, substring is searched in the string. If <em>isPattern</em>
+is provided and is true, <em>sub</em> is treated as a pattern which
+is searched inside the string <em>str</em> .</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertStrIContains">
+<code class="descname">assertStrIContains</code><span class="sig-paren">(</span><em>str</em>, <em>sub</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertStrIContains" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_str_icontains()</em></p>
+<p>Assert that the string <em>str</em> contains the given substring <em>sub</em>, irrespective of the case.
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+<p>Note that unlike <code class="xref py py-func docutils literal"><span class="pre">assertStrcontains()</span></code>, you can not search for a pattern.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertNotStrContains">
+<code class="descname">assertNotStrContains</code><span class="sig-paren">(</span><em>str</em>, <em>sub</em><span class="optional">[</span>, <em>isPattern</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertNotStrContains" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_not_str_contains()</em></p>
+<p>Assert that the string <em>str</em> does not contain the substring or pattern <em>sub</em>.
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+<p>By default, the substring is searched in the string. If <em>isPattern</em>
+is provided and is true, <em>sub</em> is treated as a pattern which
+is searched inside the string <em>str</em> .</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertNotStrIContains">
+<code class="descname">assertNotStrIContains</code><span class="sig-paren">(</span><em>str</em>, <em>sub</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertNotStrIContains" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_not_str_icontains()</em></p>
+<p>Assert that the string <em>str</em> does not contain the substring <em>sub</em>, irrespective of the case.
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+<p>Note that unlike <code class="xref py py-func docutils literal"><span class="pre">assertNotStrcontains()</span></code>, you can not search for a pattern.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertStrMatches">
+<code class="descname">assertStrMatches</code><span class="sig-paren">(</span><em>str</em>, <em>pattern</em><span class="optional">[</span>, <em>start</em><span class="optional">[</span>, <em>final</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertStrMatches" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_str_matches()</em></p>
+<p>Assert that the string <em>str</em> matches the full pattern <em>pattern</em>.</p>
+<p>If <em>start</em> and <em>final</em> are not provided or are <em>nil</em>, the pattern must match the full string, from start to end. The
+function allows to specify the expected start and end position of the pattern in the string. If provided,
+<em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="error-assertions">
+<h4>Error assertions<a class="headerlink" href="#error-assertions" title="Permalink to this headline">¶</a></h4>
+<p>Error related assertions, to verify error generation and error messages.</p>
+<dl class="function">
+<dt id="assertError">
+<code class="descname">assertError</code><span class="sig-paren">(</span><em>func</em>, <em>...</em><span class="sig-paren">)</span><a class="headerlink" href="#assertError" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_error()</em></p>
+<p>Assert that calling functions <em>func</em> with the arguments yields an error. If the
+function does not yield an error, the assertion fails.</p>
+<p>Note that the error message itself is not checked, which means that this function
+does not distinguish between the legitimate error that you expect and another error
+that might be triggered by mistake.</p>
+<p>The next functions provide a better approach to error testing, by checking
+explicitly the error message content.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When testing LuaUnit, switching from <em>assertError()</em> to  <em>assertErrorMsgEquals()</em>
+revealed quite a few bugs!</p>
+</div>
+<dl class="function">
+<dt id="assertErrorMsgEquals">
+<code class="descname">assertErrorMsgEquals</code><span class="sig-paren">(</span><em>expectedMsg</em>, <em>func</em>, <em>...</em><span class="sig-paren">)</span><a class="headerlink" href="#assertErrorMsgEquals" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_error_msg_equals()</em></p>
+<p>Assert that calling function <em>func</em> will generate exactly the given error message. If the
+function does not yield an error, or if the error message is not identical, the assertion fails.</p>
+<p>Be careful when using this function that error messages usually contain the file name and
+line number information of where the error was generated. This is usually inconvenient. To
+ignore the filename and line number information, you can either use a pattern with <a class="reference internal" href="#assertErrorMsgMatches" title="assertErrorMsgMatches"><code class="xref py py-func docutils literal"><span class="pre">assertErrorMsgMatches()</span></code></a>
+or simply check for the message content with <a class="reference internal" href="#assertErrorMsgContains" title="assertErrorMsgContains"><code class="xref py py-func docutils literal"><span class="pre">assertErrorMsgContains()</span></code></a> .</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertErrorMsgContains">
+<code class="descname">assertErrorMsgContains</code><span class="sig-paren">(</span><em>partialMsg</em>, <em>func</em>, <em>...</em><span class="sig-paren">)</span><a class="headerlink" href="#assertErrorMsgContains" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_error_msg_contains()</em></p>
+<p>Assert that calling function <em>func</em> will generate an error message containing <em>partialMsg</em> . If the
+function does not yield an error, or if the expected message is not contained in the error message, the
+assertion fails.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertErrorMsgMatches">
+<code class="descname">assertErrorMsgMatches</code><span class="sig-paren">(</span><em>expectedPattern</em>, <em>func</em>, <em>...</em><span class="sig-paren">)</span><a class="headerlink" href="#assertErrorMsgMatches" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_error_msg_matches()</em></p>
+<p>Assert that calling function <em>func</em> will generate an error message matching <em>expectedPattern</em> . If the
+function does not yield an error, or if the error message does not match the provided patternm the
+assertion fails.</p>
+<p>Note that matching is done from the start to the end of the error message. Be sure to escape magic all magic
+characters with <code class="docutils literal"><span class="pre">%</span></code> (like <code class="docutils literal"><span class="pre">-+.?*</span></code>) .</p>
+</dd></dl>
+
+</div>
+<div class="section" id="type-assertions">
+<h4>Type assertions<a class="headerlink" href="#type-assertions" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div>The following functions all perform type checking on their argument. If the
+received value is not of the right type, the failure message will contain
+the expected type, the received type and the received value to help you
+identify better the problem.</div></blockquote>
+<dl class="function">
+<dt id="assertIsNumber">
+<code class="descname">assertIsNumber</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertIsNumber" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Aliases</strong>: <em>assertNumber()</em>, <em>assert_is_number()</em>, <em>assert_number()</em></p>
+<p>Assert that the argument is a number (integer or float).
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertIsString">
+<code class="descname">assertIsString</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertIsString" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Aliases</strong>: <em>assertString()</em>, <em>assert_is_string()</em>, <em>assert_string()</em></p>
+<p>Assert that the argument is a string.
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertIsTable">
+<code class="descname">assertIsTable</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertIsTable" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Aliases</strong>: <em>assertTable()</em>, <em>assert_is_table()</em>, <em>assert_table()</em></p>
+<p>Assert that the argument is a table.
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertIsBoolean">
+<code class="descname">assertIsBoolean</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertIsBoolean" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Aliases</strong>: <em>assertBoolean()</em>, <em>assert_is_boolean()</em>, <em>assert_boolean()</em></p>
+<p>Assert that the argument is a boolean.
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertIsNil">
+<code class="descname">assertIsNil</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertIsNil" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Aliases</strong>: <em>assertNil()</em>, <em>assert_is_nil()</em>, <em>assert_nil()</em></p>
+<p>Assert that the argument is nil.
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertIsFunction">
+<code class="descname">assertIsFunction</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertIsFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Aliases</strong>: <em>assertFunction()</em>, <em>assert_is_function()</em>, <em>assert_function()</em></p>
+<p>Assert that the argument is a function.
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertIsUserdata">
+<code class="descname">assertIsUserdata</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertIsUserdata" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Aliases</strong>: <em>assertUserdata()</em>, <em>assert_is_userdata()</em>, <em>assert_userdata()</em></p>
+<p>Assert that the argument is a userdata.
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertIsCoroutine">
+<code class="descname">assertIsCoroutine</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertIsCoroutine" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Aliases</strong>: <em>assertCoroutine()</em>, <em>assert_is_coroutine()</em>, <em>assert_coroutine()</em></p>
+<p>Assert that the argument is a coroutine (an object with type <em>thread</em> ).
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertIsThread">
+<code class="descname">assertIsThread</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertIsThread" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Aliases</strong>: <em>assertIsThread()</em>, <em>assertThread()</em>, <em>assert_is_thread()</em>, <em>assert_thread()</em></p>
+<p>Same function as :func:assertIsCoroutine . Since Lua coroutines have the type thread, it&#8217;s not
+clear which name is the clearer, so we provide syntax for both names.
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="table-assertions">
+<span id="assert-table"></span><h4>Table assertions<a class="headerlink" href="#table-assertions" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="assertItemsEquals">
+<code class="descname">assertItemsEquals</code><span class="sig-paren">(</span><em>actual</em>, <em>expected</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertItemsEquals" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_items_equals()</em></p>
+<p>Assert that two tables contain the same items, irrespective of their keys.
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+<p>This function is practical for example if you want to compare two lists but
+where items are not in the same order:</p>
+</dd></dl>
+
+<div class="highlight-lua"><div class="highlight"><pre><span></span><span class="n">lu</span><span class="p">.</span><span class="n">assertItemsEquals</span><span class="p">(</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">},</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">}</span> <span class="p">)</span> <span class="c1">-- assertion succeeds</span>
+</pre></div>
+</div>
+<blockquote>
+<div>The comparison is not recursive on the items: if any of the items are tables,
+they are compared using table equality (like as in <a class="reference internal" href="#assertEquals" title="assertEquals"><code class="xref py py-func docutils literal"><span class="pre">assertEquals()</span></code></a> ), where
+the key matters.</div></blockquote>
+<div class="highlight-lua"><div class="highlight"><pre><span></span><span class="n">lu</span><span class="p">.</span><span class="n">assertItemsEquals</span><span class="p">(</span> <span class="p">{</span><span class="mi">1</span><span class="p">,{</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">},</span><span class="mi">4</span><span class="p">},</span> <span class="p">{</span><span class="mi">4</span><span class="p">,{</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,},</span><span class="mi">1</span><span class="p">}</span> <span class="p">)</span> <span class="c1">-- assertion fails because {2,3} ~= {3,2}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ending-test">
+<h4>Ending test<a class="headerlink" href="#ending-test" title="Permalink to this headline">¶</a></h4>
+<p>LuaUnit allows to force test ending, either positevely or negatively, with the following functions.</p>
+<dl class="function">
+<dt id="fail">
+<code class="descname">fail</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#fail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops the ongoing test and mark it as failed with the given message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="failIf">
+<code class="descname">failIf</code><span class="sig-paren">(</span><em>cond</em>, <em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#failIf" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the condition <em>cond</em> evaluates to <em>true</em>, stops the ongoing test and mark it as failed with the given message.
+Else, continue the test execution normally.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="success">
+<code class="descname">success</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#success" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops the ongoing test and mark it as successful.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="successIf">
+<code class="descname">successIf</code><span class="sig-paren">(</span><em>cond</em><span class="sig-paren">)</span><a class="headerlink" href="#successIf" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the condition <em>cond</em> evaluates to <em>true</em>, stops the ongoing test and mark it as successful.
+Else, continue the test execution normally.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="scientific-computing-and-luaunit">
+<h4>Scientific computing and LuaUnit<a class="headerlink" href="#scientific-computing-and-luaunit" title="Permalink to this headline">¶</a></h4>
+<p>LuaUnit is used by the CERN for the MAD-NG program, the forefront of computational physics in the field of particle accelerator design and simulation (See <a class="reference external" href="http://mad.web.cern.ch/mad/">MAD</a>). Thank to the feedback of a scientific computing developer, LuaUnit has been enhanced with some facilities for scientific applications (see all assertions functions below).</p>
+<p>The floating point library used by Lua is the one provided by the C compiler which built Lua. It is usually compliant with <a class="reference external" href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754</a> . As such,
+it can yields results such as <em>plus infinity</em>, <em>minus infinity</em> or <em>Not a Number</em> (NaN). The precision of any calculation performed in Lua is
+related to the smallest representable floating point value (typically called <em>EPS</em>): 2^-52 for 64 bits floats (type double in the C language) and 2^-23 for 32 bits float
+(type float in C).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Lua may be compiled with numbers represented either as 32 bits floats or 64 bits double (as defined by the macro LUA_FLOAT_TYPE in luaconf.h ). LuaUnit has been validated in both these configurations and in particuluar, the epsilon value <em>EPS</em> is adjusted accordingly.</p>
+</div>
+<p>For more information about performing calculations on computers, please read the reference paper <a class="reference external" href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">What Every Computer Scientist Should Know About Floating-Point Arithmetic</a></p>
+<p>If your calculation shall be portable to multiple OS or compilers, you may get different calculation errors depending on the OS/compiler. It is therefore important to verify them on every target.</p>
+<div class="admonition note" id="minuszero">
+<p class="first admonition-title">Note</p>
+<p class="last">If you need to deal with value <em>minus zero</em>, be very careful because Lua versions are inconsistent on how they treat the syntax <em>-0</em> : it creates either
+a <em>plus zero</em> or a <em>minus zero</em> . Multiplying or dividing <em>0</em> by <em>-1</em> also yields inconsistent results. The reliable way to create the <em>-0</em>
+value is : minusZero = -1 / (1/0)</p>
+</div>
+<p id="eps"><strong>EPS</strong> <em>constant</em></p>
+<p>The machine epsilon, to be used with <a class="reference internal" href="#assertAlmostEquals" title="assertAlmostEquals"><code class="xref py py-func docutils literal"><span class="pre">assertAlmostEquals()</span></code></a> .</p>
+<p>This is either:</p>
+<ul class="simple">
+<li>2^-52 or ~2.22E-16 (with lua number defined as double)</li>
+<li>2^-23 or ~1.19E-07 (with lua number defined as float)</li>
+</ul>
+<dl class="function">
+<dt id="assertNan">
+<code class="descname">assertNan</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertNan" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_nan()</em></p>
+<p>Assert that a given number is a <em>NaN</em> (Not a Number), according to the definition of <a class="reference external" href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754</a> .
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertNotNan">
+<code class="descname">assertNotNan</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertNotNan" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_not_nan()</em></p>
+<p>Assert that a given number is NOT a <em>NaN</em> (Not a Number), according to the definition of <a class="reference external" href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754</a> .
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertPlusInf">
+<code class="descname">assertPlusInf</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertPlusInf" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_plus_inf()</em></p>
+<p>Assert that a given number is <em>plus infinity</em>, according to the definition of <a class="reference external" href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754</a> .
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertMinusInf">
+<code class="descname">assertMinusInf</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertMinusInf" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_minus_inf()</em></p>
+<p>Assert that a given number is <em>minus infinity</em>, according to the definition of <a class="reference external" href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754</a> .
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertInf">
+<code class="descname">assertInf</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertInf" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_inf()</em></p>
+<p>Assert that a given number is <em>infinity</em> (either positive or negative), according to the definition of <a class="reference external" href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754</a> .
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertNotPlusInf">
+<code class="descname">assertNotPlusInf</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertNotPlusInf" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_not_plus_inf()</em></p>
+<p>Assert that a given number is NOT <em>plus infinity</em>, according to the definition of <a class="reference external" href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754</a> .
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertNotMinusInf">
+<code class="descname">assertNotMinusInf</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertNotMinusInf" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_not_minus_inf()</em></p>
+<p>Assert that a given number is NOT <em>minus infinity</em>, according to the definition of <a class="reference external" href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754</a> .
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertNotInf">
+<code class="descname">assertNotInf</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertNotInf" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_not_inf()</em></p>
+<p>Assert that a given number is neither <em>infinity</em> nor <em>minus infinity</em>, according to the definition of <a class="reference external" href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754</a> .
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertPlusZero">
+<code class="descname">assertPlusZero</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertPlusZero" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_plus_zero()</em></p>
+<p>Assert that a given number is <em>+0</em>, according to the definition of <a class="reference external" href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754</a> . The
+verification is done by dividing by the provided number and verifying that it yields
+<em>infinity</em> . If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+<p>Be careful when dealing with <em>+0</em> and <em>-0</em>, see note above.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertMinusZero">
+<code class="descname">assertMinusZero</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertMinusZero" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_minus_zero()</em></p>
+<p>Assert that a given number is <em>-0</em>, according to the definition of <a class="reference external" href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754</a> . The
+verification is done by dividing by the provided number and verifying that it yields
+<em>minus infinity</em> . If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+<p>Be careful when dealing with <em>+0</em> and <em>-0</em>, see <span class="xref std std-ref">MinusZero</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertNotPlusZero">
+<code class="descname">assertNotPlusZero</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertNotPlusZero" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_not_plus_zero()</em></p>
+<p>Assert that a given number is NOT <em>+0</em>, according to the definition of <a class="reference external" href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754</a> .
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+<p>Be careful when dealing with <em>+0</em> and <em>-0</em>, see <span class="xref std std-ref">MinusZero</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertNotMinusZero">
+<code class="descname">assertNotMinusZero</code><span class="sig-paren">(</span><em>value</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertNotMinusZero" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_not_minus_zero()</em></p>
+<p>Assert that a given number is NOT <em>-0</em>, according to the definition of <a class="reference external" href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754</a> .
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+<p>Be careful when dealing with <em>+0</em> and <em>-0</em>, see <span class="xref std std-ref">MinusZero</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertAlmostEquals">
+<code class="descname">assertAlmostEquals</code><span class="sig-paren">(</span><em>actual</em>, <em>expected</em><span class="optional">[</span>, <em>margin=EPS</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertAlmostEquals" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_almost_equals()</em></p>
+<p>Assert that two floating point numbers are equal by the defined margin.
+If margin is not provided, the machine epsilon <em>EPS</em> is used.
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+<p>Be careful that depending on the calculation, it might make more sense to measure
+the absolute error or the relative error (see below):</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="assertNotAlmostEquals">
+<code class="descname">assertNotAlmostEquals</code><span class="sig-paren">(</span><em>actual</em>, <em>expected</em><span class="optional">[</span>, <em>margin=EPS</em><span class="optional">[</span>, <em>extra_msg</em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#assertNotAlmostEquals" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Alias</strong>: <em>assert_not_almost_equals()</em></p>
+<p>Assert that two floating point numbers are not equal by the defined margin.
+If margin is not provided, the machine epsilon <em>EPS</em> is used.
+If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</p>
+<p>Be careful that depending on the calculation, it might make more sense to measure
+the absolute error or the relative error (see below).</p>
+</dd></dl>
+
+<p><strong>Example of absolute versus relative error</strong></p>
+<div class="highlight-lua"><div class="highlight"><pre><span></span><span class="c1">-- convert pi/6 radian to 30 degree</span>
+<span class="n">pi_div_6_deg_calculated</span> <span class="o">=</span> <span class="nb">math.deg</span><span class="p">(</span><span class="nb">math.pi</span><span class="o">/</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">pi_div_6_deg_expected</span> <span class="o">=</span> <span class="mi">30</span>
+
+<span class="c1">-- convert pi/3 radian to 60 degree</span>
+<span class="n">pi_div_3_deg_calculated</span> <span class="o">=</span> <span class="nb">math.deg</span><span class="p">(</span><span class="nb">math.pi</span><span class="o">/</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">pi_div_3_deg_expected</span> <span class="o">=</span> <span class="mi">60</span>
+
+<span class="c1">-- check absolute error: it is not constant</span>
+<span class="nb">print</span><span class="p">(</span> <span class="p">(</span><span class="n">pi_div_6_deg_expected</span> <span class="o">-</span> <span class="n">pi_div_6_deg_calculated</span><span class="p">)</span> <span class="o">/</span> <span class="n">lu</span><span class="p">.</span><span class="n">EPS</span> <span class="p">)</span> <span class="c1">-- prints: 16</span>
+<span class="nb">print</span><span class="p">(</span> <span class="p">(</span><span class="n">pi_div_3_deg_expected</span> <span class="o">-</span> <span class="n">pi_div_3_deg_calculated</span><span class="p">)</span> <span class="o">/</span> <span class="n">lu</span><span class="p">.</span><span class="n">EPS</span> <span class="p">)</span> <span class="c1">-- prints: 32</span>
+
+<span class="c1">-- Better use relative error:</span>
+<span class="nb">print</span><span class="p">(</span> <span class="p">(</span> <span class="p">(</span><span class="n">pi_div_6_deg_expected</span> <span class="o">-</span> <span class="n">pi_div_6_deg_calculated</span><span class="p">)</span> <span class="o">/</span> <span class="n">pi_div_6_deg_expected</span><span class="p">)</span> <span class="o">/</span> <span class="n">lu</span><span class="p">.</span><span class="n">EPS</span> <span class="p">)</span> <span class="c1">-- prints: 0.53333</span>
+<span class="nb">print</span><span class="p">(</span> <span class="p">(</span> <span class="p">(</span><span class="n">pi_div_3_deg_expected</span> <span class="o">-</span> <span class="n">pi_div_3_deg_calculated</span><span class="p">)</span> <span class="o">/</span> <span class="n">pi_div_3_deg_expected</span><span class="p">)</span> <span class="o">/</span> <span class="n">lu</span><span class="p">.</span><span class="n">EPS</span> <span class="p">)</span> <span class="c1">-- prints: 0.53333</span>
+
+<span class="c1">-- relative error is constant. Assertion can take the form of:</span>
+<span class="n">assertAlmostEquals</span><span class="p">(</span> <span class="p">(</span><span class="n">pi_div_6_deg_expected</span> <span class="o">-</span> <span class="n">pi_div_6_deg_calculated</span><span class="p">)</span> <span class="o">/</span> <span class="n">pi_div_6_deg_expected</span><span class="p">,</span> <span class="n">lu</span><span class="p">.</span><span class="n">EPS</span> <span class="p">)</span>
+<span class="n">assertAlmostEquals</span><span class="p">(</span> <span class="p">(</span><span class="n">pi_div_3_deg_expected</span> <span class="o">-</span> <span class="n">pi_div_3_deg_calculated</span><span class="p">)</span> <span class="o">/</span> <span class="n">pi_div_3_deg_expected</span><span class="p">,</span> <span class="n">lu</span><span class="p">.</span><span class="n">EPS</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pretty-printing">
+<h4>Pretty printing<a class="headerlink" href="#pretty-printing" title="Permalink to this headline">¶</a></h4>
+<dl class="function">
+<dt id="prettystr">
+<code class="descname">prettystr</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#prettystr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts <em>value</em> to a nicely formatted string, whatever the type of the value.
+It supports in particular tables, nested table and even recursive tables.</p>
+<p>You can use it in your code to replace calls to <em>tostring()</em> .</p>
+</dd></dl>
+
+<p><strong>Example of prettystr()</strong></p>
+<div class="highlight-lua"><div class="highlight"><pre><span></span>&gt; lu = require(&#39;luaunit&#39;)
+&gt; t1 = {1,2,3}
+&gt; t1[&#39;toto&#39;] = &#39;titi&#39;
+&gt; t1.f = function () end
+&gt; t1.fa = (1 == 0)
+&gt; t1.tr = (1 == 1)
+&gt; print( lu.prettystr(t1) )
+{1, 2, 3, f=function: 00635d68, fa=false, toto=&quot;titi&quot;, tr=true}
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="developing-luaunit">
+<h2>Developing LuaUnit<a class="headerlink" href="#developing-luaunit" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="development-ecosystem">
+<h3>Development ecosystem<a class="headerlink" href="#development-ecosystem" title="Permalink to this headline">¶</a></h3>
+<p>LuaUnit is developed on <a class="reference external" href="https://github.com/bluebird75/luaunit">GitHub</a>.</p>
+<p>Bugs or feature requests should be reported using <a class="reference external" href="https://github.com/bluebird75/luaunit/issues">GitHub issues</a>.</p>
+<p>LuaUnit is released under the BSD license.</p>
+<p>This documentation is available at <a class="reference external" href="http://luaunit.readthedocs.org/en/latest/">Read-the-docs</a>.</p>
+</div>
+<div class="section" id="contributing">
+<h3>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h3>
+<p>You may contribute to LuaUnit by reporting bugs or wishes, or by contributing code directly with a pull request.</p>
+<p>Some issues on GitHub are marked with label <em>enhancement</em>. Feel also free to pick up such tasks and implement them.</p>
+<p>Changes should be proposed as <em>Pull Requests</em> on GitHub.</p>
+<p>Thank to our continous integration setup with Travis-Ci and AppVeyor, all unit-tests and functional tests are run on Linux, Windows and MacOs, with all versions of Lua. So
+any <em>Pull Request</em> will show immediatly if anything is going unexpected.</p>
+<div class="section" id="unit-tests">
+<h4>Unit-tests<a class="headerlink" href="#unit-tests" title="Permalink to this headline">¶</a></h4>
+<p>All proposed changes should pass all unit-tests and if needed, add more unit-tests to cover the bug or the new functionality. Usage is pretty simple:</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>$ lua run_unit_tests.lua
+................................................................................
+...............................
+Ran <span class="m">111</span> tests in 0.120 seconds
+OK
+</pre></div>
+</div>
+</div>
+<div class="section" id="functional-tests">
+<h4>Functional tests<a class="headerlink" href="#functional-tests" title="Permalink to this headline">¶</a></h4>
+<p>Functional tests also exist to validate LuaUnit. Their management is slightly more complicated.</p>
+<p>The main goal of functional tests is to validate that LuaUnit output has not been altered. Since LuaUnit supports some standard compliant output (TAP, junitxml), this is very important (and it has been broken in the past)</p>
+<p>Functional tests perform the following actions:</p>
+<ul>
+<li><p class="first">Run the 2 suites: example_with_luaunit.lua, test_with_err_fail_pass.lua (with various options to have successe, failure and/or errors)</p>
+</li>
+<li><p class="first">Run every suite with all output format, all verbosity</p>
+</li>
+<li><p class="first">Validate the XML output with jenkins/hudson and junit schema</p>
+</li>
+<li><p class="first">Compare the results with the previous output ( archived in test/ref ), with some tricks to make the comparison possible :</p>
+<blockquote>
+<div><ul class="simple">
+<li>adjustment of the file separator to use the same output on Windows and Unix</li>
+<li>date and test duration is zeroed so that it does not impact the comparison</li>
+<li>adjust the stack trace format which has changed between Lua 5.1, 5.2 and 5.3</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">Run some legacy suites or tricky output to manage and verify output: test_with_xml.lua, , compat_luaunit_v2x.lua, legacy_example_with_luaunit.lua</p>
+</li>
+</ul>
+<p>For functional tests to run, <em>diff</em> must be available on the command line. <em>xmllint</em> is needed to perform the xml validation but
+this step is skipped if <em>xmllint</em> can not be found.</p>
+<p>When functional tests work well, it looks like this:</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>$ lua run_functional_tests.lua
+...............
+Ran <span class="m">15</span> tests in 9.676 seconds
+OK
+</pre></div>
+</div>
+<p>When functional test fail, a diff of the comparison between the reference output and the current output is displayed (it can be quite
+long). The list of faulty files is summed-up at the end.</p>
+</div>
+<div class="section" id="modifying-reference-files-for-functional-tests">
+<h4>Modifying reference files for functional tests<a class="headerlink" href="#modifying-reference-files-for-functional-tests" title="Permalink to this headline">¶</a></h4>
+<p>The script run_functional_tests.lua supports a &#8211;update option, with an optional argument.</p>
+<ul>
+<li><p class="first"><em>&#8211;update</em> without argument <strong>overwrites all reference output</strong> with the current output. Use only if you know what you are doing, this is usually a very bad idea!</p>
+</li>
+<li><p class="first">The following argument overwrite a specific subset of reference files, select the one that fits your change:</p>
+<blockquote>
+<div><ul class="simple">
+<li>TestXml: XML output of test_with_xml</li>
+<li>ExampleXml: XML output of example_with_luaunit</li>
+<li>ExampleTap: TAP output of example_with_luaunit</li>
+<li>ExampleText: text output of example_with_luaunit</li>
+<li>ExampleNil: nil output of example_with_luaunit</li>
+<li>ErrFailPassText: text output of test_with_err_fail_pass</li>
+<li>ErrFailPassTap: TAP output of test_with_err_fail_pass</li>
+<li>ErrFailPassXml: XML output of test_with_err_fail_pass</li>
+<li>StopOnError: errFailPassTextStopOnError-1.txt, -2.txt, -3.txt, -4.txt</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>For example to record a change in the test_with_err_fail_pass output</p>
+<div class="highlight-shell"><div class="highlight"><pre><span></span>$ lua run_functional_tests.lua --update ErrFailPassXml ErrFailPassTap ErrFailPassText
+
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassXmlDefault.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassXmlDefault-success.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassXmlDefault-failures.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassXmlQuiet.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassXmlQuiet-success.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassXmlQuiet-failures.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassXmlVerbose.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassXmlVerbose-success.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassXmlVerbose-failures.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassTapDefault.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassTapDefault-success.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassTapDefault-failures.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassTapQuiet.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassTapQuiet-success.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassTapQuiet-failures.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassTapVerbose.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassTapVerbose-success.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassTapVerbose-failures.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassTextDefault.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassTextDefault-success.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassTextDefault-failures.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassTextQuiet.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassTextQuiet-success.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassTextQuiet-failures.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassTextVerbose.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassTextVerbose-success.txt
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Generating test/ref/errFailPassTextVerbose-failures.txt
+$
+</pre></div>
+</div>
+<p>You can then commit the new files into git.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>how to commit updated reference outputs</p>
+<p class="last">When committing those changes into git, please use if possible an
+intelligent git committing tool to commit only the interesting changes.
+With SourceTree for example, in case of XML changes, I can select only the
+lines relevant to the change and avoid committing all the updates to test
+duration and test datestamp.</p>
+</div>
+</div>
+<div class="section" id="typical-failures-for-functional-tests">
+<h4>Typical failures for functional tests<a class="headerlink" href="#typical-failures-for-functional-tests" title="Permalink to this headline">¶</a></h4>
+<p>Functional tests may start failing when:</p>
+<ol class="arabic simple">
+<li>Increasing LuaUnit version</li>
+<li>Improving or breaking LuaUnit output</li>
+</ol>
+<p>This a good place to start looking if you see failures occuring.</p>
+</div>
+</div>
+</div>
+<div class="section" id="annexes">
+<h2>Annexes<a class="headerlink" href="#annexes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="annex-a-more-on-table-printing">
+<span id="table-printing"></span><h3>Annex A: More on table printing<a class="headerlink" href="#annex-a-more-on-table-printing" title="Permalink to this headline">¶</a></h3>
+<p>When asserting tables equality, by default, the table content is printed in case of failures. LuaUnit tries to print
+tables in a readable format. It is
+possible to always display the table id along with the content, by setting a module parameter PRINT_TABLE_REF_IN_ERROR_MSG . This
+helps identifying tables:</p>
+<div class="highlight-lua"><div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">lu</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">luaunit&#39;</span><span class="p">)</span>
+
+<span class="kd">local</span> <span class="n">t1</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">}</span>
+<span class="c1">-- normally, t1 is dispalyed as: &quot;{1,2,3}&quot;</span>
+
+<span class="c1">-- if setting this:</span>
+<span class="n">lu</span><span class="p">.</span><span class="n">PRINT_TABLE_REF_IN_ERROR_MSG</span> <span class="o">=</span> <span class="kc">true</span>
+
+<span class="c1">-- display of table t1 becomes: &quot;&lt;table: 0x29ab56&gt; {1,2,3}&quot;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>table loops</p>
+<p class="last">When displaying table content, it is possible to encounter loops, if for example two table references eachother. In such
+cases, LuaUnit display the full table content once, along with the table id, and displays only the table id for the looping
+reference.</p>
+</div>
+<p><strong>Example:</strong> displaying a table with reference loop</p>
+<div class="highlight-lua"><div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">t1</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="kd">local</span> <span class="n">t2</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">t1</span><span class="p">.</span><span class="n">t2</span> <span class="o">=</span> <span class="n">t2</span>
+<span class="n">t1</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">}</span>
+<span class="n">t2</span><span class="p">.</span><span class="n">t1</span> <span class="o">=</span> <span class="n">t1</span>
+
+<span class="c1">-- when displaying table t1:</span>
+<span class="c1">--   table t1 inside t2 is only displayed by its id because t1 is already being displayed</span>
+<span class="c1">--   table t2 is displayed along with its id because it is part of a loop.</span>
+<span class="c1">-- t1: &quot;&lt;table: 0x29ab56&gt; { a={1,2,3}, t2=&lt;table: 0x27ab23&gt; {t1=&lt;table: 0x29ab56&gt;} }&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="annex-b-comparing-tables-with-keys-of-type-table">
+<span id="comparing-table-keys-table"></span><h3>Annex B: Comparing tables with keys of type table<a class="headerlink" href="#annex-b-comparing-tables-with-keys-of-type-table" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>If provided, <em>extra_msg</em> is a string which will be printed along with the failure message.</div></blockquote>
+<p>This is a very uncommon scenario but there are a few programs out there which use tables as keys for other tables. LuaUnit has been adjusted to deal intelligently with this scenario.</p>
+<p>A small code block is worth a thousand pictures :</p>
+<div class="highlight-lua"><div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">lu</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">luaunit&#39;</span><span class="p">)</span>
+
+<span class="c1">-- let&#39;s define two tables</span>
+<span class="n">t1</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="p">}</span>
+<span class="n">t2</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="p">}</span>
+<span class="n">lu</span><span class="p">.</span><span class="n">assertEquals</span><span class="p">(</span> <span class="n">t1</span><span class="p">,</span> <span class="n">t2</span> <span class="p">)</span> <span class="c1">-- succeeds</span>
+
+<span class="c1">-- let&#39;s define three tables, with the two above tables as keys</span>
+<span class="n">t3</span> <span class="o">=</span> <span class="p">{</span> <span class="n">t1</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">a&#39;</span> <span class="p">}</span>
+<span class="n">t4</span> <span class="o">=</span> <span class="p">{</span> <span class="n">t2</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">a&#39;</span> <span class="p">}</span>
+<span class="n">t5</span> <span class="o">=</span> <span class="p">{</span> <span class="n">t2</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">a&#39;</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>There are two ways to treat comparison of tables t3 and t4:</p>
+<p><strong>Method 1: table keys are compared by content</strong></p>
+<ul class="simple">
+<li>t3 contain one key: t1</li>
+<li>t4 contain one key: t2, which has exactly the same content as t1</li>
+<li>the two keys compare equally with assertEquals, so assertEquals( t3, t4 ) succeeds</li>
+</ul>
+<p><strong>Method 2: table keys are compared by reference</strong></p>
+<ul class="simple">
+<li>t3 contain one key: t1</li>
+<li>t4 contain one key: t2, which is not the same table as t1, its reference is different</li>
+<li>the two keys are different because t1 is a different object than t2 so assertEquals( t3, t4 ) fails</li>
+</ul>
+<p>Whether method 1 or method 2 is more appropriate is up for debate.</p>
+<p>LuaUnit has been adjusted to support both scenarios, with the config variable: <em>TABLE_EQUALS_KEYBYCONTENT</em></p>
+<ul class="simple">
+<li>TABLE_EQUALS_KEYBYCONTENT = true (default): method 1 - table keys compared by content</li>
+<li>TABLE_EQUALS_KEYBYCONTENT = false: method 2 - table keys compared by reference</li>
+</ul>
+<p>In any case, assertEquals( t4, t5 ) always succeeds.</p>
+<p>To adjust the config, change it into the luaunit table before running any tests:</p>
+<div class="highlight-lua"><div class="highlight"><pre><span></span><span class="kd">local</span> <span class="n">lu</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">luaunit&#39;</span><span class="p">)</span>
+
+<span class="c1">-- define all your tests</span>
+<span class="c1">-- ...</span>
+
+<span class="n">lu</span><span class="p">.</span><span class="n">TABLE_EQUALS_KEYBYCONTENT</span> <span class="o">=</span> <span class="kc">false</span>
+<span class="c1">-- run your tests:</span>
+<span class="nb">os.exit</span><span class="p">(</span> <span class="n">lu</span><span class="p">.</span><span class="n">LuaUnit</span><span class="p">.</span><span class="n">run</span><span class="p">()</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="annex-c-source-code-of-example">
+<span id="source-code-example"></span><h3>Annex C: Source code of example<a class="headerlink" href="#annex-c-source-code-of-example" title="Permalink to this headline">¶</a></h3>
+<p>Source code of the example used in the <a class="reference internal" href="#getting-started-with-luaunit">Getting started with LuaUnit</a></p>
+<div class="highlight-lua"><div class="highlight"><pre><span></span><span class="c1">--</span>
+<span class="c1">-- The examples described in the documentation are below.</span>
+<span class="c1">--</span>
+
+<span class="n">lu</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">luaunit&#39;</span><span class="p">)</span>
+
+<span class="k">function</span> <span class="nf">add</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">)</span>
+    <span class="c1">-- add positive numbers</span>
+    <span class="c1">-- return 0 if any of the numbers are 0</span>
+    <span class="c1">-- error if any of the two numbers are negative</span>
+    <span class="k">if</span> <span class="n">v1</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">v2</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">then</span>
+        <span class="nb">error</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">Can only add positive or null numbers, received &#39;</span><span class="o">..</span><span class="n">v1</span><span class="o">..</span><span class="s1">&#39;</span><span class="s"> and &#39;</span><span class="o">..</span><span class="n">v2</span><span class="p">)</span>
+    <span class="k">end</span>
+    <span class="k">if</span> <span class="n">v1</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">v2</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">then</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">end</span>
+    <span class="k">return</span> <span class="n">v1</span><span class="o">+</span><span class="n">v2</span>
+<span class="k">end</span>
+
+<span class="k">function</span> <span class="nf">adder</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="c1">-- return a function that adds v to its argument using add</span>
+    <span class="k">function</span> <span class="nf">closure</span><span class="p">(</span> <span class="n">x</span> <span class="p">)</span> <span class="k">return</span> <span class="n">x</span><span class="o">+</span><span class="n">v</span> <span class="k">end</span>
+    <span class="k">return</span> <span class="n">closure</span>
+<span class="k">end</span>
+
+<span class="k">function</span> <span class="nf">div</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">)</span>
+    <span class="c1">-- divide positive numbers</span>
+    <span class="c1">-- return 0 if any of the numbers are 0</span>
+    <span class="c1">-- error if any of the two numbers are negative</span>
+    <span class="k">if</span> <span class="n">v1</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">v2</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">then</span>
+        <span class="nb">error</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">Can only divide positive or null numbers, received &#39;</span><span class="o">..</span><span class="n">v1</span><span class="o">..</span><span class="s1">&#39;</span><span class="s"> and &#39;</span><span class="o">..</span><span class="n">v2</span><span class="p">)</span>
+    <span class="k">end</span>
+    <span class="k">if</span> <span class="n">v1</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">v2</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">then</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">end</span>
+    <span class="k">return</span> <span class="n">v1</span><span class="o">/</span><span class="n">v2</span>
+<span class="k">end</span>
+
+
+
+<span class="n">TestAdd</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">function</span> <span class="nf">TestAdd</span><span class="p">:</span><span class="n">testAddPositive</span><span class="p">()</span>
+        <span class="n">lu</span><span class="p">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="k">function</span> <span class="nf">TestAdd</span><span class="p">:</span><span class="n">testAddZero</span><span class="p">()</span>
+        <span class="n">lu</span><span class="p">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lu</span><span class="p">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lu</span><span class="p">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="k">function</span> <span class="nf">TestAdd</span><span class="p">:</span><span class="n">testAddError</span><span class="p">()</span>
+        <span class="n">lu</span><span class="p">.</span><span class="n">assertErrorMsgContains</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">Can only add positive or null numbers, received 2 and -3&#39;</span><span class="p">,</span> <span class="n">add</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="k">function</span> <span class="nf">TestAdd</span><span class="p">:</span><span class="n">testAdder</span><span class="p">()</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">adder</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+        <span class="n">lu</span><span class="p">.</span><span class="n">assertIsFunction</span><span class="p">(</span> <span class="n">f</span> <span class="p">)</span>
+        <span class="n">lu</span><span class="p">.</span><span class="n">assertEquals</span><span class="p">(</span> <span class="n">f</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">5</span> <span class="p">)</span>
+    <span class="k">end</span>
+<span class="c1">-- end of table TestAdd</span>
+
+<span class="n">TestDiv</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">function</span> <span class="nf">TestDiv</span><span class="p">:</span><span class="n">testDivPositive</span><span class="p">()</span>
+        <span class="n">lu</span><span class="p">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">div</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="k">function</span> <span class="nf">TestDiv</span><span class="p">:</span><span class="n">testDivZero</span><span class="p">()</span>
+        <span class="n">lu</span><span class="p">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">div</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lu</span><span class="p">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">div</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">lu</span><span class="p">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">div</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="k">function</span> <span class="nf">TestDiv</span><span class="p">:</span><span class="n">testDivError</span><span class="p">()</span>
+        <span class="n">lu</span><span class="p">.</span><span class="n">assertErrorMsgContains</span><span class="p">(</span><span class="s1">&#39;</span><span class="s">Can only divide positive or null numbers, received 2 and -3&#39;</span><span class="p">,</span> <span class="n">div</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">end</span>
+<span class="c1">-- end of table TestDiv</span>
+
+<span class="cm">--[[</span>
+<span class="cm">--</span>
+<span class="cm">--      Uncomment this section to see how failures are displayed</span>
+<span class="cm">--</span>
+<span class="cm">TestWithFailures = {}</span>
+<span class="cm">    -- two failing tests</span>
+
+<span class="cm">    function TestWithFailures:testFail1()</span>
+<span class="cm">        lu.assertEquals( &quot;toto&quot;, &quot;titi&quot;)</span>
+<span class="cm">    end</span>
+
+<span class="cm">    function TestWithFailures:testFail2()</span>
+<span class="cm">        local a=1</span>
+<span class="cm">        local b=&#39;toto&#39;</span>
+<span class="cm">        local c = a + b -- oops, can not add string and numbers</span>
+<span class="cm">        return c</span>
+<span class="cm">    end</span>
+<span class="cm">-- end of table TestWithFailures</span>
+<span class="cm">]]</span>
+
+
+<span class="cm">--[[</span>
+<span class="cm">TestLogger = {}</span>
+<span class="cm">    function TestLogger:setUp()</span>
+<span class="cm">        -- define the fname to use for logging</span>
+<span class="cm">        self.fname = &#39;mytmplog.log&#39;</span>
+<span class="cm">        -- make sure the file does not already exists</span>
+<span class="cm">        os.remove(self.fname)</span>
+<span class="cm">    end</span>
+
+<span class="cm">    function TestLogger:testLoggerCreatesFile()</span>
+<span class="cm">        initLog(self.fname)</span>
+<span class="cm">        log(&#39;toto&#39;)</span>
+<span class="cm">        f = io.open(self.fname, &#39;r&#39;)</span>
+<span class="cm">        lu.assertNotNil( f )</span>
+<span class="cm">        f:close()</span>
+<span class="cm">    end</span>
+
+<span class="cm">    function TestLogger:tearDown()</span>
+<span class="cm">        self.fname = &#39;mytmplog.log&#39;</span>
+<span class="cm">        -- cleanup our log file after all tests</span>
+<span class="cm">        os.remove(self.fname)</span>
+<span class="cm">    end</span>
+<span class="cm">-- end of table TestLogger</span>
+
+<span class="cm">]]</span>
+
+<span class="nb">os.exit</span><span class="p">(</span><span class="n">lu</span><span class="p">.</span><span class="n">LuaUnit</span><span class="p">.</span><span class="n">run</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="annex-d-bsd-license">
+<h3>Annex D: BSD License<a class="headerlink" href="#annex-d-bsd-license" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>This software is distributed under the BSD License.</p>
+<p>Copyright (c) 2005-2018, Philippe Fremy &lt;phil at freehackers dot org&gt;</p>
+<p>All rights reserved.</p>
+<p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
+<p>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</p>
+<p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &#8220;AS IS&#8221; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="index-and-search-page">
+<h2>Index and Search page<a class="headerlink" href="#index-and-search-page" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to LuaUnit&#8217;s documentation!</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#more-details">More details</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#luarocks">LuaRocks</a></li>
+<li><a class="reference internal" href="#github">GitHub</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#upgrade-note">Upgrade note</a></li>
+<li><a class="reference internal" href="#luaunit-development">LuaUnit development</a></li>
+<li><a class="reference internal" href="#version-and-changelog">Version and Changelog</a><ul>
+<li><a class="reference internal" href="#new-in-version-3-3-6-mar-2018">New in version 3.3 - 6. Mar 2018</a></li>
+<li><a class="reference internal" href="#new-in-version-3-2-12-jul-2016">New in version 3.2 - 12. Jul 2016</a></li>
+<li><a class="reference internal" href="#new-in-version-3-1-10-mar-2015">New in version 3.1 - 10. Mar 2015</a></li>
+<li><a class="reference internal" href="#new-in-version-3-0-9-oct-2014">New in version 3.0 - 9. Oct 2014</a></li>
+<li><a class="reference internal" href="#new-in-version-1-5-8-nov-2012">New in version 1.5 - 8. Nov 2012</a></li>
+<li><a class="reference internal" href="#new-in-version-1-4-26-jul-2012">New in version 1.4 - 26. Jul 2012</a></li>
+<li><a class="reference internal" href="#new-in-version-1-3-30-oct-2007">New in version 1.3 - 30. Oct 2007</a></li>
+<li><a class="reference internal" href="#version-1-2-13-jun-2005">Version 1.2 - 13. Jun 2005</a></li>
+<li><a class="reference internal" href="#version-1-1">Version 1.1</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#getting-started-with-luaunit">Getting started with LuaUnit</a><ul>
+<li><a class="reference internal" href="#setting-up-your-test-script">Setting up your test script</a></li>
+<li><a class="reference internal" href="#writing-tests">Writing tests</a></li>
+<li><a class="reference internal" href="#grouping-tests-setup-teardown-functionality">Grouping tests, setup/teardown functionality</a></li>
+<li><a class="reference internal" href="#using-the-command-line">Using the command-line</a></li>
+<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#reference-documentation">Reference documentation</a><ul>
+<li><a class="reference internal" href="#enabling-global-or-module-level-functions">Enabling global or module-level functions</a></li>
+<li><a class="reference internal" href="#luaunit-run-function">LuaUnit.run() function</a></li>
+<li><a class="reference internal" href="#luaunit-runsuite-function">LuaUnit.runSuite() function</a></li>
+<li><a class="reference internal" href="#command-line-options">Command-line options</a><ul>
+<li><a class="reference internal" href="#output-formats">Output formats</a></li>
+<li><a class="reference internal" href="#other-options">Other options</a></li>
+<li><a class="reference internal" href="#flexible-test-selection">Flexible test selection</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#assertions-functions">Assertions functions</a><ul>
+<li><a class="reference internal" href="#equality-assertions">Equality assertions</a></li>
+<li><a class="reference internal" href="#value-assertions">Value assertions</a></li>
+<li><a class="reference internal" href="#string-assertions">String assertions</a></li>
+<li><a class="reference internal" href="#error-assertions">Error assertions</a></li>
+<li><a class="reference internal" href="#type-assertions">Type assertions</a></li>
+<li><a class="reference internal" href="#table-assertions">Table assertions</a></li>
+<li><a class="reference internal" href="#ending-test">Ending test</a></li>
+<li><a class="reference internal" href="#scientific-computing-and-luaunit">Scientific computing and LuaUnit</a></li>
+<li><a class="reference internal" href="#pretty-printing">Pretty printing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#developing-luaunit">Developing LuaUnit</a><ul>
+<li><a class="reference internal" href="#development-ecosystem">Development ecosystem</a></li>
+<li><a class="reference internal" href="#contributing">Contributing</a><ul>
+<li><a class="reference internal" href="#unit-tests">Unit-tests</a></li>
+<li><a class="reference internal" href="#functional-tests">Functional tests</a></li>
+<li><a class="reference internal" href="#modifying-reference-files-for-functional-tests">Modifying reference files for functional tests</a></li>
+<li><a class="reference internal" href="#typical-failures-for-functional-tests">Typical failures for functional tests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#annexes">Annexes</a><ul>
+<li><a class="reference internal" href="#annex-a-more-on-table-printing">Annex A: More on table printing</a></li>
+<li><a class="reference internal" href="#annex-b-comparing-tables-with-keys-of-type-table">Annex B: Comparing tables with keys of type table</a></li>
+<li><a class="reference internal" href="#annex-c-source-code-of-example">Annex C: Source code of example</a></li>
+<li><a class="reference internal" href="#annex-d-bsd-license">Annex D: BSD License</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#index-and-search-page">Index and Search page</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="#">LuaUnit 3.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Philippe Fremy.
+      Last updated on Mar 17, 2018.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+    </div>
+  </body>
+</html>

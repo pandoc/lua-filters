@@ -1,0 +1,46 @@
+rock_manifest = {
+   doc = {
+      _sources = {
+         ["index.txt"] = "f6240c293da1e74dbc7a5c829275e6db"
+      },
+      _static = {
+         ["ajax-loader.gif"] = "ae6667053ad118020b8e68ccf307b519",
+         ["basic.css"] = "85fc18dc784dea4d5fd16d66294776a5",
+         ["classic.css"] = "20577aace53a0034af20efe7c0bc6c32",
+         ["comment-bright.png"] = "0c850bb4920b581bf5e5dba5fa493a64",
+         ["comment-close.png"] = "2635dda49c823e8122d4d11ed385f33d",
+         ["comment.png"] = "882e40f3d6a16c6ed35659b105251525",
+         ["default.css"] = "0000e4ea89f1c9f5739b7f36d88477da",
+         ["doctools.js"] = "80261ae9c88f0ddee6d05d59179dcc47",
+         ["down-pressed.png"] = "71f5c3a4c398f4fe22a9494fdf7a0192",
+         ["down.png"] = "6bcc489d1138b05d8bd82273fa63a6d2",
+         ["file.png"] = "bcf7eb06f6c72f1cf23eeefe71195e63",
+         ["jquery-1.11.1.js"] = "3d93b072d14f2bd1ede58f4847f537fd",
+         ["jquery.js"] = "8101d596b2b8fa35fe3a634ea342d7c3",
+         ["minus.png"] = "611d6118f1968c8bd445ef0e1a845e92",
+         ["plus.png"] = "90680331edb32156fe420df2ec7fb04e",
+         ["pygments.css"] = "3cd785404007ba06fa4427d9a17f1f16",
+         ["searchtools.js"] = "4b20a948a8735a17c8c367eb4297f8c8",
+         ["sidebar.js"] = "d8f240c97f592042558f3ed35c942239",
+         ["underscore-1.3.1.js"] = "4eb64db36175fefa3e36b9e57606512c",
+         ["underscore.js"] = "b538b8a3ed2c5519b19409eace25c38b",
+         ["up-pressed.png"] = "b40e1299cd69ebd73f81d66b09f4b271",
+         ["up.png"] = "312cfdc6fc45b7154332238f1950ffff",
+         ["websupport.js"] = "c3ca9223543f6a30f9616a65ac5c34c4"
+      },
+      ["genindex.html"] = "0171f7ad85867f0b211e7557effd3dc1",
+      ["index.html"] = "4a8b197848c491902af003edcd4fde80",
+      ["my_test_suite.lua"] = "f699cc6e1fd032e0e9299c05fa416e31",
+      ["objects.inv"] = "bde5f2fca3d6d938481774fdab00938a",
+      ["search.html"] = "f4e0136f25a42b75e385b350eb8940fa",
+      ["searchindex.js"] = "df5c05b8879dbef3a872fd29c5d847d3"
+   },
+   lua = {
+      ["luaunit.lua"] = "bd11f8b0b00d7387db0ab0cd07dcff39"
+   },
+   ["luaunit-3.3-1.rockspec"] = "194355894ded892ef79bc6360656c06a",
+   test = {
+      ["run_unit_tests.lua"] = "56f8598afd7d08e14e9b1337727837ef",
+      ["test_luaunit.lua"] = "117407ddbc8c268717a1f0c95ab18a58"
+   }
+}
