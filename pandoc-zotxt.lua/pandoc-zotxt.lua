@@ -71,7 +71,7 @@
 --
 --
 -- @script pandoc-zotxt.lua
--- @release 0.3.16
+-- @release 0.3.17
 -- @author Odin Kroeger
 -- @copyright 2018, 2019 Odin Kroeger
 -- @license MIT
@@ -136,7 +136,7 @@ ZOTXT_KEYTYPES = {
 NAME = 'pandoc-zotxt.lua'
 
 --- The version of this script.
-VERSION = '0.3.16'
+VERSION = '0.3.17'
 
 
 -- # LIBRARIES
