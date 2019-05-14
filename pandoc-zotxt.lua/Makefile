@@ -30,7 +30,7 @@ prepare-tmpdir:
 
 install-luaunit:
 	[ -e "share/lua/5.3/luaunit.lua" ] || \
-		luarocks install --tree . luaunit
+		luarocks install --tree=. luaunit
 
 start-http-server:
 ifeq ('$(NO_HTTP_SERVER)', '')
