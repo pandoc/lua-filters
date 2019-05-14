@@ -23,6 +23,8 @@ jobs:
               python \
               python3 \
               python3-dev \
+              lua-5.3 \
+              luarocks \
               ttf-dejavu \
               wget
       - run: |

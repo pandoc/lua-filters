@@ -27,6 +27,8 @@ addons:
       - texlive-latex-recommended
       - texlive-latex-extra
       - pgf
+      - lua5.3
+      - luarocks
 
 before_install:
 - unset CC
