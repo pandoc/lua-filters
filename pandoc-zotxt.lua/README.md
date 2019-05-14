@@ -47,7 +47,7 @@ following commands into a bourne shell:
 ```sh
 (
     set -Cefu
-    NAME=pandoc-zotxt.lua VERS=0.3.17
+    NAME=pandoc-zotxt.lua VERS=0.3.16
     URL="https://github.com/odkr/${NAME:?}/archive/v${VERS:?}.tar.gz"
     FILTERS="${HOME:?}/.pandoc/filters"
     mkdir -p "${FILTERS:?}"

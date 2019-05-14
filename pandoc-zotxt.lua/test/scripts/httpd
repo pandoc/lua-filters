@@ -1,234 +1,185 @@
 #!/usr/bin/env python
-"""
-A simple HTTP server
+# pylint: disable=C0111, C0103, C0413
+#
+# httpd - A simple HTTP server
+#
+#
+# SYNOPSIS
+# ========
+#
+#      httpd PORT
+#
+#
+# DESCRIPTION
+# ===========
+#
+# httpd serves files from test/data/http-server. This allows for the test
+# suite to run even if Zotero and zotxt are not running. httpd only returns
+# to the caller once the HTTP server accepts requests.
+#
+#
+# FILES
+# =====
+#
+#   test/data/http-server
+#       Directory from which files are served.
+#   test/run/http-server.pid
+#       PID file.
+#
+# CAVEATS
+# =======
+#
+# The Makefile tries to make sure that the server is shut down.
+# It may fail at that though.
+#
+#
+# SEE ALSO
+# ========
+#
+# httpdctl
+#
+#
+# AUTHOR
+# ======
+#
+# Copyright 2019 Odin Kroeger
+#
+#
+# LICENSE
+# =======
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to
+# deal in the Software without restriction, including without limitation the
+# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+# sell copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+# IN THE SOFTWARE.
 
 
-SYNOPSIS
-========
+# CONSTANTS
+# =========
 
-     httpd PORT
+# How long may the server take to start up, before we give up.
+MAX_STARTUP_TIME = 5
 
-
-DESCRIPTION
-===========
-
-httpd serves files from test/data/http-server. This allows for the test
-suite to run even if Zotero and zotxt are not running. httpd only returns
-to the caller once the HTTP server accepts requests.
-
-
-FILES
-=====
-
-  test/data/http-server
-      Directory from which files are served.
-  test/run/http-server.pid
-      PID file.
-
-CAVEATS
-=======
-
-The Makefile tries to make sure that the server is shut down.
-It may fail at that though.
-
-
-SEE ALSO
-========
-
-httpdctl
-
-
-AUTHOR
-======
-
-Copyright 2019 Odin Kroeger
-
-
-LICENSE
-=======
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to
-deal in the Software without restriction, including without limitation the
-rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-sell copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-IN THE SOFTWARE.
-"""
+# How long may the server take to shut down, before we kill it.
+MAX_SHUTDOWN_TIME = 5
 
 
 # LIBRARIES
 # =========
 
 try:
-    from SimpleHTTPServer import SimpleHTTPRequestHandler
+    import SimpleHTTPServer as server
 except ImportError:
-    from http.server import SimpleHTTPRequestHandler
+    import http.server as server
 
 try:
-    from SocketServer import TCPServer
+    import SocketServer as socketserver
 except ImportError:
-    from socketserver import TCPServer
+    import socketserver
 
-try:
-    from urllib.request import urlopen
-except ImportError:
-    from urllib import urlopen
-    CONNECTION_ERRORS = (IOError,)
-else:
-    from urllib.error import URLError
-    CONNECTION_ERRORS = (ConnectionResetError, URLError)
-
-from argparse import ArgumentParser, Namespace
-from os import (chdir, devnull, dup2, fork, getcwd, getpid,
-                kill, path, setsid, umask, unlink)
-from signal import signal, SIG_IGN, SIGCHLD, SIGINT, SIGQUIT, SIGKILL, SIGTERM
-# pylint: disable = W0622
-from sys import argv, exit, stdin, stderr, stdout
-from time import sleep, time
-
+import argparse
 import atexit
+import os
+import signal
+import socket
+import sys
+import time
 
 
-# CONSTANTS
-# =========
+# INITIALISATION
+# ==============
 
-# How long may the server take to start up before we give up.
-TIMEOUT = 60
+base_dir = os.path.realpath(os.path.join(os.path.split(sys.argv[0])[0], '..'))
+data_dir = os.path.join(base_dir, 'data', 'http-server')
+pid_fname = os.path.join(base_dir, 'run', 'http-server.pid')
 
+if os.path.exists(pid_fname):
+    rel_fname = pid_fname.replace(os.path.join(os.getcwd(), ''), '', 1)
+    sys.stderr.write('httpd: {} exists.\n'.format(rel_fname))
+    sys.exit(69)
 
-# EXCEPTIONS
-# ==========
+parser = argparse.ArgumentParser(description='Starts a simle HTTP server.')
+parser.add_argument('port', type=int, metavar='PORT')
+args = parser.parse_args()
 
-class Error(Exception):
-    """Base class for errors."""
-    template = 'an error occurred'
-
-    def __init__(self, **kwargs):
-        Exception.__init__(self)
-        self.__dict__.update(kwargs)
-
-    def __str__(self):
-        return self.template.format(**vars(self))
-
-
-class TimeoutError(Error):
-    """Raised if the parent can't talk to its child."""
-    template = 'cannot reach {url!s}.'
+socketserver.TCPServer.allow_reuse_address = True
+handler = server.SimpleHTTPRequestHandler
+httpd = socketserver.TCPServer(('localhost', args.port), handler)
 
 
-# FUNCTIONS
-# =========
+# PARENT
+# ======
 
-def warn(msg, *args, **kwargs):
-    """Prints formatted warnings to STDERR."""
-    stderr.write(''.join(('httpd: ', msg.format(*args, **kwargs), '\n')))
+pid = os.fork()
 
-def exterminate(pid, grace=5):
-    """Tries to terminate a process, but kills it if that takes too long."""
-    for i in range(grace + 1):
-        if i:
-            sleep(1)
+if pid > 0:
+    # Don't wait for the child, lest it becomes a zombie.
+    signal.signal(signal.SIGCHLD, signal.SIG_IGN)
+
+    # Try to reach the child, checking whether it accepts connections.
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    for i in range(MAX_STARTUP_TIME):
+        if i > 1:
+            time.sleep(1)
         try:
-            kill(pid, SIGTERM if i < grace else SIGKILL)
-        except OSError as err:
-            if err.errno == 3:
-                break
-            raise
-
-# pylint: disable = R0914
-def main():
-    """Starts the HTTP server and checks whether it accepts connections."""
-    parser = ArgumentParser(description='Starts a simple HTTP server.')
-    parser.add_argument('port', type=int, metavar='PORT')
-    args = parser.parse_args()
-
-    if not args.port in range(1024, 65536):
-        warn('you must choose a port from 1024 to 65535.')
-        exit(1)
-
-    base_dir = path.realpath(path.join(path.split(argv[0])[0], '..'))
-    data_dir = path.join(base_dir, 'data', 'http-server')
-    pid_file = path.join(base_dir, 'run', 'http-server.pid')
-
-    if path.exists(pid_file):
-        warn('{} exists', pid_file.replace(path.join(getcwd(), ''), '', 1))
-        exit(69)
-
-    pid = fork()
-    if pid > 0:
-        # Don't wait for the child, lest it becomes a zombie.
-        signal(SIGCHLD, SIG_IGN)
-
-        # Prepare for killing the child if we have to.
-        success = False
-
-        def infanticide():
-            if pid and not success:
-                warn('terminating the HTTP server.')
-                exterminate(pid)
-        atexit.register(infanticide)
-
-        # Wait until the child is ready to serve requests.
-        stop_at = time() + TIMEOUT
-        child_url = 'http://localhost:{:d}'.format(args.port)
-        for _ in range(TIMEOUT + 1):
-            try:
-                urlopen(child_url)
-            except CONNECTION_ERRORS:
-                sleep(1)
-                if time() > stop_at:
-                    raise TimeoutError(url=child_url)
-            else:
-                success = True
-                break
-        else:
-            raise TimeoutError(url=child_url)
+            s.connect(('localhost', args.port))
+        except socket.error:
+            continue
+        s.close()
+        break
     else:
-        chdir(data_dir)
-        setsid()
-        umask(0o077)
-        for stream in (stdin, stdout, stderr):
-            stream.flush()
-            # pylint: disable = E1101, C0103
-            fd = open(devnull, stream.mode)
-            dup2(fd.fileno(), stream.fileno())
-
-        # Create the PID file.
-        atexit.register(unlink, pid_file)
-        with open(pid_file, 'w') as pid_fh:
-            pid_fh.write('{!s}\n'.format(getpid()))
-
-        # Shutdown on INT, QUIT, and TERM.
-        httpd = Namespace()
-        httpd.shutdown = lambda: None
-        for signo in (SIGINT, SIGQUIT, SIGTERM):
-            signal(signo, httpd.shutdown)
-
-        # Start server.
-        TCPServer.allow_reuse_address = True
-        httpd = TCPServer(('localhost', args.port), SimpleHTTPRequestHandler)
-        httpd.serve_forever()
-        httpd.server_close()
+        # If we reach this point, MAX_STARTUP_TIME has passed,
+        # but we couldn't connect to the child, so we kill it.
+        for i in range(MAX_SHUTDOWN_TIME):
+            if i > 1:
+                time.sleep(i)
+            try:
+                os.kill(pid, signal.SIGTERM)
+            except OSError as err:
+                if err.errno == 3:
+                    break
+        else:
+            try:
+                os.kill(pid, signal.SIGKILL)
+            except OSError:
+                pass
+        sys.exit(1)
+    sys.exit()
 
 
-# BOILERPLATE
-# ===========
+# CHILD
+# =====
 
-if __name__ == '__main__':
-    try:
-        main()
-    # pylint: disable = W0703
-    except Exception as err:
-        warn(str(err))
-        exit(1)
+# Deamonise!
+os.chdir(data_dir)
+os.setsid()
+os.umask(0o077)
+for stream, mode in ((sys.stdin, 'r'), (sys.stdout, 'a+'), (sys.stderr, 'a+')):
+    stream.flush()
+    fd = open(os.devnull, mode)
+    os.dup2(fd.fileno(), stream.fileno())
+
+# Create the PID file.
+atexit.register(os.unlink, pid_fname)
+with open(pid_fname, 'w') as pid_file:
+    pid_file.write('{!s}\n'.format(os.getpid()))
+
+# Shutdown if we receive an INT or a TERM.
+for signo in (signal.SIGTERM, signal.SIGINT):
+    signal.signal(signo, httpd.shutdown)
+
+httpd.serve_forever(0.1)
+httpd.server_close()
