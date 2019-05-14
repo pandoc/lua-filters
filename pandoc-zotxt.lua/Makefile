@@ -13,16 +13,15 @@ RM 			?= rm -f
 COLLECT_WARN_TESTS	:= find "$(UNIT_DIR)/warn" -type f -name '*.lua' \
 	-exec basename \{\} \; | sed 's/.lua$$//' | sort
 
-SIMPLE_UNIT_TESTS	:= test_core test_retrieval
+SIMPLE_UNIT_TESTS	:= test_core
 UNIT_TESTS 		:= $(SIMPLE_UNIT_TESTS) \
 			   test_get_input_directory test_warn
 GENERATIVE_TESTS	:= test-keytype-easy-citekey \
 	test-keytype-better-bibtex test-keytype-zotero-id \
 	test-bibliography
 
-test: install-luaunit prepare-tmpdir start-http-server \
-	$(UNIT_TESTS) $(GENERATIVE_TESTS) \
-	stop-http-server
+test: install-luaunit prepare-tmpdir \
+	$(UNIT_TESTS)
 
 prepare-tmpdir:
 	mkdir -p "$(TMP_DIR)"
