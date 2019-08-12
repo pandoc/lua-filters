@@ -8,5 +8,5 @@ function Header(elem)
 		return pandoc.RawBlock('latex', '\\textbf{' .. content_str .. '}  ~\\')
 	end
 
-	return elem
+	return nil
 end
