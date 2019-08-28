@@ -1,0 +1,3 @@
+some text
+{\centering\includegraphics[width=2in,height=\textheight]{logo.png}\par}
+some other text
