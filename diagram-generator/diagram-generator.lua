@@ -93,9 +93,10 @@ end
 local function tikz2image(src, filetype, additionalPackages)
 
     -- Define file names:
-    local outfile = string.format("./tmp-latex/file.%s", filetype)
-    local tmp = "./tmp-latex/file"
-    local tmpDir = "./tmp-latex/"
+    local cwd = os.getenv("PWD")
+    local outfile = string.format("%s/tmp-latex/file.%s", cwd, filetype)
+    local tmp = string.format("%s/tmp-latex/file", cwd)
+    local tmpDir = string.format("%s/tmp-latex/", cwd)
 
     -- Ensure, that the tmp directory exists:
     os.execute("mkdir -p tmp-latex")
