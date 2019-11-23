@@ -5,10 +5,10 @@ author:
   - 1
   - 2
   name: Jane Doe
-- id: 'John Q. Doe'
+- id: John Q. Doe
   institute:
   - 1
-  name: 'John Q. Doe'
+  name: John Q. Doe
 - id: Peder Ås
   institute:
   - 1
