@@ -119,7 +119,7 @@ local function process_lilypond(elem)
       end
     )
     table.insert(
-      classes, 
+      classes,
       inline and "lilypond-image-inline"
               or "lilypond-image-standalone"
     )
