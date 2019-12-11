@@ -1,6 +1,8 @@
-PANDOC_VERSION
-  and PANDOC_VERSION:must_be_at_least({2, 7, 3})
-   or error("pandoc version >=2.3.7 is required")
+if PANDOC_VERSION then
+  PANDOC_VERSION:must_be_at_least({2, 7, 3})
+else
+  error("pandoc version >=2.3.7 is required")
+end
 
 local OPTIONS = {
         image_directory = ".",
