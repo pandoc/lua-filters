@@ -68,7 +68,7 @@ document metadata. Images generated from inline code will be tagged with the
 `lilypond-image-inline` class, and those generated from code blocks with the
 `lilypond-image-standalone` class.
 
-See [ROADMAP.md](ROADMAP.md) for some planned additional bells and whistles.
+See the [ROADMAP](ROADMAP.md) for some planned additional bells and whistles.
 
 ## Requirements
 The `lilypond` executable must be installed to a location on
