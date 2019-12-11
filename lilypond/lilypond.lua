@@ -1,118 +1,132 @@
-PANDOC_VERSION:must_be_at_least({2,7,3})
+PANDOC_VERSION:must_be_at_least({2, 7, 3})
 
-local DEFAULTS = {
-    fragment = false,
-    norender = false,
-    caption = "musical notation",
-    extra_code = "",
-    image_directory = ".",
-    name = false,
-    relativize = false,
-    title = false
-  }
+local OPTIONS = {
+        image_directory = ".",
+        relativize = false
+      }
 
 local SPECIAL_CLASSES = {
-    "lilypond",
-    "ly-fragment",
-    "ly-norender"
-  }
+        ["lilypond"] = true,
+        ["ly-fragment"] = true,
+        ["ly-norender"] = true
+      }
 
 local SPECIAL_ATTRIBUTES = {
-    "ly-caption",
-    "ly-image-directory",
-    "ly-name",
-    "ly-relativize",
-    "ly-title"
-  }
+        ["ly-caption"] = true,
+        ["ly-name"] = true,
+        ["ly-title"] = true
+      }
 
 local with_temporary_directory = tostring(PANDOC_VERSION) == "2.7.3"
-                                 and pandoc.system.with_temp_directory
-                                 or pandoc.system.with_temporary_directory
+                                   and pandoc.system.with_temp_directory
+                                    or pandoc.system.with_temporary_directory
 
 local function wrap_fragment(src)
-  return table.concat({
-      [[\include "lilypond-book-preamble.ly"]],
-      [[\paper { indent = 0\mm }]],
-      [[\layout {}]],
-      [[{ \sourcefileline 0]],
-      src,
-      [[}]]
-    }, "\n")
+  return table.concat(
+           {
+             [[\include "lilypond-book-preamble.ly"]],
+             [[\paper { indent = 0\mm }]],
+             [[\layout {}]],
+             [[{ \sourcefileline 0]],
+             src,
+             [[}]]
+           },
+           "\n"
+         )
+end
+
+local function get_output_directory()
+  return PANDOC_STATE.output_file
+           and pandoc.pipe(
+                 "dirname",
+                 {PANDOC_STATE.output_file},
+                 ""
+               ):gsub("\n", "")
+end
+
+local function resolve_relative_path(what, where)
+  local res
+  pandoc.system.with_working_directory(
+    where,
+    function ()
+      res = pandoc.pipe("realpath", {what}, ""):gsub("\n", "")
+    end
+  )
+  return res
+end
+
+local function generate_image(name, input, whither)
+  local fullname = name .. ".png"
+  with_temporary_directory(
+    "lilypond-lua-XXXXX",
+    function (tmp_dir)
+      pandoc.system.with_working_directory(
+        tmp_dir,
+        function ()
+          pandoc.pipe(
+            "lilypond",
+            {"--silent", "--png", "--output=" .. name, "-"},
+            input
+          )
+          pandoc.pipe("cp", {fullname, whither}, "")
+        end
+      )
+    end
+  )
+  return whither .. "/" .. fullname
+end
+
+function make_relative_path(to, from)
+  return pandoc.pipe(
+           "realpath",
+           {"--relative-to=" .. from, to},
+           ""
+         ):gsub("\n", "")
 end
 
 local function process_lilypond(elem)
   if elem.classes:includes("lilypond") then
-    local norender = elem.classes:includes("ly-norender")
-                     or DEFAULTS.norender
-    if norender then
+    if elem.classes:includes("ly-norender") then
       return elem
     end
 
+    local inline = elem.tag == "Code"
+
     local code = elem.text
-    local fragment = elem.classes:includes("ly-fragment")
-                     or DEFAULTS.fragment
+    local fragment = elem.classes:includes("ly-fragment") or inline
     local input = fragment and wrap_fragment(code) or code
 
-    local caption = elem.attributes["ly-caption"]
-                    or DEFAULTS.caption
-    local img_raw_dir = elem.attributes["ly-image-directory"]
-                        or DEFAULTS.image_directory
-    local name = elem.attributes["ly-name"]
-                 or pandoc.sha1(input)  -- `name' can't be defaulted
-    local relativize = elem.attributes["ly-relativize"]
-                       or DEFAULTS.relativize
-    local title = elem.attributes["ly-title"]
-                  or code  -- likewise `title'
+    local out_dir = get_output_directory() or "."
+    local dest = resolve_relative_path(OPTIONS.image_directory, out_dir)
 
-    local out_dir = PANDOC_STATE.output_file
-                    and pandoc.pipe("dirname", {PANDOC_STATE.output_file}, ""):gsub("\n", "")
-                    or "."
-    local img_dir
-    pandoc.system.with_working_directory(out_dir,
-      function ()
-        img_dir = pandoc.pipe("realpath", {img_raw_dir}, "")
-        img_dir = img_dir:gsub("\n", "")
-      end
-    )
+    local name = elem.attributes["ly-name"] or pandoc.sha1(code)
+    local path = generate_image(name, input, dest)
+    local img = io.open(path, "rb")
+    pandoc.mediabag.insert(path, "image/png", img:read("*a"))
+    img:close()
 
-    local filename = name .. ".png"
-    local img_path = img_dir .. "/" .. filename
-    with_temporary_directory("lilypond-lua-XXXXX",
-      function (tmp_dir)
-        pandoc.system.with_working_directory(tmp_dir,
-          function ()
-            pandoc.pipe("lilypond", {
-                "--silent", "--png", "--output=" .. name, "-"
-              }, input)
-            pandoc.pipe("cp", {filename, img_path}, "")
-          end
-        )
-      end
-    )
+    local caption = elem.attributes["ly-caption"] or "Musical notation"
+    local src = OPTIONS.relativize and make_relative_path(path, out_dir) or path
+    local fudge = inline and "" or "fig:"
+    local title = fudge .. (elem.attributes["ly-title"] or code)
 
-    local img_file = io.open(img_path, "rb")
-    pandoc.mediabag.insert(img_path, "image/png", img_file:read("*a"))
-    img_file:close()
-
-    local img_classes = elem.classes:filter(
+    local classes = elem.classes:filter(
       function (cls)
         return not SPECIAL_CLASSES[cls]
       end
     )
-    img_classes:extend("lilypond-image")
-    local img_attributes = elem.attributes
-    for i, a in ipairs(SPECIAL_ATTRIBUTES) do
-      img_attributes[a] = nil
+    table.insert(
+      classes, 
+      inline and "lilypond-image-inline"
+              or "lilypond-image-standalone"
+    )
+    local attributes = elem.attributes
+    for a, t in pairs(SPECIAL_ATTRIBUTES) do
+      attributes[a] = nil
     end
-    local img_attrs = pandoc.Attr(elem.identifier, img_classes, img_attributes)
+    local attrs = pandoc.Attr(elem.identifier, classes, attributes)
 
-    local img_src = relativize
-                    and pandoc.pipe("realpath", {
-                            "--relative-to=" .. out_dir, img_path
-                          }, ""):gsub("\n", "")
-                    or img_path
-
-    return pandoc.Image(caption, img_src, title, remaining_attrs)
+    return pandoc.Image(caption, src, title, attrs)
   else
     return elem
   end
@@ -120,8 +134,8 @@ end
 
 local function meta_transformer(md)
   local ly_block = md.lilypond
-  for k, v in pairs(DEFAULTS) do
-    DEFAULTS[k] = ly_block[k] or DEFAULTS[k]
+  for k, v in pairs(OPTIONS) do
+    OPTIONS[k] = ly_block[k] or OPTIONS[k]
   end
   md.lilypond = nil
   return md
@@ -136,6 +150,6 @@ local function code_block_transformer(elem)
 end
 
 return {
-    {Meta = meta_transformer},
-    {Code = code_transformer, CodeBlock = code_block_transformer},
-  }
+         {Meta = meta_transformer},
+         {Code = code_transformer, CodeBlock = code_block_transformer},
+       }
