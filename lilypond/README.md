@@ -60,11 +60,12 @@ The available metadata options are:
 * `lilypond.relativize` (boolean): if enabled, use relative paths for the `src`
   attributes of generated images.
 
-The listed classes and attributes will not be copied to generated image
-elements, and the `lilypond` object (when one is present) will be stripped from
-the document metadata. Images generated from inline code will have the
-`lilypond-image-inline` class, and those generated from code blocks will have
-the `lilypond-image-standalone` class.
+The classes and attributes listed above will *not* be copied to the generated
+image, but all other classes and attributes will be, and so will the identifier
+if one is present. The `lilypond` object (if present) will be stripped from the
+document metadata. Images generated from inline code will be tagged with the
+`lilypond-image-inline` class, and those generated from code blocks with the
+`lilypond-image-standalone` class.
 
 See [ROADMAP.md](ROADMAP.md) for some planned additional bells and whistles.
 
