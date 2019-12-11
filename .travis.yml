@@ -20,6 +20,7 @@ addons:
       - python3-numpy
       - python3-matplotlib
       - latex-xcolor
+      - lilypond
       - lmodern
       - texlive-bibtex-extra
       - texlive-fonts-recommended

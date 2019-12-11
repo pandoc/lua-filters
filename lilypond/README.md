@@ -25,8 +25,8 @@ superior alternative.
 The filter operates on inline code (type `Code`) and code block (type
 `CodeBlock`) elements that are marked with the `lilypond` class. Each such
 element is replaced by an image element, with the underlying PNG image generated
-by feeding the contents of the original element to LilyPond. Images that replace
-code blocks will be wrapped in `<figure>` elements in HTML output.
+by feeding the contents of the original element to LilyPond. (Eventually the
+filter will support SVG output as well.)
 
 You can configure the filter's behavior in two ways: by adding classes and
 attributes to individual code elements, and by adding metadata to the input
@@ -68,8 +68,6 @@ document metadata. Images generated from inline code will be tagged with the
 `lilypond-image-inline` class, and those generated from code blocks with the
 `lilypond-image-standalone` class.
 
-See the [ROADMAP](ROADMAP.md) for some planned additional bells and whistles.
-
 ## Requirements
 The `lilypond` executable must be installed to a location on
 your `PATH`. You can obtain it [here](http://lilypond.org/download.html) or
@@ -80,3 +78,4 @@ specifically `realpath` and `dirname`, so you'll also need those installed.
 
 Finally, because `lilypond.lua` uses functions from the `pandoc.system`
 submodule, it requires pandoc version 2.7.3 or later.
+

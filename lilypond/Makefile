@@ -4,3 +4,5 @@ test-appoggiaturas:
 	@{ pandoc --lua-filter=lilypond.lua appoggiaturas.md \
 		| $(DIFF) appoggiaturas.expected -; } && \
 	cmp beethoven.png beethoven.expected
+
+.PHONY: test-appoggiaturas
