@@ -1,7 +1,7 @@
 if PANDOC_VERSION then
   PANDOC_VERSION:must_be_at_least({2, 7, 3})
 else
-  error("pandoc version >=2.3.7 is required")
+  error("pandoc version >=2.7.3 is required")
 end
 
 local OPTIONS = {
