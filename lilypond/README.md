@@ -1,6 +1,7 @@
 # lilypond
 This filter renders [LilyPond](http://lilypond.org) inline code and
-code blocks into embedded images of musical notation.
+code blocks into embedded images of musical notation. It's designed with
+(pandoc-flavored) Markdown input in mind.
 
 See the accompanying test files for some examples of how the filter works.
 
