@@ -27,10 +27,7 @@ local function wrap_fragment(src)
            {
              [[\include "lilypond-book-preamble.ly"]],
              [[\paper { indent = 0\mm }]],
-             [[\layout {}]],
-             [[{ \sourcefileline 0]],
              src,
-             [[}]]
            },
            "\n"
          )
@@ -139,7 +136,7 @@ local function process_lilypond(elem)
 end
 
 local function meta_transformer(md)
-  local ly_block = md.lilypond
+  local ly_block = md.lilypond or {}
   for k, v in pairs(OPTIONS) do
     OPTIONS[k] = ly_block[k] or OPTIONS[k]
   end
