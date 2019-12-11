@@ -56,7 +56,7 @@ local function resolve_relative_path(what, where)
   return res
 end
 
-local function generate_image(name, input, whither, dpi)
+local function generate_image(name, input, dpi, whither)
   local fullname = name .. ".png"
   with_temporary_directory(
     "lilypond-lua-XXXXX",
@@ -101,12 +101,12 @@ local function process_lilypond(elem)
     local fragment = elem.classes:includes("ly-fragment") or inline
     local input = fragment and wrap_fragment(code) or code
     local dpi = elem.attributes["ly-resolution"]
+    local name = elem.attributes["ly-name"] or pandoc.sha1(code)
 
     local out_dir = get_output_directory() or "."
     local dest = resolve_relative_path(OPTIONS.image_directory, out_dir)
 
-    local name = elem.attributes["ly-name"] or pandoc.sha1(code)
-    local path = generate_image(name, input, dest, dpi)
+    local path = generate_image(name, input, dpi, dest)
     local img = io.open(path, "rb")
     pandoc.mediabag.insert(path, "image/png", img:read("*a"))
     img:close()
