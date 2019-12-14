@@ -47,14 +47,12 @@ local function get_output_directory()
 end
 
 local function resolve_relative_path(what, where)
-  local res
-  pandoc.system.with_working_directory(
-    where,
-    function ()
-      res = pandoc.pipe("realpath", {what}, ""):gsub("\n", "")
-    end
-  )
-  return res
+  return pandoc.system.with_working_directory(
+           where,
+           function ()
+             return pandoc.pipe("realpath", {what}, ""):gsub("\n", "")
+           end
+         )
 end
 
 local function generate_image(name, input, dpi, whither)
@@ -141,9 +139,13 @@ end
 
 local function meta_transformer(md)
   local ly_block = md.lilypond or {}
-  for k, v in pairs(OPTIONS) do
-    OPTIONS[k] = ly_block[k] or OPTIONS[k]
-  end
+
+  OPTIONS.image_directory = ly_block.image_directory
+                              and ly_block.image_directory[1].text
+                               or OPTIONS.image_directory
+  OPTIONS.relativize = ly_block.relativize
+                         or OPTIONS.relativize
+
   md.lilypond = nil
   return md
 end
