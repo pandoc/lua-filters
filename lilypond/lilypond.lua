@@ -113,7 +113,7 @@ local function process_lilypond(elem)
     local caption = elem.attributes["ly-caption"] or "Musical notation"
     local src = OPTIONS.relativize and make_relative_path(path, out_dir) or path
     local fudge = inline and "" or "fig:"
-    local title = fudge .. (elem.attributes["ly-title"] or code)
+    local title = fudge .. (elem.attributes["ly-title"] or code:gsub("%s+", " "))
 
     local classes = elem.classes:filter(
       function (cls)
