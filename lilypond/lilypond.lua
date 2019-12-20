@@ -105,7 +105,9 @@ local function process_lilypond(elem)
 
     local code = elem.text
     local fragment = elem.classes:includes("ly-fragment") or inline
-    local input = fragment and wrap_fragment(code) or code
+    local input = fragment
+                    and wrap_fragment(code)
+                     or code
     local dpi = elem.attributes["ly-resolution"]
     local name = elem.attributes["ly-name"] or pandoc.sha1(code)
 
@@ -118,13 +120,16 @@ local function process_lilypond(elem)
     img:close()
 
     local caption = elem.attributes["ly-caption"] or "Musical notation"
-    local src = OPTIONS.relativize and make_relative_path(path, out_dir) or path
+    local src = OPTIONS.relativize
+                  and make_relative_path(path, out_dir)
+                   or path
     -- The "fig:" prefix causes this image to be rendered as a proper figure
     -- in HTML ouput (this is a rather ugly pandoc feature and may be replaced
     -- by something more elegant in the future).
     local fudge = inline and "" or "fig:"
     -- Strip newlines, indendation, etc. from the code for a more readable title.
-    local title = fudge .. (elem.attributes["ly-title"] or code:gsub("%s+", " "))
+    local title = fudge .. (elem.attributes["ly-title"]
+        `                     or code:gsub("%s+", " "))
 
     -- Strip most of the LilyPond-related attributes from this code element, for
     -- tidiness.
