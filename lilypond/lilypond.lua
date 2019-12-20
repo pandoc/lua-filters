@@ -161,14 +161,12 @@ local function process_lilypond(elem)
   end
 end
 
--- Update `OPTIONS' based on the document metadata. There's a bit of
--- munging because string options are parsed as (pandoc-flavored) Markdown
--- and we have to dig out the raw Lua string.
+-- Update `OPTIONS' based on the document metadata.
 local function meta_transformer(md)
   local ly_block = md.lilypond or {}
-
-  OPTIONS.image_directory = ly_block.image_directory
-                              and ly_block.image_directory[1].text
+  local dir_conf = ly_block.image_directory
+  OPTIONS.image_directory = dir_conf
+                              and pandoc.utils.stringify(dir_conf)
                                or OPTIONS.image_directory
   OPTIONS.relativize = ly_block.relativize
                          or OPTIONS.relativize
