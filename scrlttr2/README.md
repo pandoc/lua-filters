@@ -24,7 +24,7 @@ variables:
 - `fromaddress` (alias: `return-address`): address of the sender
 - `fromfax` (alias: `fax`): sender's fax number
 - `fromemail` (alias: `email`): sender's email
-- `fromlogo` (alias: `logo`): image to be used as the sender's logo
+- `fromlogo` (alias: `logo`): value to be used as the sender's logo
 - `fromname` (alias: `author`): sender name
 - `fromphone` (alias: `phone`): sender's phone number
 - `fromurl` (alias: `url`): sender's URL
