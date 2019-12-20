@@ -26,6 +26,9 @@ local SPECIAL_ATTRIBUTES = {
 
 -- pandoc.system.with_temporary_directory had a different (undocumented)
 -- name in the 2.7.3 release.
+-- Incidentally, the "right" way to do this version check is with a `Version'
+-- object, but despite what the documentation says `pandoc.types' doesn't
+-- seem to be available in v2.7.3.
 local with_temporary_directory = tostring(PANDOC_VERSION) == "2.7.3"
                                    and pandoc.system.with_temp_directory
                                     or pandoc.system.with_temporary_directory
