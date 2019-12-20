@@ -1,5 +1,7 @@
-if PANDOC_VERSION then
-  PANDOC_VERSION:must_be_at_least({2, 7, 3})
+if PANDOC_VERSION and PANDOC_VERSION.must_be_at_least then
+  -- Actually, this check is redundant since `Version' objects were
+  -- introduced in pandoc v2.7.3, but I've left it in for clarity.
+  PANDOC_VERSION:must_be_at_least("2.7.3")
 else
   error("pandoc version >=2.7.3 is required")
 end
