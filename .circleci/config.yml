@@ -39,8 +39,11 @@ jobs:
               truncate \
               xifthen \
               xstring
+      # Requirement for matplotlib
       - run: |
-          pip3 install --user matplotlib
+          pip3 install -q --user cython
+      - run: |
+          pip3 install -q --user matplotlib
       # Download plantuml.jar for plantuml filter
       - run: |
           cd $HOME && \
