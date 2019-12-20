@@ -134,7 +134,7 @@ local function process_lilypond(elem)
     local fudge = inline and "" or "fig:"
     -- Strip newlines, indendation, etc. from the code for a more readable title.
     local title = fudge .. (elem.attributes["ly-title"]
-        `                     or code:gsub("%s+", " "))
+                              or code:gsub("%s+", " "))
 
     -- Strip most of the LilyPond-related attributes from this code element, for
     -- tidiness.
