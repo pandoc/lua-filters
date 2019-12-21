@@ -18,6 +18,7 @@ jobs:
               graphviz \
               inkscape \
               libpng \
+              lilypond \
               openjdk8-jre \
               pkgconf \
               python \
