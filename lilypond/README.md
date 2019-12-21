@@ -63,7 +63,7 @@ The available metadata options are:
 
 The classes and attributes listed above will *not* be copied to the generated
 image, but all other classes and attributes will be, and so will the identifier
-if one is present. The `lilypond` object (if present) will be stripped from the
+if one is present. The `lilypond` block (if present) will be stripped from the
 document metadata. Images generated from inline code will be tagged with the
 `lilypond-image-inline` class, and those generated from code blocks with the
 `lilypond-image-standalone` class.
