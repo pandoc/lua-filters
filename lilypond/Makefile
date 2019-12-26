@@ -1,6 +1,6 @@
 DIFF ?= diff --strip-trailing-cr -u
 
-test: test-appoggiaturas test-oboe
+test: test-appoggiaturas test-oboe test-code
 
 test-appoggiaturas:
 	@{ pandoc --lua-filter=lilypond.lua -t html appoggiaturas.md \
@@ -13,5 +13,9 @@ test-oboe:
 	test -e oboe.png && \
 	test -e b-flat.png
 
+test-code:
+	@pandoc --lua-filter=lilypond.lua -t html code.md \
+		| $(DIFF) code.html.expected -
 
-.PHONY: test test-appoggiaturas test-oboe
+
+.PHONY: test test-appoggiaturas test-oboe test-code

@@ -26,7 +26,7 @@ local SPECIAL_ATTRIBUTES = {
 
 -- pandoc.system.with_temporary_directory had a different (undocumented)
 -- name in the 2.7.3 release.
-local with_temporary_directory = PANDOC_VERSION == "2.7.3"
+local with_temporary_directory = tostring(PANDOC_VERSION) == "2.7.3"
                                    and pandoc.system.with_temp_directory
                                     or pandoc.system.with_temporary_directory
 
@@ -96,64 +96,55 @@ function make_relative_path(to, from)
          ):gsub("\n", "")
 end
 
-local function process_lilypond(elem)
-  if elem.classes:includes("lilypond")
-       and not elem.classes:includes("ly-norender") then
+local function process_lilypond(elem, inline)
+  local code = elem.text
+  local fragment = elem.classes:includes("ly-fragment") or inline
+  local input = fragment
+                  and wrap_fragment(code)
+                   or code
+  local dpi = elem.attributes["ly-resolution"]
+  local name = elem.attributes["ly-name"] or pandoc.sha1(code)
 
-    -- Are we dealing with an inline code element or a code block?
-    local inline = elem.tag == "Code"
+  local out_dir = get_output_directory() or "."
+  local dest = resolve_relative_path(OPTIONS.image_directory, out_dir)
 
-    local code = elem.text
-    local fragment = elem.classes:includes("ly-fragment") or inline
-    local input = fragment
-                    and wrap_fragment(code)
-                     or code
-    local dpi = elem.attributes["ly-resolution"]
-    local name = elem.attributes["ly-name"] or pandoc.sha1(code)
+  local path = generate_image(name, input, dpi, dest)
+  local img = io.open(path, "rb")
+  pandoc.mediabag.insert(path, "image/png", img:read("*a"))
+  img:close()
 
-    local out_dir = get_output_directory() or "."
-    local dest = resolve_relative_path(OPTIONS.image_directory, out_dir)
+  local caption = elem.attributes["ly-caption"] or "Musical notation"
+  local src = OPTIONS.relativize
+                and make_relative_path(path, out_dir)
+                 or path
+  -- The "fig:" prefix causes this image to be rendered as a proper figure
+  -- in HTML ouput (this is a rather ugly pandoc feature and may be replaced
+  -- by something more elegant in the future).
+  local fudge = inline and "" or "fig:"
+  -- Strip newlines, indendation, etc. from the code for a more readable title.
+  local title = fudge .. (elem.attributes["ly-title"]
+                            or code:gsub("%s+", " "))
 
-    local path = generate_image(name, input, dpi, dest)
-    local img = io.open(path, "rb")
-    pandoc.mediabag.insert(path, "image/png", img:read("*a"))
-    img:close()
-
-    local caption = elem.attributes["ly-caption"] or "Musical notation"
-    local src = OPTIONS.relativize
-                  and make_relative_path(path, out_dir)
-                   or path
-    -- The "fig:" prefix causes this image to be rendered as a proper figure
-    -- in HTML ouput (this is a rather ugly pandoc feature and may be replaced
-    -- by something more elegant in the future).
-    local fudge = inline and "" or "fig:"
-    -- Strip newlines, indendation, etc. from the code for a more readable title.
-    local title = fudge .. (elem.attributes["ly-title"]
-                              or code:gsub("%s+", " "))
-
-    -- Strip most of the LilyPond-related attributes from this code element, for
-    -- tidiness.
-    local classes = elem.classes:filter(
-      function (cls)
-        return not SPECIAL_CLASSES[cls]
-      end
-    )
-    table.insert(
-      classes,
-      -- Add one special class for styling/manipulation purposes.
-      inline and "lilypond-image-inline"
-              or "lilypond-image-standalone"
-    )
-    local attributes = elem.attributes
-    for a, t in pairs(SPECIAL_ATTRIBUTES) do
-      attributes[a] = nil
+  -- Strip most of the LilyPond-related attributes from this code element, for
+  -- tidiness.
+  local classes = elem.classes:filter(
+    function (cls)
+      return not SPECIAL_CLASSES[cls]
     end
-    local attrs = pandoc.Attr(elem.identifier, classes, attributes)
-
-    return pandoc.Image(caption, src, title, attrs)
-  else
-    return elem
+  )
+  table.insert(
+    classes,
+    -- Add one special class for styling/manipulation purposes.
+    inline and "lilypond-image-inline"
+            or "lilypond-image-standalone"
+  )
+  local attributes = elem.attributes
+  for a, t in pairs(SPECIAL_ATTRIBUTES) do
+    attributes[a] = nil
   end
+  local attrs = pandoc.Attr(elem.identifier, classes, attributes)
+
+  return pandoc.Image(caption, src, title, attrs)
 end
 
 -- Update `OPTIONS' based on the document metadata.
@@ -171,13 +162,23 @@ local function meta_transformer(md)
 end
 
 local function code_transformer(elem)
-  return process_lilypond(elem)
+  if elem.classes:includes("lilypond")
+       and not elem.classes:includes("ly-norender") then
+    return process_lilypond(elem, true)
+  else
+    return elem
+  end
 end
 
--- When replacing a block element we must wrap the generated image in
--- a `Para' since `Image' is an inline element.
 local function code_block_transformer(elem)
-  return pandoc.Para({process_lilypond(elem)})
+  if elem.classes:includes("lilypond")
+       and not elem.classes:includes("ly-norender") then
+    -- When replacing a block element we must wrap the generated image
+    -- in a `Para' since `Image' is an inline element.
+    return pandoc.Para({process_lilypond(elem, false)})
+  else
+    return elem
+  end
 end
 
 -- Make sure the metadata transformation runs first so that the code
