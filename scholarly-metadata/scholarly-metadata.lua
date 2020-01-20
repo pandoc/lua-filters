@@ -158,12 +158,11 @@ local function canonicalize(raw_author, raw_institute)
     merge_on_id(institutes, inst)
   end
 
-  
   -- Add list indices to institutes for numbering and reference purposes
   for idx, inst in ipairs(institutes) do
     inst.index = pandoc.MetaInlines{pandoc.Str(tostring(idx))}
   end
-  
+
   -- replace institutes with their indices
   local to_index = function (inst)
     return tostring(select(2, institutes:find_if(has_id(inst.id))))
