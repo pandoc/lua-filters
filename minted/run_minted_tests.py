@@ -363,7 +363,7 @@ def run_tex_tests(pandoc_args, fmt):
         "[inline-code] no_mintinline off globally, remove --no-highlight",
         [arg for arg in pandoc_args if arg != "--no-highlight"],
         inline_no_mintinline_globally_md,
-        r"\VERB|\PreprocessorTok{\#include }\ImportTok{<type\_traits>}|",
+        r"\VERB|\PreprocessorTok{\#include }\ImportTok{\textless{}type\_traits\textgreater{}}|",
         *inline_no_mintinline_globally_strings
     )
     # end: global no_mintinline shared testing with / without --no-highlight
@@ -381,7 +381,7 @@ def run_tex_tests(pandoc_args, fmt):
         "[inline-code] .no_minted on single inline Code, remove --no-highlight",
         [arg for arg in pandoc_args if arg != "--no-highlight"],
         inline_no_minted_md,
-        r"\VERB|\PreprocessorTok{\#include }\ImportTok{<type\_traits>}|",
+        r"\VERB|\PreprocessorTok{\#include }\ImportTok{\textless{}type\_traits\textgreater{}}|",
         *inline_no_minted_strings
     )
     # end: no_minted shared testing with / without --no-highlight
