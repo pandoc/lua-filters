@@ -88,7 +88,7 @@ local function generate_image(name, input, dpi, whither)
   return whither .. "/" .. fullname
 end
 
-function make_relative_path(to, from)
+local function make_relative_path(to, from)
   return pandoc.pipe(
            "realpath",
            {"--relative-to=" .. from, to},
