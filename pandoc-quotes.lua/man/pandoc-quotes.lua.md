@@ -6,7 +6,7 @@ Date: May 9, 2019
 
 # NAME
 
-pandoc-quotes.lua - Replaces plain quotation marks with typographic ones
+pandoc-quotes.lua - Replace plain quotation marks with typographic ones
 
 
 # SYNOPSIS
@@ -17,7 +17,7 @@ pandoc-quotes.lua - Replaces plain quotation marks with typographic ones
 # DESCRIPTION
 
 **pandoc-quotes.lua** is a filter for **pandoc** that replaces non-typographic
-quotation marks with typographic ones for languages other than US English.
+quotation marks with typographic ones for languages other than American English.
 
 You can define which typographic quotation marks to replace plain ones with
 by setting either a document's *quot-marks*, *quot-lang*, or *lang*
@@ -60,7 +60,7 @@ quot-marks: ""''
 If *quot-marks* is set, the other fields are ignored.
 
 
-# quotation-lang
+## quot-lang
 
 An RFC 5646-like code for the language the quotation marks of
 which shall be used (e.g., "pt-BR", "es").
@@ -81,7 +81,7 @@ marks for "it" (i.e., Italian as spoken in general).
 If *quot-marks* is set, *quot-lang* is ignored.
 
 
-# lang
+## lang
 
 The format of *lang* is the same as for *quot-lang*. If *quot-marks*
 or *quot-lang* is set, *lang* is ignored. 

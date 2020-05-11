@@ -1,0 +1,141 @@
+#!/bin/sh
+# httpdctl - A script to start and stop a simple HTTP server.
+#
+#
+# SYNOPSIS
+# ========
+#
+#      httpdctl (start PORT|stop)
+#
+#
+# DESCRIPTION
+# ===========
+#
+# httpdctl starts a simple HTTP server that serves files from
+# test/data/http-server. This allows for the test suite to run even if
+# Zotero and zotxt are not running. httpdctl only returns
+# to the caller once the HTTP server accepts requests.
+#
+#
+# FILES
+# =====
+#
+#   test/data/http-server
+#       Directory from which files are served.
+#   test/run/http-server.pid
+#       PID file.
+#
+# CAVEATS
+# =======
+#
+# The Makefile tries to make sure that the server is shut down.
+# It may fail at that though.
+#
+#
+# SEE ALSO
+# ========
+#
+# httpd
+#
+#
+# AUTHOR
+# ======
+#
+# Copyright 2019 Odin Kroeger
+#
+#
+# LICENSE
+# =======
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to
+# deal in the Software without restriction, including without limitation the
+# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+# sell copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+# IN THE SOFTWARE.
+
+# INITIALISATION
+# ==============
+
+set -Cefu
+
+SCRIPT_DIR="$(dirname "$0")"
+SCRIPT_NAME="$(basename "$0")"
+: "${SCRIPT_DIR:?'cannot find myself.'}"
+PID_FILE="$SCRIPT_DIR/../run/http-server.pid"
+START_SCRIPT="$SCRIPT_DIR/httpd"
+SHUTDOWN_TIME=5
+
+
+# FUNCTIONS
+# =========
+
+onexit() {
+    __ONEXIT_STATUS=$?
+    set +e
+    trap - 1 2 3 15
+    stop
+    kill -${1:-15} $$
+    exit $__ONEXIT_STATUS
+}
+
+start() {
+    if ! [ "${1-}" ]; then
+        printf -- 'usage: %s start PORT\n' "$SCRIPT_NAME" >&2
+        return 64
+    fi
+    # shellcheck disable=2064
+    for __START_SIGNO in 1 2 3 15; do
+        trap "onexit $__START_SIGNO" "$__START_SIGNO"
+    done
+    for __START_PY in python3 python; do
+        "$__START_PY" "$START_SCRIPT" "$1" || __START_ERR=$?
+        [ "${__START_ERR-0}" -eq 127 ] || break
+    done
+    return "${__START_ERR-0}"
+}
+
+stop() {
+    [ -e "$PID_FILE" ] || return 0
+    __STOP_PID="$(cat "$PID_FILE")"
+    : "${__STOP_PID:?'cannot determine PID of HTTP server.'}"
+    for __STOP_ITER in $(seq 0 "$SHUTDOWN_TIME"); do
+        kill -s TERM "$__STOP_PID" >/dev/null 2>&1 || break
+        sleep 1
+    done
+    [ "$__STOP_ITER" -eq "$SHUTDOWN_TIME" ] && \
+        kill -s KILL "$__STOP_PID" >/dev/null 2>&1 || :
+    rm -f "${PID_FILE:?}"
+}
+
+
+# MAIN
+# ====
+
+if ! [ "${1-}" ]; then
+    printf -- 'usage: %s (start PORT|stop [STATUS]) \n' "$SCRIPT_NAME" >&2
+    exit 64
+fi
+
+ACTION="$1"
+shift
+
+case "$ACTION" in
+    start)
+        start "$@"
+        ;;
+    stop)
+        stop "$@"
+        ;;
+esac
