@@ -5,7 +5,7 @@ test: sample.md author-info-blocks.lua
 	    | $(DIFF) expected.native -
 
 expected.native: sample.md author-info-blocks.lua
-	pandoc --lua-filter=author-info-blocks.lua --standalone --output $@ $<
+	@pandoc --lua-filter=author-info-blocks.lua --standalone --output $@ $<
 
 sample.pdf: sample.md author-info-blocks.lua
 	@pandoc \

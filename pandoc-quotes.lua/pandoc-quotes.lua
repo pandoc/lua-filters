@@ -195,6 +195,7 @@ PATH_SEP = package.config:sub(1, 1)
 if PATH_SEP == '\\' then EOL = '\r\n'
                     else EOL = '\n'   end
 
+
 --- A list of mappings from RFC 5646-ish language codes to quotation marks.
 -- 
 -- I have adopted the list below from:

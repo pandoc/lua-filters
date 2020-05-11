@@ -1,7 +1,7 @@
 --[[
 pagebreak – convert raw LaTeX page breaks to other formats
 
-Copyright © 2017-2019 Benct Philip Jonsson, Albert Krewinkel
+Copyright © 2017-2020 Benct Philip Jonsson, Albert Krewinkel
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -27,6 +27,7 @@ local pagebreak = {
   html = '<div style="page-break-after: always;"></div>',
   latex = '\\newpage{}',
   ooxml = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>',
+  odt = '<text:p text:style-name="Pagebreak"/>'
 }
 
 local function pagebreaks_from_config (meta)
@@ -51,6 +52,8 @@ local function newpage(format)
     return pandoc.RawBlock('openxml', pagebreak.ooxml)
   elseif format:match 'latex' then
     return pandoc.RawBlock('tex', pagebreak.latex)
+  elseif format:match 'odt' then
+    return pandoc.RawBlock('opendocument', pagebreak.odt)
   elseif format:match 'html.*' then
     return pandoc.RawBlock('html', pagebreak.html)
   elseif format:match 'epub' then

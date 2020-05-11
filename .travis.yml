@@ -20,6 +20,7 @@ addons:
       - python3-numpy
       - python3-matplotlib
       - latex-xcolor
+      - lilypond
       - lmodern
       - texlive-bibtex-extra
       - texlive-fonts-recommended
@@ -27,6 +28,7 @@ addons:
       - texlive-latex-recommended
       - texlive-latex-extra
       - pgf
+      - luarocks
 
 before_install:
 - unset CC
@@ -34,15 +36,15 @@ before_install:
 - |
   pushd $HOME
   RELEASES_URL='https://github.com/jgm/pandoc/releases'
-  export PANDOCVERSION=$(curl -I "$RELEASES_URL/latest" | sed -ne 's#Location:.*tag/\(.*\)$#\1#p' | tr -d "\n\r")
+  export PANDOCVERSION=$(curl --silent -I "$RELEASES_URL/latest" | sed -ne 's#[Ll]ocation:.*tag/\(.*\)$#\1#p' | tr -d "\n\r")
   echo $PANDOCVERSION
-  wget $RELEASES_URL/download/$PANDOCVERSION/pandoc-$PANDOCVERSION-linux.tar.gz
-  tar xvzf pandoc-$PANDOCVERSION-linux.tar.gz
+  travis_retry wget $RELEASES_URL/download/$PANDOCVERSION/pandoc-$PANDOCVERSION-linux-amd64.tar.gz
+  tar xvzf pandoc-$PANDOCVERSION-linux-amd64.tar.gz
   popd
 # Download plantuml.jar for plantuml filter
 - |
   pushd $HOME
-  wget http://sourceforge.net/projects/plantuml/files/plantuml.jar
+  travis_retry wget http://sourceforge.net/projects/plantuml/files/plantuml.jar
   popd
 - export PATH=$HOME/pandoc-$PANDOCVERSION/bin:$PATH
 - export PLANTUML=$HOME/plantuml.jar
@@ -52,4 +54,3 @@ install: []
 script:
 - |
   make test
-

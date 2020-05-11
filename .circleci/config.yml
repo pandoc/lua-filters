@@ -18,11 +18,13 @@ jobs:
               graphviz \
               inkscape \
               libpng \
+              lilypond \
               openjdk8-jre \
               pkgconf \
               python \
               python3 \
               python3-dev \
+              luarocks \
               ttf-dejavu \
               wget
       - run: |
@@ -38,8 +40,11 @@ jobs:
               truncate \
               xifthen \
               xstring
+      # Requirement for matplotlib
       - run: |
-          pip3 install --user matplotlib
+          pip3 install -q --user cython
+      - run: |
+          pip3 install -q --user matplotlib
       # Download plantuml.jar for plantuml filter
       - run: |
           cd $HOME && \

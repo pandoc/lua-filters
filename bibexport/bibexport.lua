@@ -20,14 +20,21 @@ function citation_ids ()
   return citations
 end
 
+--- stringify meta inline elements. Pandoc prior to version 2.8
+-- didn't properly tag MetaInline values, so making it necessary to use an
+-- auxiliary Span.
+local stringifyMetaInlines = function (el)
+  return el.t
+    and utils.stringify(el)
+    or utils.stringify(pandoc.Span(el))
+end
+
 function bibdata (bibliography)
   function bibname (bibitem)
-    if type(bibitem) == 'string' then
-      return bibitem:gsub('%.bib$', '')
-    else
-      -- bibitem is assumed to be a list of inlines
-      return utils.stringify(pandoc.Span(bibitem)):gsub('%.bib$', '')
-    end
+    return type(bibitem) == 'string'
+      and bibitem:gsub('%.bib$', '')
+      -- bibitem is assumed to be a list of inlines or MetaInlines element
+      or stringifyMetaInlines(bibitem):gsub('%.bib$', '')
   end
 
   local bibs = bibliography.t == 'MetaList'

@@ -22,4 +22,5 @@ $(TESTS): prepare-tmp
 		-o $(TMP_DIR)/$@.out $(DATA_DIR)/$@.md
 	cmp $(TMP_DIR)/$@.out $(NORM_DIR)/$@.out
 
+
 .PHONY: prepare-tmp test $(TESTS) 
