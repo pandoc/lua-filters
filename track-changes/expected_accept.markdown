@@ -24,6 +24,7 @@ A *header* with a comment {#a-header-width-a-notecomment}
 
 Some unmodified text ...
 
+```{=tex}
 \newpage
-
+```
 ... continued from previous page just to test page headers in supporting formats (LaTeX, DOCX, etc.).

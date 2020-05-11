@@ -6,7 +6,7 @@ the output of `pandoc-citeproc`, and so must be run after
 `pandoc-citeproc`. For example:
 
 ~~~
-pandoc input.md -F pandoc-citerproc --lua-filter section-refs.lua
+pandoc input.md -F pandoc-citeproc --lua-filter section-refs.lua
 ~~~
 
 It allows curstomization through two metadata fields:

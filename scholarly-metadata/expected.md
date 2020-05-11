@@ -5,10 +5,10 @@ author:
   - 1
   - 2
   name: Jane Doe
-- id: 'John Q. Doe'
+- id: John Q. Doe
   institute:
   - 1
-  name: 'John Q. Doe'
+  name: John Q. Doe
 - id: Peder Ås
   institute:
   - 1
@@ -22,10 +22,13 @@ author:
 institute:
 - address: '23 Science Street, Eureka, Mississippi, USA'
   id: fosg
+  index: 1
   name: Formatting Open Science Group
 - id: fop
+  index: 2
   name: Federation of Planets
 - id: Acme Corporation
+  index: 3
   name: Acme Corporation
 ---
 

@@ -138,24 +138,26 @@ local function tikz2image(src, filetype, additionalPackages)
 
     -- Unfortunately, continuation is only possible, if we know the actual
     -- format:
-    local imgData = nil
-    if knownFormat then
-
-        -- We know the desired format. Thus, execute Inkscape:
-        os.execute("\"" .. inkscapePath .. "\"" .. baseCommand)
-
-        -- Try to open the image:
-        local r = io.open(tmp .. "." .. filetype, 'rb')
-
-        -- Read the image, if available:
-        if r then
-            imgData = r:read("*all")
-            r:close()
-        end
-
-        -- Delete the image tmp file:
-        os.remove(outfile)
+    if not knownFormat then
+        error(string.format("Don't know how to convert pdf to %s.", filetype))
     end
+
+    local imgData = nil
+
+    -- We know the desired format. Thus, execute Inkscape:
+    os.execute("\"" .. inkscapePath .. "\"" .. baseCommand)
+
+    -- Try to open the image:
+    local r = io.open(tmp .. "." .. filetype, 'rb')
+
+    -- Read the image, if available:
+    if r then
+        imgData = r:read("*all")
+        r:close()
+    end
+
+    -- Delete the image tmp file:
+    os.remove(outfile)
 
     -- Remove the temporary files:
     os.remove(tmp .. ".tex")
@@ -201,6 +203,7 @@ local function py2image(code, filetype)
         r:close()
     else
         io.stderr:write(string.format("File '%s' could not be opened", outfile))
+        error 'Could not create image from python code.'
     end
 
     -- Delete the tmp files:
@@ -248,6 +251,7 @@ function CodeBlock(block)
         -- an error occured; img contains the error message
         io.stderr:write(tostring(img))
         io.stderr:write('\n')
+        error 'Image conversion failed. Aborting.'
 
     end
 

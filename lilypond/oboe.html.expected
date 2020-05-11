@@ -1,0 +1,6 @@
+<h1 id="the-oboe">The Oboe</h1>
+<p>This instrument has a range of two octaves and fifth and is written in the G-clef:</p>
+<figure>
+<img src="oboe.png" title="\relative c&#39; { \override Staff.TimeSignature #&#39;stencil = ##f \cadenzaOn b4 c4 d4 e4 f4 g4 a4 b4 c4 d4 e4 f4 g4 a4 b4 c4 d4 e4 f4 \bar &quot;|.&quot; \cadenzaOff }" class="lilypond-image-standalone" alt="" /><figcaption>The range of the oboe</figcaption>
+</figure>
+<p>The two highest notes should be used with caution; the F in particular is risky when it enters abruptly. Some oboes have the low B♭ <img src="b-flat.png" title="\new Staff { \override Staff.TimeSignature #&#39;stencil = ##f \cadenzaOn bes4 \cadenzaOff }" class="lilypond-image-inline" alt="A low note" />; but this tone, not generally available on this instrument, should better be avoided.</p>

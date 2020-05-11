@@ -1,7 +1,7 @@
 --[[
 ScholarlyMeta – normalize author/affiliation meta variables
 
-Copyright (c) 2017-2019 Albert Krewinkel, Robert Winkler
+Copyright (c) 2017-2020 Albert Krewinkel, Robert Winkler
 
 Permission to use, copy, modify, and/or distribute this software for any purpose
 with or without fee is hereby granted, provided that the above copyright notice
@@ -156,6 +156,11 @@ local function canonicalize(raw_author, raw_institute)
   local author_insts = flatten(authors:map(function(x) return x.institute end))
   for _, inst in ipairs(author_insts) do
     merge_on_id(institutes, inst)
+  end
+
+  -- Add list indices to institutes for numbering and reference purposes
+  for idx, inst in ipairs(institutes) do
+    inst.index = pandoc.MetaInlines{pandoc.Str(tostring(idx))}
   end
 
   -- replace institutes with their indices

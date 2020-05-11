@@ -1,7 +1,7 @@
 .PHONY: test
-test: sample.html
+test: clean sample.html
 
-sample.html: sample.md
+sample.html: sample.md diagram-generator.lua
 	@pandoc --self-contained \
 	    --lua-filter=diagram-generator.lua \
 	    --metadata=pythonPath:"python3" \
@@ -9,5 +9,5 @@ sample.html: sample.md
 	    --output=$@ $<
 
 clean:
-	rm -f sample.html
-	rm -rf tmp-latex
+	@rm -f sample.html
+	@rm -rf tmp-latex
