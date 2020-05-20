@@ -4,27 +4,48 @@ abstract-to-meta – move an "abstract" section into document metadata
 Copyright: © 2017–2020 Albert Krewinkel
 License:   MIT – see LICENSE file for details
 ]]
+local abstract = pandoc.List:new{}
 
-local looking_at_abstract = false
-local abstract = {}
+--- Extract abstract from a list of blocks.
+function abstract_from_blocklist (blocks)
+  local body_blocks = {}
+  local looking_at_abstract = false
 
-function Block (elem)
-  if looking_at_abstract then
-    abstract[#abstract + 1] = elem
-    return {}
+  for _, block in ipairs(blocks) do
+    if block.t == 'Header' and block.level == 1 then
+      if block.identifier == 'abstract' then
+        looking_at_abstract = true
+      else
+        looking_at_abstract = false
+        body_blocks[#body_blocks + 1] = block
+      end
+    elseif looking_at_abstract then
+      abstract[#abstract + 1] = block
+    else
+      body_blocks[#body_blocks + 1] = block
+    end
   end
+
+  return body_blocks
 end
 
-function Header (elem)
-  if elem.level == 1 and elem.identifier == 'abstract' then
-    looking_at_abstract = true
-    return {}
-  else
-    looking_at_abstract = looking_at_abstract and elem.level ~= 1
-  end
-end
-
-function Meta (meta)
-  meta.abstract = meta.abstract or pandoc.MetaBlocks(abstract)
-  return meta
+if PANDOC_VERSION >= {2,9,2} then
+  -- Check all block lists with pandoc 2.9.2 or later
+  return {{
+      Blocks = abstract_from_blocklist,
+      Meta = function (meta)
+        meta.abstract = meta.abstract or abstract
+        return meta
+      end
+  }}
+else
+  -- otherwise, just check the top-level block-list
+  return {{
+      Pandoc = function (doc)
+        local meta = doc.meta
+        local other_blocks = abstract_from_blocklist(doc.blocks)
+        meta.abstract = meta.abstract or abstract
+        return pandoc.Pandoc(other_blocks, meta)
+      end,
+  }}
 end

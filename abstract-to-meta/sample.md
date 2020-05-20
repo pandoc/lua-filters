@@ -1,3 +1,4 @@
+::: {.frontmatter}
 # Abstract
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
@@ -6,8 +7,21 @@ nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
 fugiat nulla pariatur.
 
+- one
+- two
+- three
+
 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
 deserunt mollit anim id est laborum.
+
+# Preface
+
+* Phasellus purus.
+* Praesent fermentum tempor tellus.
+* Proin quam nisl, tincidunt et, mattis eget, convallis nec, purus.
+* Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+* Curabitur lacinia pulvinar nibh.
+:::
 
 # Lorem Ipsum
 

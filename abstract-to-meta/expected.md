@@ -7,9 +7,24 @@ abstract: |
   reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
   pariatur.
 
+  -   one
+  -   two
+  -   three
+
   Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
   officia deserunt mollit anim id est laborum.
 ---
+
+::: {.frontmatter}
+Preface
+=======
+
+-   Phasellus purus.
+-   Praesent fermentum tempor tellus.
+-   Proin quam nisl, tincidunt et, mattis eget, convallis nec, purus.
+-   Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+-   Curabitur lacinia pulvinar nibh.
+:::
 
 Lorem Ipsum
 ===========
