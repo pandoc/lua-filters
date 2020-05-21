@@ -35,6 +35,14 @@ function citation_to_numbered_ref (citation, all_refs)
    end
 end
 
+function table.contains(table, element)
+   for _, value in pairs(table) do
+     if value == element then
+       return true
+     end
+   end
+   return false
+ end
 
 function get_partial_refs (blocks, all_refs)
    local cites = {}
@@ -66,7 +74,9 @@ function get_partial_refs (blocks, all_refs)
 
    local refs = {}
    for _, nr in pairs(numbered_refs) do
+      if not table.contains(refs, nr[2]) then
       table.insert(refs, nr[2])
+      end
    end
 
    return refs
