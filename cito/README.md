@@ -71,6 +71,13 @@ together with the aliases that can be used as shorthands.
   - method
   - method_in
 
+## Filter interactions
+
+Note that the [pandoc-crossref] filter uses citations to link to
+other elements. The crossref extensions are not understood by
+cito.lua. pandoc-crossref, if used, should always be invoked
+first: `pandoc --lua-filter=cito.lua --filter=pandoc-crossref …`
+
 ## References
 
 This approach was described in <https://doi.org/10.7717/peerj-cs.112>.
