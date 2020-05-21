@@ -9,7 +9,15 @@ collaborators.
 ## Prerequisites
 
 This filter expects the `bibexport` executable to be installed
-and in the user's PATH.
+and in the user's PATH. Installation differs across systems.
+Users of the TeX Live distribution can install the [bibexport]
+package by running
+
+    tlmgr install bibexport
+
+Windows appears to be unsupported at the moment.
+
+[bibexport]: https://www.ctan.org/pkg/bibexport
 
 ## Usage
 
