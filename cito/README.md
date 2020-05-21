@@ -78,6 +78,8 @@ other elements. The crossref extensions are not understood by
 cito.lua. pandoc-crossref, if used, should always be invoked
 first: `pandoc --lua-filter=cito.lua --filter=pandoc-crossref …`
 
+[pandoc-crossref]: https://lierdakil.github.io/pandoc-crossref/
+
 ## References
 
 This approach was described in <https://doi.org/10.7717/peerj-cs.112>.
