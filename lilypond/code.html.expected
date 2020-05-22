@@ -1,6 +1,0 @@
-<p>The filter should leave code elements (like this: <code>putStrLn "hello, world!"</code>) and code blocks (like this:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode lua"><code class="sourceCode lua"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">function</span> foo<span class="op">()</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a>  <span class="cf">return</span> <span class="st">&quot;foo&quot;</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">end</span></span></code></pre></div>
-<p>) alone if they aren’t tagged with the <code>lilypond</code> class.</p>
-<p>It should also ignore elements that have the <code>ly-norender</code> class: <code class="sourceCode lilypond">relative c&#39;</code>.</p>
