@@ -33,5 +33,8 @@ requirements.
 Contributing
 ------------
 
-PRs for new filters are welcome, provided they conform to
-these guidelines.
+PRs for new filters are welcome, provided they conform to these
+guidelines. Lua code should ideally follow the Olivine Labs [Lua
+style guide].
+
+[Lua style guide]: https://github.com/Olivine-Labs/lua-style-guide
