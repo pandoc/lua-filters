@@ -11,6 +11,12 @@ Copyright: © 2018-2020 John MacFarlane <jgm@berkeley.edu>,
              2019-2020 Albert Krewinkel <albert+pandoc@zeitkraut.de>
 License:   MIT – see LICENSE file for details
 ]]
+-- Module pandoc.system is required and was added in version 2.7.3
+PANDOC_VERSION:must_be_at_least '2.7.3'
+
+local system = require 'pandoc.system'
+local with_temporary_directory = system.with_temporary_directory
+local with_working_directory = system.with_working_directory
 
 -- The PlantUML path. If set, uses the environment variable PLANTUML or the
 -- value "plantuml.jar" (local PlantUML version). In order to define a
@@ -93,83 +99,90 @@ local function graphviz(code, filetype)
     return final
 end
 
--- Compile LaTeX with Tikz code to an image:
-local function tikz2image(src, filetype, additionalPackages)
+--
+-- TikZ
+--
 
-    -- Define file names:
-    local outfile = string.format("./tmp-latex/file.%s", filetype)
-    local tmp = "./tmp-latex/file"
-    local tmpDir = "./tmp-latex/"
+--- LaTeX template used to compile TikZ images. Takes additional
+--- packages as the first, and the actual TikZ code as the second
+--- argument.
+local tikz_template = [[
+\documentclass{standalone}
+\usepackage{tikz}
+%% begin: additional packages
+%s
+%% end: additional packages
+\begin{document}
+%s
+\end{document}
+]]
 
-    -- Ensure, that the tmp directory exists:
-    os.execute("mkdir -p tmp-latex")
+--- Returns a function which takes the filename of a PDF and a
+-- target filename, and writes the input as the given format.
+-- Returns `nil` if conversion into the target format is not
+-- possible.
+local function convert_from_pdf(filetype)
+  -- Build the basic Inkscape command for the conversion
+  local inkscape_output_args
+  if filetype == 'png' then
+    inkscape_output_args = '--export-png="%s" --export-dpi=300'
+  elseif filetype == 'svg' then
+    inkscape_output_args = '--export-plain-svg="%s"'
+  else
+    return nil
+  end
+  return function (pdf_file, outfile)
+    local inkscape_command = string.format(
+      '"%s" --without-gui --file="%s" ' .. inkscape_output_args,
+      inkscapePath,
+      pdf_file,
+      outfile
+    )
+    io.stderr:write(inkscape_command .. '\n')
+    local command_output = io.popen(inkscape_command)
+    -- TODO: print output when debugging.
+    command_output:close()
+  end
+end
 
-    -- Build and write the LaTeX document:
-    local f = io.open(tmp .. ".tex", 'w')
-    f:write("\\documentclass{standalone}\n\\usepackage{tikz}\n")
+--- Compile LaTeX with Tikz code to an image
+local function tikz2image(src, filetype, additional_packages)
+  local convert = convert_from_pdf(filetype)
+  -- Bail if there is now known way from PDF to the target format.
+  if not convert then
+    error(string.format("Don't know how to convert pdf to %s.", filetype))
+  end
+  return with_temporary_directory("tikz2image", function (tmpdir)
+    return with_working_directory(tmpdir, function ()
+      -- Define file names:
+      local file_template = "%s/tikz-image.%s"
+      local tikz_file = file_template:format(tmpdir, "tex")
+      local pdf_file = file_template:format(tmpdir, "pdf")
+      local outfile = file_template:format(tmpdir, filetype)
 
-    -- Any additional package(s) are desired?
-    if additionalPackages then
-        f:write(additionalPackages)
-    end
+      -- Build and write the LaTeX document:
+      local f = io.open(tikz_file, 'w')
+      f:write(tikz_template:format(additional_packages or '', src))
+      f:close()
 
-    f:write("\\begin{document}\n")
-    f:write(src)
-    f:write("\n\\end{document}\n")
-    f:close()
+      -- Execute the LaTeX compiler:
+      pandoc.pipe(pdflatexPath, {'-output-directory', tmpdir, tikz_file}, '')
 
-    -- Execute the LaTeX compiler:
-    pandoc.pipe(pdflatexPath, {'-output-directory', tmpDir, tmp}, '')
+      convert(pdf_file, outfile)
 
-    -- Build the basic Inkscape command for the conversion:
-    local baseCommand = " --without-gui --file=" .. tmp .. ".pdf"
-    local knownFormat = false
-
-    if filetype == "png" then
-
-        -- Append the subcommands to convert into a PNG file:
-        baseCommand = baseCommand .. " --export-png="
-            .. tmp .. ".png --export-dpi=300"
-        knownFormat = true
-
-    elseif filetype == "svg" then
-
-        -- Append the subcommands to convert into a SVG file:
-        baseCommand = baseCommand .. " --export-plain-svg=" .. tmp .. ".svg"
-        knownFormat = true
-
-    end
-
-    -- Unfortunately, continuation is only possible, if we know the actual
-    -- format:
-    if not knownFormat then
-        error(string.format("Don't know how to convert pdf to %s.", filetype))
-    end
-
-    local imgData = nil
-
-    -- We know the desired format. Thus, execute Inkscape:
-    os.execute("\"" .. inkscapePath .. "\"" .. baseCommand)
-
-    -- Try to open the image:
-    local r = io.open(tmp .. "." .. filetype, 'rb')
-
-    -- Read the image, if available:
-    if r then
-        imgData = r:read("*all")
+      -- Try to open and read the image:
+      local img_data
+      local r = io.open(outfile, 'rb')
+      if r then
+        img_data = r:read("*all")
         r:close()
-    end
+      else
+        -- TODO: print warning
+      end
 
-    -- Delete the image tmp file:
-    os.remove(outfile)
-
-    -- Remove the temporary files:
-    os.remove(tmp .. ".tex")
-    os.remove(tmp .. ".pdf")
-    os.remove(tmp .. ".log")
-    os.remove(tmp .. ".aux")
-
-    return imgData
+      return img_data
+    end)
+  end)
 end
 
 -- Run Python to generate an image:
