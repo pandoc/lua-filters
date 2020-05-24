@@ -1,11 +1,15 @@
 --[[
-    This Lua filter is used to create images with or without captions from
-    code blocks. Currently PlantUML, GraphViz, Tikz, and Python can be
-    processed. For further details, see README.md.
+diagram-generator – create images and figures from code blocks.
 
-    Thanks to @floriandd2ba and @jgm for the initial implementation of
-    the PlantUML filter, which I used as a template. Thanks also @muxueqz
-    for the code to generate a GraphViz image.
+This Lua filter is used to create images with or without captions
+from code blocks. Currently PlantUML, GraphViz, Tikz, and Python
+can be processed. For further details, see README.md.
+
+Copyright: © 2018-2020 John MacFarlane <jgm@berkeley.edu>,
+             2018 Florian Schätzig <florian@schaetzig.de>,
+             2019 Thorsten Sommer <contact@sommer-engineering.com>,
+             2019-2020 Albert Krewinkel <albert+pandoc@zeitkraut.de>
+License:   MIT – see LICENSE file for details
 ]]
 
 -- The PlantUML path. If set, uses the environment variable PLANTUML or the
