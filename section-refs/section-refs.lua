@@ -1,141 +1,137 @@
-function is_ref_div (blk)
-  return (blk.t == "Div" and blk.identifier == "refs")
+-- pandoc.utils.make_sections exists since pandoc 2.8
+if PANDOC_VERSION == nil then -- if pandoc_version < 2.1
+  error("ERROR: pandoc >= 2.1 required for section-refs filter")
+else
+  PANDOC_VERSION:must_be_at_least {2,8}
 end
 
-function is_ref_header (blk)
-  return (blk.t == "Header" and blk.identifier == "bibliography")
+local utils = require 'pandoc.utils'
+local run_json_filter = utils.run_json_filter
+
+--- The document's metadata
+local meta
+-- Lowest level at which bibliographies should be generated.
+local section_refs_level
+-- original bibliography value
+local orig_bibliography
+
+-- Returns true iff a div is a section div.
+local function is_section_div (div)
+  return div.t == 'Div'
+    and div.classes[1] == 'section'
+    and div.attributes.number
 end
 
-function get_all_refs (blks)
-  for _, b in pairs(blks) do
-    if is_ref_div(b) then
-      return b.content
-    end
+local function section_header (div)
+  local header = div.content and div.content[1]
+  local is_header = is_section_div(div)
+    and header
+    and header.t == 'Header'
+  return is_header and header or nil
+end
+
+local function adjust_refs_components (div)
+  local header = section_header(div)
+  if not header then
+    return div
+  end
+  local blocks = div.content
+  local bib_header = blocks:find_if(function (b)
+      return b.identifier == 'bibliography'
+  end)
+  local refs = blocks:find_if(function (b)
+      return b.identifier == 'refs'
+  end)
+  if bib_header then
+    bib_header.identifier = 'bibliography-' .. header.attributes.number
+    bib_header.level = header.level + 1
+  end
+  if refs and refs.identifier == 'refs' then
+    refs.identifier = 'refs-' .. header.attributes.number
+  end
+  return div
+end
+
+--- Create a bibliography for a given topic. This acts on all
+-- section divs at or above `section_refs_level`
+local function create_section_bibliography (div)
+  -- don't do anything if there is no bibliography
+  if not meta.bibliography and not meta.references then
+    return nil
+  end
+  local header = section_header(div)
+  -- Blocks for which a bibliography will be generated
+  local subsections
+  local blocks
+  if not header or section_refs_level < header.level then
+    -- Don't do anything for lower level sections.
+    return nil
+  elseif section_refs_level == header.level then
+    blocks = div.content
+    subsections = pandoc.List:new{}
+  else
+    blocks = div.content:filter(function (b)
+        return not is_section_div(b)
+    end)
+    subsections = div.content:filter(is_section_div)
+  end
+  local tmp_doc = pandoc.Pandoc(blocks, meta)
+  local filter_args = {FORMAT, '-q'} -- keep pandoc-citeproc quiet
+  local new_doc = run_json_filter(tmp_doc, 'pandoc-citeproc', filter_args)
+  div.content = new_doc.blocks .. subsections
+  return adjust_refs_components(div)
+end
+
+--- Remove remaining section divs
+local function flatten_sections (div)
+  local header = section_header(div)
+  if not header then
+    return nil
+  else
+    header.identifier = div.identifier
+    header.attributes.number = nil
+    div.content[1] = header
+    return div.content
   end
 end
 
-function remove_all_refs (blks)
-  local out = {}
-  for _, b in pairs(blks) do
-    if not (is_ref_div(b) or is_ref_header(b)) then
-      table.insert(out, b)
-    end
+--- Filter to the references div and bibliography header added by
+--- pandoc-citeproc.
+local remove_pandoc_citeproc_results = {
+  Header = function (header)
+    return header.identifier == 'bibliography'
+      and {}
+      or nil
+  end,
+  Div = function (div)
+    return div.identifier == 'refs'
+      and {}
+      or nil
   end
-  return out
+}
+
+local function restore_bibliography (meta)
+  meta.bibliography = orig_bibliography
+  return meta
 end
 
--- We return a {number, ref} pair so we can sort in the individual
--- bibliographies.
-function citation_to_numbered_ref (citation, all_refs)
-  local div_id = "ref-" .. citation.id
-  for i, d in ipairs(all_refs) do
-    if d.t == "Div" and d.identifier == div_id then
-      return {i, d}
-    end
-  end
+--- Setup the document for further processing by wrapping all
+--- sections in Div elements.
+function setup_document (doc)
+  -- save meta for other filter functions
+  meta = doc.meta
+  section_refs_level = tonumber(meta["section-refs-level"]) or 1
+  orig_bibliography = meta.bibliography
+  meta.bibliography = meta['section-refs-bibliography'] or meta.bibliography
+  local sections = utils.make_sections(true, nil, doc.blocks)
+  return pandoc.Pandoc(sections, doc.meta)
 end
 
-function get_partial_refs (blocks, all_refs)
-  local cites = {}
-  local citegetter = {
-    Cite = function (el)
-      for _, c in pairs(el.citations) do
-        table.insert(cites, c)
-      end
-    end
-  }
-
-  for _, b in pairs(blocks) do
-    pandoc.walk_block(b, citegetter)
-  end
-
-
-  -- first we make a list of the {number, ref} pairs so we can sort
-  -- them. Then after sorting, we're going to make a new list with
-  -- only the second element.
-  local numbered_refs = {}
-  for _, c in pairs(cites) do
-    local r = citation_to_numbered_ref(c, all_refs)
-    if r then
-      table.insert(numbered_refs, r)
-    end
-  end
-
-  table.sort(numbered_refs, function(x, y) return x[1] < y[1] end)
-
-  local refs = pandoc.List:new{}
-  for _, nr in pairs(numbered_refs) do
-    if not refs:includes(nr[2]) then
-      table.insert(refs, nr[2])
-    end
-  end
-
-  return refs
-end
-
-function add_section_refs (blks, lvl, refs_title, all_refs)
-  local output_blks = {}
-  local section = {}
-  local refs_num = 0
-
-  local go = function ()
-    refs_num = refs_num + 1
-    local section_refs = get_partial_refs(section, all_refs)
-    if refs_title then
-      local hdr = pandoc.Header(
-        lvl + 1,
-        refs_title,
-        pandoc.Attr("bibliography-" .. tostring(refs_num),
-                    {"unnumbered"}))
-      table.insert(section_refs, 1, hdr)
-    end
-    local refs_div = pandoc.Div(
-      section_refs,
-      pandoc.Attr("refs-" .. tostring(refs_num), {"references"})
-    )
-    table.insert(section, refs_div)
-    for _, x in pairs(section) do
-      table.insert(output_blks, x)
-    end
-  end
-
-  -- to avoid putting a bib after an intro paragraph.
-  local seen_hdr_before = false
-  for _, b in pairs(blks) do
-    if b.t == "Header" and b.level <= lvl then
-      if seen_hdr_before then
-        go()
-        section = {b}
-      else
-        seen_hdr_before = true
-        table.insert(section, b)
-      end
-    else
-      table.insert(section, b)
-    end
-  end
-  go()
-  return output_blks
-end
-
-function Pandoc(doc)
-  if PANDOC_VERSION == nil then -- if pandoc_version < 2.1
-    io.stderr:write("WARNING: pandoc >= 2.1 required for section-refs filter\n")
-    return doc
-  end
-  local refs_title = doc.meta["reference-section-title"]
-  -- if we get it from a command-line field, read it in as md.
-  if type(refs_title) == "string" then
-    refs_title = pandoc.read(refs_title, "markdown").blocks[1].content
-  end
-  local lvl = tonumber(doc.meta["section-refs-level"]) or 1
-  local all_refs = get_all_refs(doc.blocks)
-  -- we only want to do something if there are refs to work
-  -- with. This way, if this is run without pandoc-citeproc, it will
-  -- just return the same document.
-  if all_refs then
-    local unreffed = remove_all_refs(doc.blocks)
-    local output = add_section_refs(unreffed, lvl, refs_title, all_refs)
-    return pandoc.Pandoc(output, doc.meta)
-  end
-end
+return {
+  -- remove result of previous pandoc-citeproc run (for backwards
+  -- compatibility)
+  remove_pandoc_citeproc_results,
+  {Pandoc = setup_document},
+  {Div = create_section_bibliography},
+  {Div = flatten_sections, Meta = restore_bibliography}
+}
