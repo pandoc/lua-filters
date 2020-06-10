@@ -13,14 +13,17 @@ end
 
 function Str(elem)
   local parts = split_hyphen(elem.c)
-  if #parts > 1 then
-    local o = {}
-    for index, part in ipairs(parts) do
-      table.insert(o, pandoc.Str(part))
-      if index < #parts then
-        table.insert(o, pandoc.RawInline('latex', '"='))
-      end
-    end
-    return o
+  -- if not more than one part, string contains no hyphen, return unchanged.
+  if #parts <= 1 then
+    return nil
   end
+  -- otherwise, splice raw latex "= between parts
+  local o = {}
+  for index, part in ipairs(parts) do
+    table.insert(o, pandoc.Str(part))
+    if index < #parts then
+      table.insert(o, pandoc.RawInline('latex', '"='))
+    end
+  end
+  return o
 end
