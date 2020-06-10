@@ -1,3 +1,7 @@
+if FORMAT ~= 'latex' then
+  return {}
+end
+
 function split_hyphen (inputstr)
   local sep = '-'
   local t = {}
@@ -8,17 +12,15 @@ function split_hyphen (inputstr)
 end
 
 function Str(elem)
-  if FORMAT == 'latex' then
-    local parts = split_hyphen(elem.c)
-    if #parts > 1 then
-      local o = {}
-      for index, part in ipairs(parts) do
-        table.insert(o, pandoc.Str(part))
-        if index < #parts then
-          table.insert(o, pandoc.RawInline('latex', '"='))
-        end
+  local parts = split_hyphen(elem.c)
+  if #parts > 1 then
+    local o = {}
+    for index, part in ipairs(parts) do
+      table.insert(o, pandoc.Str(part))
+      if index < #parts then
+        table.insert(o, pandoc.RawInline('latex', '"='))
       end
-      return o
     end
+    return o
   end
 end
