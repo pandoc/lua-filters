@@ -2,7 +2,7 @@ if FORMAT ~= 'latex' then
   return {}
 end
 
-function split_hyphen (inputstr)
+function split_hyphen(inputstr)
   local sep = '-'
   local t = {}
   for str in string.gmatch(inputstr, '([^'..sep..']+)') do
