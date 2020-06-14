@@ -4,7 +4,7 @@ abstract-to-meta – move an "abstract" section into document metadata
 Copyright: © 2017–2020 Albert Krewinkel
 License:   MIT – see LICENSE file for details
 ]]
-local abstract = pandoc.List:new{}
+local abstract = {}
 
 --- Extract abstract from a list of blocks.
 function abstract_from_blocklist (blocks)
@@ -34,7 +34,9 @@ if PANDOC_VERSION >= {2,9,2} then
   return {{
       Blocks = abstract_from_blocklist,
       Meta = function (meta)
-        meta.abstract = meta.abstract or abstract
+        if not meta.abstract and #abstract > 0 then
+          meta.abstract = pandoc.MetaBlocks(abstract)
+        end
         return meta
       end
   }}
@@ -44,7 +46,9 @@ else
       Pandoc = function (doc)
         local meta = doc.meta
         local other_blocks = abstract_from_blocklist(doc.blocks)
-        meta.abstract = meta.abstract or abstract
+        if not meta.abstract and #abstract > 0 then
+          meta.abstract = pandoc.MetaBlocks(abstract)
+        end
         return pandoc.Pandoc(other_blocks, meta)
       end,
   }}
