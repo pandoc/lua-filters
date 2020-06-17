@@ -1,0 +1,20 @@
+name: Filter collection
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  archive:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Build collection
+        run: make collection
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@master
+        with:
+          name: lua-filters
+          path: .build/lua-filters
