@@ -15,6 +15,8 @@ License:   MIT – see LICENSE file for details
 PANDOC_VERSION:must_be_at_least '2.7.3'
 
 local system = require 'pandoc.system'
+local utils = require 'pandoc.utils'
+local stringify = utils.stringify
 local with_temporary_directory = system.with_temporary_directory
 local with_working_directory = system.with_working_directory
 
@@ -77,20 +79,27 @@ end
 -- meta options was set, it gets used instead of the corresponding
 -- environment variable:
 function Meta(meta)
-  plantuml_path =
+  plantuml_path = stringify(
     meta.plantuml_path or meta.plantumlPath or plantuml_path
-  inkscape_path =
+  )
+  inkscape_path = stringify(
     meta.inkscape_path or meta.inkscapePath or inkscape_path
-  python_path =
+  )
+  python_path = stringify(
     meta.python_path or meta.pythonPath or python_path
-  python_activate_path =
+  )
+  python_activate_path = stringify(
     meta.activate_python_path or meta.activatePythonPath or python_activate_path
-  java_path =
+  )
+  java_path = stringify(
     meta.java_path or meta.javaPath or java_path
-  dot_path =
+  )
+  dot_path = stringify(
     meta.path_dot or meta.dotPath or dot_path
-  pdflatex_path =
+  )
+  pdflatex_path = stringify(
     meta.pdflatex_path or meta.pdflatexPath or pdflatex_path
+  )
 end
 
 -- Call plantuml.jar with some parameters (cf. PlantUML help):
