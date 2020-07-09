@@ -21,15 +21,15 @@ By default, this filter expects the plantuml.jar file to be in the
 working directory. Alternatively, the environment variable
 `PLANTUML` can be set with a path. If, for example, a specific
 PlantUML version is to be used per pandoc document, the
-`plantumlPath` meta variable can be set.
+`plantuml_path` meta variable can be set.
 
 Furthermore, this filter assumes that Java is located in the
 system or user path. This means that from any place of the system
 the `java` command is understood. Alternatively, the `JAVA_HOME`
 environment variable gets used. To use a specific Java version per
-pandoc document, use the `javaPath` meta variable. Please notice
+pandoc document, use the `java_path` meta variable. Please notice
 that `JAVA_HOME` must be set to the java's home directory e.g.
-`c:\Program Files\Java\jre1.8.0_201\` whereas `javaPath` must be
+`c:\Program Files\Java\jre1.8.0_201\` whereas `java_path` must be
 set to the absolute path of `java.exe` e.g.
 `c:\Program Files\Java\jre1.8.0_201\bin\java.exe`.
 
@@ -50,7 +50,7 @@ dependencies.
 This filter assumes that the `dot` command is located in the path
 and therefore can be used from any location. Alternatively, you can
 set the environment variable `DOT` or use the pandoc's meta variable
-`dotPath`.
+`dot_path`.
 
 Example usage from [the Graphviz
 gallery](https://graphviz.gitlab.io/_pages/Gallery/directed/fsm.html):
@@ -110,13 +110,13 @@ missing packages are installed automatically. This filter uses the
 `pdflatex` command which is available by the system's path. Alternatively,
 you can set the `PDFLATEX` environment variable. In case you have to use
 a specific LaTeX version on a pandoc document basis, you might set the
-`pdflatexPath` meta variable.
+`pdflatex_path` meta variable.
 
 - An installation of [Inkscape](https://inkscape.org/).
 It is assumed that the `inkscape` command is in the path and can be
 executed from any location. Alternatively, the environment
 variable `INKSCAPE` can be set with a path. If a specific
-version per pandoc document is to be used, the `inkscapePath`
+version per pandoc document is to be used, the `inkscape_path`
 meta-variable can be set.
 
 In order to use additional LaTeX packages, use the optional
@@ -207,7 +207,7 @@ on a Microsoft Windows system ...
 to `c:\ProgramData\Anaconda3\python.exe`
 
 - set the environment variable `PYTHON_ACTIVATE` or the meta
-key `activatePythonPath` to `c:\ProgramData\Anaconda3\Scripts\activate.bat`.
+key `activate_python_path` to `c:\ProgramData\Anaconda3\Scripts\activate.bat`.
 
 Pandoc will activate this Python environment and starts Python with your code.
 
@@ -235,10 +235,10 @@ All available environment variables:
 
 All available meta keys:
 
-- `plantumlPath`
-- `inkscapePath`
-- `pythonPath`
-- `activatePythonPath`
-- `javaPath`
-- `dotPath`
-- `pdflatexPath`
+- `plantuml_path`
+- `inkscape_path`
+- `python_path`
+- `activate_python_path`
+- `java_path`
+- `dot_path`
+- `pdflatex_path`

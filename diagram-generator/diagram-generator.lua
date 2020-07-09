@@ -21,38 +21,38 @@ local with_working_directory = system.with_working_directory
 -- The PlantUML path. If set, uses the environment variable PLANTUML or the
 -- value "plantuml.jar" (local PlantUML version). In order to define a
 -- PlantUML version per pandoc document, use the meta data to define the key
--- "plantumlPath".
-local plantumlPath = os.getenv("PLANTUML") or "plantuml.jar"
+-- "plantuml_path".
+local plantuml_path = os.getenv("PLANTUML") or "plantuml.jar"
 
 -- The Inkscape path. In order to define an Inkscape version per pandoc
--- document, use the meta data to define the key "inkscapePath".
-local inkscapePath = os.getenv("INKSCAPE") or "inkscape"
+-- document, use the meta data to define the key "inkscape_path".
+local inkscape_path = os.getenv("INKSCAPE") or "inkscape"
 
 -- The Python path. In order to define a Python version per pandoc document,
--- use the meta data to define the key "pythonPath".
-local pythonPath = os.getenv("PYTHON")
+-- use the meta data to define the key "python_path".
+local python_path = os.getenv("PYTHON")
 
 -- The Python environment's activate script. Can be set on a per document
 -- basis by using the meta data key "activatePythonPath".
-local pythonActivatePath = os.getenv("PYTHON_ACTIVATE")
+local python_activate_path = os.getenv("PYTHON_ACTIVATE")
 
 -- The Java path. In order to define a Java version per pandoc document,
--- use the meta data to define the key "javaPath".
-local javaPath = os.getenv("JAVA_HOME")
-if javaPath then
-    javaPath = javaPath .. package.config:sub(1,1) .. "bin"
+-- use the meta data to define the key "java_path".
+local java_path = os.getenv("JAVA_HOME")
+if java_path then
+    java_path = java_path .. package.config:sub(1,1) .. "bin"
         .. package.config:sub(1,1) .. "java"
 else
-    javaPath = "java"
+    java_path = "java"
 end
 
 -- The dot (Graphviz) path. In order to define a dot version per pandoc
--- document, use the meta data to define the key "dotPath".
-local dotPath = os.getenv("DOT") or "dot"
+-- document, use the meta data to define the key "dot_path".
+local dot_path = os.getenv("DOT") or "dot"
 
 -- The pdflatex path. In order to define a pdflatex version per pandoc
--- document, use the meta data to define the key "pdflatexPath".
-local pdflatexPath = os.getenv("PDFLATEX") or "pdflatex"
+-- document, use the meta data to define the key "pdflatex_path".
+local pdflatex_path = os.getenv("PDFLATEX") or "pdflatex"
 
 -- The default format is SVG i.e. vector graphics:
 local filetype = "svg"
@@ -77,26 +77,35 @@ end
 -- meta options was set, it gets used instead of the corresponding
 -- environment variable:
 function Meta(meta)
-    plantumlPath = meta.plantumlPath or plantumlPath
-    inkscapePath = meta.inkscapePath or inkscapePath
-    pythonPath = meta.pythonPath or pythonPath
-    pythonActivatePath = meta.activatePythonPath or pythonActivatePath
-    javaPath = meta.javaPath or javaPath
-    dotPath = meta.dotPath or dotPath
-    pdflatexPath = meta.pdflatexPath or pdflatexPath
+  plantuml_path =
+    meta.plantuml_path or meta.plantumlPath or plantuml_path
+  inkscape_path =
+    meta.inkscape_path or meta.inkscapePath or inkscape_path
+  python_path =
+    meta.python_path or meta.pythonPath or python_path
+  python_activate_path =
+    meta.activate_python_path or meta.activatePythonPath or python_activate_path
+  java_path =
+    meta.java_path or meta.javaPath or java_path
+  dot_path =
+    meta.path_dot or meta.dotPath or dot_path
+  pdflatex_path =
+    meta.pdflatex_path or meta.pdflatexPath or pdflatex_path
 end
 
 -- Call plantuml.jar with some parameters (cf. PlantUML help):
 local function plantuml(puml, filetype)
-    local final = pandoc.pipe(javaPath, {"-jar", plantumlPath, "-t" .. filetype, "-pipe", "-charset", "UTF8"}, puml)
-    return final
+  return pandoc.pipe(
+    java_path,
+    {"-jar", plantuml_path, "-t" .. filetype, "-pipe", "-charset", "UTF8"},
+    puml
+  )
 end
 
 -- Call dot (GraphViz) in order to generate the image
 -- (thanks @muxueqz for this code):
 local function graphviz(code, filetype)
-    local final = pandoc.pipe(dotPath, {"-T" .. filetype}, code)
-    return final
+  return pandoc.pipe(dot_path, {"-T" .. filetype}, code)
 end
 
 --
@@ -134,7 +143,7 @@ local function convert_from_pdf(filetype)
   return function (pdf_file, outfile)
     local inkscape_command = string.format(
       '"%s" --without-gui --file="%s" ' .. inkscape_output_args,
-      inkscapePath,
+      inkscape_path,
       pdf_file,
       outfile
     )
@@ -166,7 +175,7 @@ local function tikz2image(src, filetype, additional_packages)
       f:close()
 
       -- Execute the LaTeX compiler:
-      pandoc.pipe(pdflatexPath, {'-output-directory', tmpdir, tikz_file}, '')
+      pandoc.pipe(pdflatex_path, {'-output-directory', tmpdir, tikz_file}, '')
 
       convert(pdf_file, outfile)
 
@@ -204,9 +213,9 @@ local function py2image(code, filetype)
     f:close()
 
     -- Execute Python in the desired environment:
-    local pycmd = pythonPath .. ' ' .. pyfile
-    local command = pythonActivatePath
-      and pythonActivatePath .. ' && ' .. pycmd
+    local pycmd = python_path .. ' ' .. pyfile
+    local command = python_activate_path
+      and python_activate_path .. ' && ' .. pycmd
       or pycmd
     os.execute(command)
 
