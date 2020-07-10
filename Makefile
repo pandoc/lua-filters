@@ -1,6 +1,6 @@
 FILTERS=$(wildcard $(shell find * -type d | grep -v '[/\\]'))
 FILTER_FILES=$(shell find * -name "*.lua" -type f)
-LUA_FILTERS_TEST_IMAGE = pandoc/lua-filters-test
+LUA_FILTERS_TEST_IMAGE = tarleb/lua-filters-test
 
 .PHONY: test show-args docker-test docker-test-image archive
 
@@ -14,8 +14,11 @@ show-vars:
 	@printf "FILTER_FILES: %s\n" $(FILTER_FILES)
 
 docker-test:
-	docker run --rm --volume "$(PWD):/data" $(LUA_FILTERS_TEST_IMAGE) \
-	    make test
+	docker run \
+	       --rm \
+	       --volume "$(PWD):/data" \
+		     --entrypoint /usr/bin/make \
+	       $(LUA_FILTERS_TEST_IMAGE)
 
 docker-test-image: .tools/Dockerfile
 	docker build --tag $(LUA_FILTERS_TEST_IMAGE) --file $< .

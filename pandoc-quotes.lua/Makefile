@@ -6,21 +6,21 @@ NORM_DIR := $(BASE_DIR)/norms
 TESTS := test-simple test-lookup-simple test-lookup-void-country \
 	test-lookup-mapping test-lookup-no-fallback
 
-test: test-noop $(TESTS) 
+test: test-noop $(TESTS)
 
 prepare-tmp:
-	mkdir -p test/tmp
-	rm -f test/tmp/*
+	@mkdir -p test/tmp
+	@rm -f test/tmp/*
 
 test-noop: prepare-tmp
-	pandoc --lua-filter ./pandoc-quotes.lua -f markdown-smart \
+	@pandoc --lua-filter ./pandoc-quotes.lua -f markdown-smart -t html \
 		-o $(TMP_DIR)/$@.out $(DATA_DIR)/$@.md
-	cmp $(TMP_DIR)/$@.out $(NORM_DIR)/$@.out
+	@cmp $(TMP_DIR)/$@.out $(NORM_DIR)/$@.out
 
 $(TESTS): prepare-tmp
-	pandoc --lua-filter ./pandoc-quotes.lua \
+	@pandoc --lua-filter ./pandoc-quotes.lua -t html \
 		-o $(TMP_DIR)/$@.out $(DATA_DIR)/$@.md
-	cmp $(TMP_DIR)/$@.out $(NORM_DIR)/$@.out
+	@cmp $(TMP_DIR)/$@.out $(NORM_DIR)/$@.out
 
 
-.PHONY: prepare-tmp test $(TESTS) 
+.PHONY: prepare-tmp test $(TESTS)
