@@ -88,9 +88,9 @@ function Meta(meta)
   python_path = stringify(
     meta.python_path or meta.pythonPath or python_path
   )
-  python_activate_path = stringify(
+  python_activate_path =
     meta.activate_python_path or meta.activatePythonPath or python_activate_path
-  )
+  python_activate_path = python_activate_path and stringify(python_activate_path)
   java_path = stringify(
     meta.java_path or meta.javaPath or java_path
   )
