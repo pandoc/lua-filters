@@ -32,7 +32,7 @@ local inkscape_path = os.getenv("INKSCAPE") or "inkscape"
 
 -- The Python path. In order to define a Python version per pandoc document,
 -- use the meta data to define the key "python_path".
-local python_path = os.getenv("PYTHON")
+local python_path = os.getenv("PYTHON") or "python"
 
 -- The Python environment's activate script. Can be set on a per document
 -- basis by using the meta data key "activatePythonPath".
