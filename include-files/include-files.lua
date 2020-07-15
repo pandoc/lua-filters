@@ -7,7 +7,7 @@
 local List = require 'pandoc.List'
 
 --- Shift headings in block list by given number
-function shift_headings(blocks, shift_by)
+local function shift_headings(blocks, shift_by)
   if not shift_by then
     return blocks
   end
@@ -23,7 +23,8 @@ function shift_headings(blocks, shift_by)
 end
 
 --- Filter function for code blocks
-function CodeBlock(cb)
+local transclude
+function transclude (cb)
   -- ignore code blocks which are not of class "include".
   if not cb.classes:includes 'include' then
     return
@@ -40,9 +41,18 @@ function CodeBlock(cb)
     if line:sub(1,2) ~= '//' then
       local fh = io.open(line)
       local contents = pandoc.read(fh:read '*a', format).blocks
+      -- recursive transclusion
+      contents = pandoc.walk_block(
+        pandoc.Div(contents),
+        {CodeBlock = transclude}
+      ).content
       blocks:extend(shift_headings(contents, shift_heading_level_by))
       fh:close()
     end
   end
   return blocks
 end
+
+return {
+  {CodeBlock = transclude}
+}

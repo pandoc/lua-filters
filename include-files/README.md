@@ -31,6 +31,14 @@ will want to include files written in a different format. An
 alternative format can be specified via the `format` attribute.
 Only plain-text formats are accepted.
 
+### Recursive transclusion
+
+Included files can in turn include other files. Note that all
+filenames must be relative to the directory from which pandoc is
+run. I.e., if a file `a/b.md` is included in the main document,
+and another file `a/b/c.md` should be included, the full relative
+path must be used. Writing `b/c.md` in `a/b.md` would *not* work.
+
 ## Example
 
 Let's assume we are writing a longer document, like a thesis.

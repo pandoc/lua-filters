@@ -21,6 +21,13 @@ file-b.md
 file-d.org
 ```
 
+# Recursive transclusion
+
+``` {.include}
+// this will also include file-a.md
+file-f.md
+```
+
 # Appendix
 
 More info goes here.
