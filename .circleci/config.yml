@@ -9,6 +9,7 @@ jobs:
       - checkout
       - run: |
           apt-get -q --no-allow-insecure-repositories update && \
+          DEBIAN_FRONTEND=noninteractive \
           apt-get install --assume-yes --no-install-recommends \
               aspell \
               aspell-fr \
