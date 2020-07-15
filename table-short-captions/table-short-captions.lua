@@ -97,8 +97,14 @@ end
 -- @treturn List[Blocks] : The table with {label} in the caption,
 --                         optionally wrapped in shortcaption code
 function rewrite_longtable_caption(tbl)
+  local caption
+  if PANDOC_VERSION >= {2,10} then
+    caption = pandoc.List(tbl.caption.long)
+  else
+    caption = tbl.caption
+  end
   -- Escape if there is no caption present.
-  if not tbl.caption then
+  if not caption or #caption == 0 then
     return nil
   end
 
@@ -107,7 +113,7 @@ function rewrite_longtable_caption(tbl)
     return (inl.t) and (inl.t == "Span")                      -- is span
                    and (inl.content) and (#inl.content == 0)  -- is empty span
   end
-  local propspan, idx = tbl.caption:find_if(is_properties_span)
+  local propspan, idx = caption:find_if(is_properties_span)
 
   -- If we couldn't find properties, escape.
   if not propspan then
@@ -118,11 +124,21 @@ function rewrite_longtable_caption(tbl)
   local label, short_caption, unlisted = parse_table_attrs(propspan.attr)
 
   -- Excise the span from the caption
-  tbl.caption[idx] = nil
+  caption[idx] = nil
 
   -- Put label back into caption for pandoc-crossref
   if label then
-    tbl.caption:extend {pandoc.Str("{#"..label.."}")}
+    caption:extend {pandoc.Str("{#"..label.."}")}
+  end
+
+  -- set new caption
+  if PANDOC_VERSION >= {2,10} then
+    tbl.caption.long = caption
+    tbl.caption.short = short_caption
+      and pandoc.read(short_caption, FORMAT).blocks[1].content
+      or nil
+  else
+    tbl.caption = caption
   end
 
   -- Place new table
