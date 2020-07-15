@@ -3,7 +3,7 @@ cito_cites:
   cites_as_evidence:
   - Li95
   cites_as_recommended_reading:
-  - Upper\_writers\_1974
+  - Upper_writers_1974
 ---
 
 Abstract
