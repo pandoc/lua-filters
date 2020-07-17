@@ -5,7 +5,7 @@ end
 local function is_pre_tag_attribute(attribute) return attribute == 'data-id' end
 
 local function is_data_line_number_in_attributes(attributes)
-    for i, attribute in ipairs(attributes) do
+    for _, attribute in ipairs(attributes) do
         if attribute[1] == 'data-line-numbers' then return true end
     end
     return false
@@ -17,7 +17,7 @@ function CodeBlock(block)
         pre_tag_params = {}
         code_tag_params = {}
 
-        for k, class in ipairs(block.classes) do
+        for _, class in ipairs(block.classes) do
             if is_numberlines_class(class) and
                 not is_data_line_number_in_attributes(block.attributes) then
                 table.insert(block.attributes, {'data-line-numbers', ''})
@@ -34,7 +34,7 @@ function CodeBlock(block)
                                                         table.concat(
                                                             css_classes, ' ')))
         end
-        for i, attribute in ipairs(block.attributes) do
+        for _, attribute in ipairs(block.attributes) do
             attribute_string = string.format('%s="%s"', attribute[1],
                                              attribute[2])
             if is_pre_tag_attribute(attribute[1]) then
