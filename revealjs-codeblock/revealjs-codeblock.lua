@@ -14,8 +14,8 @@ end
 function CodeBlock(block)
     if FORMAT == 'revealjs' then
         css_classes = {}
-        pre_tag_params = {}
-        code_tag_params = {}
+        pre_tag_attributes = {}
+        code_tag_attributes = {}
 
         for _, class in ipairs(block.classes) do
             if is_numberlines_class(class) and
@@ -26,26 +26,26 @@ function CodeBlock(block)
             end
         end
         if block.identifier ~= '' then
-            table.insert(pre_tag_params,
+            table.insert(pre_tag_attributes,
                          string.format('id="%s"', block.identifier))
         end
         if next(css_classes) ~= nil then
-            table.insert(code_tag_params, string.format('class="%s"',
-                                                        table.concat(
-                                                            css_classes, ' ')))
+            table.insert(code_tag_attributes, string.format('class="%s"',
+                                                            table.concat(
+                                                                css_classes, ' ')))
         end
         for _, attribute in ipairs(block.attributes) do
             attribute_string = string.format('%s="%s"', attribute[1],
                                              attribute[2])
             if is_pre_tag_attribute(attribute[1]) then
-                table.insert(pre_tag_params, attribute_string)
+                table.insert(pre_tag_attributes, attribute_string)
             else
-                table.insert(code_tag_params, attribute_string)
+                table.insert(code_tag_attributes, attribute_string)
             end
         end
         html = string.format('<pre %s><code %s>%s</code></pre>',
-                             table.concat(pre_tag_params, ' '),
-                             table.concat(code_tag_params, ' '), block.text)
+                             table.concat(pre_tag_attributes, ' '),
+                             table.concat(code_tag_attributes, ' '), block.text)
         return pandoc.RawBlock('html', html)
     end
 end
