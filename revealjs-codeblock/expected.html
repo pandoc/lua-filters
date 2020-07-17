@@ -1,16 +1,65 @@
-<section id="codeblock" class="slide level1" data-auto-animate="">
-<h1 data-auto-animate="">CodeBlock</h1>
-<pre data-id="code-animation"><code class="python" data-line-numbers="">from foo import bar
+<section id="pretty-code" class="slide level1" data-auto-animate="">
+<h1 data-auto-animate="">Pretty Code</h1>
+<pre data-id="code-animation"><code class="jsx" data-line-numbers="">import React, { useState } from 'react';
 
-if True:
-    print("Hello World!")</code></pre>
+function Example() {
+  const [count, setCount] = useState(0);
+
+  return (
+    ...
+  );
+}</code></pre>
+<p>Example courtesy of <a href="https://revealjs.com/#/4">reveal.js</a>.</p>
 </section>
-<section id="auto-animated" class="slide level1" data-auto-animate="">
-<h1 data-auto-animate="">Auto-Animated</h1>
-<pre id="code" data-id="code-animation"><code class="python" data-line-numbers="3">from foo import bar
+<section id="even-prettier-animations" class="slide level1" data-auto-animate="">
+<h1 data-auto-animate="">Even Prettier Animations</h1>
+<pre data-id="code-animation"><code class="jsx" data-line-numbers="|4,8-11|17|22-24">import React, { useState } from 'react';
 
-print("Surprise!")
+function Example() {
+  const [count, setCount] = useState(0);
 
-if True:
-    print("Hello World!")</code></pre>
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+
+function SecondExample() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}</code></pre>
+</section>
+<section id="test-line-number-classes" class="slide level1">
+<h1>test line number classes</h1>
+<pre ><code >unnumbered</code></pre>
+<pre ><code data-line-numbers="">{.numberLines}</code></pre>
+<pre ><code data-line-numbers="">{.number-lines}</code></pre>
+<pre ><code data-line-numbers="">{.numberLines .number-lines}</code></pre>
+</section>
+<section id="test-data-line-numbers-attribute" class="slide level1">
+<h1>test data-line-numbers attribute</h1>
+<pre ><code data-line-numbers="1">{data-line-numbers="1"}</code></pre>
+<pre ><code data-line-numbers="1">{.numberLines data-line-numbers="1"}</code></pre>
+</section>
+<section id="test-code-tag-attributes" class="slide level1">
+<h1>test code tag attributes</h1>
+<pre ><code class="html another-class">{.html .another-class}</code></pre>
+<pre ><code data-trim="" some-other-attribute="" style="border: 1px solid yellow;">{data-trim="" some-other-attribute="" style="border: 1px solid yellow;"}</code></pre>
+</section>
+<section id="test-pre-tag-attributes" class="slide level1">
+<h1>test pre tag attributes</h1>
+<pre id="code"><code >{#code}</code></pre>
+<pre data-id="code-animate"><code >{data-id="code-animate"}</code></pre>
 </section>

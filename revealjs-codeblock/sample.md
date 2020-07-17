@@ -1,21 +1,99 @@
-CodeBlock {#codeblock data-auto-animate=""}
-=========
+Pretty Code {#pretty-code data-auto-animate=""}
+===========
 
-``` {.python .numberLines data-id="code-animation"}
-from foo import bar
+``` {.jsx .numberLines data-id="code-animation"}
+import React, { useState } from 'react';
 
-if True:
-    print("Hello World!")
+function Example() {
+  const [count, setCount] = useState(0);
+
+  return (
+    ...
+  );
+}
 ```
 
-Auto-Animated {#auto-animated data-auto-animate=""}
-=============
+Example courtesy of [reveal.js](https://revealjs.com/#/4).
 
-``` {#code .python data-line-numbers="3" data-id="code-animation"}
-from foo import bar
+Even Prettier Animations {#even-prettier-animations data-auto-animate=""}
+========================
 
-print("Surprise!")
+``` {.jsx data-line-numbers="|4,8-11|17|22-24" data-id="code-animation"}
+import React, { useState } from 'react';
 
-if True:
-    print("Hello World!")
+function Example() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+
+function SecondExample() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+```
+
+test line number classes
+========================
+
+    unnumbered
+
+``` {.numberLines}
+{.numberLines}
+```
+
+``` {.number-lines}
+{.number-lines}
+```
+
+``` {.numberLines .number-lines}
+{.numberLines .number-lines}
+```
+
+test data-line-numbers attribute
+================================
+
+``` {data-line-numbers="1"}
+{data-line-numbers="1"}
+```
+
+``` {.numberLines data-line-numbers="1"}
+{.numberLines data-line-numbers="1"}
+```
+
+test code tag attributes
+========================
+
+``` {.html .another-class}
+{.html .another-class}
+```
+
+``` {data-trim="" some-other-attribute="" style="border: 1px solid yellow;"}
+{data-trim="" some-other-attribute="" style="border: 1px solid yellow;"}
+```
+
+test pre tag attributes
+=======================
+
+``` {#code}
+{#code}
+```
+
+``` {data-id="code-animate"}
+{data-id="code-animate"}
 ```
