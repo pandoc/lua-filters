@@ -18,9 +18,10 @@ function CodeBlock(block)
         local code_tag_attributes = {}
 
         for _, class in ipairs(block.classes) do
-            if is_numberlines_class(class) and
-                not is_data_line_number_in_attributes(block.attributes) then
+            if is_numberlines_class(class) then
+              if not is_data_line_number_in_attributes(block.attributes) then
                 table.insert(block.attributes, {'data-line-numbers', ''})
+              end
             else
                 table.insert(css_classes, class)
             end
@@ -29,7 +30,7 @@ function CodeBlock(block)
             table.insert(pre_tag_attributes,
                          string.format('id="%s"', block.identifier))
         end
-        if next(css_classes) ~= nil then
+        if next(css_classes) then
             table.insert(code_tag_attributes, string.format('class="%s"',
                                                             table.concat(
                                                                 css_classes, ' ')))
