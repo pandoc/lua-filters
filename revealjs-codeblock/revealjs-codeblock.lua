@@ -13,9 +13,9 @@ end
 
 function CodeBlock(block)
     if FORMAT == 'revealjs' then
-        css_classes = {}
-        pre_tag_attributes = {}
-        code_tag_attributes = {}
+        local css_classes = {}
+        local pre_tag_attributes = {}
+        local code_tag_attributes = {}
 
         for _, class in ipairs(block.classes) do
             if is_numberlines_class(class) and
@@ -43,7 +43,7 @@ function CodeBlock(block)
                 table.insert(code_tag_attributes, attribute_string)
             end
         end
-        html = string.format('<pre %s><code %s>%s</code></pre>',
+        local html = string.format('<pre %s><code %s>%s</code></pre>',
                              table.concat(pre_tag_attributes, ' '),
                              table.concat(code_tag_attributes, ' '), block.text)
         return pandoc.RawBlock('html', html)
