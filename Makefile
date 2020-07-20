@@ -4,28 +4,27 @@ LUA_FILTERS_TEST_IMAGE = tarleb/lua-filters-test
 
 .PHONY: test show-args docker-test docker-test-image archive
 
-test:
+test: ## Runs tests
 	bash runtests.sh $(FILTERS)
 
 archive: .build/lua-filters.tar.gz
 
-show-vars:
+show-vars: ## Displays vars used in this makefile
 	@printf "FILTERS: %s\n" $(FILTERS)
 	@printf "FILTER_FILES: %s\n" $(FILTER_FILES)
 
-docker-test:
+docker-test: ## Runs tests with docker
 	docker run \
 	       --rm \
 	       --volume "$(PWD):/data" \
 		     --entrypoint /usr/bin/make \
 	       $(LUA_FILTERS_TEST_IMAGE)
 
-docker-test-image: .tools/Dockerfile
+docker-test-image: .tools/Dockerfile ## Builds docker image for tests
 	docker build --tag $(LUA_FILTERS_TEST_IMAGE) --file $< .
 
-# Build a single collection of Lua filters
 .PHONY: collection
-collection: .build/lua-filters
+collection: .build/lua-filters ## Builds a single collection of Lua filters
 
 .build/lua-filters: $(FILTER_FILES)
 	mkdir -p .build/lua-filters
@@ -37,6 +36,9 @@ collection: .build/lua-filters
 	tar -czf $@ -C .build lua-filters
 	@printf "Archive written to '%s'\n" "$@"
 
-clean:
+clean: ## Cleans all folders
 	rm -rf .build
 	$(foreach f,$(FILTERS),make -C $(f) clean;)
+
+help: ## Prints this help
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' ${MAKEFILE_LIST} | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

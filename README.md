@@ -38,3 +38,12 @@ guidelines. Lua code should ideally follow the Olivine Labs [Lua
 style guide].
 
 [Lua style guide]: https://github.com/Olivine-Labs/lua-style-guide
+
+Development
+-----------
+
+For complete list of available commands, runs :
+
+```console
+make help
+```
