@@ -4,7 +4,7 @@ LUA_FILTERS_TEST_IMAGE = tarleb/lua-filters-test
 
 .PHONY: test show-args docker-test docker-test-image archive
 
-test: ## Runs tests
+test: ## Runs all tests (to run specific test : make test FILTERS=target-filter-name)
 	bash runtests.sh $(FILTERS)
 
 archive: .build/lua-filters.tar.gz
@@ -13,12 +13,12 @@ show-vars: ## Displays vars used in this makefile
 	@printf "FILTERS: %s\n" $(FILTERS)
 	@printf "FILTER_FILES: %s\n" $(FILTER_FILES)
 
-docker-test: ## Runs tests with docker
+docker-test: ## Runs tests with docker (to run specific test : make docker-test FILTERS=target-filter-name)
 	docker run \
-	       --rm \
+	       --rm -it \
 	       --volume "$(PWD):/data" \
-		     --entrypoint /usr/bin/make \
-	       $(LUA_FILTERS_TEST_IMAGE)
+	       --entrypoint /usr/bin/make \
+	       $(LUA_FILTERS_TEST_IMAGE) FILTERS="${FILTERS}"
 
 docker-test-image: .tools/Dockerfile ## Builds docker image for tests
 	docker build --tag $(LUA_FILTERS_TEST_IMAGE) --file $< .
