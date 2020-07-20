@@ -17,8 +17,8 @@ docker-test:
 	docker run \
 	       --rm \
 	       --volume "$(PWD):/data" \
-		     --entrypoint /usr/bin/make \
-	       $(LUA_FILTERS_TEST_IMAGE)
+	       --entrypoint /usr/bin/make \
+	       $(LUA_FILTERS_TEST_IMAGE) FILTERS="${FILTERS}"
 
 docker-test-image: .tools/Dockerfile
 	docker build --tag $(LUA_FILTERS_TEST_IMAGE) --file $< .
