@@ -5,7 +5,7 @@ LUA_FILTERS_TEST_IMAGE = tarleb/lua-filters-test
 .PHONY: test show-args docker-test docker-test-image archive
 
 test:
-	bash runtests.sh $(FILTERS)
+	sh runtests.sh $(FILTERS)
 
 archive: .build/lua-filters.tar.gz
 
