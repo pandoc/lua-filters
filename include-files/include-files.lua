@@ -6,6 +6,20 @@
 -- pandoc's List type
 local List = require 'pandoc.List'
 
+--- Get include auto mode
+local include_auto = false
+function get_vars (meta)
+  if meta['include-auto'] then
+    include_auto = true
+  end
+end
+
+--- Keep last heading level found
+local last_heading_level = 0
+function update_last_level(header)
+  last_heading_level = header.level
+end
+
 --- Shift headings in block list by given number
 local function shift_headings(blocks, shift_by)
   if not shift_by then
@@ -32,9 +46,21 @@ function transclude (cb)
 
   -- Markdown is used if this is nil.
   local format = cb.attributes['format']
-  local shift_heading_level_by =
-    tonumber(cb.attributes['shift-heading-level-by'])
 
+  -- Attributes shift headings
+  local shift_heading_level_by = 0
+  local shift_input = cb.attributes['shift-heading-level-by']
+  if shift_input then
+    shift_heading_level_by = tonumber(shift_input)
+  else
+    if include_auto then
+      -- Auto shift headings
+      shift_heading_level_by = last_heading_level
+    end
+  end
+
+  --- keep track of level before recusion
+  local buffer_last_heading_level = last_heading_level
 
   local blocks = List:new()
   for line in cb.text:gmatch('[^\n]+') do
@@ -44,11 +70,14 @@ function transclude (cb)
         io.stderr:write("Cannot open file " .. line .. " | Skipping includes\n")
       else
         local contents = pandoc.read(fh:read '*a', format).blocks
+        last_heading_level = 0
         -- recursive transclusion
         contents = pandoc.walk_block(
           pandoc.Div(contents),
-          {CodeBlock = transclude}
+          { Header = update_last_level, CodeBlock = transclude }
           ).content
+        --- reset to level before recursion
+        last_heading_level = buffer_last_heading_level
         blocks:extend(shift_headings(contents, shift_heading_level_by))
         fh:close()
       end
@@ -58,5 +87,6 @@ function transclude (cb)
 end
 
 return {
-  {CodeBlock = transclude}
+  { Meta = get_vars },
+  { Header = update_last_level, CodeBlock = transclude }
 }
