@@ -1,4 +1,4 @@
-FROM tarleb/pandoc-ubuntu:latest
+FROM pandoc/ubuntu:latest
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBIAN_PRIORITY critical
