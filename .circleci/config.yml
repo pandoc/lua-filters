@@ -3,7 +3,7 @@ jobs:
   test_filters:
     description: Test all Lua filters
     docker:
-      - image: tarleb/pandoc-ubuntu:latest
+      - image: pandoc/ubuntu:latest
         entrypoint: /bin/bash
     steps:
       - checkout
