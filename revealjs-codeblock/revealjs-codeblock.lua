@@ -66,7 +66,7 @@ function CodeBlock(block)
     local html = string.format('<pre %s><code %s>%s</code></pre>',
                                 table.concat(pre_tag_attributes, ' '),
                                 table.concat(code_tag_attributes, ' '),
-                                block.text)
+                                block.text:gsub("<", "&lt;"):gsub(">", "&gt;"))
     return pandoc.RawBlock('html', html)
   end
 end
