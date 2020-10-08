@@ -40,14 +40,18 @@ function transclude (cb)
   for line in cb.text:gmatch('[^\n]+') do
     if line:sub(1,2) ~= '//' then
       local fh = io.open(line)
-      local contents = pandoc.read(fh:read '*a', format).blocks
-      -- recursive transclusion
-      contents = pandoc.walk_block(
-        pandoc.Div(contents),
-        {CodeBlock = transclude}
-      ).content
-      blocks:extend(shift_headings(contents, shift_heading_level_by))
-      fh:close()
+      if not fh then
+        io.stderr:write("Cannot open file " .. line .. " | Skipping includes\n")
+      else
+        local contents = pandoc.read(fh:read '*a', format).blocks
+        -- recursive transclusion
+        contents = pandoc.walk_block(
+          pandoc.Div(contents),
+          {CodeBlock = transclude}
+          ).content
+        blocks:extend(shift_headings(contents, shift_heading_level_by))
+        fh:close()
+      end
     end
   end
   return blocks
