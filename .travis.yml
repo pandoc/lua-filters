@@ -1,6 +1,10 @@
 # Use new container infrastructure to enable caching
 sudo: false
 
+# Older Ubuntu versions use Lua 5.1 for luarocks, while 20.04
+# (focal) uses Lua 5.3.
+dist: focal
+
 # Do not choose a language; we provide our own build tools.
 language: minimal
 
@@ -19,16 +23,16 @@ addons:
       - python3-tk
       - python3-numpy
       - python3-matplotlib
-      - latex-xcolor
+      - python-is-python3
       - lilypond
       - lmodern
       - texlive-bibtex-extra
       - texlive-fonts-recommended
-      - texlive-generic-recommended
       - texlive-latex-recommended
       - texlive-latex-extra
-      - pgf
-      - luarocks
+      - texlive-pictures
+      - texlive-plain-generic
+      - texlive-xetex
 
 before_install:
 - unset CC
