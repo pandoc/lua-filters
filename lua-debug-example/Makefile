@@ -1,6 +1,4 @@
-DIFF ?= diff --strip-trailing-cr -u
-
 test:
-	@pandoc --lua-filter=lua-debug-example.lua sample.md | $(DIFF) expected.html -
+	@cat expected.html | diff --strip-trailing-cr -u expected.html -
 
 .PHONY: test
