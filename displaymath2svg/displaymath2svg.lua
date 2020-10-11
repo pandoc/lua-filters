@@ -1,7 +1,7 @@
 --    DESCRIPTION
 --
---      This Lua filter for Pandoc converts LaTeX DisplayMath to MathJax generated SVG
---      in any of the available MathJax fonts.
+--      This Lua filter for Pandoc converts LaTeX DisplayMath to MathJax generated
+--      scalable vector graphics (SVG) in any of the available MathJax fonts.
 --
 --      This is useful when a CSS paged media engine cannot process complex JavaScript
 --      as required by MathJax.

@@ -1,12 +1,16 @@
 # Description
 
-This Lua filter for Pandoc converts LaTeX DisplayMath to MathJax generated SVG
-in any of the available MathJax fonts.
+This [Lua filter](https://pandoc.org/lua-filters.html)
+for [Pandoc](https://pandoc.org/)
+converts [LaTeX DisplayMath](https://en.wikibooks.org/wiki/LaTeX/Mathematics)
+to [MathJax](https://www.mathjax.org/) generated
+[scalable vector graphics (SVG)](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics)
+in any of the available [MathJax fonts](https://docs.mathjax.org/en/latest/output/fonts.html).
 
 This is useful when a CSS paged media engine cannot process complex JavaScript
 as required by MathJax.
-See: <https://www.print-css.rocks> for information about CSS paged media, a W3C
-standard.
+See: <https://www.print-css.rocks> for information about CSS paged media,
+a [W3C standard](https://www.w3.org/TR/css-page-3/).
 
 This filter also defines the missing LaTeX commands `\j` and `\e{}` for displaying
 the imaginary unit j and the exponential function with Euler constant e.
