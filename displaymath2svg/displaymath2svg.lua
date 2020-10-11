@@ -31,7 +31,7 @@
 --
 --      No Internet connection is established when creating MathJax SVG code using
 --      the tex2svg command of mathjax-node-cli.
---      Hence, formulas in SVG can be created offline and remain private.
+--      Hence, formulas in SVG can be created offline and will remain private.
 --
 --      For code auditing, see also:
 --          - https://github.com/mathjax/MathJax-node
