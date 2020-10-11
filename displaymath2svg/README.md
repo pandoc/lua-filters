@@ -19,7 +19,7 @@ the imaginary unit j and the exponential function with Euler constant e.
 # Requires
 
 ```bash
-$ sudo apt install pandoc pandoc-citeproc libghc-pandoc-prof nodejs npm
+$ sudo apt install pandoc nodejs npm
 $ sudo npm install --global mathjax-node-cli
 ```
 
