@@ -5,7 +5,7 @@ for [Pandoc](https://pandoc.org/)
 converts [LaTeX DisplayMath](https://en.wikibooks.org/wiki/LaTeX/Mathematics)
 to [MathJax](https://www.mathjax.org/) generated
 [scalable vector graphics (SVG)](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics)
-in any of the available [MathJax fonts](https://docs.mathjax.org/en/latest/output/fonts.html).
+in any of the [available MathJax fonts](https://docs.mathjax.org/en/latest/output/fonts.html).
 
 This is useful when a CSS paged media engine cannot process complex JavaScript
 as required by MathJax.
