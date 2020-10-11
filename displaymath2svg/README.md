@@ -36,7 +36,12 @@ pandoc --mathml --filter='displaymath2svg.lua'
 # Privacy
 
 No Internet connection is established when creating MathJax SVG code using
-`tex2svg`. Hence, formulas in SVG can be created offline and remain private.
+the `tex2svg` command of [`mathjax-node-cli`](https://github.com/mathjax/mathjax-node-cli).
+Hence, formulas in SVG can be created offline and remain private.
+For code auditing, see also:
+
+    - <https://github.com/mathjax/MathJax-node>
+    - <https://github.com/pkra/mathjax-node-sre>
 
 
 # Copyright
