@@ -3,7 +3,7 @@
 --      This Lua filter for Pandoc converts LaTeX DisplayMath to MathJax generated SVG
 --      in any of the available MathJax fonts.
 --
---      This is useful when CSS paged media engines cannot process complex JavaScript
+--      This is useful when a CSS paged media engine cannot process complex JavaScript
 --      as required by MathJax.
 --
 --      See: https://www.print-css.rocks for information about CSS paged media, a W3C
