@@ -26,7 +26,7 @@ $ sudo npm install --global mathjax-node-cli
 # Usage
 
 To be used as a [Pandoc Lua filter](https://pandoc.org/lua-filters.html).
-MathML should be chosen as a fallback.
+[MathML](https://en.wikipedia.org/wiki/MathML) should be set as a fallback.
 
 ```bash
 pandoc --mathml --filter='displaymath2svg.lua'

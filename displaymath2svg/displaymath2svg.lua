@@ -21,7 +21,7 @@
 --    USAGE
 --
 --      To be used as a Pandoc Lua filter.
---      MathML should be chosen as a fallback.
+--      MathML should be set as a fallback.
 --
 --      pandoc --mathml --filter='displaymath2svg.lua'
 --
