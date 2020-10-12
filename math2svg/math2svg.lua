@@ -39,7 +39,7 @@
 --      - https://github.com/mathjax/mathjax-node-cli
 
 
---  COPYRIGHT
+--  LICENSE
 --
 --    Copyright (c) 2020 Serge Y. Stroobandt
 --

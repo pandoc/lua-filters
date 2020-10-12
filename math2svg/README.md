@@ -47,7 +47,7 @@ For code auditing, see also:
 - <https://github.com/pkra/mathjax-node-sre>
 
 
-## Copyright & License
+## License
 
 Copyright (c) 2020 Serge Y. Stroobandt
 
