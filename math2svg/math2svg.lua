@@ -106,30 +106,30 @@ end
 
 function Math(elem)
 
+  local svg  = nil
+  local tags = nil
+
   if elem.mathtype == 'DisplayMath' and display2svg then
-
-    local svg = convert(elem)
-
-    if FORMAT:match '^html.?' then
-      svg = '<div class="math display">' .. svg .. '</div>'
-      return pandoc.RawInline(FORMAT, svg)
-    else
-      local filename = pandoc.sha1(svg) .. '.svg'
-      pandoc.mediabag.insert(filename, 'image/svg+xml', svg)
-      return
-    end
+    svg  = convert(elem)
+    tags = {'<div class="math display">', '</div>'}
 
   elseif elem.mathtype == 'InlineMath' and inline2svg then
+    svg  = convert(elem)
+    tags = {'<span class="math inline">', '</span>'}
 
-    local svg = convert(elem)
+  end
+
+  if svg then
 
     if FORMAT:match '^html.?' then
-      svg = '<span class="math inline">' .. svg .. '</span>'
+      svg =  tags[1] .. svg .. tags[2]
       return pandoc.RawInline(FORMAT, svg)
+
     else
       local filename = pandoc.sha1(svg) .. '.svg'
       pandoc.mediabag.insert(filename, 'image/svg+xml', svg)
       return
+
     end
 
   end
