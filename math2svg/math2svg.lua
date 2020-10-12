@@ -100,20 +100,28 @@ local inline2svg  = false
 --  Moreover, MathML is better suited to InlineMath as line heights are kept small.
 
 
---  The available options for tex2svg are:
-  --help        Show help                                                   [boolean]
-  --version     Show version number                                         [boolean]
-  --inline      process as in-line TeX                                      [boolean]
-  --speech      include speech text                         [boolean] [default: true]
-  --linebreaks  perform automatic line-breaking                             [boolean]
-  --font        web font to use                                      [default: "TeX"]
-  --ex          ex-size in pixels                                        [default: 6]
-  --width       width of container in ex                               [default: 100]
-  --extensions  extra MathJax extensions e.g. 'Safe,TeX/noUndefined'    [default: ""]
+--  Both MathML and the version of MathJax included with mathjax-node-cli
+--  lack a number of LaTeX math commands that are available with the newest online versions.
+--  These missing LaTeX math commands are defined here.
+local missing = {'\\newcommand{\\j}{{\\text{j}}}', '\\newcommand{\\e}[1]{\\,{\\text{e}}^{#1}}'}
+local newcommands = ''
+for i = 1, #missing do
+    newcommands = newcommands .. missing[i]
+end
 
 
 local function convert(elem)
-  return pandoc.pipe(tex2svg, {'--speech=false', '--font', font, elem.text}, '')
+--  The available options for tex2svg are:
+    --help        Show help                                                   [boolean]
+    --version     Show version number                                         [boolean]
+    --inline      process as in-line TeX                                      [boolean]
+    --speech      include speech text                         [boolean] [default: true]
+    --linebreaks  perform automatic line-breaking                             [boolean]
+    --font        web font to use                                      [default: "TeX"]
+    --ex          ex-size in pixels                                        [default: 6]
+    --width       width of container in ex                               [default: 100]
+    --extensions  extra MathJax extensions e.g. 'Safe,TeX/noUndefined'    [default: ""]
+  return pandoc.pipe(tex2svg, {'--speech=false', '--font', font, newcommands .. elem.text}, '')
 end
 
 
@@ -125,11 +133,9 @@ function Math(elem)
   if elem.mathtype == 'DisplayMath' and display2svg then
     svg  = convert(elem)
     tags = {'<div class="math display">', '</div>'}
-
   elseif elem.mathtype == 'InlineMath' and inline2svg then
     svg  = convert(elem)
     tags = {'<span class="math inline">', '</span>'}
-
   end
 
   if svg then
@@ -137,13 +143,15 @@ function Math(elem)
     if FORMAT:match '^html.?' then
       svg =  tags[1] .. svg .. tags[2]
       return pandoc.RawInline(FORMAT, svg)
-
     else
       local filename = pandoc.sha1(svg) .. '.svg'
       pandoc.mediabag.insert(filename, 'image/svg+xml', svg)
       return pandoc.Image('', filename)
-
     end
+
+  else
+    elem.text = newcommands .. elem.text
+    return elem
 
   end
 
