@@ -11,10 +11,23 @@
 --    privacy.
 
 
---  REQUIRES
+--  REQUIREMENTS
 --
---    $ sudo apt install pandoc nodejs npm
---    $ sudo npm install --global mathjax-node-cli
+--    First, use the package manager of your operating system to install
+--    pandoc, nodejs and npm. `brew` and `choco` are recommended package mangers for
+--    respectively macOS and Windows. See: <https://pandoc.org/installing.html>
+--
+--      $ sudo apt install pandoc nodejs npm
+--      $ sudo dnf install pandoc nodejs npm
+--      $ sudo yum install pandoc nodejs npm
+--      $ brew install pandoc nodejs npm
+--      > choco install pandoc nodejs npm
+--
+--    Then, install mathjax-node-cli using npm.
+--    Leave out the sudo on Windows.
+--
+--      $ sudo npm install --global mathjax-node-cli
+--      > npm install --global mathjax-node-cli
 
 
 --  USAGE
@@ -22,7 +35,7 @@
 --    To be used as a Pandoc Lua filter.
 --    MathML should be set as a fallback.
 --
---    pandoc --mathml --filter='math2svg.lua'
+--      pandoc --mathml --filter='math2svg.lua'
 --
 --    See also: https://pandoc.org/lua-filters.html
 

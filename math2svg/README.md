@@ -18,11 +18,26 @@ a [W3C standard](https://www.w3.org/TR/css-page-3/).
 No Internet connection is required for SVG conversions, resulting in absolute privacy.
 
 
-## Requires
+## Requirements
+
+First, use the package manager of your operating system to install
+`pandoc`, `nodejs` and `npm`. `brew` and `choco` are recommended package mangers for
+respectively macOS and Windows. See: <https://pandoc.org/installing.html>
 
 ```bash
 $ sudo apt install pandoc nodejs npm
+$ sudo dnf install pandoc nodejs npm
+$ sudo yum install pandoc nodejs npm
+$ brew install pandoc nodejs npm
+> choco install pandoc nodejs npm
+```
+
+Then, install `mathjax-node-cli` using `npm`.
+Leave out the `sudo` on Windows.
+
+```bash
 $ sudo npm install --global mathjax-node-cli
+> npm install --global mathjax-node-cli
 ```
 
 
