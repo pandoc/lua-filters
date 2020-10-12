@@ -128,7 +128,7 @@ function Math(elem)
     else
       local filename = pandoc.sha1(svg) .. '.svg'
       pandoc.mediabag.insert(filename, 'image/svg+xml', svg)
-      return
+      return pandoc.Image('', filename)
 
     end
 
