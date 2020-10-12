@@ -97,7 +97,7 @@ local display2svg = true
 local inline2svg  = false
 --  The fallback is MathML if pandoc is executed with the --mathml argument.
 --  MathML output gets generated much faster than SVG output.
---  Moreover, MathML is better suited to InlineMath as line heights are kept small.
+--  Moreover, MathML is well suited to InlineMath as line heights are kept small.
 
 
 --  Both MathML and the version of MathJax included with mathjax-node-cli
@@ -110,7 +110,21 @@ for i = 1, #missing do
 end
 
 
-local function convert(elem)
+function Math(elem)
+
+  local svg  = nil
+  local tags = nil
+
+  if elem.mathtype == 'DisplayMath' and display2svg then
+    svg  = pandoc.pipe(tex2svg, {'--speech=false', '--font', font, newcommands .. elem.text}, '')
+    tags = {'<div class="math display">', '</div>'}
+
+  elseif elem.mathtype == 'InlineMath' and inline2svg then
+    svg  = pandoc.pipe(tex2svg, {'--inline', '--speech=false', '--font', font, newcommands .. elem.text}, '')
+    tags = {'<span class="math inline">', '</span>'}
+
+  end
+
 --  The available options for tex2svg are:
     --help        Show help                                                   [boolean]
     --version     Show version number                                         [boolean]
@@ -121,27 +135,11 @@ local function convert(elem)
     --ex          ex-size in pixels                                        [default: 6]
     --width       width of container in ex                               [default: 100]
     --extensions  extra MathJax extensions e.g. 'Safe,TeX/noUndefined'    [default: ""]
-  return pandoc.pipe(tex2svg, {'--speech=false', '--font', font, newcommands .. elem.text}, '')
-end
-
-
-function Math(elem)
-
-  local svg  = nil
-  local tags = nil
-
-  if elem.mathtype == 'DisplayMath' and display2svg then
-    svg  = convert(elem)
-    tags = {'<div class="math display">', '</div>'}
-  elseif elem.mathtype == 'InlineMath' and inline2svg then
-    svg  = convert(elem)
-    tags = {'<span class="math inline">', '</span>'}
-  end
 
   if svg then
 
     if FORMAT:match '^html.?' then
-      svg =  tags[1] .. svg .. tags[2]
+      svg = tags[1] .. svg .. tags[2]
       return pandoc.RawInline(FORMAT, svg)
     else
       local filename = pandoc.sha1(svg) .. '.svg'
