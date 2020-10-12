@@ -4,12 +4,11 @@
 --    scalable vector graphics (SVG) in any of the available MathJax fonts.
 --
 --    This is useful when a CSS paged media engine cannot process complex JavaScript
---    as required by MathJax.
+--    as required by MathJax. See: https://www.print-css.rocks for information about
+--    CSS paged media, a W3C standard.
 --
---    See: https://www.print-css.rocks for information about CSS paged media, a W3C
---    standard.
---
---    The filter also allows to define additional LaTeX commands.
+--    No Internet connection is required for SVG conversions, resulting in absolute
+--    privacy.
 
 
 --  REQUIRES
@@ -88,12 +87,6 @@ local inline2svg  = false
 --  Moreover, MathML is better suited to InlineMath as line heights are kept small.
 
 
---  Any additional LaTeX math commands can be defined here.
---  For example:
---  local newcommands = '\\newcommand{\\j}{{\\text{j}}}\\newcommand{\\e}[1]{\\,{\\text{e}}^{#1}}'
-local newcommands = ''
-
-
 --  The available options for tex2svg are:
   --help        Show help                                                   [boolean]
   --version     Show version number                                         [boolean]
@@ -106,30 +99,37 @@ local newcommands = ''
   --extensions  extra MathJax extensions e.g. 'Safe,TeX/noUndefined'    [default: ""]
 
 
+local function convert(elem)
+  return pandoc.pipe(tex2svg, {'--speech=false', '--font', font, elem.text}, '')
+end
+
+
 function Math(elem)
 
   if elem.mathtype == 'DisplayMath' and display2svg then
 
-    local svg = pandoc.pipe(tex2svg, {'--speech=false', '--font', font, newcommands .. elem.text}, '')
+    local svg = convert(elem)
 
     if FORMAT:match '^html.?' then
       svg = '<div class="math display">' .. svg .. '</div>'
       return pandoc.RawInline(FORMAT, svg)
     else
       local filename = pandoc.sha1(svg) .. '.svg'
-      return pandoc.mediabag.insert(filename, 'image/svg+xml', svg)
+      pandoc.mediabag.insert(filename, 'image/svg+xml', svg)
+      return
     end
 
   elseif elem.mathtype == 'InlineMath' and inline2svg then
 
-    local svg = pandoc.pipe(tex2svg, {'--speech=false', '--font', font, newcommands .. elem.text}, '')
+    local svg = convert(elem)
 
     if FORMAT:match '^html.?' then
       svg = '<span class="math inline">' .. svg .. '</span>'
       return pandoc.RawInline(FORMAT, svg)
     else
       local filename = pandoc.sha1(svg) .. '.svg'
-      return pandoc.mediabag.insert(filename, 'image/svg+xml', svg)
+      pandoc.mediabag.insert(filename, 'image/svg+xml', svg)
+      return
     end
 
   end

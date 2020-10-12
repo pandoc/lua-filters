@@ -1,4 +1,7 @@
-# Description
+# math2svg
+
+
+## Description
 
 This [Lua filter](https://pandoc.org/lua-filters.html)
 for [Pandoc](https://pandoc.org/)
@@ -12,10 +15,10 @@ as required by MathJax.
 See: <https://www.print-css.rocks> for information about CSS paged media,
 a [W3C standard](https://www.w3.org/TR/css-page-3/).
 
-The filter also allows to define additional LaTeX commands.
+No Internet connection is required for SVG conversions, resulting in absolute privacy.
 
 
-# Requires
+## Requires
 
 ```bash
 $ sudo apt install pandoc nodejs npm
@@ -23,7 +26,7 @@ $ sudo npm install --global mathjax-node-cli
 ```
 
 
-# Usage
+## Usage
 
 To be used as a [Pandoc Lua filter](https://pandoc.org/lua-filters.html).
 [MathML](https://en.wikipedia.org/wiki/MathML) should be set as a fallback.
@@ -33,7 +36,7 @@ pandoc --mathml --filter='math2svg.lua'
 ```
 
 
-# Privacy
+## Privacy
 
 No Internet connection is established when creating MathJax SVG code using
 the `tex2svg` command of [`mathjax-node-cli`](https://github.com/mathjax/mathjax-node-cli).
@@ -44,12 +47,11 @@ For code auditing, see also:
 - <https://github.com/pkra/mathjax-node-sre>
 
 
-# Copyright
+## Copyright & License
 
 Copyright (c) 2020 Serge Y. Stroobandt
 
-
-## MIT License
+MIT License
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -70,7 +72,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-# Contact
+## Contact
 
 ```bash
 $ echo c2VyZ2VAc3Ryb29iYW5kdC5jb20K |base64 -d
