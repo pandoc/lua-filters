@@ -2,7 +2,7 @@
 
 This [Lua filter](https://pandoc.org/lua-filters.html)
 for [Pandoc](https://pandoc.org/)
-converts [LaTeX DisplayMath](https://en.wikibooks.org/wiki/LaTeX/Mathematics)
+converts [LaTeX math](https://en.wikibooks.org/wiki/LaTeX/Mathematics)
 to [MathJax](https://www.mathjax.org/) generated
 [scalable vector graphics (SVG)](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics)
 in any of the [available MathJax fonts](https://docs.mathjax.org/en/latest/output/fonts.html).
@@ -29,7 +29,7 @@ To be used as a [Pandoc Lua filter](https://pandoc.org/lua-filters.html).
 [MathML](https://en.wikipedia.org/wiki/MathML) should be set as a fallback.
 
 ```bash
-pandoc --mathml --filter='displaymath2svg.lua'
+pandoc --mathml --filter='math2svg.lua'
 ```
 
 
