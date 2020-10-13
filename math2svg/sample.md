@@ -1,9 +1,3 @@
----
-header-includes:
-    - '\newcommand{\j}{{\text{j}}}'
-    - '\newcommand{\e}[1]{\,{\text{e}}^{#1}}'
----
-
 Only plane waves in the far field exhibit the [characteristic impedance of free space](https://en.wikipedia.org/wiki/Impedance_of_free_space), which is exactly:
 
 $$Z_0 = \frac{\left|\vec{E}\right|}{\left|\vec{H}\right|} = \sqrt{\frac{\mu_0}{\epsilon_0}} = \mu_0\cdot c_0 \approx 376.73\,\Omega$$
