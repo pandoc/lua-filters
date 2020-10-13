@@ -50,10 +50,11 @@ local inline2svg  = false
 
 
 --  Enter here the full path to the tex2svg binary of mathjax-node-cli.
---  The full path can be found with one of the following commands:
+--  The full path can be found with the following command on *nix, respectively Windows:
 --    $ which -a tex2svg
 --    > where tex2svg
 local tex2svg = '/usr/local/bin/tex2svg'
+
 
 -- Speech text inclusion
 local speech = false
@@ -79,20 +80,12 @@ width = tostring(width)
 --  Available extensions are at: /usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/unpacked/extensions/
 local extensions = ''
 
---  MathJax only processes macros in math mode.
---  https://docs.mathjax.org/en/latest/input/tex/macros.html
-local macrolist = {'\\newcommand{\\j}{{\\text{j}}}', '\\newcommand{\\e}[1]{\\,{\\text{e}}^{#1}}'}
-local macros = ''
-for i = 1, #macrolist do
-    macros = macros .. macrolist[i]
-end
-
 
 function Math(elem)
 
   local svg  = nil
   local tags = nil
-  local argumentlist = {'--speech', speech, '--linebreaks', linebreaks, '--font', font, '--ex', ex, '--width', width, '--extensions', extensions, macros .. elem.text}
+  local argumentlist = {'--speech', speech, '--linebreaks', linebreaks, '--font', font, '--ex', ex, '--width', width, '--extensions', extensions, elem.text}
 
 --  The available options for tex2svg are:
     --help        Show help                                                   [boolean]
@@ -128,7 +121,6 @@ function Math(elem)
     end
 
   else
-    elem.text = macros .. elem.text
     return elem
 
   end
