@@ -2,54 +2,13 @@
 --
 --    This Lua filter for Pandoc converts LaTeX math to MathJax generated
 --    scalable vector graphics (SVG) in any of the available MathJax fonts.
---
---    This is useful when a CSS paged media engine cannot process complex JavaScript
---    as required by MathJax. See: https://www.print-css.rocks for information about
---    CSS paged media, a W3C standard.
---
---    No Internet connection is required for SVG conversions, resulting in absolute
---    privacy.
+--    This is useful when a CSS paged media engine cannot process complex JavaScript.
+--    No Internet connection is required for SVG conversions, resulting in absolute privacy.
 
 
---  REQUIREMENTS
+--  REQUIREMENTS, USAGE & PRIVACY
 --
---    First, use the package manager of your operating system to install
---    pandoc, nodejs and npm. `brew` and `choco` are recommended package mangers for
---    respectively macOS and Windows. See: <https://pandoc.org/installing.html>
---
---      $ sudo apt install pandoc nodejs npm
---      $ sudo dnf install pandoc nodejs npm
---      $ sudo yum install pandoc nodejs npm
---      $ brew install pandoc nodejs npm
---      > choco install pandoc nodejs npm
---
---    Then, install mathjax-node-cli using npm.
---    Leave out the sudo on Windows.
---
---      $ sudo npm install --global mathjax-node-cli
---      > npm install --global mathjax-node-cli
-
-
---  USAGE
---
---    To be used as a Pandoc Lua filter.
---    MathML should be set as a fallback.
---
---      pandoc --mathml --filter='math2svg.lua'
---
---    See also: https://pandoc.org/lua-filters.html
-
-
---  PRIVACY
---
---    No Internet connection is established when creating MathJax SVG code using
---    the tex2svg command of mathjax-node-cli.
---    Hence, formulas in SVG can be created offline and will remain private.
---
---    For code auditing, see also:
---      - https://github.com/mathjax/MathJax-node
---      - https://github.com/pkra/mathjax-node-sre
---      - https://github.com/mathjax/mathjax-node-cli
+--    See: https://github.com/pandoc/lua-filters/tree/master/math2svg
 
 
 --  LICENSE
@@ -82,31 +41,50 @@
 --    $ echo c2VyZ2VAc3Ryb29iYW5kdC5jb20K |base64 -d
 
 
---  Enter here the full path to the tex2svg binary of mathjax-node-cli.
---  The full path can be found with the following command:
---    $ which tex2svg
-local tex2svg = '/usr/local/lib/node_modules/mathjax-node-cli/bin/tex2svg'
-
-
---  Supported MathJax fonts are: https://docs.mathjax.org/en/latest/output/fonts.html
-local font = 'Gyre-Pagella'
-
-
 --  Indicate with true or false whether DisplayMath and InlineMath should be converted to SVG.
 local display2svg = true
 local inline2svg  = false
 --  The fallback is MathML if pandoc is executed with the --mathml argument.
 --  MathML output gets generated much faster than SVG output.
---  Moreover, MathML is well suited to InlineMath as line heights are kept small.
+--  Moreover, MathML is well suited for InlineMath as line heights are kept small.
 
 
---  Both MathML and the version of MathJax included with mathjax-node-cli
---  lack a number of LaTeX math commands that are available with the newest online versions.
---  These missing LaTeX math commands are defined here.
-local missing = {'\\newcommand{\\j}{{\\text{j}}}', '\\newcommand{\\e}[1]{\\,{\\text{e}}^{#1}}'}
-local newcommands = ''
-for i = 1, #missing do
-    newcommands = newcommands .. missing[i]
+--  Enter here the full path to the tex2svg binary of mathjax-node-cli.
+--  The full path can be found with one of the following commands:
+--    $ which -a tex2svg
+--    > where tex2svg
+local tex2svg = '/usr/local/bin/tex2svg'
+
+-- Speech text inclusion
+local speech = false
+speech = tostring(speech)
+
+-- Automatic line breaking
+local linebreaks = true
+linebreaks = tostring(linebreaks)
+
+--  Supported MathJax fonts are: https://docs.mathjax.org/en/latest/output/fonts.html
+local font = 'TeX'
+font = 'Gyre-Pagella'
+
+--  ex size in pixels
+local ex = 6
+ex = tostring(ex)
+
+-- container width in ex
+local width = 100
+width = tostring(width)
+
+--  String of extensions to be loaded at run time
+--  Available extensions are at: /usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/unpacked/extensions/
+local extensions = ''
+
+--  MathJax only processes macros in math mode.
+--  https://docs.mathjax.org/en/latest/input/tex/macros.html
+local macrolist = {'\\newcommand{\\j}{{\\text{j}}}', '\\newcommand{\\e}[1]{\\,{\\text{e}}^{#1}}'}
+local macros = ''
+for i = 1, #macrolist do
+    macros = macros .. macrolist[i]
 end
 
 
@@ -114,16 +92,7 @@ function Math(elem)
 
   local svg  = nil
   local tags = nil
-
-  if elem.mathtype == 'DisplayMath' and display2svg then
-    svg  = pandoc.pipe(tex2svg, {'--speech=false', '--font', font, newcommands .. elem.text}, '')
-    tags = {'<div class="math display">', '</div>'}
-
-  elseif elem.mathtype == 'InlineMath' and inline2svg then
-    svg  = pandoc.pipe(tex2svg, {'--inline', '--speech=false', '--font', font, newcommands .. elem.text}, '')
-    tags = {'<span class="math inline">', '</span>'}
-
-  end
+  local argumentlist = {'--speech', speech, '--linebreaks', linebreaks, '--font', font, '--ex', ex, '--width', width, '--extensions', extensions, macros .. elem.text}
 
 --  The available options for tex2svg are:
     --help        Show help                                                   [boolean]
@@ -135,6 +104,17 @@ function Math(elem)
     --ex          ex-size in pixels                                        [default: 6]
     --width       width of container in ex                               [default: 100]
     --extensions  extra MathJax extensions e.g. 'Safe,TeX/noUndefined'    [default: ""]
+
+  if elem.mathtype == 'DisplayMath' and display2svg then
+    svg  = pandoc.pipe(tex2svg, argumentlist, '')
+    tags = {'<div class="math display">', '</div>'}
+
+  elseif elem.mathtype == 'InlineMath' and inline2svg then
+    table.insert(argumentlist, 1, '--inline')
+    svg  = pandoc.pipe(tex2svg, argumentlist, '')
+    tags = {'<span class="math inline">', '</span>'}
+
+  end
 
   if svg then
 
@@ -148,7 +128,7 @@ function Math(elem)
     end
 
   else
-    elem.text = newcommands .. elem.text
+    elem.text = macros .. elem.text
     return elem
 
   end
