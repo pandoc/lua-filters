@@ -41,44 +41,49 @@
 --    $ echo c2VyZ2VAc3Ryb29iYW5kdC5jb20K |base64 -d
 
 
---  Indicate with true or false whether DisplayMath and InlineMath should be converted to SVG.
+--  By default, DisplayMath is converted to SVG, whereas InlineMath is not.
 local display2svg = true
 local inline2svg  = false
---  The fallback is MathML if pandoc is executed with the --mathml argument.
---  MathML output gets generated much faster than SVG output.
---  Moreover, MathML is well suited for InlineMath as line heights are kept small.
+--  The fallback is MathML when pandoc is executed with the --mathml argument.
 
-
---  Enter here the full path to the tex2svg binary of mathjax-node-cli.
---  The full path can be found with the following command on *nix, respectively Windows:
---    $ which -a tex2svg
---    > where tex2svg
+--  The full path to the tex2svg binary of the mathjax-node-cli package.
 local tex2svg = '/usr/local/bin/tex2svg'
 
-
--- Speech text inclusion
+--  Speech text inclusion
 local speech = false
-speech = tostring(speech)
 
--- Automatic line breaking
+--  Automatic line breaking
 local linebreaks = true
-linebreaks = tostring(linebreaks)
 
---  Supported MathJax fonts are: https://docs.mathjax.org/en/latest/output/fonts.html
+--  The default MathJax font
 local font = 'TeX'
-font = 'Gyre-Pagella'
+--  Supported MathJax fonts are: https://docs.mathjax.org/en/latest/output/fonts.html
 
 --  ex size in pixels
 local ex = 6
-ex = tostring(ex)
 
--- container width in ex
+--  Container width in ex
 local width = 100
-width = tostring(width)
 
 --  String of extensions to be loaded at run time
---  Available extensions are at: /usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/unpacked/extensions/
 local extensions = ''
+--  Available extensions are listed in:
+--  /usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/unpacked/extensions/
+
+
+function Meta(meta)
+
+  display2svg = meta.math2svg_display2svg or display2svg
+  inline2svg  = meta.math2svg_inline2svg or inline2svg
+  tex2svg     = tostring(meta.math2svg_tex2svg or tex2svg)
+  speech      = tostring(meta.math2svg_speech or speech)
+  linebreaks  = tostring(meta.math2svg_linebreaks or linebreaks)
+  font        = tostring(meta.math2svg_font or font)
+  ex          = tostring(meta.math2svg_ex or ex)
+  width       = tostring(meta.math2svg_width or width)
+  extensions  = tostring(meta.math2svg_extensions or extensions)
+
+end
 
 
 function Math(elem)
@@ -126,3 +131,10 @@ function Math(elem)
   end
 
 end
+
+
+-- Redefining the execution order.
+return {
+  {Meta = Meta},
+  {Math = Math}
+}
