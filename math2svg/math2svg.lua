@@ -41,13 +41,13 @@
 --    $ echo c2VyZ2VAc3Ryb29iYW5kdC5jb20K |base64 -d
 
 
+--  The full path to the tex2svg binary of the mathjax-node-cli package.
+local tex2svg = '/usr/local/bin/tex2svg'
+
 --  By default, DisplayMath is converted to SVG, whereas InlineMath is not.
 local display2svg = true
 local inline2svg  = false
 --  The fallback is MathML when pandoc is executed with the --mathml argument.
-
---  The full path to the tex2svg binary of the mathjax-node-cli package.
-local tex2svg = '/usr/local/bin/tex2svg'
 
 --  Speech text inclusion
 local speech = false

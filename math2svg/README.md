@@ -44,10 +44,21 @@ $ sudo npm install --global mathjax-node-cli
 ## Usage
 
 To be used as a [Pandoc Lua filter](https://pandoc.org/lua-filters.html).
-[MathML](https://en.wikipedia.org/wiki/MathML) should be set as a fallback.
+[MathML](https://en.wikipedia.org/wiki/MathML) should be set as a fallback with the `--mathml` argument.
 
 ```bash
 pandoc --mathml --filter='math2svg.lua'
+```
+
+MathML output gets generated much faster than SVG output.
+Moreover, MathML is well suited for InlineMath as line heights are kept small.
+
+Enter here the full path to the `tex2svg` binary of `mathjax-node-cli`.
+The full path can be found with the following command on \*nix, respectively Windows:
+
+```bash
+$ which -a tex2svg
+> where tex2svg
 ```
 
 
