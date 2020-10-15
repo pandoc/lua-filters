@@ -82,13 +82,13 @@ $ which -a tex2svg
 
 ### Key values `math2svg_display2svg` and `math2svg_inline2svg`
 These boolean key values specify whether display math, respectively inline math,
-should be converted to SVG by the filter.
-The defaults convert display math to SVG, whereas inline math falls back to MathML
+should be converted to [SVG](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics) by the filter.
+The defaults convert display math to SVG, whereas inline math falls back to [MathML](https://en.wikipedia.org/wiki/MathML)
 when `--mathml` was specified at `pandoc` evocation.
 These defaults offer the following benefits:
 
 - MathML output gets generated much faster than SVG output.
-- Moreover, MathML is well suited for InlineMath as line heights are kept small.
+- Moreover, MathML is well suited for inline math as line heights are kept small.
 
 
 ### Key value `math2svg_speech`
