@@ -49,25 +49,25 @@ local display2svg = true
 local inline2svg  = false
 --  The fallback is MathML when pandoc is executed with the --mathml argument.
 
---  Speech text inclusion
+--  Textual annotation for speech
 local speech = false
 
 --  Automatic line breaking
 local linebreaks = true
 
---  The default MathJax font
+--  MathJax font
 local font = 'TeX'
 --  Supported MathJax fonts are: https://docs.mathjax.org/en/latest/output/fonts.html
 
---  ex size in pixels
+--  ex unit size in pixels
 local ex = 6
 
---  Container width in ex
+--  Container width in ex for line breaking and tags
 local width = 100
 
---  String of extensions to be loaded at run time
+--  String of MathJax extensions for TeX and LaTeX to be loaded at run time
 local extensions = ''
---  Available extensions are listed in:
+--  Available MathJax extensions are listed in:
 --  /usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/unpacked/extensions/
 
 
