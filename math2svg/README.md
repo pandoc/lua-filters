@@ -15,7 +15,8 @@ cannot process complex JavaScript as required by MathJax.
 See: <https://www.print-css.rocks> for information about CSS paged media,
 a [W3C standard](https://www.w3.org/TR/css-page-3/).
 
-No Internet connection is required for SVG conversions, resulting in absolute privacy.
+No Internet connection is required when generating or viewing SVG formulas, resulting in both absolute privacy
+and offline robustness.
 
 
 ## Requirements
@@ -157,7 +158,10 @@ pandoc --mathml --filter='math2svg.lua' header-includes.yaml input.md
 
 No Internet connection is established when creating MathJax SVG code using
 the `tex2svg` command of [`mathjax-node-cli`](https://github.com/mathjax/mathjax-node-cli).
-Hence, formulas in SVG can be created offline and will remain private.
+Nor will any Internet connection be established when viewing an SVG formula.
+
+Hence, formulas in SVG can be created and viewed offline whilst remaining private.
+
 For code auditing, see also:
 
 - <https://github.com/mathjax/MathJax-node>
