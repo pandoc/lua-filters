@@ -113,7 +113,7 @@ function Math(elem)
 
   if elem.mathtype == 'DisplayMath' and display2svg then
     svg  = pandoc.pipe(tex2svg, argumentlist, '')
-    tags = {'<div class="math display">', '</div>'}
+    tags = {'<span class="math display">', '</span>'}
 
   elseif elem.mathtype == 'InlineMath' and inline2svg then
     table.insert(argumentlist, 1, '--inline')
@@ -134,6 +134,7 @@ function Math(elem)
     end
 
   else
+
     return elem
 
   end
