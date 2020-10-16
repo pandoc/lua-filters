@@ -126,6 +126,26 @@ It contains a subdirectory `TeX` with the extension file `AMSmath.js`.
 This MathJaX extension can be loaded by specifying the string `'TeX/AMSmath'` as the value of the `math2svg_extensions` key.
 
 
+### Adding `header-includes`
+It might turn out useful to systematically include LaTeX macros, for example as shown below, a series of `\newcommand`.
+
+```latex
+---
+header-includes: |
+    \newcommand{\j}{\text{j}}
+    \newcommand{\e}[1]{\,\text{e}^{#1}}
+...
+```
+
+This may be achieved either by adding a [YAML](https://en.wikipedia.org/wiki/YAML) block at the top of the input document,
+or by having a separate YAML document loaded before the input document.
+In the latter case, simply evoke `pandoc` as follows:
+
+```bash
+pandoc --mathml --filter='math2svg.lua' header-includes.yaml input.md
+```
+
+
 ## Privacy
 
 No Internet connection is established when creating MathJax SVG code using
