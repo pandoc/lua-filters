@@ -137,7 +137,7 @@ header-includes: |
 ...
 ```
 
-This may be achieved either by adding a [YAML](https://en.wikipedia.org/wiki/YAML) block with the `header-includes` key value at the top of the input document,
+This may be achieved either by adding a [YAML](https://en.wikipedia.org/wiki/YAML) block with the [`header-includes`](https://pandoc.org/MANUAL.html#metadata-blocks) key value at the top of the input document,
 or by having a separate YAML document loaded before the input document.
 In the latter case, simply evoke `pandoc` as follows:
 
