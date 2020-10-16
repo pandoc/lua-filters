@@ -42,7 +42,7 @@
 
 
 --  The full path to the tex2svg binary of the mathjax-node-cli package.
-local tex2svg = '/usr/local/bin/tex2svg'
+local tex2svg = 'tex2svg'
 
 --  By default, DisplayMath is converted to SVG, whereas InlineMath is not.
 local display2svg = true
@@ -73,9 +73,9 @@ local extensions = ''
 
 function Meta(meta)
 
+  tex2svg     = tostring(meta.math2svg_tex2svg or tex2svg)
   display2svg = meta.math2svg_display2svg or display2svg
   inline2svg  = meta.math2svg_inline2svg or inline2svg
-  tex2svg     = tostring(meta.math2svg_tex2svg or tex2svg)
   speech      = tostring(meta.math2svg_speech or speech)
   linebreaks  = tostring(meta.math2svg_linebreaks or linebreaks)
   font        = tostring(meta.math2svg_font or font)
@@ -90,7 +90,15 @@ function Math(elem)
 
   local svg  = nil
   local tags = nil
-  local argumentlist = {'--speech', speech, '--linebreaks', linebreaks, '--font', font, '--ex', ex, '--width', width, '--extensions', extensions, elem.text}
+  local argumentlist = {
+    '--speech', speech,
+    '--linebreaks', linebreaks,
+    '--font', font,
+    '--ex', ex,
+    '--width', width,
+    '--extensions', extensions,
+    elem.text
+  }
 
 --  The available options for tex2svg are:
     --help        Show help                                                   [boolean]

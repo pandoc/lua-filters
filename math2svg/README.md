@@ -51,13 +51,14 @@ To be used as a [Pandoc Lua filter](https://pandoc.org/lua-filters.html).
 pandoc --mathml --filter='math2svg.lua'
 ```
 
-The math2svg filter is entirely configurable over [`--metadata` key value pairs](https://pandoc.org/MANUAL.html#reader-options).
+The math2svg filter is entirely configurable over
+[`--metadata` key value pairs](https://pandoc.org/MANUAL.html#reader-options).
 Nine configuration keys are available with sensible default values.
 Hence, depending on your system and intentions, not all keys are necessarily required.
 
 |key|default value|
 |:--|:-----------:|
-|`math2svg_path`|`'/usr/local/bin/tex2svg'`|
+|`math2svg_tex2svg`|`''`|
 |`math2svg_display2svg`|`true`|
 |`math2svg_inline2svg`|`false`|
 |`math2svg_speech`|`false`|
@@ -68,10 +69,9 @@ Hence, depending on your system and intentions, not all keys are necessarily req
 |`math2svg_extensions`|`''`|
 
 
-### Key value `math2svg_path`
-This string key value is required when, on your system, the full path to the `tex2svg` executable
-of the `mathjax-node-cli` package differs from the default `'/usr/local/bin/tex2svg'`
-This is certainly the case on Windows systems.
+### Key value `math2svg_tex2svg`
+This string key value is only required when, on your system, the path to the `tex2svg` executable
+of the `mathjax-node-cli` package is not present in the `$PATH` environment variable.
 
 The full path to `tex2svg` can be found with the following command on \*nix, respectively Windows:
 
@@ -83,8 +83,8 @@ $ which -a tex2svg
 ### Key values `math2svg_display2svg` and `math2svg_inline2svg`
 These boolean key values specify whether display math, respectively inline math,
 should be converted to [SVG](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics) by the filter.
-The defaults convert display math to SVG, whereas inline math falls back to [MathML](https://en.wikipedia.org/wiki/MathML)
-when `--mathml` was specified at `pandoc` evocation.
+The defaults convert display math to SVG, whereas inline math falls back to
+[MathML](https://en.wikipedia.org/wiki/MathML) when `--mathml` was specified at `pandoc` evocation.
 These defaults offer the following benefits:
 
 - MathML output gets generated much faster than SVG output.
@@ -101,10 +101,12 @@ The default is `true`.
 
 
 ### Key value `math2svg_font`
-This string key value allows to specify a [MathJax font](https://docs.mathjax.org/en/latest/output/fonts.html) different from the default `'TeX'` font.
+This string key value allows to specify a [MathJax font](https://docs.mathjax.org/en/latest/output/fonts.html)
+different from the default `'TeX'` font.
 The string should correspond to the local directory name of the font in the `mathjax-node-cli` installation directory.
-For example, the key value string for the font in `/usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/fonts/HTML-CSS/Gyre-Pagella/` would simply be
-`Gyre-Pagella`.
+For example, the key value string for the font in
+`/usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/fonts/HTML-CSS/Gyre-Pagella/`
+would simply be `Gyre-Pagella`.
 
 
 ### Key value `math2svg_ex`
@@ -118,12 +120,16 @@ The default value is `100` ex.
 
 
 ### Key value `math2svg_extensions`
-This string key value allows to load one or more comma separated [MathJax extensions for TeX and LaTeX](https://docs.mathjax.org/en/latest/input/tex/extensions.html) present on the system.
+This string key value allows to load one or more comma separated
+[MathJax extensions for TeX and LaTeX](https://docs.mathjax.org/en/latest/input/tex/extensions.html)
+present on the system.
 These MathJaX extensions reside in a subdirectory of the `mathjax-node-cli` installation directory.
 
-Take for example, the installation directory of the extensions is `/usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/unpacked/extensions/`
+Take for example, the installation directory of the extensions is
+`/usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/unpacked/extensions/`
 It contains a subdirectory `TeX` with the extension file `AMSmath.js`.
-This MathJaX extension can be loaded by specifying the string `'TeX/AMSmath'` as the value of the `math2svg_extensions` key.
+This MathJaX extension can be loaded by specifying the string `'TeX/AMSmath'`
+as the value of the `math2svg_extensions` key.
 
 
 ### Adding `header-includes`
@@ -137,7 +143,8 @@ header-includes: |
 ...
 ```
 
-This may be achieved either by adding a [YAML](https://en.wikipedia.org/wiki/YAML) block with the [`header-includes`](https://pandoc.org/MANUAL.html#metadata-blocks) key value at the top of the input document,
+This may be achieved either by adding a [YAML](https://en.wikipedia.org/wiki/YAML) block with
+the [`header-includes`](https://pandoc.org/MANUAL.html#metadata-blocks) key value at the top of the input document,
 or by having a separate YAML document loaded before the input document.
 In the latter case, simply evoke `pandoc` as follows:
 
