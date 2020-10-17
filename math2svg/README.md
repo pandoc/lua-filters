@@ -8,7 +8,8 @@ for [Pandoc](https://pandoc.org/)
 converts [LaTeX math](https://en.wikibooks.org/wiki/LaTeX/Mathematics)
 to [MathJax](https://www.mathjax.org/) generated
 [scalable vector graphics (SVG)](https://en.wikipedia.org/wiki/Scalable_Vector_Graphics)
-in any of the [available MathJax fonts](https://docs.mathjax.org/en/latest/output/fonts.html).
+for insertion into the output document in a standalone manner. 
+SVG output is in any of the [available MathJax fonts](https://docs.mathjax.org/en/latest/output/fonts.html).
 
 This is useful when a CSS paged media engine (such as [Prince XML](https://www.princexml.com))
 cannot process complex JavaScript as required by MathJax.
@@ -16,7 +17,7 @@ See: <https://www.print-css.rocks> for information about CSS paged media,
 a [W3C standard](https://www.w3.org/TR/css-page-3/).
 
 No Internet connection is required when generating or viewing SVG formulas, resulting in both absolute privacy
-and offline robustness.
+and offline, standalone robustness.
 
 
 ## Requirements

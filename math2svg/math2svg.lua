@@ -1,9 +1,11 @@
 --  DESCRIPTION
 --
 --    This Lua filter for Pandoc converts LaTeX math to MathJax generated
---    scalable vector graphics (SVG) in any of the available MathJax fonts.
+--    scalable vector graphics (SVG) for insertion into the output document
+--    in a standalone manner. SVG output is in any of the available MathJax fonts.
 --    This is useful when a CSS paged media engine cannot process complex JavaScript.
---    No Internet connection is required for SVG conversions, resulting in absolute privacy.
+--    No Internet connection is required when generating or viewing SVG formulas,
+--    resulting in both absolute privacy and offline, standalone robustness.
 
 
 --  REQUIREMENTS, USAGE & PRIVACY
