@@ -28,7 +28,8 @@ local pagebreak = {
   latex = '\\newpage{}',
   ms = '.bp',
   ooxml = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>',
-  odt = '<text:p text:style-name="Pagebreak"/>'
+  odt = '<text:p text:style-name="Pagebreak"/>',
+  asciidoc = '<<<\n\n'
 }
 
 local function pagebreaks_from_config (meta)
@@ -61,6 +62,8 @@ local function newpage(format)
     return pandoc.RawBlock('html', pagebreak.epub)
   elseif format:match 'ms' then
     return pandoc.RawBlock('ms', pagebreak.ms)
+  elseif format:match 'asciidoc' then
+    return pandoc.RawBlock('asciidoc', pagebreak.asciidoc)
   else
     -- fall back to insert a form feed character
     return pandoc.Para{pandoc.Str '\f'}
