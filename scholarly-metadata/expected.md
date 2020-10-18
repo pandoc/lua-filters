@@ -20,7 +20,7 @@ author:
 - id: Max Mustermann
   name: Max Mustermann
 institute:
-- address: '23 Science Street, Eureka, Mississippi, USA'
+- address: 23 Science Street, Eureka, Mississippi, USA
   id: fosg
   index: 1
   name: Formatting Open Science Group
