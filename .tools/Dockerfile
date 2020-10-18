@@ -7,8 +7,8 @@ RUN apt-get -q --no-allow-insecure-repositories update \
   && DEBIAN_FRONTEND=noninteractive \
      apt-get install --assume-yes --no-install-recommends \
        aspell \
-       aspell-fr \
        aspell-en \
+       aspell-fr \
        default-jre \
        graphviz \
        imagemagick \
@@ -17,16 +17,16 @@ RUN apt-get -q --no-allow-insecure-repositories update \
        lmodern \
        luarocks \
        make \
+       python-is-python3 \
        python3 \
+       python3-matplotlib \
+       python3-numpy \
        python3-pip \
        python3-tk \
-       python3-numpy \
-       python3-matplotlib \
-       python-is-python3 \
        texlive-bibtex-extra \
        texlive-fonts-recommended \
-       texlive-latex-recommended \
        texlive-latex-extra \
+       texlive-latex-recommended \
        texlive-pictures \
        texlive-plain-generic \
        texlive-xetex \
