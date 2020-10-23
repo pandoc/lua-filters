@@ -28,6 +28,14 @@ file-d.org
 file-f.md
 ```
 
+# Source code
+
+``` {.include .source .bash}
+// this will include simple bash files
+shell1
+shell2
+```
+
 # Appendix
 
 More info goes here.

@@ -16,6 +16,8 @@
 ,Para [Str "This",Space,Str "is",Space,Code ("",[],[]) "file-a.md",Str "."]
 ,Header 3 ("title-of-file-a",[],[]) [Str "Title",Space,Str "of",Space,Str "file-a"]
 ,Para [Str "This",Space,Str "is",Space,Code ("",[],[]) "file-a.md",Str "."]
+,Header 1 ("source-code",[],[]) [Str "Source",Space,Str "code"]
+,CodeBlock ("",["include","source","bash"],[]) "#!/bin/bash\n\necho \"Hello World !\"\n\n#!/bin/bash\nfor i in \"Hello \" \"World \" \"!\\n\" \ndo\n\tprintf \"$i\"\ndone\n\n"
 ,Header 1 ("appendix",[],[]) [Str "Appendix"]
 ,Para [Str "More",Space,Str "info",Space,Str "goes",Space,Str "here."]
 ,Header 2 ("questionaire",[],[]) [Str "Questionaire"]
