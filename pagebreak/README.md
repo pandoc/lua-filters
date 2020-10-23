@@ -19,7 +19,8 @@ Usage
 
 Fully supported output formats are:
 
-- AsciiDoc / Asciidoctor
+- AsciiDoc / Asciidoctor,
+- ConTeXt,
 - Docx,
 - EPUB,
 - groff ms,
