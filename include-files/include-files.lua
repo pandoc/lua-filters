@@ -1,4 +1,4 @@
---- include-files.lua – filter to include Markdown files
+--- include-files.lua – filter to include files
 ---
 --- Copyright: © 2019–2020 Albert Krewinkel
 --- License:   MIT – see LICENSE file for details
