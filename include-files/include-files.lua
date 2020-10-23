@@ -53,8 +53,8 @@ function transclude (cb)
            io.stderr:write("Cannot open file " .. line .. " | Skipping includes\n")
          else
            contents = contents .. fh:read('*a')
+           fh:close()
          end
-         fh:close()
       end
     end
     return pandoc.CodeBlock(contents, cb.attr)
