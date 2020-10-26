@@ -2,10 +2,11 @@
 --
 --    This Lua filter for Pandoc converts LaTeX math to MathJax generated
 --    scalable vector graphics (SVG) for insertion into the output document
---    in a standalone manner. SVG output is in any of the available MathJax fonts.
---    This is useful when a CSS paged media engine cannot process complex JavaScript.
---    No Internet connection is required when generating or viewing SVG formulas,
---    resulting in both absolute privacy and offline, standalone robustness.
+--    in a standalone manner. SVG output is in any of the available MathJax
+--    fonts. This is useful when a CSS paged media engine cannot process complex
+--    JavaScript. No Internet connection is required when generating or viewing
+--    SVG formulas, resulting in both absolute privacy and offline, standalone
+--    robustness.
 
 
 --  REQUIREMENTS, USAGE & PRIVACY
@@ -19,23 +20,23 @@
 --
 --    MIT License
 --
---    Permission is hereby granted, free of charge, to any person obtaining a copy
---    of this software and associated documentation files (the "Software"), to deal
---    in the Software without restriction, including without limitation the rights
---    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
---    copies of the Software, and to permit persons to whom the Software is
---    furnished to do so, subject to the following conditions:
+--    Permission is hereby granted, free of charge, to any person obtaining a
+--    copy of this software and associated documentation files (the "Software"),
+--    to deal in the Software without restriction, including without limitation
+--    the rights to use, copy, modify, merge, publish, distribute, sublicense,
+--    and/or sell copies of the Software, and to permit persons to whom the
+--    Software is furnished to do so, subject to the following conditions:
 --
---    The above copyright notice and this permission notice shall be included in all
---    copies or substantial portions of the Software.
+--    The above copyright notice and this permission notice shall be included in
+--    all copies or substantial portions of the Software.
 --
 --    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 --    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
---    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
---    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
---    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
---    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
---    SOFTWARE.
+--    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+--    THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+--    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+--    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+--    DEALINGS IN THE SOFTWARE.
 
 
 --  CONTACT
@@ -59,7 +60,8 @@ local linebreaks = true
 
 --  MathJax font
 local font = 'TeX'
---  Supported MathJax fonts are: https://docs.mathjax.org/en/latest/output/fonts.html
+--  Supported MathJax fonts are:
+--  https://docs.mathjax.org/en/latest/output/fonts.html
 
 --  ex unit size in pixels
 local ex = 6
@@ -70,7 +72,8 @@ local width = 100
 --  String of MathJax extensions for TeX and LaTeX to be loaded at run time
 local extensions = ''
 --  Available MathJax extensions are listed in:
---  /usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/unpacked/extensions/
+--  /usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/unpacked/\
+--  extensions/
 
 
 function Meta(meta)
@@ -103,15 +106,16 @@ function Math(elem)
   }
 
 --  The available options for tex2svg are:
-    --help        Show help                                                   [boolean]
-    --version     Show version number                                         [boolean]
-    --inline      process as in-line TeX                                      [boolean]
-    --speech      include speech text                         [boolean] [default: true]
-    --linebreaks  perform automatic line-breaking                             [boolean]
-    --font        web font to use                                      [default: "TeX"]
-    --ex          ex-size in pixels                                        [default: 6]
-    --width       width of container in ex                               [default: 100]
-    --extensions  extra MathJax extensions e.g. 'Safe,TeX/noUndefined'    [default: ""]
+    --help        Show help                                            [boolean]
+    --version     Show version number                                  [boolean]
+    --inline      process as in-line TeX                               [boolean]
+    --speech      include speech text                  [boolean] [default: true]
+    --linebreaks  perform automatic line-breaking                      [boolean]
+    --font        web font to use                               [default: "TeX"]
+    --ex          ex-size in pixels                                 [default: 6]
+    --width       width of container in ex                        [default: 100]
+    --extensions  extra MathJax extensions                         [default: ""]
+--                e.g. 'Safe,TeX/noUndefined'
 
   if elem.mathtype == 'DisplayMath' and display2svg then
     svg  = pandoc.pipe(tex2svg, argumentlist, '')
