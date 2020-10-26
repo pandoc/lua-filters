@@ -12,7 +12,7 @@ SVG output is in any of the [available MathJax fonts][mathjax.fonts].
 This is useful when a CSS paged media engine (such as [Prince XML][prince])
 cannot process complex JavaScript as required by MathJax.
 See: <https://www.print-css.rocks> for information about CSS paged media,
-a [W3C standard][w3c]
+a [W3C standard][w3c].
 
 No Internet connection is required when generating or viewing SVG formulas,
 resulting in both absolute privacy and offline, standalone robustness.
@@ -111,8 +111,8 @@ different from the default `'TeX'` font.
 The string should correspond to the local directory name of the font in the
 `mathjax-node-cli` installation directory.
 For example, the key value string for the font in
-`/usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/fonts/HTML-CSS/Gyre-Pagella/`
-would simply be `Gyre-Pagella`.
+`/usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/fonts/`
+`HTML-CSS/Gyre-Pagella/` would simply be `Gyre-Pagella`.
 
 
 ### Key value `math2svg_ex`
@@ -132,7 +132,8 @@ These MathJaX extensions reside in a subdirectory of the `mathjax-node-cli`
 installation directory.
 
 Take for example, the installation directory of the extensions is
-`/usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/unpacked/extensions/`
+`/usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/unpacked/`
+`extensions/`
 It contains a subdirectory `TeX` with the extension file `AMSmath.js`.
 This MathJaX extension can be loaded by specifying the string `'TeX/AMSmath'`
 as the value of the `math2svg_extensions` key.
@@ -151,7 +152,7 @@ header-includes: |
 ```
 
 This may be achieved either by adding a [YAML][yaml] block with the
-[`header-includes`][panoc.header-includes] key value at the top of the input
+[`header-includes`][pandoc.header-includes] key value at the top of the input
 document, or by having a separate YAML document loaded before the input
 document. In the latter case, simply evoke `pandoc` as follows:
 
