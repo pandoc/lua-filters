@@ -21,7 +21,7 @@ resulting in both absolute privacy and offline, standalone robustness.
 ## Requirements
 
 First, use the package manager of your operating system to install `pandoc`,
-`nodejs` and `npm`. `brew` and `choco` are recommended package mangers for
+`nodejs` and `npm`. `brew` and `choco` are recommended package managers for
 respectively macOS and Windows. See: <https://pandoc.org/installing.html>
 
 ```bash
