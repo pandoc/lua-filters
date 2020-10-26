@@ -55,7 +55,7 @@ before_install:
   - export PATH=$HOME/pandoc-$PANDOCVERSION/bin:$PATH
   - export PLANTUML=$HOME/plantuml.jar
 
-install: []I
+install: []
 
 before_script:
   - sudo npm install --global mathjax-node-cli
