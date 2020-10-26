@@ -111,8 +111,8 @@ different from the default `'TeX'` font.
 The string should correspond to the local directory name of the font in the
 `mathjax-node-cli` installation directory.
 For example, the key value string for the font in
-`/usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/fonts/`
-`HTML-CSS/Gyre-Pagella/` would simply be `Gyre-Pagella`.
+`/usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/fonts/HTML-CSS/Gyre-Pagella/`
+would simply be `Gyre-Pagella`.
 
 
 ### Key value `math2svg_ex`
@@ -132,8 +132,7 @@ These MathJaX extensions reside in a subdirectory of the `mathjax-node-cli`
 installation directory.
 
 Take for example, the installation directory of the extensions is
-`/usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/unpacked/`
-`extensions/`
+`/usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/unpacked/extensions/`
 It contains a subdirectory `TeX` with the extension file `AMSmath.js`.
 This MathJaX extension can be loaded by specifying the string `'TeX/AMSmath'`
 as the value of the `math2svg_extensions` key.
