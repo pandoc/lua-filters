@@ -58,7 +58,7 @@ before_install:
 install: []
 
 before_script:
-  - npm install --global mathjax-node-cli
+  - sudo npm install --global mathjax-node-cli
 
 script:
   - |
