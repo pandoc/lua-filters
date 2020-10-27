@@ -58,8 +58,6 @@ before_install:
 install: []
 
 before_script:
-  - sudo chown -R 2000:2000 "/home/travis/.npm"
-  - sudo npm install --global mathjax-node-cli
   - npm install --global mathjax-node-cli
 
 script:
