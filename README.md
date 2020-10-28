@@ -1,6 +1,7 @@
 # Lua Filters
 
 [![Travis build status][Travis badge]](https://travis-ci.org/pandoc/lua-filters)
+
 [Travis badge]: https://img.shields.io/travis/pandoc/lua-filters/master.svg?label=travis+build
 
 This repository collects Lua filters for pandoc.
