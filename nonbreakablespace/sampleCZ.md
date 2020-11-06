@@ -1,3 +1,7 @@
+---
+lang: cs
+---
+
 # Tests
 
 ## Basic test
