@@ -1,7 +1,20 @@
+local utils = require 'pandoc.utils'
+local stringify = utils.stringify
+
 --[[
 Indexed table of one-letter prefixes, after which should be inserted '\160'.
 Verbose, but can be changed per user requirements.
 --]]
+
+local prefixes = {}
+
+local prefixesEN = {
+  'I',
+  'a',
+  'A',
+  'the',
+  'The'
+}
 
 local prefixes = {
   'a',
@@ -21,6 +34,24 @@ local prefixes = {
   'V',
   'Z'
 }
+
+-- Set `prefixes` according to `lang` metadata value
+function Meta(meta)
+  if meta.lang then
+    langSet = stringify(meta.lang)
+
+    if langSet == 'cs' then
+      prefixes = prefixesCZ
+    else
+      prefixes = prefixesEN --default to english prefixes
+    end
+
+  else
+    prefixes = prefixesEN --default to english prefixes
+  end
+
+  return prefixes
+end
 
 --[[
 Some languages (czech among them) require nonbreakable space *before* long dash
@@ -152,7 +183,9 @@ function Inlines (inlines)
       if inlines[i].t == 'Str' then
         for index, prefix in ipairs(prefixes) do
           if string.match(inlines[i].text, '%.*%s+[„]?' .. prefix .. '[“]?%s+%.*') then
-              front, detection, replacement, back = string.match(inlines[i].c, '(%.*)(%s+[„]?' .. prefix .. '[“]?)(%s+)(%.*)')
+              front, detection, replacement, back = string.match(inlines[i].c,
+                '(%.*)(%s+[„]?' .. prefix .. '[“]?)(%s+)(%.*)')
+          
               inlines[i].text = front .. detection .. insert .. back
             end
         end
@@ -161,3 +194,9 @@ function Inlines (inlines)
   end
   return inlines
 end
+
+-- This should change the order of running functions: Meta - Inlines - rest ...
+return {
+  {Meta = Meta},
+  {Inlines = Inlines},
+}
