@@ -222,6 +222,7 @@ if PATH_SEP == '\\' then EOL = '\r\n'
 -- variants for a language that is spoken in different countries, also
 -- define a 'default' for the language alone, without the country tag.
 QUOT_MARKS_BY_LANG = {
+    ar          = {'”',  '“',     '’',  '‘'    },
     bs          = {'”',  '”',     '’',  '’'    },
     bo          = {'「', '」',     '『', '』'    },
     bs          = {'”',  '”',     '’',  '’'    },
