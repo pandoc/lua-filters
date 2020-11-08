@@ -16,7 +16,7 @@ local prefixesEN = {
   'The'
 }
 
-local prefixes = {
+local prefixesCZ = {
   'a',
   'i',
   'k',
@@ -109,7 +109,8 @@ function find_dashes(my_dash)
 end
 
 --[[
-Function to determine Space element replacement for non-breakable space according to output format
+Function to determine Space element replacement for non-breakable space
+--according to output format
 --]]
 
 function insert_nonbreakable_space(format)
@@ -142,54 +143,62 @@ function Inlines (inlines)
   local insert = insert_nonbreakable_space(FORMAT)
 
   for i = 1, #inlines do
-    if inlines[i].t == 'Space' then
+
+    --assign elements to variables for simpler code writing
+    local currentEl = inlines[i]
+    local previousEl = inlines[i-1]
+    local nextEl = inlines[i+1]
+
+    if currentEl.t == 'Space'
+      or currentEl.t == 'SoftBreak' then
 
       -- Check for one-letter prefixes in Str before Space
 
-      if inlines[i - 1].t == 'Str' then
-          local one_letter_prefix = find_one_letter_prefix(inlines[i - 1].text)
-            if one_letter_prefix == true then
---            inlines[i] = pandoc.Str '\xc2\xa0' -- Both work
+      if previousEl.t == 'Str' then
+        local one_letter_prefix = find_one_letter_prefix(previousEl.text)
+        if one_letter_prefix == true then
+--        inlines[i] = pandoc.Str '\xc2\xa0' -- Both work
           inlines[i] = insert
         end
-        end
+      end
 
       -- Check for dashes in Str after Space
 
-        if inlines[i + 1].t == 'Str' then
-          local dash = find_dashes(inlines[i + 1].text)
-            if dash == true then
-              inlines[i] = insert
-            end
-        end
+      if nextEl.t == 'Str' then
+        local dash = find_dashes(nextEl.text)
 
-        -- Check for not fully parsed Str elements - Those might be products of
-        -- other filters, that were executed before this one
-
-        if inlines[i + 1].t == 'Str' then
-          if string.match(inlines[i + 1].text, '%.*%s*[„]?%d+[“]?%s*%.*') then
-              inlines[i] = insert
-            end
+        if dash == true then
+          inlines[i] = insert
         end
+      end
+
+      -- Check for not fully parsed Str elements - Those might be products of
+      -- other filters, that were executed before this one
+
+      if nextEl.t == 'Str' then
+        if string.match(nextEl.text, '%.*%s*[„]?%d+[“]?%s*%.*') then
+          inlines[i] = insert
+        end
+      end
 
     end
 
-      --[[
-      Check for Str containing sequence " prefix ", which might occur in case of
-      preceding filter creates it in one Str element. Also check, if quotation
-      mark is present introduced by "quotation.lua" filter
-      --]]
+    --[[
+    Check for Str containing sequence " prefix ", which might occur in case of
+    preceding filter creates it in one Str element. Also check, if quotation
+    mark is present introduced by "quotation.lua" filter
+    --]]
 
-      if inlines[i].t == 'Str' then
-        for index, prefix in ipairs(prefixes) do
-          if string.match(inlines[i].text, '%.*%s+[„]?' .. prefix .. '[“]?%s+%.*') then
-              front, detection, replacement, back = string.match(inlines[i].c,
-                '(%.*)(%s+[„]?' .. prefix .. '[“]?)(%s+)(%.*)')
-          
+    if currentEl.t == 'Str' then
+      for index, prefix in ipairs(prefixes) do
+        if string.match(currentEl.text, '%.*%s+[„]?' .. prefix .. '[“]?%s+%.*') then
+              front, detection, replacement, back = string.match(currentEl.text,
+	            '(%.*)(%s+[„]?' .. prefix .. '[“]?)(%s+)(%.*)')
+
               inlines[i].text = front .. detection .. insert .. back
-            end
         end
       end
+    end
 
   end
   return inlines
