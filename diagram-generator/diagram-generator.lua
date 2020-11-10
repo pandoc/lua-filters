@@ -56,6 +56,10 @@ local dot_path = os.getenv("DOT") or "dot"
 -- document, use the meta data to define the key "pdflatex_path".
 local pdflatex_path = os.getenv("PDFLATEX") or "pdflatex"
 
+-- The asymptote path. There is also the metadata variable
+-- "asymptote_path".
+local asymptote_path = os.getenv ("ASYMPTOTE") or "asy"
+
 -- The default format is SVG i.e. vector graphics:
 local filetype = "svg"
 local mimetype = "image/svg+xml"
@@ -100,6 +104,9 @@ function Meta(meta)
   pdflatex_path = stringify(
     meta.pdflatex_path or meta.pdflatexPath or pdflatex_path
   )
+  asymptote_path = stringify(
+     meta.asymptote_path or meta.asymptotePath or asymptote_path
+  )
 end
 
 -- Call plantuml.jar with some parameters (cf. PlantUML help):
@@ -135,11 +142,10 @@ local tikz_template = [[
 \end{document}
 ]]
 
---- Returns a function which takes the filename of a PDF and a
--- target filename, and writes the input as the given format.
--- Returns `nil` if conversion into the target format is not
--- possible.
-local function convert_from_pdf(filetype)
+-- Returns a function which takes the filename of a PDF or SVG file
+-- and a target filename, and writes the input as the given format.
+-- Returns `nil` if conversion into the target format is not possible.
+local function convert_with_inkscape(filetype)
   -- Build the basic Inkscape command for the conversion
   local inkscape_output_args
   if filetype == 'png' then
@@ -165,7 +171,7 @@ end
 
 --- Compile LaTeX with Tikz code to an image
 local function tikz2image(src, filetype, additional_packages)
-  local convert = convert_from_pdf(filetype)
+  local convert = convert_with_inkscape(filetype)
   -- Bail if there is now known way from PDF to the target format.
   if not convert then
     error(string.format("Don't know how to convert pdf to %s.", filetype))
@@ -248,6 +254,50 @@ local function py2image(code, filetype)
     return imgData
 end
 
+--
+-- Asymptote
+--
+
+local function asymptote(code, filetype)
+  local convert
+  if filetype ~= 'svg' and filetype ~= 'png' then
+    error(string.format("Conversion to %s not implemented", filetype))
+  end
+  return with_temporary_directory(
+    "asymptote",
+    function(tmpdir)
+      return with_working_directory(
+        tmpdir,
+        function ()
+          local asy_file = "pandoc_diagram.asy"
+          local svg_file = "pandoc_diagram.svg"
+          local f = io.open(asy_file, 'w')
+          f:write(code)
+          f:close()
+
+          pandoc.pipe(asymptote_path, {"-f", "svg", "-o", "pandoc_diagram", asy_file}, "")
+
+          local r
+          if filetype == 'svg' then
+            r = io.open(svg_file, 'rb')
+          else
+            local png_file = "pandoc_diagram.png"
+            convert_with_inkscape("png")(svg_file, png_file)
+            r = io.open(png_file, 'rb')
+          end
+
+          local img_data
+          if r then
+            img_data = r:read("*all")
+            r:close()
+          else
+            error("could not read asymptote result file")
+          end
+          return img_data
+      end)
+  end)
+end
+
 -- Executes each document's code block to find matching code blocks:
 function CodeBlock(block)
 
@@ -260,6 +310,7 @@ function CodeBlock(block)
         graphviz = graphviz,
         tikz = tikz2image,
         py2image = py2image,
+        asymptote = asymptote,
     }
 
     -- Check if a converter exists for this block. If not, return the block
