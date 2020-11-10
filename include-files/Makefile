@@ -5,11 +5,16 @@ test: sample.md file-a.md file-b.md file-c.md include-files.lua
 	    | $(DIFF) expected.native -
 	@pandoc --lua-filter=include-files.lua -M include-auto --to=native $< \
 	    | $(DIFF) expected-auto.native -
+	@pandoc --lua-filter=include-files.lua --to=json $< \
+	    | $(DIFF) expected.json -
 
 expected.native: sample.md file-a.md file-b.md file-c.md include-files.lua
 	pandoc --lua-filter=include-files.lua --output $@ $<
 
 expected-auto.native: sample.md file-a.md file-b.md file-c.md include-files.lua
-	pandoc --lua-filter=include-files.lua --output $@ $<
+	pandoc --lua-filter=include-files.lua -M include-auto  --output $@ $<
+
+expected.json: sample.md file-a.md file-b.md file-c.md include-files.lua
+	pandoc --lua-filter=include-files.lua --to=json --output $@ $<
 
 .PHONY: test

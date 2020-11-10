@@ -59,6 +59,10 @@ will want to include files written in a different format. An
 alternative format can be specified via the `format` attribute.
 Only plain-text formats are accepted.
 
+If the global meta variable `include-format` is set
+(e.g on the command line `-M include-format=<format>`) it is used
+as a default value for all include code blocks.
+
 ### Recursive transclusion
 
 Included files can in turn include other files. Note that all
@@ -66,6 +70,27 @@ filenames must be relative to the directory from which pandoc is
 run. I.e., if a file `a/b.md` is included in the main document,
 and another file `a/b/c.md` should be included, the full relative
 path must be used. Writing `b/c.md` in `a/b.md` would _not_ work.
+
+### Replacing file extensions
+
+Extensions of included file paths can be replaced depending on the output format.
+Specifiying the attribute `replace-ext-if-format=<format1>:<ext1>;...;<formatN>:<extN>`
+replaces the extension of a file path with `<ext1>` if the output
+format matches `<format1>`. Multiple replacements are separated
+by a semicolon `;`.
+
+## Format dependend including and exluding
+
+If an include block need to be included and excluded depending
+on the output format.
+See the filter `codeblock-filter-format` which can be executed
+before this filter to achieve the desired result.
+
+## Errors
+
+If you set the meta variable `include-fail-if-read-error` to `true`.
+An error while including inexistent or non readable
+files results in a failure instead of a warning.
 
 ## Example
 
@@ -87,6 +112,13 @@ some additional information in the main file `main.md`:
     ``` {.include}
     chapters/introduction.md
     chapters/methods.md
+    ```
+
+    ``` {.include replace-ext-if-format=latex:.tex}
+    chapters/methods-tables.md
+    ```
+
+    ``` {.include}
     chapters/results.md
     chapters/discussion.md
     ```

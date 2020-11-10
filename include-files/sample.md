@@ -37,3 +37,9 @@ More info goes here.
 // a level 1 heading becomes level 2.
 file-c.md
 ```
+
+## Replace Extension
+
+```{.include replace-ext-if-format=native:.txt;json:.dat}
+file-a.md
+```

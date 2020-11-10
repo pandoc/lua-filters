@@ -20,4 +20,7 @@
 ,Para [Str "More",Space,Str "info",Space,Str "goes",Space,Str "here."]
 ,Header 2 ("questionaire",[],[]) [Str "Questionaire"]
 ,BulletList
- [[Plain [Str "Is",Space,Str "this",Space,Str "good?"]]]]
+ [[Plain [Str "Is",Space,Str "this",Space,Str "good?"]]]
+,Header 2 ("replace-extension",[],[]) [Str "Replace",Space,Str "Extension"]
+,Header 3 ("title-of-file-a",[],[]) [Str "Title",Space,Str "of",Space,Str "file-a"]
+,Para [Str "This",Space,Str "is",Space,Code ("",[],[]) "file-a.txt",Str "."]]

@@ -1,0 +1,13 @@
+[Header 1 ("exluded-always",[],[]) [Str "Exluded",Space,Str "always"]
+,Header 1 ("test-a",[],[]) [Str "Test",Space,Str "A"]
+,Para [Str "Should",Space,Str "all",Space,Str "be",Space,Str "exluded",Space,Str "in",Space,Code ("",[],[]) "json",Str ":"]
+,CodeBlock ("",[],[]) "ls -al || exit 1 // included excluded code block"
+,Header 2 ("header",[],[]) [Str "Header"]
+,Div ("",[],[])
+ [Para [Str "A",Space,Str "included/excluded",Space,Str "div"]]
+,Para [Image ("",[],[]) [Str "Included",Space,Str "excluded",Space,Str "image"] ("image.svg","fig:")]
+,Para [Code ("",[],[]) "included/excluded code"]
+,Header 1 ("test-b",[],[]) [Str "Test",Space,Str "B"]
+,Para [Str "Should",Space,Str "all",Space,Str "be",Space,Str "exluded",Space,Str "in",Space,Code ("",[],[]) "native",Str ":"]
+,Para []
+,Para []]
