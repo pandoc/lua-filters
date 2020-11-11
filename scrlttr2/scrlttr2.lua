@@ -79,6 +79,8 @@ function setkomavar_commands (meta)
   set_koma_var('invoice', meta.invoice)
   set_koma_var('place', meta.place)
 
+  set_koma_var('firstfoot', meta.firstfoot)
+
   set_koma_var('fromfax', meta.fromfax or meta.fax, true)
   set_koma_var('fromurl', meta.fromurl or meta.url, true)
   set_koma_var('fromlogo', meta.fromlogo or meta.logo, true)

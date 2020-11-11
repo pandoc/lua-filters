@@ -23,6 +23,8 @@ end
 
 --- configs – these are populated in the Meta filter.
 local pagebreak = {
+  asciidoc = '<<<\n\n',
+  context = '\\page',
   epub = '<p style="page-break-after: always;"> </p>',
   html = '<div style="page-break-after: always;"></div>',
   latex = '\\newpage{}',
@@ -49,18 +51,22 @@ end
 
 --- Return a block element causing a page break in the given format.
 local function newpage(format)
-  if format == 'docx' then
+  if format:match 'asciidoc' then
+    return pandoc.RawBlock('asciidoc', pagebreak.asciidoc)
+  elseif format == 'context' then
+    return pandoc.RawBlock('context', pagebreak.context)
+  elseif format == 'docx' then
     return pandoc.RawBlock('openxml', pagebreak.ooxml)
-  elseif format:match 'latex' then
-    return pandoc.RawBlock('tex', pagebreak.latex)
-  elseif format:match 'odt' then
-    return pandoc.RawBlock('opendocument', pagebreak.odt)
-  elseif format:match 'html.*' then
-    return pandoc.RawBlock('html', pagebreak.html)
   elseif format:match 'epub' then
     return pandoc.RawBlock('html', pagebreak.epub)
+  elseif format:match 'html.*' then
+    return pandoc.RawBlock('html', pagebreak.html)
+  elseif format:match 'latex' then
+    return pandoc.RawBlock('tex', pagebreak.latex)
   elseif format:match 'ms' then
     return pandoc.RawBlock('ms', pagebreak.ms)
+  elseif format:match 'odt' then
+    return pandoc.RawBlock('opendocument', pagebreak.odt)
   else
     -- fall back to insert a form feed character
     return pandoc.Para{pandoc.Str '\f'}

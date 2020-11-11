@@ -317,6 +317,17 @@ function CodeBlock(block)
         if block.attributes["name"] then
             imgObj.attributes["name"] = block.attributes["name"]
         end
+    
+        -- Transfer the identifier from the code block to the new image block
+        -- to enable downstream filters like pandoc-crossref. This allows a figure
+        -- block starting with:
+        --
+        --     ```{#fig:pumlExample .plantuml caption="This is an image, created by **PlantUML**."}
+        --
+        -- to be referenced as @fig:pumlExample outside of the figure.
+        if block.identifier then
+            imgObj.identifier = block.identifier
+        end
 
         -- Finally, put the image inside an empty paragraph. By returning the
         -- resulting paragraph object, the source code block gets replaced by

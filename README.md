@@ -1,7 +1,10 @@
-[![travis build
-status](https://img.shields.io/travis/pandoc/lua-filters/master.svg?label=travis+build)](https://travis-ci.org/pandoc/lua-filters)
-
 # Lua Filters
+
+[![Travis build status][Travis badge]](https://travis-ci.org/pandoc/lua-filters)
+[![Circle CI build status][Circle CI badge]](https://circleci.com/gh/pandoc/lua-filters)
+
+[Travis badge]: https://img.shields.io/travis/pandoc/lua-filters.svg?logo=travis
+[Circle CI badge]: https://img.shields.io/circleci/build/gh/pandoc/lua-filters?logo=circleci
 
 This repository collects Lua filters for pandoc.
 
@@ -33,8 +36,13 @@ requirements.
 Contributing
 ------------
 
-PRs for new filters are welcome, provided they conform to these
-guidelines. Lua code should ideally follow the Olivine Labs [Lua
-style guide].
+PRs for improvements, bug fixes, or new filters are welcome.
+Please see CONTRIBUTING.md for additional information.
+
+License
+-------
+
+All filters are published under the MIT license by their
+respective authors. See LICENSE for details.
 
 [Lua style guide]: https://github.com/Olivine-Labs/lua-style-guide

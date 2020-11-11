@@ -3,14 +3,12 @@ Contributing to lua-filters
 
 Happy to have you here! Below you can find guidance on the
 best way to contribute to this collection of Lua filters.
+All contributions are welcome!
 
 Bugs reports and feature requests
 ---------------------------------
 
-All contributions are welcome!
-
-
-Please report all bugs on the
+We are happy to receive feature request or bug reports on the
 GitHub [issue tracker].
 
 Please note that all filters *usually* target the latest pandoc
@@ -73,6 +71,12 @@ The filters come with these components:
 
 All components should be bundled in a single directory.
 
+Text and source files should always be terminated by a final
+newline character. The repository comes with a `.editorconfig`
+file which helps to adhere to this and similar conventions. Please
+consider installing [editorconfig](https://editorconfig.org) if
+you editor supports it.
+
 ### Configuration
 
 Filters are expected to be readily usable by a wide range of
@@ -83,6 +87,23 @@ There are two main methods to configure a filter: environment
 variables and special metadata values. The `diagram-generator`
 filter supports both and can serve as a good reference.
 
+Tests
+-----
+
+We currently test filters under two aspects on different CI
+systems:
+
+- *Travis CI*: filters are tested against the latest pandoc
+  version as available from pandoc's download page. The build is
+  configured via `.travis.yml`.
+- *Circle CI*: tests are run in the latest pandoc/ubuntu Docker
+  image. The config is in `.circleci/config.yml`.
+
+Both systems contain all software necessary to run the tests. Some
+filters require additional software to be installed. Please make
+sure that all requirements are satisfied in both build
+environments and that the builds finish successfully.
+
 Commits
 -------
 
@@ -90,6 +111,12 @@ Please follow the usual guidelines for git commits: keep commits
 atomic, self-contained, and add a brief but clear commit message.
 This [guide](https://chris.beams.io/posts/git-commit/) by Chris
 Beams is a good resource if you'd like to learn more.
+
+However, don't fret over this too much. You can also just
+accumulate commits without much thought for this rule. We can
+squash all commits in a PR into a single commit upon merging. But
+we still appreciate it if we don't have to rewrite the commit
+message.
 
 
 [issue tracker]: https://github.com/pandoc/lua-filters/issues
