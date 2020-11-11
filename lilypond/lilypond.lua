@@ -7,9 +7,8 @@ else
 end
 
 local OPTIONS = {
-        image_directory = ".",
-        relativize = false
-      }
+  image_directory = ".",
+}
 
 local SPECIAL_CLASSES = {
         ["lilypond"] = true,
@@ -45,30 +44,12 @@ local function wrap_fragment(src)
          )
 end
 
-local function get_output_directory()
-  return PANDOC_STATE.output_file
-           and pandoc.pipe(
-                 "dirname",
-                 {PANDOC_STATE.output_file},
-                 ""
-               ):gsub("\n", "")
-end
-
-local function resolve_relative_path(what, where)
-  return pandoc.system.with_working_directory(
-           where,
-           function ()
-             return pandoc.pipe("realpath", {what}, ""):gsub("\n", "")
-           end
-         )
-end
-
-local function generate_image(name, input, dpi, whither)
+local function generate_image(name, input, dpi)
   local fullname = name .. ".png"
-  with_temporary_directory(
+  return fullname, with_temporary_directory(
     "lilypond-lua-XXXXX",
     function (tmp_dir)
-      pandoc.system.with_working_directory(
+      return pandoc.system.with_working_directory(
         tmp_dir,
         function ()
           pandoc.pipe(
@@ -80,20 +61,14 @@ local function generate_image(name, input, dpi, whither)
             },
             input
           )
-          pandoc.pipe("cp", {fullname, whither}, "")
+          local fh = io.open(fullname, 'rb')
+          local data = fh:read('*all')
+          fh:close()
+          return data
         end
       )
     end
   )
-  return whither .. "/" .. fullname
-end
-
-local function make_relative_path(to, from)
-  return pandoc.pipe(
-           "realpath",
-           {"--relative-to=" .. from, to},
-           ""
-         ):gsub("\n", "")
 end
 
 local function process_lilypond(elem, inline)
@@ -105,18 +80,11 @@ local function process_lilypond(elem, inline)
   local dpi = elem.attributes["ly-resolution"]
   local name = elem.attributes["ly-name"] or pandoc.sha1(code)
 
-  local out_dir = get_output_directory() or "."
-  local dest = resolve_relative_path(OPTIONS.image_directory, out_dir)
-
-  local path = generate_image(name, input, dpi, dest)
-  local img = io.open(path, "rb")
-  pandoc.mediabag.insert(path, "image/png", img:read("*a"))
-  img:close()
+  local image_filename, image_data = generate_image(name, input, dpi)
+  local src = OPTIONS.image_directory .. '/' .. image_filename
+  pandoc.mediabag.insert(src, "image/png", image_data)
 
   local caption = elem.attributes["ly-caption"] or "Musical notation"
-  local src = OPTIONS.relativize
-                and make_relative_path(path, out_dir)
-                 or path
   -- The "fig:" prefix causes this image to be rendered as a proper figure
   -- in HTML ouput (this is a rather ugly pandoc feature and may be replaced
   -- by something more elegant in the future).
@@ -154,9 +122,6 @@ local function meta_transformer(md)
   OPTIONS.image_directory = dir_conf
                               and pandoc.utils.stringify(dir_conf)
                                or OPTIONS.image_directory
-  OPTIONS.relativize = ly_block.relativize
-                         or OPTIONS.relativize
-
   md.lilypond = nil
   return md
 end

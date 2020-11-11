@@ -55,11 +55,8 @@ The available (key-value) attributes are:
 
 The available metadata options are:
 
-* `lilypond.image_directory` (string): directory where generated images should
-  be saved. Will be resolved relative to the output file for this run of pandoc.
-  Default: `"."`.
-* `lilypond.relativize` (boolean): if enabled, use relative paths for the `src`
-  attributes of generated images.
+* `lilypond.image_directory` (string): media sub-directory where
+  generated images should be stored. Default: `"."`.
 
 The classes and attributes listed above will *not* be copied to the generated
 image, but all other classes and attributes will be, and so will the identifier
@@ -73,9 +70,5 @@ The `lilypond` executable must be installed to a location on
 your `PATH`. You can obtain it [here](http://lilypond.org/download.html) or
 through your package manager.
 
-The filter uses some path-manipulation commands from the GNU coreutils,
-specifically `realpath` and `dirname`, so you'll also need those installed.
-
 Finally, because `lilypond.lua` uses functions from the `pandoc.system`
 submodule, it requires pandoc version 2.7.3 or later.
-
