@@ -142,7 +142,7 @@ function Inlines (inlines)
   --variable holding replacement value for the non-breakable space
   local insert = insert_nonbreakable_space(FORMAT)
 
-  for i = 1, #inlines do
+  for i = 2, #inlines do
 
     --assign elements to variables for simpler code writing
     local currentEl = inlines[i]
