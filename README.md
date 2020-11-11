@@ -25,8 +25,9 @@ Each filter goes in its own subdirectory.  Each subdirectory contains:
 Requirements
 ------------
 
-Filters are tested against the latest pandoc version.  There is
-no guarantee that filters will work with older versions, but
+Filters are tested against the pandoc version in the latest
+pandoc/ubuntu Docker image, i.e. usually the latest release. There
+is no guarantee that filters will work with older versions, but
 many do.
 
 Some filters depend on external programs, which must be installed

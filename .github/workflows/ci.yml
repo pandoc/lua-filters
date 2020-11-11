@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths-ignore:
+      - '**/README.md'
+      - CONTRIBUTING.md
+      - LICENSE
+      - .editorconfig
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**/README.md'
+      - CONTRIBUTING.md
+      - LICENSE
+      - .editorconfig
+  schedule:
+    # At 4:17am each Monday
+    - cron: '17 4 * * 1'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: make docker-test-image
+
+      - name: Run tests in Docker image
+        run: make docker-test
