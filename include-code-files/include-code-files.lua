@@ -18,6 +18,17 @@ local function transclude (cb)
     else
       local number = 1
       local start = 1
+
+      -- change hyphenated attributes to PascalCase
+      for i,pascal in pairs({"startLine", "endLine"})
+      do
+         local hyphen = pascal:gsub("%u", "-%0"):lower()
+         if cb.attributes[hyphen] then
+            cb.attributes[pascal] = cb.attributes[hyphen]
+            cb.attributes[hyphen] = nil
+         end
+      end
+
       if cb.attributes.startLine then
         cb.attributes.startFrom = cb.attributes.startLine
         start = tonumber(cb.attributes.startLine)

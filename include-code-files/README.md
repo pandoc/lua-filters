@@ -28,6 +28,8 @@ If you want to include a specific range of lines, use `startLine` and `endLine`:
     ```{include="hello.c" startLine=35 endLine=80}
     ```
 
+`start-line` and `end-line` alternatives are also recognized.
+
 ### Dedent
 
 Using the `dedent` attribute, you can have whitespaces removed on each line,
