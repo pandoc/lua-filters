@@ -2,7 +2,8 @@
 
 Filter to include code from source files.
 
-The filter is largely inspired by [pandoc-include-code](https://github.com/owickstrom/pandoc-include-code).
+The filter is largely inspired by
+[pandoc-include-code](https://github.com/owickstrom/pandoc-include-code).
 
 ## Usage
 
