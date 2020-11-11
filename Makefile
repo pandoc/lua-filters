@@ -1,6 +1,6 @@
 FILTERS=$(wildcard $(shell find * -type d | grep -v '[/\\]'))
 FILTER_FILES=$(shell find * -name "*.lua" -type f)
-LUA_FILTERS_TEST_IMAGE = tarleb/lua-filters-test
+LUA_FILTERS_TEST_IMAGE = pandoc/lua-filters-test
 
 .PHONY: test show-args docker-test docker-test-image archive
 
