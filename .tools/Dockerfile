@@ -9,7 +9,9 @@ RUN apt-get -q --no-allow-insecure-repositories update \
        aspell \
        aspell-en \
        aspell-fr \
+       asymptote \
        default-jre \
+       dvisvgm \
        graphviz \
        imagemagick \
        inkscape \
