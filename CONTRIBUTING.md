@@ -54,7 +54,7 @@ The filters come with these components:
   contain a small header with author, copyright, and licensing
   information. All filters must be licensed under the MIT license.
 
-  Lua code should follow the Olivine Labs [Lua style guide]. The
+  Lua code should follow the HsLua [Lua style guide]. The
   tl;dr is: use snake_case for most names and keep lines below 80
   chars.
 
@@ -120,4 +120,4 @@ message.
 
 
 [issue tracker]: https://github.com/pandoc/lua-filters/issues
-[Lua style guide]: https://github.com/Olivine-Labs/lua-style-guide
+[Lua style guide]: https://github.com/hslua/lua-style-guide
