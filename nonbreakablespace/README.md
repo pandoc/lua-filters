@@ -1,20 +1,24 @@
 # Non-breakable space filter
 
 This filter replaces regular spaces with non-breakable spaces according to 
-predefined conditions. Currently, this filter replaces regular spaces with
-unbreakable ones after one-letter words (prefixes and conjunctions):
-'a', 'i', 'k', 'o', 's', 'u', 'v', 'z'; and theyre uppercase variant. Also
-inserts non-breakable spaces in front of en-dashes and in front of numbers.
+predefined conditions.
+
+Rules for space replacement are defined for two languages: English and Czech
+(default is English) in `prefixes` tables. Also, non-breakable spaces are
+inserted in front of dashes and in front of numbers. Rules for inserting 
+non-breakable spaces in English are not as firm as in authors native language 
+(Czech), but some typographic conventions suggest to insert non-breakable space
+after words: "I", "the", "The", "a", "A". Any suggestions regarding improvement 
+of English support in this filter are highly welcome.
 Some extra effort is taken in detecting these patterns in *not-fully* parsed
 strings (for example, if this filter is used after some macro replacing 
 filter).
 
 In this regard this filter functions similarly like TeX `vlna` preprocessor
-or LuaTeX `luavlna` package.
+(only Czech) or LuaTeX `luavlna` package (international).
 
-The default settings are conformant to Czech typography rules, but these can
-be changed easily by user customization in filter file `nonbreakablespace.lua`
-by changing contents of `prefixes` or `dashes` tables.
+The default settings can be changed easily by user customization in filter file
+`pandocVlna.lua` by changing contents of `prefixes` or `dashes` tables.
 
 Currently supported formats are:
 
@@ -22,6 +26,8 @@ Currently supported formats are:
 * Open Office Document
 * MS Word
 * HTML
+
+For other formats filter defaults to insert escaped Unicode sequence `\u{a0}`.
 
 **NOTE**: Using this filter increases strain on line-breaking patterns. Whenever 
 possible, consider allowing hyphenation.
