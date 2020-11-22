@@ -1,8 +1,21 @@
+--[[
+pandocVlna.lua - Filter to automatically insert non-breakable spaces in specific
+locations in text.
+
+Currently supports czech and english languages, with default being set to
+english. PRs or suggestions leading to improvement of current features or
+to add supported for other languages is highly welcome.
+Inspired by simillar tools in TeX toolchain: `luavlna` and `vlna`.
+
+Author: Tomas Krulis (with substantial help from Albert Krewinkel)
+License: MIT - more details in LICENSE file in repository root directory
+--]]
+
 local utils = require 'pandoc.utils'
 local stringify = utils.stringify
 
 --[[
-Indexed table of one-letter prefixes, after which should be inserted '\160'.
+Table of one-letter prefixes, after which should be inserted '\160'.
 Verbose, but can be changed per user requirements.
 --]]
 
@@ -74,7 +87,7 @@ local nonbreakablespaces = {
 
 --[[
 Function to determine Space element replacement for non-breakable space
---according to output format
+according to output format
 --]]
 
 function insert_nonbreakable_space(format)
@@ -85,7 +98,8 @@ function insert_nonbreakable_space(format)
   elseif format:match 'context' then
     return pandoc.RawInline('tex',nonbreakablespaces.latex)
   else
-    --fallback to inserting non-breakable space unicode symbol
+    -- fallback to inserting non-breakable space unicode symbol
+    -- pandoc.Str '\xc2\xa0' -- also works
     return pandoc.Str '\u{a0}'
   end
 end
@@ -103,12 +117,13 @@ representation
 
 function Inlines (inlines)
 
-  --variable holding replacement value for the non-breakable space
-  local insert = insert_nonbreakable_space(FORMAT)
+  -- variable holding replacement value for the non-breakable space
+  local nbsp = insert_nonbreakable_space(FORMAT)
 
-  for i = 2, #inlines do
+  for i = 2, #inlines do -- test from second position, to prevent error if
+    -- `Space` element would be first in `Inlines` block
 
-    --assign elements to variables for simpler code writing
+    --assign elements to variables for more readability
     local currentEl = inlines[i]
     local previousEl = inlines[i-1]
     local nextEl = inlines[i+1]
@@ -118,45 +133,42 @@ function Inlines (inlines)
 
       -- Check for one-letter prefixes in Str before Space
 
-      if previousEl.t == 'Str' then
-        if prefixes[previousEl.text]== true then
---        inlines[i] = pandoc.Str '\xc2\xa0' -- Both work
-          inlines[i] = insert
-        end
+      if previousEl.t == 'Str' and prefixes[previousEl.text] then
+        -- if elements in table (`prefixes`) are mapped to bolean values,
+        -- it is possible to test like `prefixes[argument]` instead of
+        -- `if prefixes[argument] == true`
+        inlines[i] = nbsp
       end
 
       -- Check for dashes in Str after Space
 
-      if nextEl.t == 'Str' then
-        if dashes[nextEl.text] == true then
-          inlines[i] = insert
-        end
+      if nextEl.t == 'Str' and dashes[nextEl.text] then
+        inlines[i] = nbsp
       end
 
-      -- Check for not fully parsed Str elements - Those might be products of
-      -- other filters, that were executed before this one
+      -- Check for digit `Str` elements. Those elements might not be fully
+      -- parsed (in case there were other filters executed before this one),
+      -- so following regex checks for any characters or whitespace wrapping
+      -- around `Str` element containing digits
 
-      if nextEl.t == 'Str' then
-        if string.match(nextEl.text, '%.*%s*[„]?%d+[“]?%s*%.*') then
-          inlines[i] = insert
-        end
+      if nextEl.t == 'Str' and string.match(nextEl.text, '%.*%s*%d+%s*%.*') then
+        inlines[i] = nbsp
       end
 
     end
 
     --[[
     Check for Str containing sequence " prefix ", which might occur in case of
-    preceding filter creates it in one Str element. Also check, if quotation
-    mark is present introduced by "quotation.lua" filter
+    preceding filter creates it inside Str element.
     --]]
 
     if currentEl.t == 'Str' then
-      for index, prefix in ipairs(prefixes) do
-        if string.match(currentEl.text, '%.*%s+[„]?' .. prefix .. '[“]?%s+%.*') then
-              front, detection, replacement, back = string.match(currentEl.text,
-	            '(%.*)(%s+[„]?' .. prefix .. '[“]?)(%s+)(%.*)')
+      for prefix, _ in pairs(prefixes) do
+        if string.match(currentEl.text, '%.*%s+' .. prefix .. '%s+%.*') then
+          front, detection, replacement, back = string.match(currentEl.text,
+	            '(%.*)(%s+' .. prefix .. ')(%s+)(%.*)')
 
-              inlines[i].text = front .. detection .. insert .. back
+          inlines[i].text = front .. detection .. nbsp .. back
         end
       end
     end
