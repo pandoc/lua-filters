@@ -45,4 +45,4 @@ License
 All filters are published under the MIT license by their
 respective authors. See LICENSE for details.
 
-[Lua style guide]: https://github.com/Olivine-Labs/lua-style-guide
+[Lua style guide]: https://github.com/hslua/lua-style-guide
