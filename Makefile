@@ -29,10 +29,10 @@ docker-test-image: .tools/Dockerfile
 .PHONY: collection
 collection: .build/lua-filters
 
-.build/lua-filters: $(FILTER_FILES)
+.build/lua-filters: $(FILTER_FILES) CONTRIBUTING.md LICENSE README.md
 	mkdir -p .build/lua-filters
 	cp -a $(FILTER_FILES) .build/lua-filters
-	cp -a LICENSE .build/lua-filters
+	cp -a CONTRIBUTING.md LICENSE README.md .build/lua-filters
 	@printf "Filters collected in '%s'\n" "$@"
 
 .build/lua-filters.tar.gz: .build/lua-filters
