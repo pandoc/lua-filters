@@ -9,6 +9,8 @@ test:
 
 archive: .build/lua-filters.tar.gz
 
+archives: .build/lua-filters.tar.gz .build/lua-filters.zip
+
 show-vars:
 	@printf "FILTERS: %s\n" $(FILTERS)
 	@printf "FILTER_FILES: %s\n" $(FILTER_FILES)
@@ -35,6 +37,11 @@ collection: .build/lua-filters
 
 .build/lua-filters.tar.gz: .build/lua-filters
 	tar -czf $@ -C .build lua-filters
+	@printf "Archive written to '%s'\n" "$@"
+
+.build/lua-filters.zip: .build/lua-filters
+	rm -f $@
+	(cd .build && zip -r -9 lua-filters.zip lua-filters)
 	@printf "Archive written to '%s'\n" "$@"
 
 clean:

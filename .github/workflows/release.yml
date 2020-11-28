@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    # At 4:17am each day
+    # If this is changed, also change the 'yesterday' variable below.
+    - cron: '17 4 1 * *'
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure
+        id: config
+        run: |
+          last="$(date --date='4:17am yesterday' '+%s')"
+          commitdate="$(git log -1 --format='%cd' --date=unix)"
+          authordate="$(git log -1 --format='%ad' --date=unix)"
+          release_date=""
+          if [ "$commitdate" -gt "$last" ] || [ "$authordate" -gt "$last" ]; then
+              release_date="$(date '+%F')"
+          fi
+          printf "release_date=%s\n" "$release_date"
+          printf "::set-output name=release-date::%s\n" "$release_date"
+
+      - name: Build collection
+        run: make archives
+
+      - name: Create release
+        if: ${{ steps.config.outputs.release-date != '' }}
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_DATE: ${{ steps.config.outputs.release-date }}
+        with:
+          tag_name: v${{ env.RELEASE_DATE }}
+          release_name: Lua Filters v${{ env.RELEASE_DATE }}
+          draft: false
+          prerelease: false
+
+      - name: Add zip archive to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./.build/lua-filters.zip
+          asset_name: lua-filters.zip
+          asset_content_type: application/zip
+
+      - name: Add tar archive to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./.build/lua-filters.tar.gz
+          asset_name: lua-filters.tar.gz
+          asset_content_type: application/x-gtar
