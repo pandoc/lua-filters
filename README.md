@@ -20,10 +20,30 @@ is no guarantee that filters will work with older versions, but
 many do.
 
 Some filters depend on external programs, which must be installed
-separately. Refer to the filters' README for detailed
-requirements; the filter READMEs are not included in the release
-archives, but available online at
-<https://github.com/pandoc/lua-filters>.
+separately. Refer to the filters' documentations for detailed
+requirements.
+
+Installation
+------------
+
+All filters can be used without special installation, just by
+passing the respective `.lua` file path to pandoc via
+`--lua-filter`/`-L`.
+
+User-global installation is possible by placing a filter in within
+the `filters` directory of pandoc's user data directory. This
+allows to use the filters just by using the filename, without
+having to specify the full file path.
+
+On mac and Linux, the filters can be installed by extracting the
+archive with
+
+    RELEASE_URL=https://github.com/pandoc/lua-filters/releases/latest
+    curl -LSs $RELEASE_URL/download/lua-filters.tar.gz | \
+        tar --strip-components=1 --one-top-level=$PANDOC_DIR -zvxf -
+
+where `$PANDOC_DIR` is a user directory as listed in the output of
+`pandoc -v`.
 
 Contributing
 ------------
