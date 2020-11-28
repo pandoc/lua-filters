@@ -3,7 +3,7 @@ Contributing to lua-filters
 
 Happy to have you here! Below you can find guidance on the
 best way to contribute to this collection of Lua filters.
-All contributions are welcome!
+Contributions are welcome!
 
 Bugs reports and feature requests
 ---------------------------------
