@@ -5,7 +5,7 @@ on:
   schedule:
     # At 4:17am each day
     # If this is changed, also change the 'yesterday' variable below.
-    - cron: '17 4 1 * *'
+    - cron: '17 4 * * *'
 
 jobs:
   release:
