@@ -63,7 +63,6 @@ function Meta(meta)
     prefixes = prefixesEN --default to english prefixes
   end
 
-  return prefixes
 end
 
 --[[
