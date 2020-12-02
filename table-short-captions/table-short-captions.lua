@@ -92,27 +92,24 @@ local function parse_table_attrs(attr)
   return label, short_caption, unlisted
 end
 
---- Wraps a table with shortcaption code
+function is_properties_span(inl)
+  return (inl.t) and (inl.t == "Span")                      -- is span
+                 and (inl.content) and (#inl.content == 0)  -- is empty span
+end
+
+--- Parse the caption for Pandoc < 2.10
 -- @tparam Table tbl : The table with {}-wrapped properties in the caption
--- @treturn List[Blocks] : The table with {label} in the caption,
---                         optionally wrapped in shortcaption code
-function rewrite_longtable_caption(tbl)
-  local caption
-  if PANDOC_VERSION >= {2,10} then
-    caption = pandoc.List(tbl.caption.long)
-  else
-    caption = tbl.caption
-  end
+-- @treturn ?string : The "short-caption" property, if present.
+-- @treturn bool : Whether ".unlisted" appeared in the classes
+function parse_short_caption_legacy(tbl)
+  local caption = tbl.caption
+
   -- Escape if there is no caption present.
   if not caption or #caption == 0 then
     return nil
   end
 
   -- Try find the properties block
-  local is_properties_span = function (inl)
-    return (inl.t) and (inl.t == "Span")                      -- is span
-                   and (inl.content) and (#inl.content == 0)  -- is empty span
-  end
   local propspan, idx = caption:find_if(is_properties_span)
 
   -- If we couldn't find properties, escape.
@@ -132,13 +129,69 @@ function rewrite_longtable_caption(tbl)
   end
 
   -- set new caption
+  tbl.caption = caption
+
+  return short_caption, unlisted
+end
+
+--- Parse the caption for Pandoc >= 2.10
+-- @tparam Table tbl : The table with {}-wrapped properties in the caption
+-- @treturn ?string : The "short-caption" property, if present.
+-- @treturn bool : Whether ".unlisted" appeared in the classes
+function parse_short_caption(tbl)
+  local caption = pandoc.List(tbl.caption.long)
+
+  -- Escape if there is no caption present.
+  if #caption == 0 then
+    return nil
+  end
+
+  -- Try find the properties block
+  local find_properties = function (list)
+    for bidx, block in ipairs(list) do
+      local propspan, idx = block.content:find_if(is_properties_span)
+      if propspan then
+        return propspan, bidx, idx
+      end
+    end
+  end
+  local propspan, bidx, idx = find_properties(caption)
+
+  -- If we couldn't find properties, escape.
+  if not propspan then
+    return nil
+  end
+
+  -- Otherwise, parse it all
+  local label, short_caption, unlisted = parse_table_attrs(propspan.attr)
+
+  -- Excise the span from the caption
+  caption[bidx].content[idx] = nil
+
+  -- Put label back into caption for pandoc-crossref
+  if label then
+    caption[bidx].content:extend {pandoc.Str("{#"..label.."}")}
+  end
+
+  -- set new caption
+  tbl.caption.long = caption
+  tbl.caption.short = short_caption
+    and pandoc.read(short_caption, FORMAT).blocks[1].content
+    or nil
+
+  return short_caption, unlisted
+end
+
+--- Wraps a table with shortcaption code
+-- @tparam Table tbl : The table with {}-wrapped properties in the caption
+-- @treturn List[Blocks] : The table with {label} in the caption,
+--                         optionally wrapped in shortcaption code
+function rewrite_longtable_caption(tbl)
+  local short_caption, unlisted
   if PANDOC_VERSION >= {2,10} then
-    tbl.caption.long = caption
-    tbl.caption.short = short_caption
-      and pandoc.read(short_caption, FORMAT).blocks[1].content
-      or nil
+    short_caption, unlisted = parse_short_caption(tbl)
   else
-    tbl.caption = caption
+    short_caption, unlisted = parse_short_caption_legacy(tbl)
   end
 
   -- Place new table
