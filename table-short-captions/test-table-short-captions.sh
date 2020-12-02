@@ -46,7 +46,7 @@ assert_contains <<EOF
 \textbf{unlisted}. \{\#tbl:tbl-label3\}}\tabularnewline
 EOF
 assert_contains <<EOF
-\undef\pandoctableshortcapt
+\let\pandoctableshortcapt\relax
 EOF
 
 # Test 4
@@ -59,7 +59,7 @@ an \textbf{overriding} short-caption. This is the expected usage.
 \{\#tbl:tbl-label4\}}\tabularnewline
 EOF
 assert_contains <<EOF
-\undef\pandoctableshortcapt
+\let\pandoctableshortcapt\relax
 EOF
 
 # Test 5
@@ -101,5 +101,5 @@ assert_contains <<EOF
 \{\#tbl:tbl-label9\}}\tabularnewline
 EOF
 assert_contains <<EOF
-\undef\pandoctableshortcapt
+\let\pandoctableshortcapt\relax
 EOF
