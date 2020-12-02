@@ -4,9 +4,10 @@ latex_result="$(cat -)"
 
 assert_contains ()
 {
-    printf '%s' "$latex_result" | grep -qF "$1" -
+    content="$(cat -)"
+    printf '%s' "$latex_result" | grep -qF "$content" -
     if [ $? -ne 0 ]; then
-        printf 'Output does not contain `%s`.\n' "$1" >&2
+        printf 'Output does not contain `%s`.\n' "$content" >&2
         exit 1
     fi
 }
