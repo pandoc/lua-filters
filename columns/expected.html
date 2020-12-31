@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Julien Dutant" />
+  <title>Columns - Multiple columns support in Pandoc’s markdown</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <style>
+  /* Styles added by the columns.lua pandoc filter */
+    .columns :first-child {margin-top: 0;}
+    .column-span + * {margin-top: 0;}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Columns - Multiple columns support in Pandoc’s markdown</h1>
+<p class="author">Julien Dutant</p>
+</header>
+<h1 id="columns">Columns</h1>
+<p>Multiple columns support in Pandoc’s markdown.</p>
+<p>v1.0. Copyright: © 2021 Julien Dutant <a href="mailto:julien.dutant@kcl.ac.uk" class="email">julien.dutant@kcl.ac.uk</a> License: MIT - see LICENSE file for details.</p>
+<h2 id="introduction">Introduction</h2>
+<p>This Lua filter for Pandoc provides multicolumn support in <a href="https://pandoc.org/">Pandoc</a>’s markdown for outputs in <code>html</code> and LaTeX/PDF. It supports several markdown syntaxes, explicit column breaks, spanning elements, customisation and nesting. Html output relies on <a href="https://drafts.csswg.org/css-multicol">CSS Multi-column layout</a> and LaTeX/PDF outputs on the <a href="https://www.ctan.org/pkg/multicol"><code>multicol</code> LaTeX package</a>.</p>
+<p>Limitations: in <code>html</code> output, support is limited to recent browsers and variable across browsers.</p>
+<p>This document also serves as a test document. To see the multi-columns layouts of this document in action, you need to process it with <code>pandoc</code> using this filter.</p>
+<h2 id="pre-requistes">Pre-requistes</h2>
+<p>Requires <a href="https://pandoc.org/">Pandoc</a>. Copy the file <code>columns.lua</code> in your working folder or in Pandoc’s <code>filter</code> folder. Called from the command line with a <code>-L</code> or <code>--lua-filter</code> option:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pandoc</span> <span class="at">--lua-filter</span> columns.lua SOURCE.md <span class="at">-o</span> DESTINATION.html</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pandoc</span> <span class="at">-L</span> columns.lua SOURCE.md <span class="at">-o</span> DESTINATION.pdf</span></code></pre></div>
+<p>Or from a <code>filters</code> field in a Pandoc defaults file. See the <a href="https://pandoc.org/MANUAL.html">Pandoc documentation</a> for further details.</p>
+<p>For instance, to process the present documentation use:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pandoc</span> <span class="at">-L</span> columns.lua README.md <span class="at">-o</span> readme.html</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pandoc</span> <span class="at">-L</span> columns.lua README.md <span class="at">-o</span> readme.pdf</span></code></pre></div>
+<h2 id="basic-usage">Basic usage</h2>
+<h3 id="columns-1">Columns</h3>
+<p>In Pandoc markdown source specify a multicolumn section as follows:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>::: columns</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>...content that will be spread over several columns...</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div>
+<p>The filter will render this section as a multicolumns layout in <code>html</code> and LaTeX, as illustrated below (you need to process this document with <code>pandoc</code> using this filter to see the results in <code>html</code> or <code>pdf</code>:</p>
+<div class="columns" style="column-count: 2 ;">
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante in mi ornare volutpat sed sit amet diam. Nullam interdum erat a augue faucibus, nec tempus tortor sagittis. Aenean imperdiet imperdiet dignissim. Nam aliquam blandit ex, sed molestie nibh feugiat ac. Morbi feugiat convallis semper. Ut et consequat purus. Fusce convallis vehicula enim in vulputate. Curabitur a augue arcu. Mauris laoreet lectus arcu, sed elementum turpis scelerisque id. Etiam porta turpis quis ipsum dictum vulputate. In ut convallis urna, at imperdiet nunc. Cras laoreet, massa lobortis gravida egestas, lacus est pellentesque arcu, imperdiet efficitur nibh dolor vel sapien. Sed accumsan condimentum diam non pellentesque.</p><p>Vestibulum cursus nisi risus, sit amet consectetur massa suscipit nec. Sed condimentum, est id iaculis ornare, purus risus finibus felis, posuere congue est nibh eget dui. Maecenas orci erat, commodo auctor justo quis, vestibulum mollis ex. Vivamus sed bibendum turpis. Donec auctor, leo a cursus efficitur, quam urna dignissim enim, viverra condimentum orci est non sem. Donec ac viverra nisl. Suspendisse ac auctor massa. Mauris porttitor purus vel velit vehicula, sed efficitur odio lacinia. Fusce sed odio arcu. Ut rhoncus lacus vel magna interdum tincidunt. Nunc imperdiet finibus tincidunt.</p>
+</div>
+<p>This syntax is based on the <a href="https://pandoc.org/MANUAL.html#divs-and-spans"><code>fenced_div</code> syntax of Pandoc’s’ markdown</a>. At least three consecutive colons are needed, both at the beginning and at then end of your multi-column section (even if it runs until the end of your document). But more than three are fine:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>::: columns ::::::</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>...content that will be spread over several columns...</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>::::::::::::::</span></code></pre></div>
+<p>Each opening series of colons needs to be matched with a closing ones. For readibility we usually match their number of colons but it’s not necessary (as the above illustrates). If you enclose sections within sections (see container syntax, nesting, column spans and column breaks below) you need to make sure that each opening series of colons is matched with a closed ones, otherwise Pandoc will not recognize them or interpret them incorrectly.</p>
+<p>Here <code>columns</code> is a <em>attribute</em> of the fenced div (section). As we’ll see below, these sections can have more than a single attribute. When they have several, they need to be specified within curly brackets and <code>columns</code> should be preceded by a dot, as in:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>::::: {.columns .someattribute property=value}</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>...content that will be spread over several columns...</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>:::::</span></code></pre></div>
+<h3 id="specifying-the-number-of-columns">Specifying the number of columns</h3>
+<p>By default two columns are provided. You can specify the desired number of columns in various ways:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>::: twocolumns</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>::: three-columns</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>::: five_columns</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>::: {.columns column-count=3}</span></code></pre></div>
+<p>Note that in <code>html</code> browsers may override your specified number of columns.</p>
+<h3 id="customizing-the-gap-and-rule-between-columns">Customizing the gap and rule between columns</h3>
+<p>The gap and rule between columns can be customized too. The gap is specified with a <code>columngap</code> (or <code>column-gap</code> or <code>columnsep</code> or <code>column-sep</code>) attribute. The rule is specified with a <code>column-rule</code> (or <code>columnrule</code>) attribute using CSS syntax.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>::: {.columns columngap=3em column-rule=&quot;1px solid black&quot;}</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>::: {.threecolumns columngap=4em column-rule=&quot;3pt solid blue&quot;}</span></code></pre></div>
+<p>Here is an illustration:</p>
+<div class="columns" style="column-count: 3 ;; column-gap: 4em ;; column-rule: 3pt solid blue ;">
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante in mi ornare volutpat sed sit amet diam. Nullam interdum erat a augue faucibus, nec tempus tortor sagittis. Aenean imperdiet imperdiet dignissim. Nam aliquam blandit ex, sed molestie nibh feugiat ac. Morbi feugiat convallis semper. Ut et consequat purus. Fusce convallis vehicula enim in vulputate. Curabitur a augue arcu. Mauris laoreet lectus arcu, sed elementum turpis scelerisque id. Etiam porta turpis quis ipsum dictum vulputate. In ut convallis urna, at imperdiet nunc. Cras laoreet, massa lobortis gravida egestas, lacus est pellentesque arcu, imperdiet efficitur nibh dolor vel sapien. Sed accumsan condimentum diam non pellentesque.</p><p>Vestibulum cursus nisi risus, sit amet consectetur massa suscipit nec. Sed condimentum, est id iaculis ornare, purus risus finibus felis, posuere congue est nibh eget dui. Maecenas orci erat, commodo auctor justo quis, vestibulum mollis ex. Vivamus sed bibendum turpis. Donec auctor, leo a cursus efficitur, quam urna dignissim enim, viverra condimentum orci est non sem. Donec ac viverra nisl. Suspendisse ac auctor massa. Mauris porttitor purus vel velit vehicula, sed efficitur odio lacinia. Fusce sed odio arcu. Ut rhoncus lacus vel magna interdum tincidunt. Nunc imperdiet finibus tincidunt.</p>
+</div>
+<h3 id="spanning-elements">Spanning elements</h3>
+<p>Elements that span across all columns are introduced as <code>column-span</code> (or <code>columnspan</code>) sections:</p>
+<pre class="columns"><code>::: columns ::::::::
+
+content in columns
+
+::::: column-span
+
+# This heading spans across all columns
+
+:::::
+
+content in columns
+
+:::</code></pre>
+<p>Here is an illustration:</p>
+<div class="columns" style="column-count: 2 ;; column-rule: 1px solid black ;">
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante in mi ornare volutpat sed sit amet diam. Nullam interdum erat a augue faucibus, nec tempus tortor sagittis. Aenean imperdiet imperdiet dignissim. Nam aliquam blandit ex, sed molestie nibh feugiat ac. Morbi feugiat convallis semper. Ut et consequat purus. Fusce convallis vehicula enim in vulputate. Curabitur a augue arcu. Mauris laoreet lectus arcu, sed elementum turpis scelerisque id. Etiam porta turpis quis ipsum dictum vulputate. In ut convallis urna, at imperdiet nunc. Cras laoreet, massa lobortis gravida egestas, lacus est pellentesque arcu, imperdiet efficitur nibh dolor vel sapien. Sed accumsan condimentum diam non pellentesque.</p><section id="vestibulum-cursus-nisi-risus-sit-amet-consectetur-massa-suscipit-nec" class="column-span" style="column-span: all ;">
+<h1>Vestibulum cursus nisi risus, sit amet consectetur massa suscipit nec</h1>
+</section><p>Sed condimentum, est id iaculis ornare, purus risus finibus felis, posuere congue est nibh eget dui. Maecenas orci erat, commodo auctor justo quis, vestibulum mollis ex. Vivamus sed bibendum turpis. Donec auctor, leo a cursus efficitur, quam urna dignissim enim, viverra condimentum orci est non sem. Donec ac viverra nisl. Suspendisse ac auctor massa. Mauris porttitor purus vel velit vehicula, sed efficitur odio lacinia. Fusce sed odio arcu. Ut rhoncus lacus vel magna interdum tincidunt. Nunc imperdiet finibus tincidunt.</p>
+</div>
+<h3 id="explicitly-specifying-column-breaks">Explicitly specifying column breaks</h3>
+<p>Column breaks can be explicitly specified. This can be done using <code>\columnbreak</code> or a <code>columnbreak</code> (or <code>column-break</code>) section.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>::: columns</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>This content is in a first column.</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>\columnbreak</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>This content is in a second column.</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>:::: columnbreak</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>::::</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>This content is in a third column.</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>:::: column-break</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>::::</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>This content is in a fourth column.</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>:::</span></code></pre></div>
+<p>The result is:</p>
+<div class="columns" style="column-count: 4 ;">
+<p>This content is in a first column.</p><div style="break-after: column ;">
+
+</div><p>This content is in a second column.</p><div style="break-after: column ;">
+
+</div><p>This content is in a third column.</p><div style="break-after: column ;">
+
+</div><p>This content is in a fourth column.</p>
+</div>
+<p><strong>Warning and limitations</strong></p>
+<ul>
+<li>In <code>html</code>, browsers may ignore explicit column breaks.</li>
+<li>A <code>\columnbreak</code> break must be preceded by an empty line and occupy a line on its own.</li>
+<li>A <code>::: columnbreak</code> break must be followed by a closing line of <code>:::</code>.</li>
+</ul>
+<p>When columnbreaks are explicitly specified, they are used to determine the number of columns. If the section both speficies a number of columns and includes explicit columnbreaks, the greatest number is used.</p>
+<h3 id="container-syntax">Container syntax</h3>
+<p>A multicolumn section with explicit breaks can also be written using a container syntax, with <code>column</code> sections included in a <code>columns</code> section, as follows.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode markdown"><code class="sourceCode markdown"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>:::::: columns</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>::: column</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>First column content here</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>::: column</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>Second column content</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>:::::</span></code></pre></div>
+<p>This follows <a href="https://pandoc.org/MANUAL.html#columns">Pandoc’s markdown syntax for <code>beamer</code> output</a>. Note that individual column widths and further column attributes available in <code>beamer</code> outputs are not supported here.</p>
+<p>Container syntax and columnbreak syntax can be mixed, as in the example below:</p>
+<div class="columns" style="column-count: 3 ;">
+<div>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante in mi ornare volutpat sed sit amet diam. Nullam interdum erat a augue faucibus, nec tempus tortor sagittis. Aenean imperdiet imperdiet dignissim. Nam aliquam blandit ex, sed molestie nibh feugiat ac. Morbi feugiat convallis semper. Ut et consequat purus. Fusce convallis vehicula enim in vulputate. Curabitur a augue arcu.</p>
+<div style="break-after: column ;">
+
+</div>
+</div><p>Mauris laoreet lectus arcu, sed elementum turpis scelerisque id. Etiam porta turpis quis ipsum dictum vulputate. In ut convallis urna, at imperdiet nunc. Cras laoreet, massa lobortis gravida egestas, lacus est pellentesque arcu, imperdiet efficitur nibh dolor vel sapien. Sed accumsan condimentum diam non pellentesque.</p><div style="break-after: column ;">
+
+</div><p>Vestibulum cursus nisi risus, sit amet consectetur massa suscipit nec. Sed condimentum, est id iaculis ornare, purus risus finibus felis, posuere congue est nibh eget dui. Maecenas orci erat, commodo auctor justo quis, vestibulum mollis ex.</p>
+</div>
+<h2 id="advanced-usage">Advanced usage</h2>
+<h3 id="nesting">Nesting</h3>
+<p>Multicolumn sections can be nested. Support for nesting may vary across browsers. Here is an illustration:</p>
+<div class="columns" style="column-count: 3 ;">
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante in mi ornare volutpat sed sit amet diam. Nullam interdum erat a augue faucibus, nec tempus tortor sagittis. Aenean imperdiet imperdiet dignissim. Nam aliquam blandit ex, sed molestie nibh feugiat ac. Morbi feugiat convallis semper. Ut et consequat purus. Fusce convallis vehicula enim in vulputate. Curabitur a augue arcu.</p><div style="break-after: column ;">
+
+</div><p>Mauris laoreet lectus arcu, sed elementum turpis scelerisque id. Etiam porta turpis quis ipsum dictum vulputate. In ut convallis urna, at imperdiet nunc.</p><div class="columns" style="column-count: 2 ;">
+<p>This is a two-column section nested within the middle column of a three-column section.</p>
+</div><p>Cras laoreet, massa lobortis gravida egestas, lacus est pellentesque arcu, imperdiet efficitur nibh dolor vel sapien. Sed accumsan condimentum diam non pellentesque.</p><div style="break-after: column ;">
+
+</div><p>Vestibulum cursus nisi risus, sit amet consectetur massa suscipit nec. Sed condimentum, est id iaculis ornare, purus risus finibus felis, posuere congue est nibh eget dui. Maecenas orci erat, commodo auctor justo quis, vestibulum mollis ex.</p>
+</div>
+<h3 id="number-of-columns">Number of columns</h3>
+<p>Number of columns can be specified in English up to ten. Accepted patterns are <code>&lt;number&gt;columns</code>, <code>&lt;number&gt;-columns</code> and <code>&lt;number&gt;_columns</code>. Note that this is a “class”, and should be preceded by a dot when specified along other attributes within curly brackets:</p>
+<pre><code>::: twocolumns
+
+::: {.three-columns columnsep=2em}
+
+:::
+</code></pre>
+<p>Alternatively, the <code>column-count</code> can be used to specify any number of columns.</p>
+<pre><code>::: {.columns column-count=3}</code></pre>
+<p>If both English names and <code>column-count</code> are used, the former prevails.</p>
+<h3 id="html-output">HTML output</h3>
+<p>The <code>html</code> output looks like this. Without column breaks:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;columns&quot;</span><span class="ot"> style=</span><span class="st">&quot;column-count: 2; column-rule: 1px solid black;&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>Content that distributed in columns...</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;column-span&quot;</span><span class="ot"> style=</span><span class="st">&quot;;&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>Content that spreads across all columns</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>More content distributed in columns...</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
+<p>With columnbreaks:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;columns&quot;</span><span class="ot"> style=</span><span class="st">&quot;column-count: 2;&quot;</span><span class="kw">&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>Content of the first column.</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div</span><span class="ot"> style=</span><span class="st">&quot;break-after: column;&quot;</span><span class="kw">&gt;&lt;/div&gt;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>Content of the second column.</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span></code></pre></div>
+<p>In CSS <code class="sourceCode css">break-after<span class="in">: column</span></code> means “after this element, place a column break”.</p>
+<p>The classes <code>columns</code> and <code>column-span</code> are needed to ensure that the first element of a multiple columns <code>div</code>, or the first element after an element spanning across columns, have no top margin. If they had we would get unwanted space at the beginning of the first column. Thus the filter adds the following to the header:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;style&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.columns</span> <span class="in">:first-child</span> {<span class="kw">margin-top</span>: <span class="dv">0</span><span class="op">;</span>}</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">.column-span</span> <span class="op">+</span> <span class="op">*</span> {<span class="kw">margin-top</span>: <span class="dv">0</span><span class="op">;</span>}</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/style&gt;</span></span></code></pre></div>
+<h3 id="latex-output">LaTeX output</h3>
+<p>The LaTeX output looks as follows. Preamble:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode latex"><code class="sourceCode latex"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">\usepackage</span>{<span class="ex">multicol</span>}</span></code></pre></div>
+<p>Document body:</p>
+<pre><code>{\begin{multicols}{2}
+
+content distributed over two columns
+
+\end{multicols}
+}</code></pre>
+<p>With properties and explicit column breaks:</p>
+<pre><code>{\setlength{\columnsep}{4em}
+\setlength{\columnseprule}{ 3pt}
+\renewcommand{\columnseprulecolor}{\color{blue}}
+\begin{multicols}{3}
+
+content distributed over three columns
+
+\end{multicols}
+}</code></pre>
+<p>Note that the <code>multicols</code> environment is wrapped within <code>{...}</code>. This is to ensure that settings of <code>\columnsep</code>, <code>\columnseprule</code> and <code>\columnseprulecolor</code> do not affect subsequent <code>multicol</code> environments.</p>
+<h2 id="contributing">Contributing</h2>
+<p>Issues and pull requests are welcome. They can be submitted <a href="https://github.com/jdutant/columns">to the repository</a>.</p>
+<h2 id="references">References</h2>
+<ul>
+<li><code>html</code>: <a href="https://drafts.csswg.org/css-multicol">CSS Multi-column layout</a></li>
+<li>LaTeX: <a href="https://www.ctan.org/pkg/multicol"><code>multicol</code> LaTeX package</a></li>
+<li>Pandoc: https://pandoc.org/lua-filters.html</li>
+<li>Pandoc lua filters: https://pandoc.org/lua-filters.html</li>
+</ul>
+</body>
+</html>

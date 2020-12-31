@@ -1,0 +1,704 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Columns - Multiple columns support in Pandoc's markdown},
+  pdfauthor={Julien Dutant},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{multicol}
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{Columns - Multiple columns support in Pandoc's markdown}
+\author{Julien Dutant}
+\date{}
+
+\begin{document}
+\maketitle
+
+\hypertarget{columns}{%
+\section{Columns}\label{columns}}
+
+Multiple columns support in Pandoc's markdown.
+
+v1.0. Copyright: © 2021 Julien Dutant
+\href{mailto:julien.dutant@kcl.ac.uk}{\nolinkurl{julien.dutant@kcl.ac.uk}}
+License: MIT - see LICENSE file for details.
+
+\hypertarget{introduction}{%
+\subsection{Introduction}\label{introduction}}
+
+This Lua filter for Pandoc provides multicolumn support in
+\href{https://pandoc.org/}{Pandoc}'s markdown for outputs in
+\texttt{html} and LaTeX/PDF. It supports several markdown syntaxes,
+explicit column breaks, spanning elements, customisation and nesting.
+Html output relies on \href{https://drafts.csswg.org/css-multicol}{CSS
+Multi-column layout} and LaTeX/PDF outputs on the
+\href{https://www.ctan.org/pkg/multicol}{\texttt{multicol} LaTeX
+package}.
+
+Limitations: in \texttt{html} output, support is limited to recent
+browsers and variable across browsers.
+
+This document also serves as a test document. To see the multi-columns
+layouts of this document in action, you need to process it with
+\texttt{pandoc} using this filter.
+
+\hypertarget{pre-requistes}{%
+\subsection{Pre-requistes}\label{pre-requistes}}
+
+Requires \href{https://pandoc.org/}{Pandoc}. Copy the file
+\texttt{columns.lua} in your working folder or in Pandoc's
+\texttt{filter} folder. Called from the command line with a \texttt{-L}
+or \texttt{-\/-lua-filter} option:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{pandoc} \AttributeTok{{-}{-}lua{-}filter}\NormalTok{ columns.lua SOURCE.md }\AttributeTok{{-}o}\NormalTok{ DESTINATION.html}
+
+\ExtensionTok{pandoc} \AttributeTok{{-}L}\NormalTok{ columns.lua SOURCE.md }\AttributeTok{{-}o}\NormalTok{ DESTINATION.pdf}
+\end{Highlighting}
+\end{Shaded}
+
+Or from a \texttt{filters} field in a Pandoc defaults file. See the
+\href{https://pandoc.org/MANUAL.html}{Pandoc documentation} for further
+details.
+
+For instance, to process the present documentation use:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{pandoc} \AttributeTok{{-}L}\NormalTok{ columns.lua README.md }\AttributeTok{{-}o}\NormalTok{ readme.html}
+
+\ExtensionTok{pandoc} \AttributeTok{{-}L}\NormalTok{ columns.lua README.md }\AttributeTok{{-}o}\NormalTok{ readme.pdf}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{basic-usage}{%
+\subsection{Basic usage}\label{basic-usage}}
+
+\hypertarget{columns-1}{%
+\subsubsection{Columns}\label{columns-1}}
+
+In Pandoc markdown source specify a multicolumn section as follows:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{::: columns}
+
+\NormalTok{...content that will be spread over several columns...}
+
+\NormalTok{:::}
+\end{Highlighting}
+\end{Shaded}
+
+The filter will render this section as a multicolumns layout in
+\texttt{html} and LaTeX, as illustrated below (you need to process this
+document with \texttt{pandoc} using this filter to see the results in
+\texttt{html} or \texttt{pdf}:
+
+{\begin{multicols}{2}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante in
+mi ornare volutpat sed sit amet diam. Nullam interdum erat a augue
+faucibus, nec tempus tortor sagittis. Aenean imperdiet imperdiet
+dignissim. Nam aliquam blandit ex, sed molestie nibh feugiat ac. Morbi
+feugiat convallis semper. Ut et consequat purus. Fusce convallis
+vehicula enim in vulputate. Curabitur a augue arcu. Mauris laoreet
+lectus arcu, sed elementum turpis scelerisque id. Etiam porta turpis
+quis ipsum dictum vulputate. In ut convallis urna, at imperdiet nunc.
+Cras laoreet, massa lobortis gravida egestas, lacus est pellentesque
+arcu, imperdiet efficitur nibh dolor vel sapien. Sed accumsan
+condimentum diam non pellentesque.
+
+Vestibulum cursus nisi risus, sit amet consectetur massa suscipit nec.
+Sed condimentum, est id iaculis ornare, purus risus finibus felis,
+posuere congue est nibh eget dui. Maecenas orci erat, commodo auctor
+justo quis, vestibulum mollis ex. Vivamus sed bibendum turpis. Donec
+auctor, leo a cursus efficitur, quam urna dignissim enim, viverra
+condimentum orci est non sem. Donec ac viverra nisl. Suspendisse ac
+auctor massa. Mauris porttitor purus vel velit vehicula, sed efficitur
+odio lacinia. Fusce sed odio arcu. Ut rhoncus lacus vel magna interdum
+tincidunt. Nunc imperdiet finibus tincidunt.
+
+\end{multicols}
+}
+
+This syntax is based on the
+\href{https://pandoc.org/MANUAL.html\#divs-and-spans}{\texttt{fenced\_div}
+syntax of Pandoc's' markdown}. At least three consecutive colons are
+needed, both at the beginning and at then end of your multi-column
+section (even if it runs until the end of your document). But more than
+three are fine:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{::: columns ::::::}
+
+\NormalTok{...content that will be spread over several columns...}
+
+\NormalTok{::::::::::::::}
+\end{Highlighting}
+\end{Shaded}
+
+Each opening series of colons needs to be matched with a closing ones.
+For readibility we usually match their number of colons but it's not
+necessary (as the above illustrates). If you enclose sections within
+sections (see container syntax, nesting, column spans and column breaks
+below) you need to make sure that each opening series of colons is
+matched with a closed ones, otherwise Pandoc will not recognize them or
+interpret them incorrectly.
+
+Here \texttt{columns} is a \emph{attribute} of the fenced div (section).
+As we'll see below, these sections can have more than a single
+attribute. When they have several, they need to be specified within
+curly brackets and \texttt{columns} should be preceded by a dot, as in:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{::::: \{.columns .someattribute property=value\}}
+
+\NormalTok{...content that will be spread over several columns...}
+
+\NormalTok{:::::}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{specifying-the-number-of-columns}{%
+\subsubsection{Specifying the number of
+columns}\label{specifying-the-number-of-columns}}
+
+By default two columns are provided. You can specify the desired number
+of columns in various ways:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{::: twocolumns}
+
+\NormalTok{::: three{-}columns}
+
+\NormalTok{::: five\_columns}
+
+\NormalTok{::: \{.columns column{-}count=3\}}
+\end{Highlighting}
+\end{Shaded}
+
+Note that in \texttt{html} browsers may override your specified number
+of columns.
+
+\hypertarget{customizing-the-gap-and-rule-between-columns}{%
+\subsubsection{Customizing the gap and rule between
+columns}\label{customizing-the-gap-and-rule-between-columns}}
+
+The gap and rule between columns can be customized too. The gap is
+specified with a \texttt{columngap} (or \texttt{column-gap} or
+\texttt{columnsep} or \texttt{column-sep}) attribute. The rule is
+specified with a \texttt{column-rule} (or \texttt{columnrule}) attribute
+using CSS syntax.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{::: \{.columns columngap=3em column{-}rule="1px solid black"\}}
+
+\NormalTok{::: \{.threecolumns columngap=4em column{-}rule="3pt solid blue"\}}
+\end{Highlighting}
+\end{Shaded}
+
+Here is an illustration:
+
+{\setlength{\columnsep}{4em}
+\setlength{\columnseprule}{ 3pt}
+\renewcommand{\columnseprulecolor}{\color{blue}}
+\begin{multicols}{3}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante in
+mi ornare volutpat sed sit amet diam. Nullam interdum erat a augue
+faucibus, nec tempus tortor sagittis. Aenean imperdiet imperdiet
+dignissim. Nam aliquam blandit ex, sed molestie nibh feugiat ac. Morbi
+feugiat convallis semper. Ut et consequat purus. Fusce convallis
+vehicula enim in vulputate. Curabitur a augue arcu. Mauris laoreet
+lectus arcu, sed elementum turpis scelerisque id. Etiam porta turpis
+quis ipsum dictum vulputate. In ut convallis urna, at imperdiet nunc.
+Cras laoreet, massa lobortis gravida egestas, lacus est pellentesque
+arcu, imperdiet efficitur nibh dolor vel sapien. Sed accumsan
+condimentum diam non pellentesque.
+
+Vestibulum cursus nisi risus, sit amet consectetur massa suscipit nec.
+Sed condimentum, est id iaculis ornare, purus risus finibus felis,
+posuere congue est nibh eget dui. Maecenas orci erat, commodo auctor
+justo quis, vestibulum mollis ex. Vivamus sed bibendum turpis. Donec
+auctor, leo a cursus efficitur, quam urna dignissim enim, viverra
+condimentum orci est non sem. Donec ac viverra nisl. Suspendisse ac
+auctor massa. Mauris porttitor purus vel velit vehicula, sed efficitur
+odio lacinia. Fusce sed odio arcu. Ut rhoncus lacus vel magna interdum
+tincidunt. Nunc imperdiet finibus tincidunt.
+
+\end{multicols}
+}
+
+\hypertarget{spanning-elements}{%
+\subsubsection{Spanning elements}\label{spanning-elements}}
+
+Elements that span across all columns are introduced as
+\texttt{column-span} (or \texttt{columnspan}) sections:
+
+\begin{verbatim}
+::: columns ::::::::
+
+content in columns
+
+::::: column-span
+
+# This heading spans across all columns
+
+:::::
+
+content in columns
+
+:::
+\end{verbatim}
+
+Here is an illustration:
+
+{\setlength{\columnseprule}{ 1pt}
+\renewcommand{\columnseprulecolor}{\color{black}}
+\begin{multicols}{2}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante in
+mi ornare volutpat sed sit amet diam. Nullam interdum erat a augue
+faucibus, nec tempus tortor sagittis. Aenean imperdiet imperdiet
+dignissim. Nam aliquam blandit ex, sed molestie nibh feugiat ac. Morbi
+feugiat convallis semper. Ut et consequat purus. Fusce convallis
+vehicula enim in vulputate. Curabitur a augue arcu. Mauris laoreet
+lectus arcu, sed elementum turpis scelerisque id. Etiam porta turpis
+quis ipsum dictum vulputate. In ut convallis urna, at imperdiet nunc.
+Cras laoreet, massa lobortis gravida egestas, lacus est pellentesque
+arcu, imperdiet efficitur nibh dolor vel sapien. Sed accumsan
+condimentum diam non pellentesque.
+
+\end{multicols}
+\begin{multicols}{2}[\hypertarget{vestibulum-cursus-nisi-risus-sit-amet-consectetur-massa-suscipit-nec}{%
+\section{Vestibulum cursus nisi risus, sit amet consectetur massa
+suscipit
+nec}\label{vestibulum-cursus-nisi-risus-sit-amet-consectetur-massa-suscipit-nec}}]
+
+Sed condimentum, est id iaculis ornare, purus risus finibus felis,
+posuere congue est nibh eget dui. Maecenas orci erat, commodo auctor
+justo quis, vestibulum mollis ex. Vivamus sed bibendum turpis. Donec
+auctor, leo a cursus efficitur, quam urna dignissim enim, viverra
+condimentum orci est non sem. Donec ac viverra nisl. Suspendisse ac
+auctor massa. Mauris porttitor purus vel velit vehicula, sed efficitur
+odio lacinia. Fusce sed odio arcu. Ut rhoncus lacus vel magna interdum
+tincidunt. Nunc imperdiet finibus tincidunt.
+
+\end{multicols}
+}
+
+\hypertarget{explicitly-specifying-column-breaks}{%
+\subsubsection{Explicitly specifying column
+breaks}\label{explicitly-specifying-column-breaks}}
+
+Column breaks can be explicitly specified. This can be done using
+\texttt{\textbackslash{}columnbreak} or a \texttt{columnbreak} (or
+\texttt{column-break}) section.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{::: columns}
+
+\NormalTok{This content is in a first column.}
+
+\NormalTok{\textbackslash{}columnbreak}
+
+\NormalTok{This content is in a second column.}
+
+\NormalTok{:::: columnbreak}
+\NormalTok{::::}
+
+\NormalTok{This content is in a third column.}
+
+\NormalTok{:::: column{-}break}
+\NormalTok{::::}
+
+\NormalTok{This content is in a fourth column.}
+
+\NormalTok{:::}
+\end{Highlighting}
+\end{Shaded}
+
+The result is:
+
+{\begin{multicols}{4}
+
+This content is in a first column.
+
+\columnbreak
+
+This content is in a second column.
+
+\columnbreak
+
+This content is in a third column.
+
+\columnbreak
+
+This content is in a fourth column.
+
+\end{multicols}
+}
+
+\textbf{Warning and limitations}
+
+\begin{itemize}
+\tightlist
+\item
+  In \texttt{html}, browsers may ignore explicit column breaks.
+\item
+  A \texttt{\textbackslash{}columnbreak} break must be preceded by an
+  empty line and occupy a line on its own.
+\item
+  A \texttt{:::\ columnbreak} break must be followed by a closing line
+  of \texttt{:::}.
+\end{itemize}
+
+When columnbreaks are explicitly specified, they are used to determine
+the number of columns. If the section both speficies a number of columns
+and includes explicit columnbreaks, the greatest number is used.
+
+\hypertarget{container-syntax}{%
+\subsubsection{Container syntax}\label{container-syntax}}
+
+A multicolumn section with explicit breaks can also be written using a
+container syntax, with \texttt{column} sections included in a
+\texttt{columns} section, as follows.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{:::::: columns}
+
+\NormalTok{::: column}
+
+\NormalTok{First column content here}
+
+\NormalTok{:::}
+
+\NormalTok{::: column}
+
+\NormalTok{Second column content}
+
+\NormalTok{:::}
+
+\NormalTok{:::::}
+\end{Highlighting}
+\end{Shaded}
+
+This follows \href{https://pandoc.org/MANUAL.html\#columns}{Pandoc's
+markdown syntax for \texttt{beamer} output}. Note that individual column
+widths and further column attributes available in \texttt{beamer}
+outputs are not supported here.
+
+Container syntax and columnbreak syntax can be mixed, as in the example
+below:
+
+{\begin{multicols}{3}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante in
+mi ornare volutpat sed sit amet diam. Nullam interdum erat a augue
+faucibus, nec tempus tortor sagittis. Aenean imperdiet imperdiet
+dignissim. Nam aliquam blandit ex, sed molestie nibh feugiat ac. Morbi
+feugiat convallis semper. Ut et consequat purus. Fusce convallis
+vehicula enim in vulputate. Curabitur a augue arcu.
+
+\columnbreak
+
+Mauris laoreet lectus arcu, sed elementum turpis scelerisque id. Etiam
+porta turpis quis ipsum dictum vulputate. In ut convallis urna, at
+imperdiet nunc. Cras laoreet, massa lobortis gravida egestas, lacus est
+pellentesque arcu, imperdiet efficitur nibh dolor vel sapien. Sed
+accumsan condimentum diam non pellentesque.
+
+\columnbreak
+
+Vestibulum cursus nisi risus, sit amet consectetur massa suscipit nec.
+Sed condimentum, est id iaculis ornare, purus risus finibus felis,
+posuere congue est nibh eget dui. Maecenas orci erat, commodo auctor
+justo quis, vestibulum mollis ex.
+
+\end{multicols}
+}
+
+\hypertarget{advanced-usage}{%
+\subsection{Advanced usage}\label{advanced-usage}}
+
+\hypertarget{nesting}{%
+\subsubsection{Nesting}\label{nesting}}
+
+Multicolumn sections can be nested. Support for nesting may vary across
+browsers. Here is an illustration:
+
+{\begin{multicols}{3}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a ante in
+mi ornare volutpat sed sit amet diam. Nullam interdum erat a augue
+faucibus, nec tempus tortor sagittis. Aenean imperdiet imperdiet
+dignissim. Nam aliquam blandit ex, sed molestie nibh feugiat ac. Morbi
+feugiat convallis semper. Ut et consequat purus. Fusce convallis
+vehicula enim in vulputate. Curabitur a augue arcu.
+
+\columnbreak
+
+Mauris laoreet lectus arcu, sed elementum turpis scelerisque id. Etiam
+porta turpis quis ipsum dictum vulputate. In ut convallis urna, at
+imperdiet nunc.
+
+{\begin{multicols}{2}
+
+This is a two-column section nested within the middle column of a
+three-column section.
+
+\end{multicols}
+}
+
+Cras laoreet, massa lobortis gravida egestas, lacus est pellentesque
+arcu, imperdiet efficitur nibh dolor vel sapien. Sed accumsan
+condimentum diam non pellentesque.
+
+\columnbreak
+
+Vestibulum cursus nisi risus, sit amet consectetur massa suscipit nec.
+Sed condimentum, est id iaculis ornare, purus risus finibus felis,
+posuere congue est nibh eget dui. Maecenas orci erat, commodo auctor
+justo quis, vestibulum mollis ex.
+
+\end{multicols}
+}
+
+\hypertarget{number-of-columns}{%
+\subsubsection{Number of columns}\label{number-of-columns}}
+
+Number of columns can be specified in English up to ten. Accepted
+patterns are \texttt{\textless{}number\textgreater{}columns},
+\texttt{\textless{}number\textgreater{}-columns} and
+\texttt{\textless{}number\textgreater{}\_columns}. Note that this is a
+``class'', and should be preceded by a dot when specified along other
+attributes within curly brackets:
+
+\begin{verbatim}
+::: twocolumns
+
+::: {.three-columns columnsep=2em}
+
+:::
+\end{verbatim}
+
+Alternatively, the \texttt{column-count} can be used to specify any
+number of columns.
+
+\begin{verbatim}
+::: {.columns column-count=3}
+\end{verbatim}
+
+If both English names and \texttt{column-count} are used, the former
+prevails.
+
+\hypertarget{html-output}{%
+\subsubsection{HTML output}\label{html-output}}
+
+The \texttt{html} output looks like this. Without column breaks:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{\textless{}div}\OtherTok{ class=}\StringTok{"columns"}\OtherTok{ style=}\StringTok{"column{-}count: 2; column{-}rule: 1px solid black;"}\KeywordTok{\textgreater{}}
+
+\NormalTok{Content that distributed in columns...}
+
+\KeywordTok{\textless{}div}\OtherTok{ class=}\StringTok{"column{-}span"}\OtherTok{ style=}\StringTok{";"}\KeywordTok{\textgreater{}}
+\NormalTok{Content that spreads across all columns}
+\KeywordTok{\textless{}/div\textgreater{}}
+
+\NormalTok{More content distributed in columns...}
+
+\KeywordTok{\textless{}/div\textgreater{}}
+\end{Highlighting}
+\end{Shaded}
+
+With columnbreaks:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{\textless{}div}\OtherTok{ class=}\StringTok{"columns"}\OtherTok{ style=}\StringTok{"column{-}count: 2;"}\KeywordTok{\textgreater{}}
+
+\NormalTok{Content of the first column.}
+
+\KeywordTok{\textless{}div}\OtherTok{ style=}\StringTok{"break{-}after: column;"}\KeywordTok{\textgreater{}\textless{}/div\textgreater{}}
+
+\NormalTok{Content of the second column.}
+
+\KeywordTok{\textless{}/div\textgreater{}}
+\end{Highlighting}
+\end{Shaded}
+
+In CSS \VERB|\NormalTok{break{-}after}\InformationTok{: column}| means
+``after this element, place a column break''.
+
+The classes \texttt{columns} and \texttt{column-span} are needed to
+ensure that the first element of a multiple columns \texttt{div}, or the
+first element after an element spanning across columns, have no top
+margin. If they had we would get unwanted space at the beginning of the
+first column. Thus the filter adds the following to the header:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+  \KeywordTok{\textless{}style\textgreater{}}
+    \FunctionTok{.columns} \InformationTok{:first{-}child}\NormalTok{ \{}\KeywordTok{margin{-}top}\NormalTok{: }\DecValTok{0}\OperatorTok{;}\NormalTok{\}}
+    \FunctionTok{.column{-}span} \OperatorTok{+} \OperatorTok{*}\NormalTok{ \{}\KeywordTok{margin{-}top}\NormalTok{: }\DecValTok{0}\OperatorTok{;}\NormalTok{\}}
+  \KeywordTok{\textless{}/style\textgreater{}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{latex-output}{%
+\subsubsection{LaTeX output}\label{latex-output}}
+
+The LaTeX output looks as follows. Preamble:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{\textbackslash{}usepackage}\NormalTok{\{}\ExtensionTok{multicol}\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Document body:
+
+\begin{verbatim}
+{\begin{multicols}{2}
+
+content distributed over two columns
+
+\end{multicols}
+}
+\end{verbatim}
+
+With properties and explicit column breaks:
+
+\begin{verbatim}
+{\setlength{\columnsep}{4em}
+\setlength{\columnseprule}{ 3pt}
+\renewcommand{\columnseprulecolor}{\color{blue}}
+\begin{multicols}{3}
+
+content distributed over three columns
+
+\end{multicols}
+}
+\end{verbatim}
+
+Note that the \texttt{multicols} environment is wrapped within
+\texttt{\{...\}}. This is to ensure that settings of
+\texttt{\textbackslash{}columnsep},
+\texttt{\textbackslash{}columnseprule} and
+\texttt{\textbackslash{}columnseprulecolor} do not affect subsequent
+\texttt{multicol} environments.
+
+\hypertarget{contributing}{%
+\subsection{Contributing}\label{contributing}}
+
+Issues and pull requests are welcome. They can be submitted
+\href{https://github.com/jdutant/columns}{to the repository}.
+
+\hypertarget{references}{%
+\subsection{References}\label{references}}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{html}: \href{https://drafts.csswg.org/css-multicol}{CSS
+  Multi-column layout}
+\item
+  LaTeX: \href{https://www.ctan.org/pkg/multicol}{\texttt{multicol}
+  LaTeX package}
+\item
+  Pandoc: https://pandoc.org/lua-filters.html
+\item
+  Pandoc lua filters: https://pandoc.org/lua-filters.html
+\end{itemize}
+
+\end{document}
