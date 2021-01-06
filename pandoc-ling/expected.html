@@ -179,28 +179,7 @@
 <h1 class="title">Using pandoc-ling</h1>
 <p class="author">Michael Cysouw</p>
 </header>
-<nav id="TOC" role="doc-toc">
-<ul>
-<li><a href="#pandoc-ling"><span class="toc-section-number">1</span> pandoc-ling</a></li>
-<li><a href="#rationale"><span class="toc-section-number">2</span> Rationale</a></li>
-<li><a href="#the-basic-structure-of-a-linguistic-example"><span class="toc-section-number">3</span> The basic structure of a linguistic example</a></li>
-<li><a href="#introducing-pandoc-ling"><span class="toc-section-number">4</span> Introducing <code>pandoc-ling</code></a>
-<ul>
-<li><a href="#editing-linguistic-examples"><span class="toc-section-number">4.1</span> Editing linguistic examples</a></li>
-<li><a href="#interlinear-examples"><span class="toc-section-number">4.2</span> Interlinear examples</a></li>
-<li><a href="#cross-referencing-examples"><span class="toc-section-number">4.3</span> Cross-referencing examples</a></li>
-<li><a href="#options-of-pandoc-ling"><span class="toc-section-number">4.4</span> Options of <code>pandoc-ling</code></a>
-<ul>
-<li><a href="#global-options"><span class="toc-section-number">4.4.1</span> Global options</a></li>
-<li><a href="#local-options"><span class="toc-section-number">4.4.2</span> Local options</a></li>
-</ul></li>
-<li><a href="#issues-with-pandoc-ling"><span class="toc-section-number">4.5</span> Issues with <code>pandoc-ling</code></a></li>
-<li><a href="#a-note-on-latex-conversion"><span class="toc-section-number">4.6</span> A note on Latex conversion</a></li>
-<li><a href="#a-note-on-implementation"><span class="toc-section-number">4.7</span> A note on implementation</a></li>
-</ul></li>
-</ul>
-</nav>
-<h1 data-number="1" id="pandoc-ling"><span class="header-section-number">1</span> pandoc-ling</h1>
+<h1 data-number="1" id="pandoc-ling">pandoc-ling</h1>
 <p><em>Michael Cysouw</em> &lt;<a href="mailto:cysouw@mac.com" class="email">cysouw@mac.com</a>&gt;</p>
 <p>A Pandoc filter for linguistic examples</p>
 <p>tl;dr</p>
@@ -209,11 +188,11 @@
 <li>Let numbering and cross-referencing be done for you.</li>
 <li>Export to (almost) any format of your wishes for final polishing.</li>
 </ul>
-<h1 data-number="2" id="rationale"><span class="header-section-number">2</span> Rationale</h1>
+<h1 data-number="2" id="rationale">Rationale</h1>
 <p>In the field of linguistics there is an outspoken tradition to format example sentences in research papers in a very specific way. In the field, it is a perennial problem to get such example sentences to look just right. Within Latex, there are numerous packages to deal with this problem (e.g. covington, linguex, gb4e, expex, etc.). Depending on your needs, there is some Latex solution for almost everyone. However, these solutions in Latex are often cumbersome to type, and they are not portable to other formats. Specifically, transfer between Latex, html, docx, odt or epub would actually be highly desirable. Such transfer is the hallmark of <a href="https://pandoc.org">Pandoc</a>, a tool by John MacFarlane that provides conversion between these (and many more) formats.</p>
 <p>Any such conversion between text-formats naturally never works perfectly: every text-format has specific features that are not transferable to other formats. A central goal of Pandoc (at least in my interpretation) is to define a set of shared concepts for text-structure (a ‘common denominator’ if you will, but surely not ‘least’!) that can then be mapped to other formats. In many ways, Pandoc tries (again) to define a set of logical concepts for text structure (‘semantic markup’), which can then be formatted by your favorite typesetter. As long as you stay inside the realm of this ‘common denominator’ (in practice that means Pandoc’s extended version of Markdown/CommonMark), conversion works reasonably well (think 90%-plus).</p>
 <p>Building on John Gruber’s <a href="https://daringfireball.net/projects/markdown/syntax">Markdown philosophy</a>, there is a strong urge here to learn to restrain oneself while writing, and try to restrict the number of layout-possibilities to a minimum. In this sense, with <code>pandoc-ling</code> I propose a Markdown-structure for linguistic examples that is simple, easy to type, easy to read, and portable through the Pandoc universe by way of an extension mechanism of Pandoc, called a ‘Pandoc Lua Filter’. This extension will not magically allow you to write every linguistic example thinkable, but my guess is that in practice the present proposal covers the majority of situations in linguistic publications (think 90%-plus). As an example (and test case) I have included automatic conversions into various formats in this repository (chech them out to get an idea of the strengths and weaknesses of this approach).</p>
-<h1 data-number="3" id="the-basic-structure-of-a-linguistic-example"><span class="header-section-number">3</span> The basic structure of a linguistic example</h1>
+<h1 data-number="3" id="the-basic-structure-of-a-linguistic-example">The basic structure of a linguistic example</h1>
 <p>Basically, a linguistic examples consists of 6 possible building blocks, of which only the number and at least one example line are necessary. The space between the building blocks is kept as minimal as possible without becoming cramped. When (optional) building blocks are not included, then the other blocks shift left and up (only exception: a preamble without labels is not shifted left completely, but left-aligned with the example, not with the judgement).</p>
 <ul>
 <li><strong>Number</strong>: Running tally of all examples in the work, possibly restarting at chapters or other major headings. Typically between round brackets, possibly with a chapter number added before in long works, e.g. example (7.26). Aligned top-left, typically left-aligned to main text margin.</li>
@@ -234,8 +213,8 @@
 </figure>
 <p>There are of course much more possibilities to extend the structure of a linguistic examples, like third or fourth subdivisions of labels (often using small roman numerals as a third level) or multiple glossing lines in the interlinear example. Also, the content of the header is sometimes found right-aligned to the right of the interlinear example (language into to the top, reference to the bottom). All such options are currently not supported by <code>pandoc-ling</code>.</p>
 <p>Under the hood, this structure is prepared by <code>pandoc-ling</code> as a table. Tables are reasonably well transcoded to different document formats. Specific layout considerations mostly have to be set manually. Alignment of the text should work in most exports. Some <code>CSS</code> styling is proposed by <code>pandoc-ling</code>, but can of course be overruled.</p>
-<h1 data-number="4" id="introducing-pandoc-ling"><span class="header-section-number">4</span> Introducing <code>pandoc-ling</code></h1>
-<h2 data-number="4.1" id="editing-linguistic-examples"><span class="header-section-number">4.1</span> Editing linguistic examples</h2>
+<h1 data-number="4" id="introducing-pandoc-ling">Introducing <code>pandoc-ling</code></h1>
+<h2 data-number="4.1" id="editing-linguistic-examples">Editing linguistic examples</h2>
 <p>To include a linguistic example in Markdown <code>pandoc-ling</code> uses the <code>div</code> structure, which is indicated in Pandoc-Markdown by typing three colons at the start and three colons at the end. To indicate the <code>class</code> of this <code>div</code> the letters ‘ex’ (for ‘example’) should be added after the top colons (with or without space in between). This ‘ex’-class is the signal for <code>pandoc-ling</code> to start processing such a <code>div</code>. The numbering of these examples will be inserted by <code>pandoc-ling</code>.</p>
 <p>Empty lines can be added inside the <code>div</code> for visual pleasure, as they mostly do not have an influence on the output. Exception: do <em>not</em> use empty lines between unlabeled line examples. Multiple lines of text can be used (without empty lines in between), but they will simply be interpreted as one sequential paragraph.</p>
 <pre><code>::: ex
@@ -432,7 +411,7 @@ that should go over various lines in the output.
 </tbody>
 </table>
 </div>
-<h2 data-number="4.2" id="interlinear-examples"><span class="header-section-number">4.2</span> Interlinear examples</h2>
+<h2 data-number="4.2" id="interlinear-examples">Interlinear examples</h2>
 <p>For interlinear examples with aligned source and gloss, the structure of a <code>lineblock</code> is used, starting the lines with a vertical line <code>|</code>. There should always be four vertical lines (for header, source, gloss and translation, respectively), although the content after the first vertical line can be empty. The source and gloss lines are separated at spaces, and all parts are right-aligned. If you want to have a space that is not separated, you will have to ‘protect’ the space, either by putting a backslash before the space, or by inserting a non-breaking space instead of a normal space (either type <code>&amp;nbsp;</code> or insert an actual non-breaking space, i.e. unicode character <code>U+00A0</code>).</p>
 <pre><code>:::ex
 | Dutch (Germanic)
@@ -628,7 +607,7 @@ b.
 </tbody>
 </table>
 </div>
-<h2 data-number="4.3" id="cross-referencing-examples"><span class="header-section-number">4.3</span> Cross-referencing examples</h2>
+<h2 data-number="4.3" id="cross-referencing-examples">Cross-referencing examples</h2>
 <p>The examples are automatically numbered by <code>pandoc-ling</code>. Cross-references to examples can be made by using the <code>[@ID]</code> format (used by Pandoc for citations). When an example has an explicit identifier (like <code>#test</code> in the next example), then a reference can be made to this example with <code>[@test]</code>, leading to <a href="#test">(4.11)</a> when formatted.</p>
 <pre><code>::: {#test .ex}
 This is a test
@@ -646,8 +625,8 @@ This is a test
 </div>
 <p>Inspired by the <code>linguex</code>-approach, you can also use the keywords <code>Next</code> or <code>Last</code> to refer to the next or the last example, e.g. <code>[@Last]</code> will be formatted as <a href="#test">(4.11)</a>. By doubling the capitals to <code>NNext</code> or <code>LLast</code> reference to the next/last-but-one can be made. Actually, the number of starting capitals can be repeated at will in <code>pandoc-ling</code>, so something like <code>[@LLLLLLLLast]</code> will also work. It will be formatted as <a href="#ling-ex:4.4">(4.4)</a> after the processing of <code>pandoc-ling</code>. Needless to say that in such a situation an explicit identifier would be a better choice.</p>
 <p>Referring to sub-examples can be done by manually adding a suffix into the cross reference, simply separated from the identifier by a space. For example, <code>[@LLast c]</code> will refer to the third sub-example of the last-but-one example. Formatted this will look like this: <a href="#ling-ex:4.10">(4.10 c)</a>, smile! However, note that the “c” has to be manually determined. It is simply a literal suffix that will be copied into the cross-reference. Something like <code>[@LLast Ha1l0]</code> will work also, leading to <a href="#ling-ex:4.10">(4.10 Ha1l0)</a> when formatted (which is of course nonsensical).</p>
-<h2 data-number="4.4" id="options-of-pandoc-ling"><span class="header-section-number">4.4</span> Options of <code>pandoc-ling</code></h2>
-<h3 data-number="4.4.1" id="global-options"><span class="header-section-number">4.4.1</span> Global options</h3>
+<h2 data-number="4.4" id="options-of-pandoc-ling">Options of <code>pandoc-ling</code></h2>
+<h3 data-number="4.4.1" id="global-options">Global options</h3>
 <p>The following global options are available with <code>pandoc-ling</code>. These can be added to the <a href="https://pandoc.org/MANUAL.html#metadata-blocks">Pandoc metadata</a>. An example of such metadata can be found at the bottom of this <code>readme</code> in the form of a YAML-block. Pandoc allows for various methods to provide metadata (see the link above).</p>
 <ul>
 <li><strong><code>formatGloss</code></strong> (boolean, default <code>false</code>): should all interlinear examples be consistently formatted? If you use this option, you can simply use capital letters for abbreviations in the gloss, and they will be changed to small caps. The source line is set to italics, and the translations is put into single quotes.</li>
@@ -656,9 +635,9 @@ This is a test
 <li><strong><code>addChapterNumber</code></strong> (boolean, default <code>false</code>): should the chapter (= highest heading level) number be added to the number of the example? In most formats this automatically implies <code>restartAtChapter: true</code>. In most Latex situations this only works in combination with a <code>documentclass: book</code>.</li>
 <li><strong><code>latexPackage</code></strong> (one of: <code>linguex</code>, <code>gb4e</code>, <code>langsci-gb4e</code>, <code>expex</code>, default <code>linguex</code>): Various options for converting examples to Latex packages that typeset linguistic examples. None of the conversions works perfectly, though in should work in most normal situations (think 90%-plus). It might be necessary to first convert to <code>Latex</code> and then typeset. Using the direct option insider Pandoc might also work in many situations.</li>
 </ul>
-<h3 data-number="4.4.2" id="local-options"><span class="header-section-number">4.4.2</span> Local options</h3>
+<h3 data-number="4.4.2" id="local-options">Local options</h3>
 <p>Local options are options that can be set for each individual example. Currently only the <code>formatGloss</code> option can be used to have an individual example be formatted differently from the global setting. For example, when the global setting is <code>formatGloss: true</code> in the metadata, then adding <code>formatGloss=false</code> in the curly brackets of a specific example will block the formatting. This is especially useful when the automatic formatting does not give the desired result.</p>
-<h2 data-number="4.5" id="issues-with-pandoc-ling"><span class="header-section-number">4.5</span> Issues with <code>pandoc-ling</code></h2>
+<h2 data-number="4.5" id="issues-with-pandoc-ling">Issues with <code>pandoc-ling</code></h2>
 <ul>
 <li>Manually provided identifiers for examples should not be purely numerical (so do not use e.g. <code>#5789</code>). In some situation this interferes with the setting of the cross-references.</li>
 <li>Because the cross-references use the same structure as citations in Pandoc, the processing of citations (by <code>citeproc</code>) should be performed <strong>after</strong> the processing by <code>pandoc-ling</code>. Further, <a href="https://github.com/lierdakil/pandoc-crossref"><code>pandoc-crossref</code></a>, another Pandoc extension for numbering figures and other captions, also uses the same system. From experience, it seems safer to put <code>pandoc-crossref</code> <strong>before</strong> <code>pandoc-ling</code> in the order of processing (though I have no idea why).</li>
@@ -667,9 +646,9 @@ This is a test
 <li>Multi-column cells are crucial for <code>pandoc-ling</code> to work properly. These are only introduced in new table format with Pandoc 2.10 (so older Pandoc version are not supported). Also note that these structures are not yet exported to all formats, e.g. it will not be displayed correctly in <code>docx</code>. However, this is currently an area of active development</li>
 <li><code>langsci-gb4e</code> is only available as part of the <a href="https://ctan.org/pkg/langsci?lang=en"><code>langsci</code> package</a>. You have to make it available to Pandoc, e.g. by adding it into the same directory as the pandoc-ling.lua filter. I have added a recent version of <code>langsci-gb4e</code> here for convenience, but this one might be outdated at some time in the future.</li>
 </ul>
-<h2 data-number="4.6" id="a-note-on-latex-conversion"><span class="header-section-number">4.6</span> A note on Latex conversion</h2>
+<h2 data-number="4.6" id="a-note-on-latex-conversion">A note on Latex conversion</h2>
 <p>Originally, I decided to write this filter as a two-pronged conversion, making a markdown version myself, but using a mapping to one of the many latex libraries for linguistics examples as a quick fix. I assumed that such a mapping would be the easy part. However, it turned out that the mapping to latex was much more difficult that I anticipated. Basically, it turned out that the ‘common denominator’ that I was aiming for was not necessarily the ‘common denominator’ provided by the latex packages. I worked on mapping to various packages (linguex, gb4e, langsci-gb4e and expex) with growing dismay. This approach resulted in a first version. However, after this version was (more or less) finished, I realised that it would be better to first define the ‘common denominator’ more clearly (as done here), and then implement this purely in Pandoc. From that basis I have then made attempts to map them to the various latex packages.</p>
-<h2 data-number="4.7" id="a-note-on-implementation"><span class="header-section-number">4.7</span> A note on implementation</h2>
+<h2 data-number="4.7" id="a-note-on-implementation">A note on implementation</h2>
 <p>The basic structure of the examples are transformed into Pandoc tables. Tables are reasonably safe for converting in other formats. Care has been taken to add <code>classes</code> to all elements of the tables (e.g. the preamble has the class <code>linguistic-example-preamble</code>). When exported formats are aware of these classes, they can be used to fine-tune the formatting. I have used a few such fine-tunings into the html output of this filter by adding a few CSS-style statements. The naming of the classes is quite transparent, using the form <code>linguistic-example-...</code>.</p>
 </body>
 </html>

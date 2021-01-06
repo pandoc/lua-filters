@@ -58,7 +58,7 @@
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\setcounter{secnumdepth}{5}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 \usepackage{linguex}
 \renewcommand{\theExLBr}{}
 \renewcommand{\theExRBr}{}
@@ -77,10 +77,6 @@
 \begin{document}
 \maketitle
 
-{
-\setcounter{tocdepth}{3}
-\tableofcontents
-}
 \hypertarget{pandoc-ling}{%
 \section{pandoc-ling}\label{pandoc-ling}}
 

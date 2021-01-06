@@ -69,7 +69,8 @@ end
 ------------------------------------------
 
 function addFormatting (meta)
-  local tmp = meta['header-includes'] or pandoc.MetaList{meta['header-includes']}
+	local tmp = meta['header-includes'] or 
+							pandoc.MetaList{meta['header-includes']}
   
   if FORMAT:match "html" then
     -- add specific CSS for layout of examples
@@ -181,7 +182,8 @@ function processDiv (div)
 
 	-- keep track of chapters (primary sections)
 	if div.classes[1] == "section" then
-		if div.attributes.number ~= nil and string.len(div.attributes.number) == 1 then
+		if div.attributes.number ~= nil and 
+					string.len(div.attributes.number) == 1 then
 			chapter = chapter + 1
 			counterInChapter = 0
 		end
@@ -477,7 +479,8 @@ function pandocMakeExample (parsedDiv)
   local numberParen = pandoc.Plain( "("..parsedDiv.number..")" )
 	example[1].bodies[1].body[1][2][1].contents[1] = numberParen
 	-- set class for number
-	example[1].bodies[1].body[1][2][1].attr = pandoc.Attr(nil, {"linguistic-example-number"})
+	example[1].bodies[1].body[1][2][1].attr = 
+		pandoc.Attr(nil, {"linguistic-example-number"})
 
 	return example
 end
