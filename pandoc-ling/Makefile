@@ -4,18 +4,18 @@ DIFF ?= diff --strip-trailing-cr -u
 
 test: test_html test_latex
 
-test_html: README.md pandoc-ling.lua
+test_html: readme.md pandoc-ling.lua
 	@pandoc --lua-filter pandoc-ling.lua --standalone --to=html $< \
 	    | $(DIFF) expected.html -
 
-test_latex: README.md pandoc-ling.lua
+test_latex: readme.md pandoc-ling.lua
 	@pandoc --lua-filter pandoc-ling.lua --standalone --to=latex $< \
 	    | $(DIFF) expected.tex -
 
-expected.html: README.md pandoc-ling.lua
+expected.html: readme.md pandoc-ling.lua
 	pandoc --lua-filter pandoc-ling.lua --standalone --output $@ $<
 
-expected.tex: README.md pandoc-ling.lua
+expected.tex: readme.md pandoc-ling.lua
 	pandoc --lua-filter pandoc-ling.lua --standalone --output $@ $<
 
 .PHONY: test
