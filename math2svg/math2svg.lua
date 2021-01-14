@@ -16,7 +16,7 @@
 
 --  LICENSE
 --
---    Copyright (c) 2020 Serge Y. Stroobandt
+--    Copyright (c) 2020-2021 Serge Y. Stroobandt
 --
 --    MIT License
 --

@@ -178,7 +178,7 @@ For code auditing, see also:
 
 ## License
 
-Copyright (c) 2020 Serge Y. Stroobandt
+Copyright (c) 2020-2021 Serge Y. Stroobandt
 
 MIT License
 
