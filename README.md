@@ -1,40 +1,60 @@
-[![travis build
-status](https://img.shields.io/travis/pandoc/lua-filters/master.svg?label=travis+build)](https://travis-ci.org/pandoc/lua-filters)
-
 # Lua Filters
 
-This repository collects Lua filters for pandoc.
+[![Build status][GitHub Actions badge]][GitHub Actions]
 
-To learn about Lua filters, see the
-[documentation](http://pandoc.org/lua-filters.html).
+[GitHub Actions badge]: https://img.shields.io/github/workflow/status/pandoc/lua-filters/CI?logo=github
+[GitHub Actions]: https://github.com/pandoc/lua-filters/actions
 
-Structure
----------
+A collection of Lua filters for pandoc.
 
-Each filter goes in its own subdirectory.  Each subdirectory contains:
+To learn about Lua filters, see the [documentation].
 
-- the filter itself (e.g. `wordcount.lua`)
-- a `README.md` describing the use of the filter
-- a `Makefile` with a `test` target to test the filter
-- some data files used for the tests, which may also serve
-  as examples
+[documentation]: http://pandoc.org/lua-filters.html
 
 Requirements
 ------------
 
-Filters are tested against the latest pandoc version.  There is
-no guarantee that filters will work with older versions, but
+Filters are tested against the pandoc version in the latest
+pandoc/ubuntu Docker image, i.e. usually the latest release. There
+is no guarantee that filters will work with older versions, but
 many do.
 
 Some filters depend on external programs, which must be installed
-separately.  Refer to the filters' README for detailed
+separately. Refer to the filters' documentations for detailed
 requirements.
+
+Installation
+------------
+
+All filters can be used without special installation, just by
+passing the respective `.lua` file path to pandoc via
+`--lua-filter`/`-L`.
+
+User-global installation is possible by placing a filter in within
+the `filters` directory of pandoc's user data directory. This
+allows to use the filters just by using the filename, without
+having to specify the full file path.
+
+On mac and Linux, the filters can be installed by extracting the
+archive with
+
+    RELEASE_URL=https://github.com/pandoc/lua-filters/releases/latest
+    curl -LSs $RELEASE_URL/download/lua-filters.tar.gz | \
+        tar --strip-components=1 --one-top-level=$PANDOC_DIR -zvxf -
+
+where `$PANDOC_DIR` is a user directory as listed in the output of
+`pandoc -v`.
 
 Contributing
 ------------
 
-PRs for new filters are welcome, provided they conform to these
-guidelines. Lua code should ideally follow the Olivine Labs [Lua
-style guide].
+PRs for improvements, bug fixes, or new filters are welcome.
+Please see CONTRIBUTING.md for additional information.
 
-[Lua style guide]: https://github.com/Olivine-Labs/lua-style-guide
+License
+-------
+
+All filters are published under the MIT license by their
+respective authors. See LICENSE for details.
+
+[Lua style guide]: https://github.com/hslua/lua-style-guide

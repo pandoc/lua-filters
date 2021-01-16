@@ -52,6 +52,15 @@ local function adjust_refs_components (div)
   return div
 end
 
+local function run_citeproc (doc)
+  if PANDOC_VERSION >= '2.11' then
+    local args = {'--from=json', '--to=json', '--citeproc'}
+    return run_json_filter(doc, 'pandoc', args)
+  else
+    return run_json_filter(doc, 'pandoc-citeproc', {FORMAT, '-q'})
+  end
+end
+
 --- Create a bibliography for a given topic. This acts on all
 -- section divs at or above `section_refs_level`
 local function create_section_bibliography (div)
@@ -76,8 +85,7 @@ local function create_section_bibliography (div)
     subsections = div.content:filter(is_section_div)
   end
   local tmp_doc = pandoc.Pandoc(blocks, meta)
-  local filter_args = {FORMAT, '-q'} -- keep pandoc-citeproc quiet
-  local new_doc = run_json_filter(tmp_doc, 'pandoc-citeproc', filter_args)
+  local new_doc = run_citeproc(tmp_doc)
   div.content = new_doc.blocks .. subsections
   return adjust_refs_components(div)
 end

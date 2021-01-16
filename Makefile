@@ -1,6 +1,6 @@
 FILTERS=$(wildcard $(shell find * -type d | grep -v '[/\\]'))
 FILTER_FILES=$(shell find * -name "*.lua" -type f)
-LUA_FILTERS_TEST_IMAGE = tarleb/lua-filters-test
+LUA_FILTERS_TEST_IMAGE = pandoc/lua-filters-test
 
 .PHONY: test show-args docker-test docker-test-image archive
 
@@ -8,6 +8,8 @@ test:
 	sh runtests.sh $(FILTERS)
 
 archive: .build/lua-filters.tar.gz
+
+archives: .build/lua-filters.tar.gz .build/lua-filters.zip
 
 show-vars:
 	@printf "FILTERS: %s\n" $(FILTERS)
@@ -27,14 +29,28 @@ docker-test-image: .tools/Dockerfile
 .PHONY: collection
 collection: .build/lua-filters
 
-.build/lua-filters: $(FILTER_FILES)
-	mkdir -p .build/lua-filters
-	cp -a $(FILTER_FILES) .build/lua-filters
-	cp -a LICENSE .build/lua-filters
+.PHONY: docs
+docs:
+
+.build/lua-filters: $(FILTER_FILES) docs \
+		CONTRIBUTING.md LICENSE README.md
+	mkdir -p $@
+	mkdir -p $@/filters
+	mkdir -p $@/docs
+	cp -a CONTRIBUTING.md LICENSE README.md $@
+	cp -a $(FILTER_FILES) $@/filters
+	for filter in $(FILTERS); do \
+	    cp $$filter/README.md $@/docs/$$filter.md; \
+	done
 	@printf "Filters collected in '%s'\n" "$@"
 
 .build/lua-filters.tar.gz: .build/lua-filters
 	tar -czf $@ -C .build lua-filters
+	@printf "Archive written to '%s'\n" "$@"
+
+.build/lua-filters.zip: .build/lua-filters
+	rm -f $@
+	(cd .build && zip -r -9 lua-filters.zip lua-filters)
 	@printf "Archive written to '%s'\n" "$@"
 
 clean:

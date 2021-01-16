@@ -29,6 +29,7 @@ variables:
 - `fromphone` (alias: `phone`): sender's phone number
 - `fromurl` (alias: `url`): sender's URL
 - `customer`: customer number
+- `firstfoot`: footer on the first page
 - `invoice`: invoice number
 - `myref`: sender's reference
 - `place`: sender's place used near date
@@ -43,7 +44,7 @@ list is given, then each list item is used as a line, e.g.,
     fromaddress:
       - 35 Industry Way
       - Springfield
-      
+
 The `KOMAoptions` value is inferred from the given variables, but
 can be overwritten by specifying it explicitly.
 

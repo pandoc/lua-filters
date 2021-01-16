@@ -20,6 +20,6 @@ sample.pdf: sample.md
 	@pandoc -s $(LF) $(F) -t latex $< -o $@
 
 clean:
-	rm -v *.aux *.dvi *.fdb_latexmk *.fls *.log *.lot *.ps *.pdf sample.tex | true
+	rm -fv *.aux *.dvi *.fdb_latexmk *.fls *.log *.lot *.ps *.pdf sample.tex
 
 .PHONY: test test-with-crossref clean

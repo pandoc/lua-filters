@@ -16,8 +16,36 @@ Metadata from included files is discarded.
 The default is to include the subdocuments unchanged, but it can
 be convenient to modify the level of headers; a top-level header
 in an included file should be a second or third-level header in
-the final document. Use the `shift-heading-level-by` attribute to
-control header shifting.
+the final document.
+
+#### Manual shifting
+
+Use the `shift-heading-level-by` attribute to control header
+shifting.
+
+#### Automatic shifting
+
+1. Add metadata `-M include-auto` to enable automatic shifting.
+2. Do not specify `shift-heading-level-by`
+3. It will be inferred to the last heading level encountered
+
+_Example_ :
+
+````md
+# Title f
+
+This is `file-f.md`.
+
+## Subtitle f
+
+```{.include} >> equivalent to {.include shift-heading-level-by=2}
+file-a.md
+```
+
+```{.include shift-heading-level-by=1} >> force shift to be 1
+file-a.md
+```
+````
 
 ### Comments
 
@@ -37,7 +65,7 @@ Included files can in turn include other files. Note that all
 filenames must be relative to the directory from which pandoc is
 run. I.e., if a file `a/b.md` is included in the main document,
 and another file `a/b/c.md` should be included, the full relative
-path must be used. Writing `b/c.md` in `a/b.md` would *not* work.
+path must be used. Writing `b/c.md` in `a/b.md` would _not_ work.
 
 ## Example
 

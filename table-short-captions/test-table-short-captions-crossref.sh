@@ -4,9 +4,10 @@ latex_result="$(cat -)"
 
 assert_contains ()
 {
-    printf '%s' "$latex_result" | grep -qF "$1" -
+    content="$(cat -)"
+    printf '%s' "$latex_result" | grep -qF "$content" -
     if [ $? -ne 0 ]; then
-        printf 'Output does not contain `%s`.\n' "$1" >&2
+        printf 'Output does not contain `%s`.\n' "$content" >&2
         exit 1
     fi
 }
@@ -49,7 +50,7 @@ assert_contains <<EOF
 caption} of tbl3, which is \textbf{unlisted}.}\tabularnewline
 EOF
 assert_contains <<EOF
-\undef\pandoctableshortcapt
+\let\pandoctableshortcapt\relax
 EOF
 
 # Test 4
@@ -65,7 +66,7 @@ caption} of tbl4, which has an \textbf{overriding} short-caption. This
 is the expected usage.}\tabularnewline
 EOF
 assert_contains <<EOF
-\undef\pandoctableshortcapt
+\let\pandoctableshortcapt\relax
 EOF
 
 # Test 5
@@ -114,5 +115,5 @@ caption} of tbl9, which is \textbf{unlisted}, yet has a
 short-caption.}\tabularnewline
 EOF
 assert_contains <<EOF
-\undef\pandoctableshortcapt
+\let\pandoctableshortcapt\relax
 EOF
