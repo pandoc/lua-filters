@@ -19,6 +19,8 @@ RUN apt-get -q --no-allow-insecure-repositories update \
        lmodern \
        luarocks \
        make \
+       nodejs \
+       npm \
        python-is-python3 \
        python3 \
        python3-matplotlib \
@@ -38,6 +40,9 @@ ARG plantuml_jar=plantuml.1.2018.9.jar
 RUN wget https://sourceforge.net/projects/plantuml/files/${plantuml_jar} \
       --quiet --output-document=/root/${plantuml_jar}
 ENV PLANTUML=/root/$plantuml_jar
+
+RUN npm install --global mathjax-node-cli
+
 ENV DIFF="diff -u"
 ENV LC_ALL="C.UTF-8"
 ENV LANG="C.UTF-8"

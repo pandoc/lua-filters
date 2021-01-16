@@ -1,0 +1,5 @@
+---
+header-includes: |
+    \newcommand{\j}{\text{j}}
+    \newcommand{\e}[1]{\,\text{e}^{#1}}
+...
