@@ -160,6 +160,31 @@ pandoc --mathml --filter='math2svg.lua' header-includes.yaml input.md
 ```
 
 
+## Adding equation numbers with CSS
+
+Here is how to add automatic equation numbers to the right,
+whilst keeping display math equations centered.
+
+```css
+span.math.display {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    }
+
+span.math.display svg {
+    margin: 0 auto;
+    max-width: 85%;
+    }
+
+span.math.display:after {
+    counter-increment: equation;
+    content: '(' counter(equation) ')';
+    font-weight: bold;
+    }
+```
+
+
 ## Privacy
 
 No Internet connection is established when creating MathJax SVG code using
