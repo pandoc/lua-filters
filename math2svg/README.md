@@ -162,8 +162,12 @@ pandoc --mathml --filter='math2svg.lua' header-includes.yaml input.md
 
 ## Adding equation numbers with CSS
 
-Here is how to add automatic equation numbers to the right,
-whilst keeping display math equations centered.
+When automatic equation numbers are desired, these need to be added using
+[cascading style sheets (CSS)](https://en.wikipedia.org/wiki/CSS),
+as JavaScript is not available in CSS paged media.
+
+Below example CSS code centers display math whilst adding equation numbers
+to the right.
 
 ```css
 span.math.display {
