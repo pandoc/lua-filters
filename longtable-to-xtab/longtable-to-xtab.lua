@@ -8,9 +8,6 @@
 -- @license MIT - see LICENSE file for details.
 -- @release 1.0
 
--- For debug
-local pretty = require 'pl.pretty'
-
 --- Add a block to the document's header-includes meta-data field.
 -- @param meta the document's metadata block
 -- @param block Pandoc block element (e.g. RawBlock or Para) to be added to header-includes
