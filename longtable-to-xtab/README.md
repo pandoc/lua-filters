@@ -16,8 +16,8 @@ Introduction
 
 By default Pandoc outputs uses the LaTeX package `longtable` to format
 tables in LaTeX. However `longtable` environments cannot be used in a two column document or in a multiple columns environements (`multicol`).
-In those contexts one should use the `supertabular` or `xtab` packages
-- preferably `xtab`, which is based on `supertabular` and improves it.
+In those contexts one should use the `supertabular` or `xtab` packages -
+preferably `xtab`, which is based on `supertabular` and improves it.
 
 This filter converts the LaTeX output of Pandoc for tables from
 `longtable` to `xtab` codes. It does so by implementing a [suggestion of
