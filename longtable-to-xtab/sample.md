@@ -1,3 +1,9 @@
+---
+classoption:
+  - twocolumn
+  - landscape
+---
+
 # Table with headers and caption
 
 -------------------------------------------------------------
