@@ -1,0 +1,77 @@
+\hypertarget{table-with-headers-and-caption}{%
+\section{Table with headers and
+caption}\label{table-with-headers-and-caption}}
+
+{
+  {\renewcommand{\endfirsthead}{\iffalse}
+  \let\endhead\fi
+        
+
+\tablecaption{Here's the \emph{caption}. It, too, may span multiple
+lines.}
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.17}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.11}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.22}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.36}}@{}}
+\caption{Here's the \emph{caption}. It, too, may span multiple
+lines.}\tabularnewline
+\toprule
+Centered Header & Default Aligned & Right Aligned & Left
+Aligned\footnote{Footnote in a table.} \\ \addlinespace
+\midrule
+\endfirsthead
+\toprule
+Centered Header & Default Aligned & Right Aligned & Left
+Aligned{} \\ \addlinespace
+\midrule
+\endhead
+First & row & 12.0 & Example of a row that spans multiple
+lines. \\ \addlinespace
+Second & row & 5.0 & Here's another one. Note the blank line between
+rows. \\ \addlinespace
+\bottomrule
+\end{longtable}
+
+}
+
+\hypertarget{table-without-headers}{%
+\section{Table without headers}\label{table-without-headers}}
+
+\tablecaption{this table doesn't have headers.}
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.17}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.11}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.22}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.36}}@{}}
+\caption{this table doesn't have headers.}\tabularnewline
+\toprule
+\endhead
+First & row & 12.0 & Example of a row that spans multiple
+lines. \\ \addlinespace
+Second & row & 5.0 & Here's another one. Note the blank line between
+rows. \\ \addlinespace
+\bottomrule
+\end{longtable}
+
+\hypertarget{table-without-caption}{%
+\section{Table without caption}\label{table-without-caption}}
+
+\begin{longtable}[]{@{}
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.17}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.11}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.22}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.36}}@{}}
+\toprule
+Centered Header & Default Aligned & Right Aligned & Left
+Aligned \\ \addlinespace
+\midrule
+\endhead
+First & row & 12.0 & Example of a row that spans multiple
+lines. \\ \addlinespace
+Second & row & 5.0 & Here's another one. Note the blank line between
+rows. \\ \addlinespace
+\bottomrule
+\end{longtable}
