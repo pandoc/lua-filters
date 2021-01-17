@@ -4,6 +4,11 @@ classoption:
   - landscape
 ---
 
+This is a two column layout with tables. Without the `longtable-to-xtab`
+filter trying to convert this document to PDF fails because Pandoc's
+favoured table package, `longtable`, isn't compatible with multiple
+column layouts.
+
 # Table with headers and caption
 
 -------------------------------------------------------------
