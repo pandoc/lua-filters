@@ -16,8 +16,7 @@ abstract: |
 ---
 
 ::: {.frontmatter}
-Preface
-=======
+# Preface
 
 -   Phasellus purus.
 -   Praesent fermentum tempor tellus.
@@ -26,8 +25,7 @@ Preface
 -   Curabitur lacinia pulvinar nibh.
 :::
 
-Lorem Ipsum
-===========
+# Lorem Ipsum
 
 Quo dolore molestiae et laboriosam occaecati explicabo corrupti. Earum
 expedita ducimus quaerat est quam ut molestiae. Illum deleniti vel

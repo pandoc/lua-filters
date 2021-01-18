@@ -4,9 +4,10 @@ latex_result="$(cat -)"
 
 assert_contains ()
 {
-    printf '%s' "$latex_result" | grep -qF "$1" -
+    content="$(cat -)"
+    printf '%s' "$latex_result" | grep -qF "$content" -
     if [ $? -ne 0 ]; then
-        printf 'Output does not contain `%s`.\n' "$1" >&2
+        printf 'Output does not contain `%s`.\n' "$content" >&2
         exit 1
     fi
 }
@@ -45,7 +46,7 @@ assert_contains <<EOF
 \textbf{unlisted}. \{\#tbl:tbl-label3\}}\tabularnewline
 EOF
 assert_contains <<EOF
-\undef\pandoctableshortcapt
+\let\pandoctableshortcapt\relax
 EOF
 
 # Test 4
@@ -58,7 +59,7 @@ an \textbf{overriding} short-caption. This is the expected usage.
 \{\#tbl:tbl-label4\}}\tabularnewline
 EOF
 assert_contains <<EOF
-\undef\pandoctableshortcapt
+\let\pandoctableshortcapt\relax
 EOF
 
 # Test 5
@@ -100,5 +101,5 @@ assert_contains <<EOF
 \{\#tbl:tbl-label9\}}\tabularnewline
 EOF
 assert_contains <<EOF
-\undef\pandoctableshortcapt
+\let\pandoctableshortcapt\relax
 EOF

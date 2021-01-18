@@ -19,10 +19,13 @@ Usage
 
 Fully supported output formats are:
 
+- AsciiDoc / Asciidoctor,
+- ConTeXt,
 - Docx,
-- LaTeX,
+- EPUB,
+- groff ms,
 - HTML, and
-- EPUB.
+- LaTeX.
 
 ODT is supported, but requires additional settings in the
 reference document (see below).

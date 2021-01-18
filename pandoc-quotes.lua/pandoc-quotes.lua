@@ -1,32 +1,32 @@
 --- Replaces plain quotation marks with typographic ones.
--- 
+--
 -- # SYNOPSIS
--- 
+--
 --      pandoc --lua-filter pandoc-quotes.lua
--- 
--- 
+--
+--
 -- # DESCRIPTION
--- 
+--
 -- pandoc-quotes.lua is a filter for pandoc that replaces non-typographic
 -- quotation marks with typographic ones for languages other than American
 -- English.
--- 
+--
 -- You can define which typographic quotation marks to replace plain ones with
 -- by setting either a document's quot-marks, quot-lang, or lang
 -- metadata field. If none of these is set, pandoc-quotes.lua does nothing.
--- 
+--
 -- You can add your own mapping of a language to quotation marks or override
 -- the default ones by setting quot-marks-by-lang.
--- 
+--
 -- ## quot-marks
--- 
+--
 -- A list of four strings, where the first item lists the primary left
 -- quotation mark, the second the primary right quotation mark, the third
 -- the secondary left quotation mark, and the fourth the secondary right
 -- quotation mark.
--- 
+--
 -- For example:
--- 
+--
 -- ```yaml
 -- ---
 -- quot-marks:
@@ -36,68 +36,68 @@
 --     - '
 -- ...
 -- ```
--- 
+--
 -- You always have to set all four.
--- 
+--
 -- If each quotation mark consists of one character only,
 -- you can write the whole list as a simple string.
--- 
+--
 -- For example:
--- 
+--
 -- ```yaml
 -- ---
 -- quot-marks: ""''
 -- ...
 -- ```
--- 
+--
 -- If quot-marks is set, the other fields are ignored.
--- 
--- 
+--
+--
 -- # quotation-lang
--- 
+--
 -- An RFC 5646-like code for the language the quotation marks of
 -- which shall be used (e.g., "pt-BR", "es").
--- 
+--
 -- For example:
--- 
+--
 -- ```yaml
 -- ---
 -- quot-lang: de-AT
 -- ...
 -- ```
--- 
+--
 -- Note: Only the language and the country tags of RFC 5646 are supported.
--- For example, "it-CH" (i.e., Italian as spoken in Switzerland) is fine, 
--- but "it-756" (also Italian as spoken in Switzerland) will return the 
+-- For example, "it-CH" (i.e., Italian as spoken in Switzerland) is fine,
+-- but "it-756" (also Italian as spoken in Switzerland) will return the
 -- quotation marks for "it" (i.e., Italian as spoken in general).
--- 
+--
 -- If quot-marks is set, quot-lang is ignored.
--- 
--- 
+--
+--
 -- # lang
--- 
+--
 -- The format of lang is the same as for quot-lang. If quot-marks
--- or quot-lang is set, lang is ignored. 
--- 
+-- or quot-lang is set, lang is ignored.
+--
 -- For example:
--- 
+--
 -- ```yaml
 -- ---
 -- lang: de-AT
 -- ...
 -- ```
--- 
--- 
+--
+--
 -- # ADDING LANGUAGES
--- 
+--
 -- You can add quotation marks for unsupported languages, or override the
 -- defaults, by setting the metadata field quot-marks-by-lang to a maping
 -- of RFC 5646-like language codes (e.g., "pt-BR", "es") to lists of quotation
 -- marks, which are given in the same format as for the quot-marks
 -- metadata field.
--- 
+--
 -- For example:
--- 
+--
 -- ```yaml
 -- ---
 -- quot-marks-by-lang:
@@ -105,29 +105,29 @@
 -- lang: abc-XYZ
 -- ...
 -- ```
--- 
--- 
+--
+--
 -- # CAVEATS
--- 
+--
 -- pandoc represents documents as abstract syntax trees internally, and
 -- quotations are nodes in that tree. However, pandoc-quotes.lua replaces
 -- those nodes with their content, adding proper quotation marks. That is,
 -- pandoc-quotes.lua pushes quotations from the syntax of a document's
--- representation into its semantics. That being so, you should not 
+-- representation into its semantics. That being so, you should not
 -- use pandoc-quotes.lua with output formats that represent quotes
 -- syntactically (e.g., HTML, LaTeX, ConTexT). Moroever, filters running after
 -- pandoc-quotes won't recognise quotes. So, it should be the last or
 -- one of the last filters you apply.
--- 
+--
 -- Support for quotation marks of different languages is certainly incomplete
 -- and likely erroneous. See <https://github.com/odkr/pandoc-quotes.lua> if
 -- you'd like to help with this.
--- 
+--
 -- pandoc-quotes.lua is Unicode-agnostic.
--- 
--- 
+--
+--
 -- # SEE ALSO
--- 
+--
 -- pandoc(1)
 --
 --
@@ -197,10 +197,10 @@ if PATH_SEP == '\\' then EOL = '\r\n'
 
 
 --- A list of mappings from RFC 5646-ish language codes to quotation marks.
--- 
+--
 -- I have adopted the list below from:
 -- <https://en.wikipedia.org/w/index.php?title=Quotation_mark&oldid=836731669>
--- 
+--
 -- I tried to come up with reasonable defaults for secondary quotes for
 -- language that, according to the Wikipedia, don't have any.
 --
@@ -218,13 +218,15 @@ if PATH_SEP == '\\' then EOL = '\r\n'
 -- are going to use them anyway. And they should get a reasonable result,
 -- not a runtime error.
 --
--- The order in which languages are listed is meaningless. If you define 
+-- The order in which languages are listed is meaningless. If you define
 -- variants for a language that is spoken in different countries, also
 -- define a 'default' for the language alone, without the country tag.
 QUOT_MARKS_BY_LANG = {
-    bo          = {'「', '」',    '『', '』'     },
+    ar          = {'”',  '“',     '’',  '‘'    },
     bs          = {'”',  '”',     '’',  '’'    },
-    cn          = {'「', '」',    '『', '』'     },
+    bo          = {'「', '」',     '『', '』'    },
+    bs          = {'”',  '”',     '’',  '’'    },
+    cn          = {'「', '」',     '『', '』'    },
     cs          = {'„',  '“',     '‚',  '‘'    },
     cy          = {'‘',  '’',     '“',  '”'    },
     da          = {'»',  '«',     '›',  '‹'    },
@@ -364,8 +366,8 @@ do
     --
     -- @tparam pandoc.MetaValue The content of a metadata field.
     --  Must be either of type pandoc.MetaInlines or pandoc.MetaList.
-    -- @treturn[1] {pandoc.Str,pandoc.Str,pandoc.Str,pandoc.Str} 
-    --  A table of quotation marks 
+    -- @treturn[1] {pandoc.Str,pandoc.Str,pandoc.Str,pandoc.Str}
+    --  A table of quotation marks
     -- @treturn[2] `nil` if an error occurred.
     -- @treturn[2] string An error message.
     function get_quotation_marks (meta)
@@ -391,7 +393,7 @@ end
 
 do
     local stringify = pandoc.utils.stringify
-    
+
     -- Holds the quotation marks for the language of the document.
     -- Common to `configure` and `insert_quot_marks`.
     local QUOT_MARKS = nil
@@ -407,9 +409,9 @@ do
         if meta['quot-marks-by-lang'] then
             for k, v in pairs(meta['quot-marks-by-lang']) do
                 local quot_marks, err = get_quotation_marks(v)
-                if not quot_marks then 
+                if not quot_marks then
                     warn('metadata field "quot-marks-by-lang": lang "%s": %s.',
-                         k, err) 
+                         k, err)
                     return
                 end
                 QUOT_MARKS_BY_LANG[k] = quot_marks
@@ -418,7 +420,7 @@ do
         if meta['quot-marks'] then
             local err
             quot_marks, err = get_quotation_marks(meta['quot-marks'])
-            if not quot_marks then 
+            if not quot_marks then
                 warn('metadata field "quot-marks": %s.', err)
                 return
             end
@@ -440,7 +442,7 @@ do
                 if quot_marks then break end
             end
         end
-        if quot_marks then QUOT_MARKS = map(pandoc.Str, quot_marks) 
+        if quot_marks then QUOT_MARKS = map(pandoc.Str, quot_marks)
         elseif lang then warn('%s: unknown language.', lang) end
     end
 
@@ -449,7 +451,7 @@ do
         local insert = table.insert
         --- Replaces quoted elements with quoted text.
         --
-        -- Uses the quotation marks stored in `QUOT_MARKS`, 
+        -- Uses the quotation marks stored in `QUOT_MARKS`,
         -- which it shares with `configure`.
         --
         -- @tparam pandoc.Quoted quoted A quoted element.

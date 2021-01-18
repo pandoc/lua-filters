@@ -7,6 +7,9 @@ while making it possible to rely on default object metadata
 structures when using the data in other filters or when accessing
 the data from custom templates.
 
+Most users will want to use this filter in combination with
+[author-info-blocks](https://github.com/pandoc/lua-filters/tree/master/author-info-blocks).
+
 
 ## Canonical format for authors and affiliations
 
@@ -36,10 +39,10 @@ will be transformed into
       name: Jane Doe
     - id: 'John Q. Doe'
       name: 'John Q. Doe'
-      
+
 Internally, `id` will be a simple string, while `name` is of type
 `MetaInlines`.
-      
+
 
 ## Referencing affiliations
 
@@ -50,7 +53,7 @@ object. Three methods of doing this are supported.
 1.  **Referencing institutes by list index**: affiliations can be
     listed in the *institute* metadata field and then referenced
     by using the numerical index:
-    
+
         institute:
           - Acme Corporation
           - Federation of Planets
@@ -59,7 +62,7 @@ object. Three methods of doing this are supported.
               institute: [1, 2]
           - John Q. Doe:
               institute: [2]
-        
+
     This is also the canonical representation used to keep track
     of author affiliations.
 
@@ -81,7 +84,7 @@ object. Three methods of doing this are supported.
     more convenient to give an affiliation directly in the
     author's YAML object. Those objects can still be referenced
     by ID from authors listed below such entry.
-    
+
         author:
           - Jane Doe:
               institute:

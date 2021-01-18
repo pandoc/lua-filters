@@ -1,7 +1,7 @@
 # multiple-bibliographies
 
 This filter allows to create multiple bibliographies using
-`pandoc-citeproc`. The content of each bibliography is controlled
+`pandoc-citeproc`/`citeproc`. The content of each bibliography is controlled
 via YAML values and the file in which a bibliographic entry is
 specified.
 

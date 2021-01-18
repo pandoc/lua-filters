@@ -1,5 +1,4 @@
-Track changes in LaTeX and HTML
-===============================
+# Track changes in LaTeX and HTML
 
 A **simple** comment from me.
 
@@ -19,8 +18,7 @@ And so is this.
 
 One more.
 
-A *header* width  comment {#a-header-width-a-notecomment}
-========================
+# A *header* width  comment {#a-header-width-a-notecomment}
 
 Some unmodified text ...
 
