@@ -18,6 +18,12 @@ No Internet connection is required when generating or viewing SVG formulas,
 resulting in both absolute privacy and offline, standalone robustness.
 
 
+## Version history
+
+- 2021-01-19: SVG caching 
+- 2021-01-16: Initial release
+
+
 ## Requirements
 
 First, use the package manager of your operating system to install `pandoc`,
@@ -54,7 +60,7 @@ pandoc --mathml --filter='math2svg.lua'
 
 The math2svg filter is entirely configurable over
 [`--metadata` key value pairs](pandoc.metadata).
-Nine configuration keys are available with sensible default values.
+Ten configuration keys are available with sensible default values.
 Hence, depending on your system and intentions, not all keys are necessarily
 required.
 
@@ -69,6 +75,7 @@ required.
 |`math2svg_ex`|`6`|
 |`math2svg_width`|`100`|
 |`math2svg_extensions`|`''`|
+|`math2svg_cache`|`true`|
 
 
 ### Key value `math2svg_tex2svg`
@@ -136,6 +143,11 @@ Take for example, the installation directory of the extensions is
 It contains a subdirectory `TeX` with the extension file `AMSmath.js`.
 This MathJaX extension can be loaded by specifying the string `'TeX/AMSmath'`
 as the value of the `math2svg_extensions` key.
+
+
+### Key value `math2svg_cache`
+Caching avoids repetition of the SVG rendering of identical math formulas,
+both for display and inline math. Caching is on by default.
 
 
 ### Adding `header-includes`

@@ -1,3 +1,6 @@
+--  VERSION 2021-01-19
+
+
 --  DESCRIPTION
 --
 --    This Lua filter for Pandoc converts LaTeX math to MathJax generated
@@ -75,6 +78,13 @@ local extensions = ''
 --  /usr/local/lib/node_modules/mathjax-node-cli/node_modules/mathjax/unpacked/\
 --  extensions/
 
+--  Speed up conversion by caching SVG.
+local cache = true
+
+local _cache = {}
+_cache.DisplayMath = {}
+_cache.InlineMath  = {}
+
 
 function Meta(meta)
 
@@ -87,6 +97,7 @@ function Meta(meta)
   ex          = tostring(meta.math2svg_ex or ex)
   width       = tostring(meta.math2svg_width or width)
   extensions  = tostring(meta.math2svg_extensions or extensions)
+  cache       = tostring(meta.math2svg_cache or cache)
 
 end
 
@@ -94,7 +105,11 @@ end
 function Math(elem)
 
   local svg  = nil
-  local tags = nil
+
+  local tags = {}
+  tags.DisplayMath = {'<span class="math display">', '</span>'}
+  tags.InlineMath  = {'<span class="math inline">', '</span>'}
+
   local argumentlist = {
     '--speech', speech,
     '--linebreaks', linebreaks,
@@ -117,26 +132,45 @@ function Math(elem)
     --extensions  extra MathJax extensions                         [default: ""]
 --                e.g. 'Safe,TeX/noUndefined'
 
-  if elem.mathtype == 'DisplayMath' and display2svg then
-    svg  = pandoc.pipe(tex2svg, argumentlist, '')
-    tags = {'<span class="math display">', '</span>'}
+  if (elem.mathtype == 'DisplayMath' and display2svg)
+  or (elem.mathtype == 'InlineMath'  and inline2svg ) then
 
-  elseif elem.mathtype == 'InlineMath' and inline2svg then
-    table.insert(argumentlist, 1, '--inline')
-    svg  = pandoc.pipe(tex2svg, argumentlist, '')
-    tags = {'<span class="math inline">', '</span>'}
+    if cache then
+      -- Attempt to retrieve cache.
+      svg = _cache[elem.mathtype][elem.text]
+    end
+
+    if not svg then
+
+      if elem.mathtype == 'InlineMath' then
+        -- Add the --inline argument to the argument list.
+        table.insert(argumentlist, 1, '--inline')
+      end
+
+      -- Generate SVG.
+      svg = pandoc.pipe(tex2svg, argumentlist, '')
+
+      if cache then
+        -- Add to cache.
+        _cache[elem.mathtype][elem.text] = svg
+      end
+
+    end
 
   end
 
+  -- Return
   if svg then
 
     if FORMAT:match '^html.?' then
-      svg = tags[1] .. svg .. tags[2]
+      svg = tags[elem.mathtype][1] .. svg .. tags[elem.mathtype][2]
       return pandoc.RawInline(FORMAT, svg)
+
     else
       local filename = pandoc.sha1(svg) .. '.svg'
       pandoc.mediabag.insert(filename, 'image/svg+xml', svg)
       return pandoc.Image('', filename)
+
     end
 
   else
@@ -145,7 +179,7 @@ function Math(elem)
 
   end
 
-end
+end -- function
 
 
 -- Redefining the execution order.
