@@ -85,6 +85,10 @@ local _cache = {}
 _cache.DisplayMath = {}
 _cache.InlineMath  = {}
 
+local tags = {}
+tags.DisplayMath = {'<span class="math display">', '</span>'}
+tags.InlineMath  = {'<span class="math inline">', '</span>'}
+
 
 function Meta(meta)
 
@@ -105,10 +109,6 @@ end
 function Math(elem)
 
   local svg  = nil
-
-  local tags = {}
-  tags.DisplayMath = {'<span class="math display">', '</span>'}
-  tags.InlineMath  = {'<span class="math inline">', '</span>'}
 
   local argumentlist = {
     '--speech', speech,
