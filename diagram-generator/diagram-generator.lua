@@ -162,7 +162,6 @@ local function convert_with_inkscape(filetype)
       pdf_file,
       outfile
     )
-    io.stderr:write(inkscape_command .. '\n')
     local command_output = io.popen(inkscape_command)
     -- TODO: print output when debugging.
     command_output:close()
@@ -300,9 +299,6 @@ end
 
 -- Executes each document's code block to find matching code blocks:
 function CodeBlock(block)
-  -- Predefine a potential image:
-  local fname = nil
-
   -- Using a table with all known generators i.e. converters:
   local converters = {
     plantuml = plantuml,
@@ -323,67 +319,56 @@ function CodeBlock(block)
   local success, img = pcall(img_converter, block.text,
       filetype, block.attributes["additionalPackages"] or nil)
 
-  -- Was ok?
-  if success and img then
-    -- Hash the figure name and content:
-    fname = pandoc.sha1(img) .. "." .. filetype
-
-    -- Store the data in the media bag:
-    pandoc.mediabag.insert(fname, mimetype, img)
-
-  else
-
-    -- an error occured; img contains the error message
-    io.stderr:write(tostring(img))
+  -- Bail if an error occured; img contains the error message when that
+  -- happens.
+  if not (success and img) then
+    io.stderr:write(tostring(img or "no image data has been returned."))
     io.stderr:write('\n')
     error 'Image conversion failed. Aborting.'
-
   end
 
-  -- Case: This code block was an image e.g. PlantUML or dot/Graphviz, etc.:
-  if fname then
+  -- If we got here, then the transformation went ok and `img` contains
+  -- the image data.
 
-    -- Define the default caption:
-    local caption = {}
-    local enableCaption = nil
+  -- Create figure name by hashing the image content
+  local fname = pandoc.sha1(img) .. "." .. filetype
 
-    -- If the user defines a caption, use it:
-    if block.attributes["caption"] then
-      caption = pandoc.read(block.attributes.caption).blocks[1].content
+  -- Store the data in the media bag:
+  pandoc.mediabag.insert(fname, mimetype, img)
 
-      -- This is pandoc's current hack to enforce a caption:
-      enableCaption = "fig:"
-    end
+  local enable_caption = nil
 
-    -- Create a new image for the document's structure. Attach the user's
-    -- caption. Also use a hack (fig:) to enforce pandoc to create a
-    -- figure i.e. attach a caption to the image.
-    local imgObj = pandoc.Image(caption, fname, enableCaption)
+  -- If the user defines a caption, read it as Markdown.
+  local caption = block.attributes.caption
+    and pandoc.read(block.attributes.caption).blocks[1].content
+    or {}
 
-    -- Now, transfer the attribute "name" from the code block to the new
-    -- image block. It might gets used by the figure numbering lua filter.
-    -- If the figure numbering gets not used, this additional attribute
-    -- gets ignored as well.
-    if block.attributes["name"] then
-      imgObj.attributes["name"] = block.attributes["name"]
-    end
+  -- A non-empty caption means that this image is a figure. We have to
+  -- set the image title to "fig:" for pandoc to treat it as such.
+  local title = #caption > 0 and "fig:" or ""
 
-    -- Transfer the identifier from the code block to the new image block
-    -- to enable downstream filters like pandoc-crossref. This allows a figure
-    -- block starting with:
-    --
-    --     ```{#fig:pumlExample .plantuml caption="This is an image, created by **PlantUML**."}
-    --
-    -- to be referenced as @fig:pumlExample outside of the figure.
-    if block.identifier then
-      imgObj.identifier = block.identifier
-    end
+  -- Transfer identifier and other relevant attributes from the code
+  -- block to the image. Currently, only `name` is kept as an attribute.
+  -- This allows a figure block starting with:
+  --
+  --     ```{#fig:example .plantuml caption="Image created by **PlantUML**."}
+  --
+  -- to be referenced as @fig:example outside of the figure when used
+  -- with `pandoc-crossref`.
+  local img_attr = pandoc.Attr {
+    id = block.identifier,
+    name = block.attributes.name
+  }
 
-    -- Finally, put the image inside an empty paragraph. By returning the
-    -- resulting paragraph object, the source code block gets replaced by
-    -- the image:
-    return pandoc.Para{ imgObj }
-  end
+  -- Create a new image for the document's structure. Attach the user's
+  -- caption. Also use a hack (fig:) to enforce pandoc to create a
+  -- figure i.e. attach a caption to the image.
+  local img_obj = pandoc.Image(caption, fname, title, img_attr)
+
+  -- Finally, put the image inside an empty paragraph. By returning the
+  -- resulting paragraph object, the source code block gets replaced by
+  -- the image:
+  return pandoc.Para{ img_obj }
 end
 
 -- Normally, pandoc will run the function in the built-in order Inlines ->
