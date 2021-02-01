@@ -68,14 +68,14 @@ local mimetype = "image/svg+xml"
 -- vector graphics. In these cases, we use a different format
 -- such as PNG:
 if FORMAT == "docx" then
-    filetype = "png"
-    mimetype = "image/png"
+  filetype = "png"
+  mimetype = "image/png"
 elseif FORMAT == "pptx" then
-    filetype = "png"
-    mimetype = "image/png"
+  filetype = "png"
+  mimetype = "image/png"
 elseif FORMAT == "rtf" then
-    filetype = "png"
-    mimetype = "image/png"
+  filetype = "png"
+  mimetype = "image/png"
 end
 
 -- Execute the meta data table to determine the paths. This function
@@ -212,46 +212,46 @@ end
 -- Run Python to generate an image:
 local function py2image(code, filetype)
 
-    -- Define the temp files:
-    local outfile = string.format('%s.%s', os.tmpname(), filetype)
-    local pyfile = os.tmpname()
+  -- Define the temp files:
+  local outfile = string.format('%s.%s', os.tmpname(), filetype)
+  local pyfile = os.tmpname()
 
-    -- Replace the desired destination's file type in the Python code:
-    local extendedCode = string.gsub(code, "%$FORMAT%$", filetype)
+  -- Replace the desired destination's file type in the Python code:
+  local extendedCode = string.gsub(code, "%$FORMAT%$", filetype)
 
-    -- Replace the desired destination's path in the Python code:
-    extendedCode = string.gsub(extendedCode, "%$DESTINATION%$", outfile)
+  -- Replace the desired destination's path in the Python code:
+  extendedCode = string.gsub(extendedCode, "%$DESTINATION%$", outfile)
 
-    -- Write the Python code:
-    local f = io.open(pyfile, 'w')
-    f:write(extendedCode)
-    f:close()
+  -- Write the Python code:
+  local f = io.open(pyfile, 'w')
+  f:write(extendedCode)
+  f:close()
 
-    -- Execute Python in the desired environment:
-    local pycmd = python_path .. ' ' .. pyfile
-    local command = python_activate_path
-      and python_activate_path .. ' && ' .. pycmd
-      or pycmd
-    os.execute(command)
+  -- Execute Python in the desired environment:
+  local pycmd = python_path .. ' ' .. pyfile
+  local command = python_activate_path
+    and python_activate_path .. ' && ' .. pycmd
+    or pycmd
+  os.execute(command)
 
-    -- Try to open the written image:
-    local r = io.open(outfile, 'rb')
-    local imgData = nil
+  -- Try to open the written image:
+  local r = io.open(outfile, 'rb')
+  local imgData = nil
 
-    -- When the image exist, read it:
-    if r then
-        imgData = r:read("*all")
-        r:close()
-    else
-        io.stderr:write(string.format("File '%s' could not be opened", outfile))
-        error 'Could not create image from python code.'
-    end
+  -- When the image exist, read it:
+  if r then
+    imgData = r:read("*all")
+    r:close()
+  else
+    io.stderr:write(string.format("File '%s' could not be opened", outfile))
+    error 'Could not create image from python code.'
+  end
 
-    -- Delete the tmp files:
-    os.remove(pyfile)
-    os.remove(outfile)
+  -- Delete the tmp files:
+  os.remove(pyfile)
+  os.remove(outfile)
 
-    return imgData
+  return imgData
 end
 
 --
@@ -300,97 +300,96 @@ end
 
 -- Executes each document's code block to find matching code blocks:
 function CodeBlock(block)
+  -- Predefine a potential image:
+  local fname = nil
 
-    -- Predefine a potential image:
-    local fname = nil
+  -- Using a table with all known generators i.e. converters:
+  local converters = {
+    plantuml = plantuml,
+    graphviz = graphviz,
+    tikz = tikz2image,
+    py2image = py2image,
+    asymptote = asymptote,
+  }
 
-    -- Using a table with all known generators i.e. converters:
-    local converters = {
-        plantuml = plantuml,
-        graphviz = graphviz,
-        tikz = tikz2image,
-        py2image = py2image,
-        asymptote = asymptote,
-    }
+  -- Check if a converter exists for this block. If not, return the block
+  -- unchanged.
+  local img_converter = converters[block.classes[1]]
+  if not img_converter then
+    return nil
+  end
 
-    -- Check if a converter exists for this block. If not, return the block
-    -- unchanged.
-    local img_converter = converters[block.classes[1]]
-    if not img_converter then
-      return nil
+  -- Call the correct converter which belongs to the used class:
+  local success, img = pcall(img_converter, block.text,
+      filetype, block.attributes["additionalPackages"] or nil)
+
+  -- Was ok?
+  if success and img then
+    -- Hash the figure name and content:
+    fname = pandoc.sha1(img) .. "." .. filetype
+
+    -- Store the data in the media bag:
+    pandoc.mediabag.insert(fname, mimetype, img)
+
+  else
+
+    -- an error occured; img contains the error message
+    io.stderr:write(tostring(img))
+    io.stderr:write('\n')
+    error 'Image conversion failed. Aborting.'
+
+  end
+
+  -- Case: This code block was an image e.g. PlantUML or dot/Graphviz, etc.:
+  if fname then
+
+    -- Define the default caption:
+    local caption = {}
+    local enableCaption = nil
+
+    -- If the user defines a caption, use it:
+    if block.attributes["caption"] then
+      caption = pandoc.read(block.attributes.caption).blocks[1].content
+
+      -- This is pandoc's current hack to enforce a caption:
+      enableCaption = "fig:"
     end
 
-    -- Call the correct converter which belongs to the used class:
-    local success, img = pcall(img_converter, block.text,
-        filetype, block.attributes["additionalPackages"] or nil)
+    -- Create a new image for the document's structure. Attach the user's
+    -- caption. Also use a hack (fig:) to enforce pandoc to create a
+    -- figure i.e. attach a caption to the image.
+    local imgObj = pandoc.Image(caption, fname, enableCaption)
 
-    -- Was ok?
-    if success and img then
-        -- Hash the figure name and content:
-        fname = pandoc.sha1(img) .. "." .. filetype
-
-        -- Store the data in the media bag:
-        pandoc.mediabag.insert(fname, mimetype, img)
-
-    else
-
-        -- an error occured; img contains the error message
-        io.stderr:write(tostring(img))
-        io.stderr:write('\n')
-        error 'Image conversion failed. Aborting.'
-
+    -- Now, transfer the attribute "name" from the code block to the new
+    -- image block. It might gets used by the figure numbering lua filter.
+    -- If the figure numbering gets not used, this additional attribute
+    -- gets ignored as well.
+    if block.attributes["name"] then
+      imgObj.attributes["name"] = block.attributes["name"]
     end
 
-    -- Case: This code block was an image e.g. PlantUML or dot/Graphviz, etc.:
-    if fname then
-
-        -- Define the default caption:
-        local caption = {}
-        local enableCaption = nil
-
-        -- If the user defines a caption, use it:
-        if block.attributes["caption"] then
-            caption = pandoc.read(block.attributes.caption).blocks[1].content
-
-            -- This is pandoc's current hack to enforce a caption:
-            enableCaption = "fig:"
-        end
-
-        -- Create a new image for the document's structure. Attach the user's
-        -- caption. Also use a hack (fig:) to enforce pandoc to create a
-        -- figure i.e. attach a caption to the image.
-        local imgObj = pandoc.Image(caption, fname, enableCaption)
-
-        -- Now, transfer the attribute "name" from the code block to the new
-        -- image block. It might gets used by the figure numbering lua filter.
-        -- If the figure numbering gets not used, this additional attribute
-        -- gets ignored as well.
-        if block.attributes["name"] then
-            imgObj.attributes["name"] = block.attributes["name"]
-        end
-    
-        -- Transfer the identifier from the code block to the new image block
-        -- to enable downstream filters like pandoc-crossref. This allows a figure
-        -- block starting with:
-        --
-        --     ```{#fig:pumlExample .plantuml caption="This is an image, created by **PlantUML**."}
-        --
-        -- to be referenced as @fig:pumlExample outside of the figure.
-        if block.identifier then
-            imgObj.identifier = block.identifier
-        end
-
-        -- Finally, put the image inside an empty paragraph. By returning the
-        -- resulting paragraph object, the source code block gets replaced by
-        -- the image:
-        return pandoc.Para{ imgObj }
+    -- Transfer the identifier from the code block to the new image block
+    -- to enable downstream filters like pandoc-crossref. This allows a figure
+    -- block starting with:
+    --
+    --     ```{#fig:pumlExample .plantuml caption="This is an image, created by **PlantUML**."}
+    --
+    -- to be referenced as @fig:pumlExample outside of the figure.
+    if block.identifier then
+      imgObj.identifier = block.identifier
     end
+
+    -- Finally, put the image inside an empty paragraph. By returning the
+    -- resulting paragraph object, the source code block gets replaced by
+    -- the image:
+    return pandoc.Para{ imgObj }
+  end
 end
 
 -- Normally, pandoc will run the function in the built-in order Inlines ->
 -- Blocks -> Meta -> Pandoc. We instead want Meta -> Blocks. Thus, we must
 -- define our custom order:
 return {
-    {Meta = Meta},
-    {CodeBlock = CodeBlock},
+  {Meta = Meta},
+  {CodeBlock = CodeBlock},
 }
