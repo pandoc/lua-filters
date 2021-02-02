@@ -1,4 +1,4 @@
--- Copyright © 2017–2020 Albert Krewinkel, Robert Winkler
+-- Copyright © 2017–2021 Albert Krewinkel, Robert Winkler
 --
 -- This library is free software; you can redistribute it and/or modify it
 -- under the terms of the MIT license. See LICENSE for details.

@@ -1,7 +1,7 @@
 --[[
 abstract-to-meta – move an "abstract" section into document metadata
 
-Copyright: © 2017–2020 Albert Krewinkel
+Copyright: © 2017–2021 Albert Krewinkel
 License:   MIT – see LICENSE file for details
 ]]
 local abstract = {}

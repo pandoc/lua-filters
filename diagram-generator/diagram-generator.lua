@@ -5,10 +5,10 @@ This Lua filter is used to create images with or without captions
 from code blocks. Currently PlantUML, GraphViz, Tikz, and Python
 can be processed. For further details, see README.md.
 
-Copyright: © 2018-2020 John MacFarlane <jgm@berkeley.edu>,
+Copyright: © 2018-2021 John MacFarlane <jgm@berkeley.edu>,
              2018 Florian Schätzig <florian@schaetzig.de>,
              2019 Thorsten Sommer <contact@sommer-engineering.com>,
-             2019-2020 Albert Krewinkel <albert+pandoc@zeitkraut.de>
+             2019-2021 Albert Krewinkel <albert+pandoc@zeitkraut.de>
 License:   MIT – see LICENSE file for details
 ]]
 -- Module pandoc.system is required and was added in version 2.7.3
