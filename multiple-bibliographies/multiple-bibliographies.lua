@@ -118,6 +118,11 @@ local function create_topic_bibliography (div)
   -- First block of the result contains the dummy paragraph, second is
   -- the refs Div filled by pandoc-citeproc.
   div.content = res.blocks[2].content
+  -- ensure that the div has class 'csl-bib-body'. The LaTeX writer expects it
+  -- as a marker for reference divs.
+  div.classes = div.classes:includes 'csl-bib-body'
+    and div.classes
+    or div.classes .. {'csl-bib-body'}
   return div
 end
 
