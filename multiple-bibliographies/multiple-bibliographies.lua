@@ -28,6 +28,10 @@ local doc_meta = pandoc.Meta{}
 --- Div used by pandoc-citeproc to insert the bibliography.
 local refs_div = pandoc.Div({}, pandoc.Attr('refs'))
 
+-- Div filled by pandoc-citeproc with properties set according to
+-- the output format and the attributes of cs:bibliography
+local refs_div_with_properties
+
 local supports_quiet_flag = (function ()
   -- We use pandoc instead of pandoc-citeproc starting with pandoc 2.11
   if PANDOC_VERSION >= "2.11" then
@@ -76,8 +80,8 @@ local function resolve_doc_citations (doc)
   -- resolve all citations
   -- doc = run_json_filter(doc, 'pandoc-citeproc')
   doc = run_citeproc(doc)
-  -- remove catch-all bibliography
-  table.remove(doc.blocks)
+  -- remove catch-all bibliography and keep it for future use
+  refs_div_with_properties = table.remove(doc.blocks)
   -- restore bibliography to original value
   doc.meta.bibliography = orig_bib
   return doc
@@ -118,11 +122,9 @@ local function create_topic_bibliography (div)
   -- First block of the result contains the dummy paragraph, second is
   -- the refs Div filled by pandoc-citeproc.
   div.content = res.blocks[2].content
-  -- ensure that the div has class 'csl-bib-body'. The LaTeX writer expects it
-  -- as a marker for reference divs.
-  div.classes = div.classes:includes 'csl-bib-body'
-    and div.classes
-    or div.classes .. {'csl-bib-body'}
+  -- Set the classes and attributes as pandoc-citeproc did it on refs_div
+  div.classes = refs_div_with_properties.classes
+  div.attributes = refs_div_with_properties.attributes
   return div
 end
 
