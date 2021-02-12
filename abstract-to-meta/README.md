@@ -35,3 +35,21 @@ satisfy this condition.^[1]
 
 [1]: This requires the `auto_identifier` extension. It is
      enabled by default.
+
+The abstract can be placed anywhere in the document.
+
+The filter assumes that the abstract runs up until the next
+heading or a [horizontal rule], whichever comes first). Thus the
+abstract can be placed at the beginning of a document whose text
+doesn't start with a heading:
+
+    # Abstract
+
+    The abstract text includes this.
+
+    * * * *
+
+    This text is the beginning of the document.
+
+
+[horizontal rule]: https://pandoc.org/MANUAL.html#horizontal-rules

@@ -20,7 +20,11 @@ function abstract_from_blocklist (blocks)
         body_blocks[#body_blocks + 1] = block
       end
     elseif looking_at_abstract then
-      abstract[#abstract + 1] = block
+      if block.t == 'HorizontalRule' then
+        looking_at_abstract = false
+      else
+        abstract[#abstract + 1] = block
+      end
     else
       body_blocks[#body_blocks + 1] = block
     end
