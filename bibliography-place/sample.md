@@ -10,6 +10,7 @@ references:
   issued: 1979
   title: Short stories
   type: book
+bibliography: none.bib
 ...
 
 I enjoyed @Doe.

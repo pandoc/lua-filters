@@ -49,4 +49,41 @@ $endif$
 
 $if(referencesblock)$$referencesblock$$endif$
 
+
+%
+% From pandoc's template: placement
+%   of bibliography with natbib and biblatex
+
+$if(natbib)$
+  $if(bibliography)$
+    $if(biblio-title)$
+      $if(has-chapters)$
+      \renewcommand\bibname{$biblio-title$}
+      $else$
+      \renewcommand\refname{$biblio-title$}
+      $endif$
+    $endif$
+    $if(beamer)$
+    \begin{frame}[allowframebreaks]{$biblio-title$}
+      \bibliographytrue
+    $endif$
+    \bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+    $if(beamer)$
+    \end{frame}
+    $endif$
+  $endif$
+$endif$
+
+$if(biblatex)$
+  $if(beamer)$
+  \begin{frame}[allowframebreaks]{$biblio-title$}
+    \bibliographytrue
+    \printbibliography[heading=none]
+  \end{frame}
+  $else$
+\printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+  $endif$
+$endif$
+
+
 \end{document}
