@@ -38,10 +38,24 @@ places it in a `$referencesblock$` variable instead.
 Usage
 ----
 
-Call the filter from the command line or the defaults file. *It must be called
-after citeproc*.
+Call the filter at the command line or in a defaults file (see Pandoc's
+manual for detail). **Important**: the filter must be called after *citeproc*. From the command line:
 
-Place references with the `$referencesblock` variable:
+```
+pandoc -s --citeproc -L bibliography-place.lua sample.md -t html
+
+pandoc -s --citeproc --lua-filter bibliography-place.lua sample.md -t html
+```
+
+In a default file:
+
+```
+filters:
+- citeproc
+- bibliography-place.lua
+```
+
+In you custom Pandoc template you can then place the references block with the `referencesblock` variable:
 
 ```
 $body$
@@ -54,14 +68,11 @@ $endif$
 $if(referencesblock)$$referencesblock$$endif$
 ```
 
-Warnings and troubleshooting
-----------------------------
+Notes
+-----
 
-The filter must be called after *citeproc*.
-
-If you process the document with another or no bibliography engine, the
-reference sections will simply be erased.
+The template can be agnostic on which bibliography engine your run. If you process the document with other bibliography engines (natbib, biblatex) the filter will leave them untouched and you can place them by moving the
+`\printbibliography` commands in the template.
 
 If you use the filter with the default pandoc templates or with a template
 that does not use `$referencesblock$` your bibliography will not be printed.
-
