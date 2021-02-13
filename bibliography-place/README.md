@@ -6,8 +6,6 @@ author: "Julien Dutant"
 Bibliography place
 =======
 
-**WORK IN PROGRESS**
-
 Control the placement of a `citeproc`-generated bibliography
 via Pandoc templates.
 
@@ -40,6 +38,9 @@ places it in a `$referencesblock$` variable instead.
 Usage
 ----
 
+Call the filter from the command line or the defaults file. *It must be called
+after citeproc*.
+
 Place references with the `$referencesblock` variable:
 
 ```
@@ -52,4 +53,15 @@ $endif$
 
 $if(referencesblock)$$referencesblock$$endif$
 ```
+
+Warnings and troubleshooting
+----------------------------
+
+The filter must be called after *citeproc*.
+
+If you process the document with another or no bibliography engine, the
+reference sections will simply be erased.
+
+If you use the filter with the default pandoc templates or with a template
+that does not use `$referencesblock$` your bibliography will not be printed.
 
