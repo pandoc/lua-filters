@@ -3,10 +3,6 @@
 % Preamble commands for each bibliography engine
 %   These are included in Pandoc's default template
 %
-% TODO: when the filter has put the references in the
-%   metadata field, Pandoc's LaTeX writer doesn't
-%   set (csl-refs) to true, so we can't use if(csl-refs)
-%
 \newlength{\cslhangindent}
 \setlength{\cslhangindent}{1.5em}
 \newlength{\csllabelwidth}
@@ -43,5 +39,13 @@ School of Studies
 Doe, Jane. 1979. \emph{Short Stories}.
 
 \end{CSLReferences}
+
+
+%
+% From pandoc's template: placement
+%   of bibliography with natbib and biblatex
+
+
+
 
 \end{document}
