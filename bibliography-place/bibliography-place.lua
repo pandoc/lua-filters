@@ -1,4 +1,5 @@
---- # not-in-format - keep document parts out of selected output formats.
+--- # Bibliography-place: template-controlled bibliography
+--    placement in Pandoc.
 --
 -- This Lua filter for Pandoc allows placement of the bibliography
 -- to be controlled in pandoc templates.
@@ -7,7 +8,7 @@
 -- @author Albert Krewinkel
 -- @copyright 2021 Julien Dutant, Albert Krewinkel
 -- @license MIT - see LICENSE file for details.
--- @release 1.0
+-- @release 0.1
 
 local references = pandoc.List:new()
 
