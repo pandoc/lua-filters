@@ -10,27 +10,7 @@
 -- @license MIT - see LICENSE file for details.
 -- @release 0.1
 
-local references = pandoc.List:new()
-
---- Add environment to the references Div if needed
--- takes the body of references (list of blocks)
--- and wraps it in suitable environment commands for
--- each format. id needed for links.
--- @param content content of the bibliography
--- @param id identifier of the bibliography
-local function add_environment(content, id)
-  if FORMAT:match("latex") then
-    content:insert(1,pandoc.RawBlock("latex",
-        "\\hypertarget{refs}{" .. id .. "}"))
-    content:insert(1,pandoc.RawBlock("latex", "\\begin{CSLReferences}{1}{0}"))
-    content:insert(pandoc.RawBlock("latex", "\\end{CSLReferences}"))
-  elseif FORMAT:match("html.*") then
-    -- wrap the content in an HTML Div
-    content:insert(1,pandoc.RawBlock("html", '<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">'))
-    content:insert(pandoc.RawBlock("html", '</div>'))
-  end
-  return content
-end
+local references = nil
 
 --- Div filter for the 'refs' Div.
 -- Extract the Div with identifer 'refs' if present and
@@ -40,8 +20,10 @@ end
 function Div(element)
   if element.identifier == 'refs'
     or element.classes:includes('csl-bib-body') then
-      references = add_environment(element.content, element.identifier)
+
+    references = pandoc.MetaBlocks( { element } )
     return {} -- remove from main body
+
   end
 end
 

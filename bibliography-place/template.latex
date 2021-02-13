@@ -3,10 +3,17 @@
 % Preamble commands for each bibliography engine
 %   These are included in Pandoc's default template
 %
-% TODO: when the filter has put the references in the
-%   metadata field, Pandoc's LaTeX writer doesn't
-%   set (csl-refs) to true, so we can't use if(csl-refs)
-%
+$if(natbib)$
+\usepackage[$natbiboptions$]{natbib}
+\bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
+$endif$
+$if(biblatex)$
+\usepackage[$if(biblio-style)$style=$biblio-style$,$endif$$for(biblatexoptions)$$biblatexoptions$$sep$,$endfor$]{biblatex}
+$for(bibliography)$
+\addbibresource{$bibliography$}
+$endfor$
+$endif$
+$if(csl-refs)$
 \newlength{\cslhangindent}
 \setlength{\cslhangindent}{1.5em}
 \newlength{\csllabelwidth}
@@ -27,6 +34,7 @@
 \newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
 \newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+$endif$
 
 \begin{document}
 

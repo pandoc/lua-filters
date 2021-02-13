@@ -40,6 +40,8 @@ places it in a `$referencesblock$` variable instead.
 Usage
 ----
 
+Place references with the `$referencesblock` variable:
+
 ```
 $body$
 
@@ -48,5 +50,6 @@ $if(institute)$
 $for(institute)$$institute$$endfor$
 $endif$
 
+$if(referencesblock)$$referencesblock$$endif$
 ```
 
