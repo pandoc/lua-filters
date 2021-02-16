@@ -355,7 +355,7 @@ function CodeBlock(block)
   --
   -- to be referenced as @fig:example outside of the figure when used
   -- with `pandoc-crossref`.
-  local img_attr = pandoc.Attr {
+  local img_attr = {
     id = block.identifier,
     name = block.attributes.name
   }
