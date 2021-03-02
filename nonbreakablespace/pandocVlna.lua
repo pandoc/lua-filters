@@ -119,7 +119,7 @@ function Inlines (inlines)
   -- variable holding replacement value for the non-breakable space
   local nbsp = insert_nonbreakable_space(FORMAT)
 
-  for i = 2, #inlines do -- test from second position, to prevent error if
+  for i = 2, #inlines-1 do -- test from second position, to prevent error if
     -- `Space` element would be first in `Inlines` block
 
     --assign elements to variables for more readability
