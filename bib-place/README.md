@@ -10,6 +10,9 @@ Control the placement of a `citeproc`-generated bibliography
 via Pandoc templates. Only works with a single-bibliography
 document.
 
+The filter does not affect biblatex / natbib outputs, so it can be
+used with a custom template that caters for all bibliography engines.
+
 Introduction
 ------------
 
