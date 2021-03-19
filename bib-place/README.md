@@ -43,9 +43,9 @@ Call the filter at the command line or in a defaults file (see Pandoc's
 manual for detail). **Important**: the filter must be called after *citeproc*. From the command line:
 
 ```
-pandoc -s --citeproc -L bibliography-place.lua sample.md -t html
+pandoc -s --citeproc -L bib-place.lua sample.md -t html
 
-pandoc -s --citeproc --lua-filter bibliography-place.lua sample.md -t html
+pandoc -s --citeproc --lua-filter bib-place.lua sample.md -t html
 ```
 
 In a default file:
@@ -53,7 +53,7 @@ In a default file:
 ```
 filters:
 - citeproc
-- bibliography-place.lua
+- bib-place.lua
 ```
 
 In you custom Pandoc template you can then place the references block with the `referencesblock` variable:
