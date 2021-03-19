@@ -1,13 +1,14 @@
 ---
-title: "Bibliography-place"
+title: "Bib-place"
 author: "Julien Dutant"
 ---
 
-Bibliography place
+Bib-place
 =======
 
 Control the placement of a `citeproc`-generated bibliography
-via Pandoc templates.
+via Pandoc templates. Only works with a single-bibliography
+document.
 
 Introduction
 ------------
