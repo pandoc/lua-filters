@@ -1,16 +1,25 @@
 ---
 title: "Sample first line indent"
+# Filter options. These are defaults, you will get the same
+# if you don't specify anything. See the README.md for details.
 first-line-indent:
-  set-metadata-variable: true # make it false to revert to vertical whitespace separation instead
+  set-metadata-variable: true
+  set-header-includes: true
+  auto-remove: true
+  remove-after: Table
+  dont-remove-after:
+    - DefinitionList
+    - OrderedList
+  size: "2em"
 ---
 
-First paragraph. Usually without first-line indent. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tincidunt lacinia metus id ullamcorper. Integer eget magna quis ipsum lobortis dignissim.
+First paragraph. In English-style typography, the first paragraph shouldn't have a first-line indent, nor the paragraphs below headers.
 
 This paragraph should start with a first-line indent. But after this quote:
 
 > Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
-The paragraph continues, so there should not be a first-line indent.
+the paragraph continues, so there should not be a first-line indent.
 
 The quote below ends a paragraph:
 
@@ -46,4 +55,26 @@ Or horizontal rules.
 
 ---
 
-Last but not least, you can fiddle with the filter options in the document metadata and see what happens.
+In this document we added a few custom filter options. The size of first-line
+indents is 2em instead of the standard 1em. We also added an option to remove indent after tables:
+
+  Right     Left     Center     Default
+-------     ------ ----------   -------
+     12     12        12            12
+    123     123       123          123
+      1     1          1             1
+
+Table:  Demonstration of simple table syntax.
+
+So this paragraph's first line is not indented. And we included custom options
+*not* to remove ident after ordered lists and definition lists:
+
+Definition
+: This is a definition block.
+
+This paragraph is indented.
+
+1. An ordered
+2. list
+
+This paragraph is indented.
