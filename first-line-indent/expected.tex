@@ -1,0 +1,66 @@
+First paragraph. Usually without first-line indent. Lorem ipsum dolor
+sit amet, consectetur adipiscing elit. Donec tincidunt lacinia metus id
+ullamcorper. Integer eget magna quis ipsum lobortis dignissim.
+
+This paragraph should start with a first-line indent. But after this
+quote:
+
+\begin{quote}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+\end{quote}
+
+\noindent The paragraph continues, so there should not be a first-line
+indent.
+
+The quote below ends a paragraph:
+
+\begin{quote}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+\end{quote}
+
+\indent This paragraph, then, is genuinely a new paragraph and starts
+with a first-line indent.
+
+\hypertarget{further-tests}{%
+\section{Further tests}\label{further-tests}}
+
+After a heading (in English typographic style) the paragraph does not
+have a first-line indent.
+
+In the couple couple of paragraphs that follow the quotes below, we have
+manually specified \texttt{\textbackslash{}noindent} and
+\texttt{\textbackslash{}indent} respectively. This is to check that the
+filter doesn't add its own commands to those.
+
+\begin{quote}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+\end{quote}
+
+\noindent Manually specified no first line indent.
+
+\indent Manually specified first line ident.
+
+We can also check that indent is removed after lists:
+
+\begin{itemize}
+\tightlist
+\item
+  A bullet
+\item
+  list
+\end{itemize}
+
+\noindent And after code blocks:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{local}\NormalTok{ variable }\OperatorTok{=} \StringTok{"value"}
+\end{Highlighting}
+\end{Shaded}
+
+\noindent Or horizontal rules.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\noindent Last but not least, you can fiddle with the filter options in
+the document metadata and see what happens.
