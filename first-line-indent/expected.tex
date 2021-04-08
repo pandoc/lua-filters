@@ -1,0 +1,203 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Sample first line indent},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\setlength{\parindent}{2em}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{Sample first line indent}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+First paragraph. In English-style typography, the first paragraph
+shouldn't have a first-line indent, nor the paragraphs below headers.
+
+This paragraph should start with a first-line indent. But after this
+quote:
+
+\begin{quote}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+\end{quote}
+
+\noindent the paragraph continues, so there should not be a first-line
+indent.
+
+The quote below ends a paragraph:
+
+\begin{quote}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+\end{quote}
+
+\indent This paragraph, then, is genuinely a new paragraph and starts
+with a first-line indent.
+
+\hypertarget{further-tests}{%
+\section{Further tests}\label{further-tests}}
+
+After a heading (in English typographic style) the paragraph does not
+have a first-line indent.
+
+In the couple couple of paragraphs that follow the quotes below, we have
+manually specified \texttt{\textbackslash{}noindent} and
+\texttt{\textbackslash{}indent} respectively. This is to check that the
+filter doesn't add its own commands to those.
+
+\begin{quote}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+\end{quote}
+
+\noindent Manually specified no first line indent.
+
+\indent Manually specified first line ident.
+
+We can also check that indent is removed after lists:
+
+\begin{itemize}
+\tightlist
+\item
+  A bullet
+\item
+  list
+\end{itemize}
+
+\noindent And after code blocks:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{local}\NormalTok{ variable }\OperatorTok{=} \StringTok{"value"}
+\end{Highlighting}
+\end{Shaded}
+
+\noindent Or horizontal rules.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\noindent In this document we added a few custom filter options. The
+size of first-line indents is 2em instead of the standard 1em. We also
+added an option to remove indent after tables:
+
+\begin{longtable}[]{@{}rlcl@{}}
+\caption{Demonstration of simple table syntax.}\tabularnewline
+\toprule
+Right & Left & Center & Default \\
+\midrule
+\endfirsthead
+\toprule
+Right & Left & Center & Default \\
+\midrule
+\endhead
+12 & 12 & 12 & 12 \\
+123 & 123 & 123 & 123 \\
+1 & 1 & 1 & 1 \\
+\bottomrule
+\end{longtable}
+
+\noindent So this paragraph's first line is not indented. And we
+included custom options \emph{not} to remove ident after ordered lists
+and definition lists:
+
+\begin{description}
+\tightlist
+\item[Definition]
+This is a definition block.
+\end{description}
+
+This paragraph is indented.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  An ordered
+\item
+  list
+\end{enumerate}
+
+This paragraph is indented.
+
+\end{document}
