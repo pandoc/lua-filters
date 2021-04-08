@@ -3,8 +3,11 @@ This filter renders [LilyPond](http://lilypond.org) inline code and
 code blocks into embedded images of musical notation. It's designed with
 (pandoc-flavored) Markdown input in mind.
 
-See the accompanying test files and the [examples](#Examples) section below
-for some examples of how the filter works.
+See the accompanying test files `oboe.md` and `appoggiaturas.md`
+for examples of how to include LilyPond notation directly in a
+Markdown document. \(These test files can be compiled with
+`make`.\) And see the [examples](#examples) section below for
+examples of how to call the filter from the command line.
 
 ## Rationale
 LilyPond is the tool of choice for generating musical notation from
@@ -67,41 +70,38 @@ document metadata. Images generated from inline code will be tagged with the
 `lilypond-image-standalone` class.
 
 ## Examples
-Here’s an example command that converts the included oboe.md test file to a
-PDF. The resulting PDF contains the LilyPond notation rendered as engraved
-music.
+Here’s an example command that converts the included oboe.md test
+file to a PDF. The resulting PDF contains the LilyPond notation
+rendered as engraved music.
 
 ```bash
-pandoc --from=markdown \
-	--to=pdf \
-	--pdf-engine=lualatex \ # see note about typefaces below
-	--lua-filter=lilypond.lua \
-	--extract-media=. \
-	--output=oboe.pdf \
-	oboe.md
+pandoc --pdf-engine=lualatex \ # see note about typefaces below
+  --lua-filter=lilypond.lua \
+  --extract-media=. \
+  --output=oboe.pdf \
+  oboe.md
 ```
 
-\(Note that in order to render musical notation \[♭, ♮, and so forth\] in
-running text, the typeface used by the TeX engine must contain such glyphs
-as Unicode characters. The default Latin Modern typeface does not.\)
+\(Note that in order to render musical notation \[♭, ♮, and so
+forth\] in running text, the typeface used by the TeX engine must
+contain such glyphs as Unicode characters. The default Latin
+Modern typeface does not.\)
 
-And here’s an example of a command that produces an HTML snippet from
-oboe.md. Again, the LilyPond code is rendered in the resulting file as
-engraved music \(in the form of PNGs\).
+And here’s an example of a command that produces an HTML snippet
+from oboe.md. Again, the LilyPond code is rendered in the
+resulting file as engraved music \(in the form of PNGs\).
 
 ```bash
-pandoc --from=markdown \
-	--to=html \
-	--lua-filter=lilypond.lua \
-	--extract-media=. \
-	--output=oboe.html \
-	oboe.md
+pandoc --lua-filter=lilypond.lua \
+  --extract-media=. \
+  --output=oboe.html \
+  oboe.md
 ```
 
 ## Requirements
-The `lilypond` executable must be installed to a location on
-your `PATH`. You can obtain it [here](http://lilypond.org/download.html) or
-through your package manager.
+The `lilypond` executable must be installed to a location on your `PATH`.
+You can obtain it [here](http://lilypond.org/download.html) or through your
+package manager.
 
 Finally, because `lilypond.lua` uses functions from the `pandoc.system`
 submodule, it requires pandoc version 2.7.3 or later.
