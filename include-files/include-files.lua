@@ -1,4 +1,4 @@
---- include-files.lua – filter to include Markdown files
+--- include-files.lua – filter to include files
 ---
 --- Copyright: © 2019–2021 Albert Krewinkel
 --- License:   MIT – see LICENSE file for details
@@ -42,6 +42,22 @@ function transclude (cb)
   -- ignore code blocks which are not of class "include".
   if not cb.classes:includes 'include' then
     return
+  end
+  -- process files as source code blocks
+  if cb.classes:includes 'source' then
+     local contents = ""
+     for line in cb.text:gmatch('[^\n]+') do
+       if line:sub(1,2) ~= '//' then
+         local fh = io.open(line)
+         if not fh then
+           io.stderr:write("Cannot open file " .. line .. " | Skipping includes\n")
+         else
+           contents = contents .. fh:read('*a')
+           fh:close()
+         end
+      end
+    end
+    return pandoc.CodeBlock(contents, cb.attr)
   end
 
   -- Markdown is used if this is nil.

@@ -1,0 +1,6 @@
+#!/bin/bash
+for i in "Hello " "World " "!\n" 
+do
+	printf "$i"
+done
+

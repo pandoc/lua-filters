@@ -11,6 +11,9 @@ document.
 
 Metadata from included files is discarded.
 
+Add class `source` to include files as normal code blocks taken from
+files instead of text in same format as the input.
+
 ### Shifting Headings
 
 The default is to include the subdocuments unchanged, but it can
@@ -59,6 +62,9 @@ will want to include files written in a different format. An
 alternative format can be specified via the `format` attribute.
 Only plain-text formats are accepted.
 
+In order to include source code block from files use additional class
+`source` instead of trying the language as `format`.
+
 ### Recursive transclusion
 
 Included files can in turn include other files. Note that all
@@ -99,6 +105,13 @@ some additional information in the main file `main.md`:
     // headings in included documents are shifted down a level,
     // a level 1 heading becomes level 2.
     appendix/questionaire.md
+    ```
+
+    ## Source code
+
+    ``` {.include .source .lua}
+    // code of this nice filter
+    include-files.lua
     ```
 
 An HTML can be produced with this command:
