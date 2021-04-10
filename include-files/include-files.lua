@@ -3,8 +3,12 @@
 --- Copyright: © 2019–2021 Albert Krewinkel
 --- License:   MIT – see LICENSE file for details
 
--- pandoc's List type
+-- Module pandoc.path is required and was added in version 2.12
+PANDOC_VERSION:must_be_at_least '2.12'
+
 local List = require 'pandoc.List'
+local path = require 'pandoc.path'
+local system = require 'pandoc.system'
 
 --- Get include auto mode
 local include_auto = false
@@ -20,20 +24,26 @@ function update_last_level(header)
   last_heading_level = header.level
 end
 
---- Shift headings in block list by given number
-local function shift_headings(blocks, shift_by)
-  if not shift_by then
-    return blocks
-  end
-
-  local shift_headings_filter = {
+--- Update contents of included file
+local function update_contents(blocks, shift_by)
+  local update_contents_filter = {
+    -- Shift headings in block list by given number
     Header = function (header)
-      header.level = header.level + shift_by
+      if shift_by then
+        header.level = header.level + shift_by
+      end
       return header
+    end,
+    -- If image paths are relative then prepend include file path
+    Image = function (image)
+      if path.is_relative(image.src) then
+        image.src = path.join({system.get_working_directory(), image.src})
+      end
+      return image
     end
   }
 
-  return pandoc.walk_block(pandoc.Div(blocks), shift_headings_filter).content
+  return pandoc.walk_block(pandoc.Div(blocks), update_contents_filter).content
 end
 
 --- Filter function for code blocks
@@ -72,13 +82,22 @@ function transclude (cb)
         local contents = pandoc.read(fh:read '*a', format).blocks
         last_heading_level = 0
         -- recursive transclusion
-        contents = pandoc.walk_block(
-          pandoc.Div(contents),
-          { Header = update_last_level, CodeBlock = transclude }
-          ).content
+        contents = system.with_working_directory(
+            path.directory(line),
+            function ()
+              return pandoc.walk_block(
+                pandoc.Div(contents),
+                { Header = update_last_level, CodeBlock = transclude }
+              )
+            end).content
         --- reset to level before recursion
         last_heading_level = buffer_last_heading_level
-        blocks:extend(shift_headings(contents, shift_heading_level_by))
+        blocks:extend(
+          system.with_working_directory(
+            path.directory(line),
+            function ()
+              return update_contents(contents, shift_heading_level_by)
+            end))
         fh:close()
       end
     end
