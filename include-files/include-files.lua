@@ -25,7 +25,7 @@ function update_last_level(header)
 end
 
 --- Update contents of included file
-local function update_contents(blocks, shift_by)
+local function update_contents(blocks, shift_by, include_path)
   local update_contents_filter = {
     -- Shift headings in block list by given number
     Header = function (header)
@@ -37,7 +37,7 @@ local function update_contents(blocks, shift_by)
     -- If image paths are relative then prepend include file path
     Image = function (image)
       if path.is_relative(image.src) then
-        image.src = path.join({system.get_working_directory(), image.src})
+        image.src = path.normalize(path.join({include_path, image.src}))
       end
       return image
     end
@@ -92,12 +92,8 @@ function transclude (cb)
             end).content
         --- reset to level before recursion
         last_heading_level = buffer_last_heading_level
-        blocks:extend(
-          system.with_working_directory(
-            path.directory(line),
-            function ()
-              return update_contents(contents, shift_heading_level_by)
-            end))
+        blocks:extend(update_contents(contents, shift_heading_level_by,
+                                      path.directory(line)))
         fh:close()
       end
     end
