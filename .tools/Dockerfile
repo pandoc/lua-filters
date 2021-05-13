@@ -4,6 +4,11 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV DEBIAN_PRIORITY critical
 
 RUN apt-get -q --no-allow-insecure-repositories update \
+  ## I hate the `curl ... | bash -` pattern with a passion, but it
+  ## doesn't have to be secure here.
+  && DEBIAN_FRONTEND=noninteractive \
+     apt-get install --assume-yes --no-install-recommends curl \
+  && curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
   && DEBIAN_FRONTEND=noninteractive \
      apt-get install --assume-yes --no-install-recommends \
        aspell \
@@ -20,7 +25,6 @@ RUN apt-get -q --no-allow-insecure-repositories update \
        luarocks \
        make \
        nodejs \
-       npm \
        python-is-python3 \
        python3 \
        python3-matplotlib \
