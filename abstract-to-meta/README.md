@@ -39,7 +39,7 @@ satisfy this condition.^[1]
 The abstract can be placed anywhere in the document.
 
 The filter assumes that the abstract runs up until the next
-heading or a [horizontal rule], whichever comes first). Thus the
+heading or [horizontal rule], whichever comes first. Thus the
 abstract can be placed at the beginning of a document whose text
 doesn't start with a heading:
 
