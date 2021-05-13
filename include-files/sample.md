@@ -28,6 +28,15 @@ file-d.org
 file-f.md
 ```
 
+# Subdirectories
+
+``` {.include}
+// file-g.md includes an image and source code. The relative
+// path used in file-g.md will be prefixed with subdir in the
+// final document.
+subdir/file-g.md
+```
+
 # Appendix
 
 More info goes here.
