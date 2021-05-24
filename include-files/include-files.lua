@@ -21,14 +21,9 @@ local sys = require 'pandoc.system'
 local utils = require 'pandoc.utils'
 -- local ut = require "module-lua.utils"
 
--- Save env. variables
+-- Save env. variables and root working dir
 local env = sys.environment()
-
--- Save meta table and metadata
-local meta
-function save_meta (m)
-  meta = m
-end
+local cwd = system.get_working_directory()
 
 --- Replace variables in code blocks
 local metaMap
@@ -97,6 +92,11 @@ function get_vars (meta)
   -- If this is nil, markdown is used as a default format.
   default_format = meta['include-format']
 
+  -- If all relative include paths are treated relative to the current working directory.
+  -- An attribute "relative-to-current" can be used on include blocks, images, codeblock includes
+  -- to to selectively choose if the include is relative to the current document.
+  includes_relative_to_cwd = meta['include-paths-relative-to-cwd']
+
   -- Save meta table for var_replace
   metaMap = meta
 end
@@ -120,14 +120,16 @@ local function update_contents(blocks, shift_by, include_path)
     end,
     -- If image paths are relative then prepend include file path
     Image = function (image)
-      if path.is_relative(image.src) then
+      if (not includes_relative_to_cwd or image.classes:includes("relative-to-current")) and
+          path.is_relative(image.src) then
         image.src = path.normalize(path.join({include_path, image.src}))
       end
       return image
     end,
     -- Update path for include-code-files.lua filter style CodeBlocks
     CodeBlock = function (cb)
-      if cb.attributes.include and path.is_relative(cb.attributes.include) then
+      if (not includes_relative_to_cwd or cb.classes:includes("relative-to-current")) and
+          cb.attributes.include and path.is_relative(cb.attributes.include) then
         cb.attributes.include =
           path.normalize(path.join({include_path, cb.attributes.include}))
         end
@@ -191,10 +193,16 @@ function transclude (cb)
                       tostring(raw), line))
     end
 
+    -- Make relative include path relative to pandoc's working
+    -- dir and make it absolute
+    if (includes_relative_to_cwd and not cb.classes:includes("relative-to-current")) and
+       path.is_relative(line) then
+      line = path.normalize(path.join({cwd, line}))
+    end
+
     local fh = io.open(line)
     if not fh then
-      local cwd = system.get_working_directory()
-      local msg = "Cannot find include file: '" .. line .. "' in working dir: '" .. cwd .. "'"
+      local msg = "Cannot find include file: '" .. line .. "', curr. working dir: '" .. cwd .. "'"
       if include_fail_if_read_error then
         io.stderr:write(msg .. " | error\n")
         error("Abort due to include failure")
@@ -215,6 +223,7 @@ function transclude (cb)
       -- Inlcude as parsed AST
       local contents = pandoc.read(text, format).blocks
       last_heading_level = 0
+
       -- Recursive transclusion
       contents = system.with_working_directory(
           path.directory(line),
@@ -224,10 +233,11 @@ function transclude (cb)
           { Header = update_last_level, CodeBlock = transclude }
             )
           end).content
+
         --- Reset to level before recursion
         last_heading_level = buffer_last_heading_level
-      blocks:extend(update_contents(contents, shift_heading_level_by,
-                                    path.directory(line)))
+        blocks:extend(update_contents(contents, shift_heading_level_by,
+                                      path.directory(line)))
     end
 
     ::skip_to_next::

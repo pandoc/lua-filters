@@ -105,12 +105,20 @@ subdir/file-h-latex.md
 
 Included files can in turn include other files. Note that all
 filenames must be relative to the directory from which they are
-included. I.e., if a file `a/b.md` is included in the main
+included.
+I.e., if a file `a/b.md` is included in the main
 document, and another file `a/b/c.md` should be included from
 `a/b.md`, then the relative path from `a/b.md` must be used, in
 this case `b/c.md`. The full relative path will be automatically
 generated in the final document. The same goes for image paths and
 codeblock file paths using the `include-code-files` filter.
+
+If you set the meta variable `include-paths-relative-to-cwd` to `true`,
+all include paths are treated relative to pandoc's working directory.
+You can selectively set the attribute `relative-to-current` on all pandoc
+elements modiefied by this filter (e.g. image, codeblock file paths,
+codeblock transclusion) which will treat the
+paths relative to the directory from which they are included.
 
 ### Missing Includes
 
