@@ -80,12 +80,12 @@ subdir/file-i.md
 
 ### Variable Substitution in Paths
 
-If attribute `var-replace` is used, the patterns `${meta:<meta-var>}` or `${env:<env-var>}`
-will be replaced by the corresponding meta data variable `<meta-var>` in the document or the
+The patterns `${meta:<meta-var>}` or `${env:<env-var>}` inside include paths
+will be replaced by the corresponding meta data variable `<meta-var>` or the
 environment variable `<env-var>`, e.g.
 
 ````md
-```{.include .var-replace}
+```{.include}
 ${meta:subdir-name}/file-h.md
 ${env:SUBDIR_NAME}/file-h.md
 ```
@@ -136,6 +136,11 @@ some additional information in the main file `main.md`:
     ---
     author: me
     title: Thesis
+
+    include-format: markdown+markdown_in_html_blocks+link_attributes+tex_math_dollars+fenced_divs+bracketed_spans
+    include-auto: true
+    include-fail-if-read-error: true
+    include-paths-relative-to-cwd: false
     ---
 
     # Frontmatter

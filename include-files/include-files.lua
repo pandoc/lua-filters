@@ -9,20 +9,11 @@ PANDOC_VERSION:must_be_at_least '2.12'
 local List = require 'pandoc.List'
 local path = require 'pandoc.path'
 local system = require 'pandoc.system'
+local utils = require 'pandoc.utils'
 local cs = PANDOC_STATE
 
--- This is the codeblock-var-replace
--- filter directly copied, since we
--- cannot run Lua filters inside this filter
--- https://github.com/jgm/pandoc/issues/6830
--- We replace variables in include blocks.
-
-local sys = require 'pandoc.system'
-local utils = require 'pandoc.utils'
--- local ut = require "module-lua.utils"
-
--- Save env. variables and root working dir
-local env = sys.environment()
+-- Save env. variables and root working dir.
+local env = system.environment()
 local cwd = system.get_working_directory()
 
 --- Replace variables in code blocks
@@ -46,11 +37,6 @@ local function var_replace_codeblocks (cb)
     end
 
     return repl
-  end
-
-  -- ignore code blocks which are not of class "var-replace".
-  if not cb.classes:includes 'var-replace' then
-    return
   end
 
   cb.text = cb.text:gsub("%${(%l+):([^}]+)}", replace)
@@ -97,12 +83,11 @@ function get_vars (meta)
   -- to to selectively choose if the include is relative to the current document.
   includes_relative_to_cwd = meta['include-paths-relative-to-cwd']
 
-  -- Save meta table for var_replace
+  -- Save meta table for var_replace.
   metaMap = meta
 end
 
-
---- Keep last heading level found
+--- Keep last heading level found.
 local last_heading_level = 0
 function update_last_level(header)
   last_heading_level = header.level
@@ -111,14 +96,14 @@ end
 --- Update contents of included file
 local function update_contents(blocks, shift_by, include_path)
   local update_contents_filter = {
-    -- Shift headings in block list by given number
+    -- Shift headings in block list by given number.
     Header = function (header)
       if shift_by then
         header.level = header.level + shift_by
       end
       return header
     end,
-    -- If image paths are relative then prepend include file path
+    -- If image paths are relative then prepend include file path.
     Image = function (image)
       if (not includes_relative_to_cwd or image.classes:includes("relative-to-current")) and
           path.is_relative(image.src) then
@@ -140,7 +125,7 @@ local function update_contents(blocks, shift_by, include_path)
   return pandoc.walk_block(pandoc.Div(blocks), update_contents_filter).content
 end
 
---- Filter function for code blocks
+--- Filter function for code blocks.
 local transclude
 function transclude (cb)
   -- ignore code blocks which are not of class "include".
@@ -148,12 +133,12 @@ function transclude (cb)
     return
   end
 
-  -- Filter by includes and excludes
+  -- Filter by includes and excludes.
   if not is_included(cb) then
     return List{} -- remove block
   end
 
-  -- Variable substitution
+  -- Variable substitution.
   var_replace_codeblocks(cb)
 
   local format = cb.attributes['format']
@@ -162,7 +147,7 @@ function transclude (cb)
     format = default_format
   end
 
-  -- Check if we include the file as raw inline
+  -- Check if we include the file as raw inline.
   local raw = cb.attributes['raw']
   raw = raw == "true"
 
@@ -173,12 +158,12 @@ function transclude (cb)
     shift_heading_level_by = tonumber(shift_input)
   else
     if include_auto then
-      -- Auto shift headings
+      -- Auto shift headings.
       shift_heading_level_by = last_heading_level
     end
   end
 
-  --- Keep track of level before recursion
+  --- Keep track of level before recursion.
   local buffer_last_heading_level = last_heading_level
 
   local blocks = List:new()
@@ -194,7 +179,7 @@ function transclude (cb)
     end
 
     -- Make relative include path relative to pandoc's working
-    -- dir and make it absolute
+    -- dir and make it absolute.
     if (includes_relative_to_cwd and not cb.classes:includes("relative-to-current")) and
        path.is_relative(line) then
       line = path.normalize(path.join({cwd, line}))
@@ -212,19 +197,19 @@ function transclude (cb)
       end
     end
 
-    -- Read the file
+    -- Read the file.
     local text = fh:read('*a')
     fh:close()
 
     if raw then
-      -- Include as raw inline element
+      -- Include as raw inline element.
       blocks:extend({pandoc.RawBlock(format, text)})
     else
       -- Inlcude as parsed AST
       local contents = pandoc.read(text, format).blocks
       last_heading_level = 0
 
-      -- Recursive transclusion
+      -- Recursive transclusion.
       contents = system.with_working_directory(
           path.directory(line),
           function ()
@@ -234,7 +219,7 @@ function transclude (cb)
             )
           end).content
 
-        --- Reset to level before recursion
+        --- Reset to level before recursion.
         last_heading_level = buffer_last_heading_level
         blocks:extend(update_contents(contents, shift_heading_level_by,
                                       path.directory(line)))
