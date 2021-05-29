@@ -215,7 +215,7 @@ function make_new_file(filepath)
         print(filepath)
         local filename = split_path(filepath)["filename"]
         local dirname = split_path(filepath)["dirname"]
-        if filename then
+        if dirname then
             os.execute("mkdir "..dirname)
         end
         f = io.open(filepath, "w")
