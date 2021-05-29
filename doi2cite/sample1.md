@@ -1,7 +1,7 @@
 ---
 bibliography:
-  - "my_refs.bib"
-  - "__from_DOI.bib"
+  - 'my_refs.bib'
+  - '__from_DOI.bib'
 ---
 
 # Introduction

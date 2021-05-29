@@ -11,16 +11,15 @@
 base_url = "http://api.crossref.org"
 mailto = "pandoc.doi2cite@gmail.com"
 bibname = "__from_DOI.bib"
-bibpath = "__from_DOI.bib"
 key_list = {};
 doi_key_map = {};
 doi_entry_map = {};
 error_strs = {};
 error_strs["Resource not found."] = 404
 error_strs["No acceptable resource available."] = 406
-error_strs["<html><body><h1>503 Service Unavailable</h1>\n"..
-    "No server is available to handle this request.\n"..
-    "</body></html>"] = 503
+error_strs["<html><body><h1>503 Service Unavailable</h1>\n"
+        .."No server is available to handle this request.\n"
+        .."</body></html>"] = 503
 
 
 --------------------------------------------------------------------------------
@@ -30,14 +29,8 @@ error_strs["<html><body><h1>503 Service Unavailable</h1>\n"..
 function Meta(m)
     local bib_data = m.bibliography
     local bibpaths = get_paths_from(bib_data)
-    bibpath = get_filepath(bibname, bibpaths)
-    if bibpath == nil then
-        bibpath = "__from_DOI.bib"
-        print("[doi2cite WARNING]: "
-            .."Include '"..bibpath.."' into bibliography list"
-            .." to be processed by citeproc."
-        )
-    end
+    bibpath = find_filepath(bibname, bibpaths)
+    bibpath = verify_path(bibpath)
     local f = io.open(bibpath, "r")
     if f then
         entries_str = f:read('*all')
@@ -50,13 +43,7 @@ function Meta(m)
         end
         f:close()
     else
-        if io.open(bibpath, "w") == nil then
-            error("Unable to make bibtex file: "..bibpath..".\n"
-            .."This error may come from the missing directory. \n"
-            .."doi2cite filter will not make directory by iteself. \n"
-            .."Make sure that the directory for bibtex file exists."
-            )
-        end
+        make_new_file(bibpath)
     end
 end
 
@@ -75,17 +62,16 @@ function Cite(c)
             doi = nil
         end
         if doi then
-            if doi_key_map[doi] ~= nil then
-                local entry_key = doi_key_map[doi]
-                citation.id = entry_key
+            if doi_key_map[doi] then
+                citation.id = doi_key_map[doi]
             else
                 local entry_str = get_bibentry(doi)
-                if entry_str == nil or error_strs[entry_str] ~= nil then
+                if entry_str == nil or error_strs[entry_str] then
                     print("Failed to get ref from DOI: " .. doi)
                 else
                     entry_str = tex2raw(entry_str)
                     local entry_key = get_entrykey(entry_str)
-                    if key_list[entry_key] ~= nil then
+                    if key_list[entry_key] then
                         entry_key = entry_key.."_"..doi
                         entry_str = replace_entrykey(entry_str, entry_key)
                     end
@@ -131,8 +117,10 @@ function get_paths_from(metadata)
             filepaths[metadata[1].text] = true
         elseif type(metadata) == "table" then
             for _, datum in pairs(metadata) do
-                if datum[1].text then
-                    filepaths[datum[1].text] = true
+                if datum[1] then
+                    if datum[1].text then
+                        filepaths[datum[1].text] = true
+                    end
                 end
             end
         end
@@ -140,27 +128,28 @@ function get_paths_from(metadata)
     return filepaths    
 end
 
--- Extract filename from a given a path 
-function get_filename(path)
-    local len = path:len()
-    local reversed = path:reverse()
-    if reversed:find("/") then
-        local pos = reversed:find("/")
-        local fname_rev = reversed:sub(1, pos-1)
-        return fname_rev:reverse()
-    elseif reversed:find([[\]]) then
-        local pos = reversed:find([[\]])
-        local fname_rev = reversed:sub(1, pos-1)
-        return fname_rev:reverse()
+-- Extract filename and dirname from a given a path 
+function split_path(filepath)
+    local delim = nil
+    local len = filepath:len()
+    local reversed = filepath:reverse()
+    if filepath:find("/") then
+        delim = "/"
+    elseif filepath:find([[\]]) then
+        delim = [[\]]
     else
-        return path    
+        return {filename = filepath, dirname = nil}
     end
+    local pos = reversed:find(delim)
+    local dirname = filepath:sub(1, len - pos)
+    local filename = reversed:sub(1, pos - 1):reverse()
+    return {filename = filename, dirname = dirname}
 end
 
 -- Find bibname in a given filepath list and return the filepath if found 
-function get_filepath(filename, filepaths)
+function find_filepath(filename, filepaths)
     for path, _ in pairs(filepaths) do
-        local filename = get_filename(path)
+        local filename = split_path(path)["filename"]
         if filename == bibname then
             return path
         end
@@ -220,6 +209,40 @@ function get_doi_key_map(bibtex_string)
     return keys
 end
 
+-- function to make directories and files
+function make_new_file(filepath)
+    if filepath then
+        print(filepath)
+        local filename = split_path(filepath)["filename"]
+        local dirname = split_path(filepath)["dirname"]
+        if filename then
+            os.execute("mkdir "..dirname)
+        end
+        f = io.open(filepath, "w")
+        if f then
+            f:close()
+        else
+            error("Unable to make bibtex file: "..bibpath..".\n"
+            .."This error may come from the missing directory. \n"
+            )
+        end
+    end
+end
+
+-- Verify that the given filepath is correct.
+-- Catch common Pandoc user mistakes about Windows-formatted filepath.
+function verify_path(bibpath)
+    if bibpath == nil then
+        print("[WARNING] doi2cite: "
+            .."The given file path is incorrect or empty. "
+            .."In Windows-formatted filepath, Pandoc recognizes "
+            .."double backslash ("..[[\\]]..") as the delimiters."
+        )
+        return "__from_DOI.bib"
+    else
+        return bibpath
+    end
+end
 
 --------------------------------------------------------------------------------
 -- The main function --

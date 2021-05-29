@@ -3,7 +3,7 @@ This pandoc lua filiter helps users to insert references in a document
 with using DOI(Digital Object Identifier) tags. With this filter, users
 do not need to make bibtex file by themselves. Instead, the filter
 automatically generate .bib file from the DOI tags, and convert the DOI
-tags into citation keys available by `--citeproc`.
+tags into citation keys available by Pandoc-citeproc.
 
 <img src="https://user-images.githubusercontent.com/30950088/117561410-87ec5d00-b0d1-11eb-88be-931f3158ec44.png" width="960">
 
@@ -19,7 +19,7 @@ What the filter do are as follows:
 # Prerequisites
 -   Pandoc version 2.0 or newer
 -   This filter does not need any external dependencies
--   This filter must be executed before `pandoc-crossref` or
+-   This filter should be executed before `pandoc-crossref` or
     `--citeproc`
 
 # DOI tags
@@ -35,9 +35,9 @@ same as the accessible URL.
 # YAML header
 The file **name** of the auto-generated bibliography file **MUST** be
 `__from_DOI.bib`, but the **place** of the file can be changed (e.g. 
-`./refs/__from_DOI.bib`). You can designate the filepath in the
-document yaml header. The yaml key is `bibliography`, which is also
-used by Pandoc `--citeproc`.
+`'./refs/__from_DOI.bib'` or `'refs\\__from_DOI.bib'` for Windows). Yo
+u can designate the filepath in the document yaml header. The yaml key
+ is `bibliography`, which is also used by Pandoc-citeproc.
 
 
 # Example
@@ -46,8 +46,8 @@ example1.md:
 
     ---
     bibliography:
-      - "my_refs.bib"
-      - "__from_DOI.bib"
+      - 'my_refs.bib'
+      - '__from_DOI.bib'
     ---
 
     # Introduction
