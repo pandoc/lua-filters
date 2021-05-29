@@ -212,8 +212,7 @@ end
 -- function to make directories and files
 function make_new_file(filepath)
     if filepath then
-        print(filepath)
-        local filename = split_path(filepath)["filename"]
+        print("doi2cite: creating "..filepath)
         local dirname = split_path(filepath)["dirname"]
         if dirname then
             os.execute("mkdir "..dirname)
