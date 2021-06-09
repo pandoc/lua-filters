@@ -28,7 +28,7 @@ local doc_meta = pandoc.Meta{}
 --- Div used by pandoc-citeproc to insert the bibliography.
 local refs_div = pandoc.Div({}, pandoc.Attr('refs'))
 
--- Div filled by pandoc-citeproc with properties set according to
+-- Div filled by citeproc with properties set according to
 -- the output format and the attributes of cs:bibliography
 local refs_div_with_properties
 
@@ -106,6 +106,18 @@ local function meta_for_pandoc_citeproc (bibliography)
   return new_meta
 end
 
+local function remove_duplicates(classes)
+  local seen = {}
+  return classes:filter(function(x)
+      if seen[x] then
+        return false
+      else
+        seen[x] = true
+        return true
+      end
+  end)
+end
+
 --- Create a bibliography for a given topic. This acts on all divs whose
 -- ID starts with "refs", followed by nothing but underscores and
 -- alphanumeric characters.
@@ -123,7 +135,7 @@ local function create_topic_bibliography (div)
   -- the refs Div filled by pandoc-citeproc.
   div.content = res.blocks[2].content
   -- Set the classes and attributes as pandoc-citeproc did it on refs_div
-  div.classes = refs_div_with_properties.classes
+  div.classes = remove_duplicates(refs_div_with_properties.classes)
   div.attributes = refs_div_with_properties.attributes
   return div
 end

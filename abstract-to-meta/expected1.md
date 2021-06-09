@@ -15,7 +15,7 @@ abstract: |
   officia deserunt mollit anim id est laborum.
 ---
 
-::: {.frontmatter}
+::: frontmatter
 # Preface
 
 -   Phasellus purus.
