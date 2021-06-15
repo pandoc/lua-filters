@@ -1,4 +1,9 @@
-test: clean expected1.md expected1.pdf
+DIFF ?= diff --strip-trailing-cr -u
+
+test:
+	@pandoc --lua-filter=doi2cite.lua --wrap=preserve --output=output.md sample1.md
+	@$(DIFF) expected1.md output.md
+	@rm -f output.md
 
 expected1.md: sample1.md doi2cite.lua
 	pandoc --lua-filter=doi2cite.lua --wrap=preserve --output $@ $<
