@@ -15,7 +15,7 @@ abstract: |
   officia deserunt mollit anim id est laborum.
 ---
 
-::: {.frontmatter}
+::: frontmatter
 Mauris vel erat tincidunt, venenatis elit ac, luctus augue. Aliquam sed
 hendrerit augue. Donec finibus mi et dolor semper, non malesuada nulla
 ullamcorper. Fusce auctor ullamcorper nunc, sit amet molestie nunc
