@@ -219,6 +219,93 @@ key `activatePythonPath` to `c:\ProgramData\Anaconda3\Scripts\activate.bat`.
 
 Pandoc will activate this Python environment and starts Python with your code.
 
+## Asymptote
+[Asymptote](https://asymptote.sourceforge.io/) is a graphics
+language inspired by Metapost. To use Asymptote, you will need to
+install the software itself, a TeX distribution such as
+[TeX Live](https://www.tug.org/texlive/), and
+[dvisvgm](https://dvisvgm.de/), which may be included in the TeX
+distribution.
+
+If png output is required (such as for the `docx`, `pptx` and `rtf`
+output formats) Inkscape must be installed. See the Ti*k*Z section
+for details.
+
+Ensure that the Asymptote `asy` binary is in the path, or point
+the environment variable `ASYMPTOTE` or the metadata variable
+`asymptotePath` to the full path name. Asymptote calls the various
+TeX utilities and dvipdfm, so you will need to configure Asymptote
+so that it finds them.
+
+~~~~~~~~~~~~~~~~
+```{.asymptote caption="This is an image, created by **Asymptote**."}
+size(5cm);
+include graph;
+
+pair circumcenter(pair A, pair B, pair C)
+{
+  pair P, Q, R, S;
+  P = (A+B)/2;
+  Q = (B+C)/2;
+  R = rotate(90, P) * A;
+  S = rotate(90, Q) * B;
+  return extension(P, R, Q, S);
+}
+
+pair incenter(pair A, pair B, pair C)
+{
+  real a = abs(angle(C-A)-angle(B-A)),
+       b = abs(angle(C-B)-angle(A-B)),
+       c = abs(angle(A-C)-angle(B-C));
+  return (sin(a)*A + sin(b)*B + sin(c)*C) / (sin(a)+sin(b)+sin(c));
+}
+
+real dist_A_BC(pair A, pair B, pair C)
+{
+  real det = cross(B-A, C-A);
+  return abs(det/abs(B-C));
+}
+
+pair A = (0, 0), B = (5, 0), C = (3.5, 4),
+     O = circumcenter(A, B, C),
+     I = incenter(A, B, C);
+dot(A); dot(B); dot(C); dot(O, blue); dot(I, magenta);
+draw(A--B--C--cycle, linewidth(2));
+draw(Circle(O, abs(A-O)), blue+linewidth(1.5));
+draw(Circle(I, dist_A_BC(I, A, B)), magenta+linewidth(1.5));
+label("$A$", A, SW);
+label("$B$", B, SE);
+label("$C$", C, NE);
+label("$O$", O, W);
+label("$I$", I, E);
+```
+~~~~~~~~~~~~~~~~
+
+### Mermaid
+To use Mermaid, you must install mermaid-cli itself. See the
+[mermaid-cli website](https://github.com/mermaid-js/mermaid-cli) for more details.
+
+This filter assumes that the `mmdc` command is located in the path
+and therefore can be used from any location. Alternatively, you can
+set the environment variable `MERMAID` or use the pandoc's meta variable
+`mermaid_path`.
+
+Example usage from [the Mermaid page](https://github.com/mermaid-js/mermaid):
+
+~~~~~~~~~~~~~~~~
+```{.mermaid caption="This is a sequence diagram, created by **Mermaid**."}
+sequenceDiagram
+Alice->>John: Hello John, how are you?
+loop Healthcheck
+    John->>John: Fight against hypochondria
+end
+Note right of John: Rational thoughts!
+John-->>Alice: Great!
+John->>Bob: How about you?
+Bob-->>John: Jolly good!
+```
+~~~~~~~~~~~~~~~~
+
 ## How to run pandoc
 This section will show, how to call Pandoc in order to use this filter with
 meta keys. The following command assume, that the filters are stored in the
@@ -240,13 +327,17 @@ All available environment variables:
 - `JAVA_HOME` e.g. `c:\Program Files\Java\jre1.8.0_201`; Default: n/a
 - `DOT` e.g. `c:\ProgramData\chocolatey\bin\dot.exe`; Default: `dot`
 - `PDFLATEX` e.g. `c:\Program Files\MiKTeX 2.9\miktex\bin\x64\pdflatex.exe`; Default: `pdflatex`
+- `ASYMPTOTE` e.g. `c:\Program Files\Asymptote\asy`; Default: `asy`
+- `MERMAID` e.g. `c:\Program Files\nodejs\mmdc`; Default: `mmdc`
 
 All available meta keys:
 
-- `plantumlPath`
-- `inkscapePath`
-- `pythonPath`
-- `activatePythonPath`
-- `javaPath`
-- `dotPath`
-- `pdflatexPath`
+- `plantuml_path`
+- `inkscape_path`
+- `python_path`
+- `activate_python_path`
+- `java_path`
+- `dot_path`
+- `pdflatex_path`
+- `asymptote_path`
+- `mermaid_path`
