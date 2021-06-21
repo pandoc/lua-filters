@@ -62,7 +62,7 @@ local pdflatex_path = os.getenv("PDFLATEX") or "pdflatex"
 local asymptote_path = os.getenv ("ASYMPTOTE") or "asy"
 
 -- The mermaid-cli path. In order to define an mermaid-cli version per pandoc
--- document, use the meta data to define the key "inkscape_path".
+-- document, use the meta data to define the key "mermaid_path".
 local mermaid_path = os.getenv("MERMAID") or "mmdc"
 
 -- The default format is SVG i.e. vector graphics:
