@@ -271,6 +271,29 @@ label("$O$", O, W);
 label("$I$", I, E);
 ```
 
+### Mermaid
+To use Mermaid, you must install mermaid-cli itself. See the
+[mermaid-cli website](https://github.com/mermaid-js/mermaid-cli) for more details.
+
+This filter assumes that the `mmdc` command is located in the path
+and therefore can be used from any location. Alternatively, you can
+set the environment variable `MERMAID` or use the pandoc's meta variable
+`mermaid_path`.
+
+Example usage from [the Mermaid page](https://github.com/mermaid-js/mermaid):
+
+```{.mermaid caption="This is a sequence diagram, created by **Mermaid**."}
+sequenceDiagram
+Alice->>John: Hello John, how are you?
+loop Healthcheck
+    John->>John: Fight against hypochondria
+end
+Note right of John: Rational thoughts!
+John-->>Alice: Great!
+John->>Bob: How about you?
+Bob-->>John: Jolly good!
+```
+
 ## How to run pandoc
 This section will show, how to call Pandoc in order to use this filter with
 meta keys. The following command assume, that the filters are stored in the
@@ -293,6 +316,7 @@ All available environment variables:
 - `DOT` e.g. `c:\ProgramData\chocolatey\bin\dot.exe`; Default: `dot`
 - `PDFLATEX` e.g. `c:\Program Files\MiKTeX 2.9\miktex\bin\x64\pdflatex.exe`; Default: `pdflatex`
 - `ASYMPTOTE` e.g. `c:\Program Files\Asymptote\asy`; Default: `asy`
+- `MERMAID` e.g. `c:\Program Files\nodejs\mmdc`; Default: `mmdc`
 
 All available meta keys:
 
@@ -304,3 +328,4 @@ All available meta keys:
 - `dot_path`
 - `pdflatex_path`
 - `asymptote_path`
+- `mermaid_path`

@@ -9,6 +9,7 @@ Copyright: © 2018-2021 John MacFarlane <jgm@berkeley.edu>,
              2018 Florian Schätzig <florian@schaetzig.de>,
              2019 Thorsten Sommer <contact@sommer-engineering.com>,
              2019-2021 Albert Krewinkel <albert+pandoc@zeitkraut.de>
+             2021 Moritz Mähr <moritz.maehr@gmail.com>
 License:   MIT – see LICENSE file for details
 ]]
 -- Module pandoc.system is required and was added in version 2.7.3
@@ -60,6 +61,10 @@ local pdflatex_path = os.getenv("PDFLATEX") or "pdflatex"
 -- "asymptote_path".
 local asymptote_path = os.getenv ("ASYMPTOTE") or "asy"
 
+-- The mermaid-cli path. In order to define an mermaid-cli version per pandoc
+-- document, use the meta data to define the key "inkscape_path".
+local mermaid_path = os.getenv("MERMAID") or "mmdc"
+
 -- The default format is SVG i.e. vector graphics:
 local filetype = "svg"
 local mimetype = "image/svg+xml"
@@ -107,6 +112,9 @@ function Meta(meta)
   asymptote_path = stringify(
      meta.asymptote_path or meta.asymptotePath or asymptote_path
   )
+  mermaid_path = stringify(
+    meta.mermaid_path or meta.mermaidPath or mermaid_path
+  ) 
 end
 
 -- Call plantuml.jar with some parameters (cf. PlantUML help):
@@ -297,6 +305,49 @@ local function asymptote(code, filetype)
   end)
 end
 
+-- Call mermaid-cli with some parameters (cf. mermaid-cli help):
+local function mermaid(code, filetype)
+  local convert
+  if filetype ~= 'svg' and filetype ~= 'pdf' and filetype ~= 'png' then
+    error(string.format("Conversion to %s not implemented", filetype))
+  end
+  return with_temporary_directory(
+    "mmdc",
+    function(tmpdir)
+      return with_working_directory(
+        tmpdir,
+        function ()
+          -- Try to write code to mmd file:
+          local mmd_file = "pandoc_diagram.mmd"
+          local f = io.open(mmd_file, 'w')
+          f:write(code)
+          f:close()
+
+          local outfile = "pandoc_diagram." .. filetype
+          pandoc.pipe(mermaid_path, {"-o", outfile, "-i", mmd_file}, "")
+
+          -- Try to open the written image:
+          local r = io.open(outfile, 'rb')
+          local img_data = nil
+
+          -- When the image exist, read it:
+          if r then
+            img_data = r:read("*all")
+            r:close()
+          else
+            io.stderr:write(string.format("File '%s' could not be opened", outfile))
+            error 'Could not create image from mermaid code.'
+          end
+
+          -- Delete the tmp files:
+          os.remove(mmd_file)
+          os.remove(outfile)
+
+          return img_data
+      end)
+  end)
+end
+
 -- Executes each document's code block to find matching code blocks:
 function CodeBlock(block)
   -- Using a table with all known generators i.e. converters:
@@ -306,6 +357,7 @@ function CodeBlock(block)
     tikz = tikz2image,
     py2image = py2image,
     asymptote = asymptote,
+    mermaid = mermaid,
   }
 
   -- Check if a converter exists for this block. If not, return the block
