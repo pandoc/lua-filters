@@ -15,13 +15,49 @@ RUN apt-get -q --no-allow-insecure-repositories update \
        aspell-en \
        aspell-fr \
        asymptote \
+       ca-certificates \
+       chromium-browser \
        default-jre \
        dvisvgm \
+       fonts-liberation \
        graphviz \
        imagemagick \
        inkscape \
+       libappindicator3-1 \
+       libasound2 \
+       libatk-bridge2.0-0 \
+       libatk1.0-0 \
+       libc6 \
+       libcairo2 \
+       libcups2 \
+       libdbus-1-3 \
+       libexpat1 \
+       libfontconfig1 \
+       libgbm1 \
+       libgcc1 \
+       libglib2.0-0 \
+       libgtk-3-0 \
+       libnspr4 \
+       libnss3 \
+       libpango-1.0-0 \
+       libpangocairo-1.0-0 \
+       libstdc++6 \
+       libx11-6 \
+       libx11-xcb1 \
+       libxcb1 \
+       libxcomposite1 \
+       libxcursor1 \
+       libxdamage1 \
+       libxext6 \
+       libxfixes3 \
+       libxi6 \
+       libxrandr2 \
+       libxrender1 \
+       libxss1 \
+       libxtst6 \
        lilypond \
        lmodern \
+       lsb-release \
        luarocks \
        make \
        nodejs \
@@ -38,14 +74,15 @@ RUN apt-get -q --no-allow-insecure-repositories update \
        texlive-pictures \
        texlive-plain-generic \
        texlive-xetex \
-       wget
+       wget \
+       xdg-utils
 
 ARG plantuml_jar=plantuml.1.2018.9.jar
 RUN wget https://sourceforge.net/projects/plantuml/files/${plantuml_jar} \
       --quiet --output-document=/root/${plantuml_jar}
 ENV PLANTUML=/root/$plantuml_jar
 
-RUN npm install --global mathjax-node-cli
+RUN npm install --global mathjax-node-cli @mermaid-js/mermaid-cli --unsafe-perm=true
 
 ENV DIFF="diff -u"
 ENV LC_ALL="C.UTF-8"
