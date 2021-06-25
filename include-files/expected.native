@@ -23,6 +23,15 @@
 ,Header 1 ("source-include",[],[]) [Str "Source",Space,Str "include"]
 ,Para [Str "File",Space,Str "inclusion",Space,Str "codeblocks",Space,Str "for",Space,Str "use",Space,Str "with",Space,Str "include-code-files",Space,Str "will",Space,Str "be",SoftBreak,Str "updated",Space,Str "too."]
 ,CodeBlock ("",["c"],[("include","subdir/somecode.c")]) ""
+,Header 1 ("includeexclude-if-format",[],[]) [Str "Include/exclude",Space,Str "if",Space,Str "format"]
+,Para [Str "The",Space,Str "next",Space,Str "document",Space,Str "should",Space,Str "be",Space,Str "included",Space,Str "in",Space,Str "formats",Space,Code ("",[],[]) "native, html, latex",Str "."]
+,Header 1 ("some-other-stuff",[],[]) [Str "Some",Space,Str "other",Space,Str "stuff"]
+,Para [Str "The",Space,Str "next",Space,Str "document",Space,Str "should",Space,Str "not",Space,Str "be",Space,Str "included",Space,Str "in",Space,Str "formats",Space,Code ("",[],[]) "native, commonmark",Str "."]
+,Header 1 ("meta-and-env-var-replacement",[],[]) [Str "Meta",Space,Str "and",Space,Str "env",Space,Str "var",Space,Str "replacement"]
+,Header 1 ("some-other-stuff",[],[]) [Str "Some",Space,Str "other",Space,Str "stuff"]
+,Header 1 ("some-other-stuff",[],[]) [Str "Some",Space,Str "other",Space,Str "stuff"]
+,Header 1 ("raw-include",[],[]) [Str "Raw",Space,Str "include"]
+,RawBlock (Format "latex") "\\section{Some other stuff}\n"
 ,Header 1 ("appendix",[],[]) [Str "Appendix"]
 ,Para [Str "More",Space,Str "info",Space,Str "goes",Space,Str "here."]
 ,Header 2 ("questionaire",[],[]) [Str "Questionaire"]
