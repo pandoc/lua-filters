@@ -1,0 +1,2 @@
+[Header 2 ("replace",[],[]) [Str "Replace"]
+,CodeBlock ("",["var-replace"],[]) "Hello:  I am a monkey and eat a banana\n\nZebras and giraffes are cool and humble  !\n\nThe fearful bear thanks for everything in 'chapters:   1/A B.txt'\nand of course eat some chocolate"]
