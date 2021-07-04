@@ -88,7 +88,7 @@ local function add_header_includes(meta, blocks)
   -- it could be a MetaList or a single String
   if meta['header-includes'] then
     if meta['header-includes'].t == 'MetaList' then
-      header_includes:extend(meta['header-includes'])
+      header_includes:__concat(meta['header-includes'])
     else
       header_includes:insert(meta['header-includes'])
     end
