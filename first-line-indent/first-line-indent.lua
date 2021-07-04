@@ -82,10 +82,10 @@ local header_code = {
 -- @return meta the modified metadata block
 local function add_header_includes(meta, blocks)
 
-  local header_includes = pandoc.List(blocks)
+  local header_includes = pandoc.MetaList( { pandoc.MetaBlocks(blocks) })
 
   -- add any exisiting meta['header-includes']
-  -- it could be a MetaList or a single String
+  -- it can be MetaInlines, MetaBlocks or MetaList
   if meta['header-includes'] then
     if meta['header-includes'].t == 'MetaList' then
       header_includes:extend(meta['header-includes'])
@@ -94,7 +94,7 @@ local function add_header_includes(meta, blocks)
     end
   end
 
-  meta['header-includes'] = pandoc.MetaBlocks(header_includes)
+  meta['header-includes'] = header_includes
 
   return meta
 
