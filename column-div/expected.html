@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Test</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Test</h1>
+</header>
+<h1 id="column-div-test">column-div test</h1>
+<p>content…</p>
+<h2 id="three-columns">Three columns</h2>
+<div class="multicols" style="column-count:3">
+<p>content…</p>
+<p>content…</p>
+<p>content…</p>
+</div>
+<h2 id="two-unbalanced-columns">Two unbalanced columns</h2>
+<div class="columns">
+<div class="column" data-valign="b" style="width:40%;">
+<p>contents…</p>
+</div><div class="column" data-valign="b" style="width:60%;">
+<p>contents…</p>
+</div>
+</div>
+<h2 id="columns-in-columns">Columns in columns</h2>
+<div class="multicols" style="column-count:3">
+<div class="columns">
+<div class="column" data-valign="b" style="width:20%;">
+<p>contents…</p>
+</div><div class="column" data-valign="b" style="width:80%;">
+<p>contents…</p>
+</div>
+</div>
+<div class="columns">
+<div class="column" data-valign="b" style="width:20%;">
+<p>contents…</p>
+</div><div class="column" data-valign="b" style="width:80%;">
+<p>contents…</p>
+</div>
+</div>
+<div class="columns">
+<div class="column" data-valign="b" style="width:20%;">
+<p>contents…</p>
+</div><div class="column" data-valign="b" style="width:80%;">
+<p>contents…</p>
+</div>
+</div>
+</div>
+</body>
+</html>
