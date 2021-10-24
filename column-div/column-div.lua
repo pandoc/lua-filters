@@ -26,18 +26,28 @@ Note:       You need to include multicol latex package to get balanced columns
 local List = require 'pandoc.List'
 
 function Div(div)
-  options = ''
-  local env = div.classes[1]
+  local options = ''
+  local env = ''
   local returned_list
   local begin_env
   local end_env
   local opt
 
   -- if the div has no class, the object is left unchanged
-  if not env then return nil end
+  -- if the div has no class but an id, div.classes ~= nil
+  -- TODO: use a div with no class to build a 'scope' in Latex
+  --        usefull for user who would throw inline Latex code and limit it's
+  --        effect.
+  if not div.classes or #div.classes == 0 then return nil end
 
   -- if the output is beamer do columns
   if FORMAT:match 'beamer' then
+    -- only arbitrary environment support in beamer for now. Environment has to
+    -- be the firs class name.
+    env = div.classes[1]
+    if options == '' and div.attributes['data-latex'] then
+      options = div.attributes['data-latex']
+    end
     -- build the returned list of blocks
     begin_env = List:new{pandoc.RawBlock('tex',
                                   '\\begin' .. '{' .. env .. '}' .. options)}
@@ -47,8 +57,8 @@ function Div(div)
   -- if the format is latex then do minipage and others (like multicol)
   elseif FORMAT:match 'latex' then
     -- build the returned list of blocks
-    if env == 'column' then
-      --opt = div.attributes['width']
+    if div.classes:includes('column') then
+      env = 'column'
       opt = div.attributes.width
       if opt then
         local width=tonumber(string.match(opt,'(%f[%d]%d[,.%d]*%f[%D])%%'))/100
@@ -63,7 +73,8 @@ function Div(div)
       end_env = List:new{pandoc.RawBlock('tex', '\\end{' .. 'minipage' .. '}')}
       returned_list = begin_env .. div.content .. end_env
 
-    elseif env == 'columns' then
+    elseif div.classes:includes('columns') then
+      env = 'columns'
       -- merge two consecutives RawBlocks (\end... and \begin...)
       -- to get rid of the unwanted blank line
       local blocks = div.content
@@ -82,13 +93,20 @@ function Div(div)
 
     else
       -- other environments ex: multicols
-
-      -- process supported options
-      opt = div.attributes['column-count']    -- this synthax needed due to '_'
-      if opt then options = '{' .. opt .. '}' end
-
-      -- default if no known options
-      if options == '' then options = div.attributes.data-latex end
+      if div.classes:includes('multicols') then
+        env = 'multicols'
+        -- process supported options
+        opt = div.attributes['column-count']
+        if opt then options = '{' .. opt .. '}' end
+      else
+        -- Latex skilled users can use arbitrary environments passed as
+        -- the first (and only signifiant) class name.
+        env = div.classes[1]
+        -- default if no known options
+        if options == '' and div.attributes['data-latex'] then
+          options = div.attributes['data-latex']
+        end
+      end
 
       begin_env = List:new{pandoc.RawBlock('tex',
                                     '\\begin' .. '{' .. env .. '}' .. options)}
@@ -105,9 +123,11 @@ function Div(div)
         div.attributes.style = div.attributes.style ..
                                 '; column-count: ' .. opt
       else
-        div.attributes.style = 'column-count:' .. opt
+        div.attributes.style = 'column-count: ' .. opt
       end
       div.attributes['column-count'] = nil
+      -- column-count is "consumed" by the filter otherwise it would appear as
+      -- data-column-count="…" in the resulting document
       returned_list = List:new{pandoc.Div(div.content, div.attr)}
     end
   end

@@ -1,6 +1,6 @@
 ---
 title: "Column Div - leverage Pandoc native divs to make columns
- an other things"
+ and other things"
 author: "Christophe Agathon"
 ---
 
@@ -32,6 +32,14 @@ PDF document from markdown sources.
 The main purpose of this filter is to make it possible and give
 similar formating features for both Latex/PDF and HTML outputs.
 
+My guidelines are :
+
+1) Use Pandoc divs like many already have proposed for uneven and even columns
+2) Same functionalities and rendering in HTML and Latex+PDF
+3) Mess the least possible with plain Pandoc processing which is quite OK already for HTML (miss only column-count for even columning).
+4) Allow users to use unknown Latex environments from exotic packages if they wish, provided they include them in the preamble.
+
+
 Usage
 -----
 
@@ -56,10 +64,10 @@ Pandoc markdown files.
 ### Formating the document
 
 Everything is done with Pandoc's fenced divs with class names and
-attributes. The attributes are similar to those from Latex and/or
-HTML styling.
+attributes. The attributes are similar to those from HTML styling and/or
+Latex.
 
-#### Multiple balanced columns
+#### Multiple even columns
 For Latex and PDF output, you will need to call the multicol
 package. This can be done un the YAML header.
 
@@ -85,7 +93,7 @@ Some text formatted on 2 columns
 * Latex output is done with `multicols` environment.
 * HTML output uses `style="column-count: 2"` on a div block.
 
-#### Unbalanced columns
+#### Uneven columns
 
 No specific Latex package are needed. We use Nested Pandoc divs in
 the same way that columns and column environments are used in
@@ -112,14 +120,17 @@ well already (based on divs with `width` attributes).
 
 #### Other usages
 
-HTML : you can already create divs with whatever class names youl
+For HTML outputs, you already can create divs with whatever class names you
 like and style them with `style=" … "` attributes. This is
-proccessed by Pandoc and as nothing to do with this filter.
+processed by Pandoc and has nothing to do with this filter.
 
 This filter allows to do the same in Latex (and PDF).
-The class name is used as the environment name and a
-`data-latex=" … "` attribute allows you to pass options and
-parameters to the `\begin` instruction.
+You can create whatever environment you need. The environment name is the
+class name given to the fenced div. In case of multiple class names, the 
+first one is used. Other are ignored but allowed to help you to maintain 
+a single markdown source for PDF and HTML outputs.
+The `data-latex=" … "` attribute allows you to pass options and
+parameters to the `\begin` environment instruction.
 
 To Do
 -----
@@ -129,7 +140,7 @@ spacing, rules, etc.
 
 Since Pandoc does a very good job with the `width` styling
 attribute to implement variable column width, it could easily
-support HTML balanced column via the `column-count` attribute.
+support HTML even column via the `column-count` attribute.
 
 Contributing
 ------------
