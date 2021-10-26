@@ -37,6 +37,38 @@ file-f.md
 subdir/file-g.md
 ```
 
+# Include/exclude if format
+
+The next document should be included in formats `native, html, latex`.
+
+```{.include include-if-format=native;html;latex}
+subdir/file-h.md
+```
+
+The next document should not be included in formats `native, commonmark`.
+
+```{.include exclude-if-format=native;commonmark}
+subdir/file-i.md
+```
+
+# Meta and env var replacement
+
+```{.include .var-replace}
+// Replace meta data variable in path
+${meta:subdir-name}/file-h.md
+```
+
+```{.include .var-replace}
+// Replace envrionment variable in path
+${env:SUBDIR_NAME}/file-h.md
+```
+
+# Raw include
+
+```{.include raw=true format=latex}
+subdir/file-h-latex.md
+```
+
 # Appendix
 
 More info goes here.
