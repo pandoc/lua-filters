@@ -1,3 +1,5 @@
+PANDOC ?= pandoc
+
 .PHONY: all
 all: sample_beamer.pdf sample_latex.pdf sample.html
 
@@ -23,21 +25,21 @@ pandoc_inputs := sample.md
 
 # Sample beamer presentation.
 sample_beamer.tex: $(pandoc_inputs)
-	pandoc -s -t beamer --no-highlight --lua-filter=minted.lua $^ > $@
+	$(PANDOC) -s -t beamer --no-highlight --lua-filter=minted.lua $^ > $@
 
 sample_beamer.pdf: sample_beamer.tex
 	latexmk -pdf -shell-escape -jobname=sample_beamer sample_beamer
 
 # Sample latex document.
 sample_latex.tex: $(pandoc_inputs)
-	pandoc -s -t latex --no-highlight --lua-filter=minted.lua $^ > $@
+	$(PANDOC) -s -t latex --no-highlight --lua-filter=minted.lua $^ > $@
 
 sample_latex.pdf: sample_latex.tex
 	latexmk -pdf -shell-escape -jobname=sample_latex sample_latex
 
 # Sample html5 document.
 sample.html: $(pandoc_inputs)
-	pandoc -s -t html5 --lua-filter=minted.lua $^ > $@
+	$(PANDOC) -s -t html5 --lua-filter=minted.lua $^ > $@
 
 # ---
 
