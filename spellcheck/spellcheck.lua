@@ -1,6 +1,11 @@
 -- lua filter for spell checking: requires 'aspell'.
 -- Copyright (C) 2017-2020 John MacFarlane, released under MIT license
 
+-- pandoc.utils.stringify works on MetaValue elements since pandoc 2.1
+if PANDOC_VERSION == nil then -- if pandoc_version < 2.1
+  error("ERROR: pandoc >= 2.1 required for spellcheck.lua filter")
+end
+
 local text = require('text')
 local words = {}
 local deflang
@@ -15,10 +20,7 @@ local function add_to_dict(lang, t)
 end
 
 local function get_deflang(meta)
-  deflang = (meta.lang and meta.lang[1] and meta.lang[1].c) or 'en'
-  -- the following is better but won't work in pandoc 2.0.6.
-  -- it requires pandoc commit ecc46e229fde934f163d1f646383d24bfe2039e1:
-  -- deflang = (meta.lang and pandoc.utils.stringify(meta.lang)) or 'en'
+  deflang = (meta.lang and pandoc.utils.stringify(meta.lang)) or 'en'
   return {} -- eliminate meta so it doesn't get spellchecked
 end
 
