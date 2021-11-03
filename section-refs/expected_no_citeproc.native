@@ -1,7 +1,238 @@
-[Header 1 ("here-is-one-section",[],[]) [Str "Here",Space,Str "is",Space,Str "one",Space,Str "section"]
-,Header 2 ("a-subsection",[],[]) [Str "A",Space,Str "subsection"]
-,Para [Str "Here",Space,Str "is",Space,Str "something",Space,Cite [Citation {citationId = "ainsworth:sheppard", citationPrefix = [], citationSuffix = [Space,Str "27"], citationMode = NormalCitation, citationNoteNum = 1, citationHash = 0}] [Str "[@ainsworth:sheppard",Space,Str "27]"],Str ".",Space,Str "And",Space,Str "here",Space,Str "is",Space,Str "something",Space,Str "else",SoftBreak,Cite [Citation {citationId = "dames:physiology", citationPrefix = [], citationSuffix = [], citationMode = NormalCitation, citationNoteNum = 2, citationHash = 0}] [Str "[@dames:physiology]"],Str ".",Space,Str "Finally,",Space,Str "we",Space,Str "want",Space,Str "to",Space,Str "make",Space,Str "sure",Space,Str "that",Space,Str "we",Space,Str "have",Space,Str "one",Space,Str "last",SoftBreak,Str "citation",Space,Str "here",Space,Cite [Citation {citationId = "kant:critique2", citationPrefix = [], citationSuffix = [Space,Str "29"], citationMode = NormalCitation, citationNoteNum = 3, citationHash = 0}] [Str "[@kant:critique2",Space,Str "29]"],Str "."]
-,Header 2 ("another-subsection.",[],[]) [Str "Another",Space,Str "subsection."]
-,Para [Str "Here",Space,Str "is",Space,Str "something",Space,Cite [Citation {citationId = "altick:aldine", citationPrefix = [], citationSuffix = [Space,Str "20"], citationMode = NormalCitation, citationNoteNum = 4, citationHash = 0}] [Str "[@altick:aldine",Space,Str "20]"],Str ".",Space,Str "And",Space,Str "here",Space,Str "is",Space,Str "something",Space,Str "repeated",SoftBreak,Cite [Citation {citationId = "dames:physiology", citationPrefix = [], citationSuffix = [], citationMode = NormalCitation, citationNoteNum = 5, citationHash = 0}] [Str "[@dames:physiology]"],Str "."]
-,Header 1 ("here-is-another-section",[],[]) [Str "Here",Space,Str "is",Space,Str "another",Space,Str "section"]
-,Para [Str "Here",Space,Str "is",Space,Str "something",Space,Cite [Citation {citationId = "lukacs:european", citationPrefix = [], citationSuffix = [Space,Str "125"], citationMode = NormalCitation, citationNoteNum = 6, citationHash = 0}] [Str "[@lukacs:european",Space,Str "125]"],Str ".",Space,Str "And",Space,Str "here",Space,Str "is",Space,Str "something",Space,Str "else",SoftBreak,Cite [Citation {citationId = "cohen:jokes", citationPrefix = [], citationSuffix = [Space,Str "3"], citationMode = NormalCitation, citationNoteNum = 7, citationHash = 0}] [Str "[@cohen:jokes",Space,Str "3]"],Str ".",Space,Str "Finally,",Space,Str "we",Space,Str "want",Space,Str "to",Space,Str "make",Space,Str "sure",Space,Str "that",Space,Str "we",Space,Str "have",Space,Str "one",Space,Str "last",SoftBreak,Str "citation",Space,Str "here",Space,Cite [Citation {citationId = "trollope:autobiography", citationPrefix = [], citationSuffix = [Space,Str "392"], citationMode = NormalCitation, citationNoteNum = 8, citationHash = 0}] [Str "[@trollope:autobiography",Space,Str "392]"],Str "."]]
+[ Header
+    1
+    ( "here-is-one-section" , [] , [] )
+    [ Str "Here"
+    , Space
+    , Str "is"
+    , Space
+    , Str "one"
+    , Space
+    , Str "section"
+    ]
+, Header
+    2
+    ( "a-subsection" , [] , [] )
+    [ Str "A" , Space , Str "subsection" ]
+, Para
+    [ Str "Here"
+    , Space
+    , Str "is"
+    , Space
+    , Str "something"
+    , Space
+    , Cite
+        [ Citation
+            { citationId = "ainsworth:sheppard"
+            , citationPrefix = []
+            , citationSuffix = [ Space , Str "27" ]
+            , citationMode = NormalCitation
+            , citationNoteNum = 1
+            , citationHash = 0
+            }
+        ]
+        [ Str "[@ainsworth:sheppard" , Space , Str "27]" ]
+    , Str "."
+    , Space
+    , Str "And"
+    , Space
+    , Str "here"
+    , Space
+    , Str "is"
+    , Space
+    , Str "something"
+    , Space
+    , Str "else"
+    , SoftBreak
+    , Cite
+        [ Citation
+            { citationId = "dames:physiology"
+            , citationPrefix = []
+            , citationSuffix = []
+            , citationMode = NormalCitation
+            , citationNoteNum = 2
+            , citationHash = 0
+            }
+        ]
+        [ Str "[@dames:physiology]" ]
+    , Str "."
+    , Space
+    , Str "Finally,"
+    , Space
+    , Str "we"
+    , Space
+    , Str "want"
+    , Space
+    , Str "to"
+    , Space
+    , Str "make"
+    , Space
+    , Str "sure"
+    , Space
+    , Str "that"
+    , Space
+    , Str "we"
+    , Space
+    , Str "have"
+    , Space
+    , Str "one"
+    , Space
+    , Str "last"
+    , SoftBreak
+    , Str "citation"
+    , Space
+    , Str "here"
+    , Space
+    , Cite
+        [ Citation
+            { citationId = "kant:critique2"
+            , citationPrefix = []
+            , citationSuffix = [ Space , Str "29" ]
+            , citationMode = NormalCitation
+            , citationNoteNum = 3
+            , citationHash = 0
+            }
+        ]
+        [ Str "[@kant:critique2" , Space , Str "29]" ]
+    , Str "."
+    ]
+, Header
+    2
+    ( "another-subsection." , [] , [] )
+    [ Str "Another" , Space , Str "subsection." ]
+, Para
+    [ Str "Here"
+    , Space
+    , Str "is"
+    , Space
+    , Str "something"
+    , Space
+    , Cite
+        [ Citation
+            { citationId = "altick:aldine"
+            , citationPrefix = []
+            , citationSuffix = [ Space , Str "20" ]
+            , citationMode = NormalCitation
+            , citationNoteNum = 4
+            , citationHash = 0
+            }
+        ]
+        [ Str "[@altick:aldine" , Space , Str "20]" ]
+    , Str "."
+    , Space
+    , Str "And"
+    , Space
+    , Str "here"
+    , Space
+    , Str "is"
+    , Space
+    , Str "something"
+    , Space
+    , Str "repeated"
+    , SoftBreak
+    , Cite
+        [ Citation
+            { citationId = "dames:physiology"
+            , citationPrefix = []
+            , citationSuffix = []
+            , citationMode = NormalCitation
+            , citationNoteNum = 5
+            , citationHash = 0
+            }
+        ]
+        [ Str "[@dames:physiology]" ]
+    , Str "."
+    ]
+, Header
+    1
+    ( "here-is-another-section" , [] , [] )
+    [ Str "Here"
+    , Space
+    , Str "is"
+    , Space
+    , Str "another"
+    , Space
+    , Str "section"
+    ]
+, Para
+    [ Str "Here"
+    , Space
+    , Str "is"
+    , Space
+    , Str "something"
+    , Space
+    , Cite
+        [ Citation
+            { citationId = "lukacs:european"
+            , citationPrefix = []
+            , citationSuffix = [ Space , Str "125" ]
+            , citationMode = NormalCitation
+            , citationNoteNum = 6
+            , citationHash = 0
+            }
+        ]
+        [ Str "[@lukacs:european" , Space , Str "125]" ]
+    , Str "."
+    , Space
+    , Str "And"
+    , Space
+    , Str "here"
+    , Space
+    , Str "is"
+    , Space
+    , Str "something"
+    , Space
+    , Str "else"
+    , SoftBreak
+    , Cite
+        [ Citation
+            { citationId = "cohen:jokes"
+            , citationPrefix = []
+            , citationSuffix = [ Space , Str "3" ]
+            , citationMode = NormalCitation
+            , citationNoteNum = 7
+            , citationHash = 0
+            }
+        ]
+        [ Str "[@cohen:jokes" , Space , Str "3]" ]
+    , Str "."
+    , Space
+    , Str "Finally,"
+    , Space
+    , Str "we"
+    , Space
+    , Str "want"
+    , Space
+    , Str "to"
+    , Space
+    , Str "make"
+    , Space
+    , Str "sure"
+    , Space
+    , Str "that"
+    , Space
+    , Str "we"
+    , Space
+    , Str "have"
+    , Space
+    , Str "one"
+    , Space
+    , Str "last"
+    , SoftBreak
+    , Str "citation"
+    , Space
+    , Str "here"
+    , Space
+    , Cite
+        [ Citation
+            { citationId = "trollope:autobiography"
+            , citationPrefix = []
+            , citationSuffix = [ Space , Str "392" ]
+            , citationMode = NormalCitation
+            , citationNoteNum = 8
+            , citationHash = 0
+            }
+        ]
+        [ Str "[@trollope:autobiography" , Space , Str "392]" ]
+    , Str "."
+    ]
+]
