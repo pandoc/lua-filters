@@ -4,8 +4,14 @@ titlepage: true
 titlepage-text-color: "000000"
 titlepage-rule-color: "00519E"
 titlepage-rule-height: 15
+test_property: from_defaults
+test_property_bool: true
 logo: "logo.pdf"
 logo-width: 10cm
 header-includes:
   - \usepackage[section]{placeins}
 ...
+
+# Content from `default.md`
+
+This text from `default.md` should be ignored.

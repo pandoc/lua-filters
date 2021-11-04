@@ -1,0 +1,12 @@
+---
+author: The Second Man
+institute: ACME University
+test_property: from_defaults2
+test_property_bool: true
+header-includes:
+  - \setbeamertemplate{footline}[page number]
+...
+
+# Content from `default2.md`
+
+This text from `default2.md` should be ignored.
