@@ -1,0 +1,11 @@
+---
+# Eisvogel settings
+titlepage: true
+titlepage-text-color: "000000"
+titlepage-rule-color: "00519E"
+titlepage-rule-height: 15
+logo: "logo.pdf"
+logo-width: 10cm
+header-includes:
+  - \usepackage[section]{placeins}
+...
