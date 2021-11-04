@@ -66,7 +66,14 @@ The metadata from all referenced YAML files **is merged,** except for duplicates
 
 **Note:** This can lead to unexpected results if a single value is expected. But since there is no easy way of specifying detailed merging rules, the best is to modularize the YAML files properly in order to avoid such conflicts.
 
-The exact relationship between metadata from the document and the sum of the external YAML files is to decided. It will likely follow the same mechanism, but this means that you can e.g. not override any meta-data from the included YAML files (logo path, document settings, etc.).
+The exact relationship between metadata from the document and the sum of the external YAML files is yet to be decided. It will likely follow the same mechanism, but **this means that you can e.g. not override** any meta-data from the included YAML files (like logo path, document settings, etc.), just augment it.
+
+A special treatment seems possible for boolean values (i.e. the document has the last word on those).
+
+My current assessment is that in the majority of cases, augmenting the metadata is more feasible, like 
+- combining header includes,
+- combining template-specific settings, or 
+- combining bibliography files.
 
 ## Work in Progress
 
