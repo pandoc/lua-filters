@@ -54,6 +54,7 @@ local merge_methods = {
     end
   end,
   extendlist = function(v1, v2)
+  -- TBD: Filter out duplicates
     local res
     if type(v1) == "table" and v1.tag == "MetaList" then
       res = v1
@@ -62,23 +63,47 @@ local merge_methods = {
     end
     if type(v2) == "table" and v2.tag == "MetaList" then
       for i = 1, #v2 do
-        res[#res + 1] = v2[i]
+        local found = false
+        for j = 1, #res do
+          if res[j] == v2[i] then
+            found = true 
+            break 
+          end
+        end
+        if not found then
+          res[#res + 1] = v2[i]
+        end
       end
     else
-      res[#res + 1] = v2
+      local found = false
+      for j = 1, #res do
+        if res[j] == v2 then
+          found = true 
+          break 
+        end
+      end
+      if not found then
+        res[#res + 1] = v2
+      end
     end
     return res
   end
 }
 
 --- Merge second metadata table into the first.
-function merge_metadata(md1, md2, field_methods)
+function merge_metadata(md1, md2)
   for k, v in pairs(md2) do
     -- The default method is to replace the current value.
-    local method = field_methods[k] or "replace"
+    -- local method = field_methods[k] or "replace"
     -- print(k, type(k), md1[k], md2[k])
-    if stringify(k) == 'header-includes' then
+    if stringify(k) == 'header-includes' 
+      or stringify(k) == 'author'
+      or stringify(k) == 'bibliography' then
       method = "extendlist"
+    elseif false then
+      method = "keep"
+    else
+      method = "replace"
     end
     md1[k] = merge_methods[method](md1[k], md2[k])
   end
@@ -87,13 +112,14 @@ end
 
 -- Default priority rules
 -- So far no quick solution for 'header-includes' in LUA
-local field_methods = {
-    testproperty = "extendlist",
-    author = "extendlist",
-    title = "replace",
-    date = "replace",
-    classoptions = "keep"
-  }
+-- local field_methods = {
+--    testproperty = "extendlist",
+--    author = "extendlist",
+--    bibliography = "extendlist",
+--    title = "replace",
+--    date = "replace",
+--    classoptions = "replace"
+--  }
 
 
 function meta_expand (meta)
@@ -111,7 +137,7 @@ function meta_expand (meta)
 --      print(stringify(doc_from_file))
 --      table.insert(all_meta, doc_from_file.meta)
       yaml_fh:close()
-      all_meta = merge_metadata(all_meta, doc_from_file.meta, field_methods)
+      all_meta = merge_metadata(all_meta, doc_from_file.meta)
     end
   end
   -- Remove the includes-meta directive after processing

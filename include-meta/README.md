@@ -62,13 +62,20 @@ The metadata from the external YAML files will be processed in the order of (1) 
       - \setbeamertemplate{footline}[page number]
     ...
 
-The metadata from all referenced YAML files **is merged,** except for duplicates. For instance, if you specify one author in the the first YAML and another one in the second, the final meta-data will be a list of both. The order of the list will represent the order of the processing (see above).
+The **metadata in the YAML header of the document** is processed **at the very end** (i.e. with the highest priority).
 
-**Note:** This can lead to unexpected results if a single value is expected. But since there is no easy way of specifying detailed merging rules, the best is to modularize the YAML files properly in order to avoid such conflicts.
+The metadata from all referenced YAML files and the YAML header in the document **is combined as follows:**
 
-The exact relationship between metadata from the document and the sum of the external YAML files is yet to be decided. It will likely follow the same mechanism, but **this means that you can e.g. not override** any meta-data from the included YAML files (like logo path, document settings, etc.), just augment it.
+- duplicates are ignored,
+- `title` and `date` are replaced by the value in the source with the highest priority (the document or the last YAML file in the list),
+- `author` and `header-includes` values are joined to a combined list,
+- `classoptions` is kept from the first file (tbc).
 
-A special treatment seems possible for boolean values (i.e. the document has the last word on those).
+For instance, if you specify one author in the the first YAML and another one in the second, the final meta-data will be a list of both. The order of the list will represent the order of the processing (see above).
+
+**Note:** The merging rules and code are based on a [Github Issue discussion](https://github.com/jgm/pandoc/issues/3115#issuecomment-294506221).
+
+The exact relationship between metadata from the document and the sum of the external YAML files is still to be evaluated. I might add a mechanism for specifying the priority of e.g. the document settings. 
 
 My current assessment is that in the majority of cases, augmenting the metadata is more feasible, like 
 - combining header includes,

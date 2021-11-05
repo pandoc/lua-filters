@@ -1,12 +1,20 @@
 ---
-# Eisvogel settings
+# User defaults
+author: 
+  - Joe Doe
+  - Jill Doe
+institute: ACME University
+bibliography: my-references.bib
+lang: "en"
+# Some other settings
+test_property: from_defaults
+test_property_bool: true
+# Standard design settings for Eisvogel
 titlepage: true
 titlepage-text-color: "000000"
 titlepage-rule-color: "00519E"
 titlepage-rule-height: 15
-test_property: from_defaults
-test_property_bool: true
-logo: "logo.pdf"
+logo: "logo-regular.pdf"
 logo-width: 10cm
 header-includes:
   - \usepackage[section]{placeins}
