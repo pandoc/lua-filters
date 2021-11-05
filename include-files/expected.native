@@ -1,30 +1,173 @@
-[Header 1 ("section-1",[],[]) [Str "Section",Space,Str "1"]
-,Para [Str "Thanks",Space,Str "everyone!"]
-,Header 1 ("title-of-file-a",[],[]) [Str "Title",Space,Str "of",Space,Str "file-a"]
-,Para [Str "This",Space,Str "is",Space,Code ("",[],[]) "file-a.md",Str "."]
-,Header 1 ("file-b",[],[]) [Str "File",Space,Str "b"]
-,Para [Str "This",Space,Str "is",Space,Code ("",[],[]) "file-b.md",Str "."]
-,Para [Str "It",Space,Str "has",Space,Str "two",Space,Str "paragraphs",Space,Str "and",Space,Str "a",Space,Str "header."]
-,Header 1 ("different-format",[],[]) [Str "Different",Space,Str "format"]
-,Header 2 ("org-header",[],[]) [Str "Org",Space,Str "header"]
-,Para [Str "This",Space,Str "is",Space,Emph [Str "emphasized"],Str "."]
-,Header 1 ("recursive-transclusion",[],[]) [Str "Recursive",Space,Str "transclusion"]
-,Header 1 ("title-f",[],[]) [Str "Title",Space,Str "f"]
-,Para [Str "This",Space,Str "is",Space,Code ("",[],[]) "file-f.md",Str "."]
-,Header 2 ("subtitle-f",[],[]) [Str "Subtitle",Space,Str "f"]
-,Header 1 ("title-of-file-a",[],[]) [Str "Title",Space,Str "of",Space,Str "file-a"]
-,Para [Str "This",Space,Str "is",Space,Code ("",[],[]) "file-a.md",Str "."]
-,Header 2 ("title-of-file-a",[],[]) [Str "Title",Space,Str "of",Space,Str "file-a"]
-,Para [Str "This",Space,Str "is",Space,Code ("",[],[]) "file-a.md",Str "."]
-,Header 1 ("subdirectories",[],[]) [Str "Subdirectories"]
-,Header 1 ("image-include",[],[]) [Str "Image",Space,Str "include"]
-,Para [Str "Image",Space,Str "relative",Space,Str "path",Space,Str "will",Space,Str "be",Space,Str "updated."]
-,Para [Image ("",[],[]) [Str "Image",Space,Str "title"] ("subdir/someimage.png","fig:")]
-,Header 1 ("source-include",[],[]) [Str "Source",Space,Str "include"]
-,Para [Str "File",Space,Str "inclusion",Space,Str "codeblocks",Space,Str "for",Space,Str "use",Space,Str "with",Space,Str "include-code-files",Space,Str "will",Space,Str "be",SoftBreak,Str "updated",Space,Str "too."]
-,CodeBlock ("",["c"],[("include","subdir/somecode.c")]) ""
-,Header 1 ("appendix",[],[]) [Str "Appendix"]
-,Para [Str "More",Space,Str "info",Space,Str "goes",Space,Str "here."]
-,Header 2 ("questionaire",[],[]) [Str "Questionaire"]
-,BulletList
- [[Plain [Str "Is",Space,Str "this",Space,Str "good?"]]]]
+[ Header
+    1
+    ( "section-1" , [] , [] )
+    [ Str "Section" , Space , Str "1" ]
+, Para [ Str "Thanks" , Space , Str "everyone!" ]
+, Header
+    1
+    ( "title-of-file-a" , [] , [] )
+    [ Str "Title" , Space , Str "of" , Space , Str "file-a" ]
+, Para
+    [ Str "This"
+    , Space
+    , Str "is"
+    , Space
+    , Code ( "" , [] , [] ) "file-a.md"
+    , Str "."
+    ]
+, Header
+    1 ( "file-b" , [] , [] ) [ Str "File" , Space , Str "b" ]
+, Para
+    [ Str "This"
+    , Space
+    , Str "is"
+    , Space
+    , Code ( "" , [] , [] ) "file-b.md"
+    , Str "."
+    ]
+, Para
+    [ Str "It"
+    , Space
+    , Str "has"
+    , Space
+    , Str "two"
+    , Space
+    , Str "paragraphs"
+    , Space
+    , Str "and"
+    , Space
+    , Str "a"
+    , Space
+    , Str "header."
+    ]
+, Header
+    1
+    ( "different-format" , [] , [] )
+    [ Str "Different" , Space , Str "format" ]
+, Header
+    2
+    ( "org-header" , [] , [] )
+    [ Str "Org" , Space , Str "header" ]
+, Para
+    [ Str "This"
+    , Space
+    , Str "is"
+    , Space
+    , Emph [ Str "emphasized" ]
+    , Str "."
+    ]
+, Header
+    1
+    ( "recursive-transclusion" , [] , [] )
+    [ Str "Recursive" , Space , Str "transclusion" ]
+, Header
+    1 ( "title-f" , [] , [] ) [ Str "Title" , Space , Str "f" ]
+, Para
+    [ Str "This"
+    , Space
+    , Str "is"
+    , Space
+    , Code ( "" , [] , [] ) "file-f.md"
+    , Str "."
+    ]
+, Header
+    2
+    ( "subtitle-f" , [] , [] )
+    [ Str "Subtitle" , Space , Str "f" ]
+, Header
+    1
+    ( "title-of-file-a" , [] , [] )
+    [ Str "Title" , Space , Str "of" , Space , Str "file-a" ]
+, Para
+    [ Str "This"
+    , Space
+    , Str "is"
+    , Space
+    , Code ( "" , [] , [] ) "file-a.md"
+    , Str "."
+    ]
+, Header
+    2
+    ( "title-of-file-a" , [] , [] )
+    [ Str "Title" , Space , Str "of" , Space , Str "file-a" ]
+, Para
+    [ Str "This"
+    , Space
+    , Str "is"
+    , Space
+    , Code ( "" , [] , [] ) "file-a.md"
+    , Str "."
+    ]
+, Header
+    1 ( "subdirectories" , [] , [] ) [ Str "Subdirectories" ]
+, Header
+    1
+    ( "image-include" , [] , [] )
+    [ Str "Image" , Space , Str "include" ]
+, Para
+    [ Str "Image"
+    , Space
+    , Str "relative"
+    , Space
+    , Str "path"
+    , Space
+    , Str "will"
+    , Space
+    , Str "be"
+    , Space
+    , Str "updated."
+    ]
+, Para
+    [ Image
+        ( "" , [] , [] )
+        [ Str "Image" , Space , Str "title" ]
+        ( "subdir/someimage.png" , "fig:" )
+    ]
+, Header
+    1
+    ( "source-include" , [] , [] )
+    [ Str "Source" , Space , Str "include" ]
+, Para
+    [ Str "File"
+    , Space
+    , Str "inclusion"
+    , Space
+    , Str "codeblocks"
+    , Space
+    , Str "for"
+    , Space
+    , Str "use"
+    , Space
+    , Str "with"
+    , Space
+    , Str "include-code-files"
+    , Space
+    , Str "will"
+    , Space
+    , Str "be"
+    , SoftBreak
+    , Str "updated"
+    , Space
+    , Str "too."
+    ]
+, CodeBlock
+    ( "" , [ "c" ] , [ ( "include" , "subdir/somecode.c" ) ] )
+    ""
+, Header 1 ( "appendix" , [] , [] ) [ Str "Appendix" ]
+, Para
+    [ Str "More"
+    , Space
+    , Str "info"
+    , Space
+    , Str "goes"
+    , Space
+    , Str "here."
+    ]
+, Header
+    2 ( "questionaire" , [] , [] ) [ Str "Questionaire" ]
+, BulletList
+    [ [ Plain
+          [ Str "Is" , Space , Str "this" , Space , Str "good?" ]
+      ]
+    ]
+]

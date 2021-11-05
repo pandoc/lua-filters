@@ -1,4 +1,80 @@
-[Para [Str "The",Space,Str "filter",Space,Str "should",Space,Str "leave",Space,Str "code",Space,Str "elements",Space,Str "(like",Space,Str "this:",Space,Code ("",[],[]) "putStrLn \"hello, world!\"",Str ")",SoftBreak,Str "and",Space,Str "code",Space,Str "blocks",Space,Str "(like",Space,Str "this:"]
-,CodeBlock ("",["lua"],[]) "function foo()\n  return \"foo\"\nend"
-,Para [Str ")",Space,Str "alone",Space,Str "if",Space,Str "they",Space,Str "aren\8217t",Space,Str "tagged",Space,Str "with",Space,Str "the",Space,Code ("",[],[]) "lilypond",Space,Str "class."]
-,Para [Str "It",Space,Str "should",Space,Str "also",Space,Str "ignore",Space,Str "elements",Space,Str "that",Space,Str "have",Space,Str "the",Space,Code ("",[],[]) "ly-norender",Space,Str "class:",Space,Code ("",["lilypond","ly-norender"],[]) "relative c'",Str "."]]
+[ Para
+    [ Str "The"
+    , Space
+    , Str "filter"
+    , Space
+    , Str "should"
+    , Space
+    , Str "leave"
+    , Space
+    , Str "code"
+    , Space
+    , Str "elements"
+    , Space
+    , Str "(like"
+    , Space
+    , Str "this:"
+    , Space
+    , Code ( "" , [] , [] ) "putStrLn \"hello, world!\""
+    , Str ")"
+    , SoftBreak
+    , Str "and"
+    , Space
+    , Str "code"
+    , Space
+    , Str "blocks"
+    , Space
+    , Str "(like"
+    , Space
+    , Str "this:"
+    ]
+, CodeBlock
+    ( "" , [ "lua" ] , [] )
+    "function foo()\n  return \"foo\"\nend"
+, Para
+    [ Str ")"
+    , Space
+    , Str "alone"
+    , Space
+    , Str "if"
+    , Space
+    , Str "they"
+    , Space
+    , Str "aren\8217t"
+    , Space
+    , Str "tagged"
+    , Space
+    , Str "with"
+    , Space
+    , Str "the"
+    , Space
+    , Code ( "" , [] , [] ) "lilypond"
+    , Space
+    , Str "class."
+    ]
+, Para
+    [ Str "It"
+    , Space
+    , Str "should"
+    , Space
+    , Str "also"
+    , Space
+    , Str "ignore"
+    , Space
+    , Str "elements"
+    , Space
+    , Str "that"
+    , Space
+    , Str "have"
+    , Space
+    , Str "the"
+    , Space
+    , Code ( "" , [] , [] ) "ly-norender"
+    , Space
+    , Str "class:"
+    , Space
+    , Code
+        ( "" , [ "lilypond" , "ly-norender" ] , [] ) "relative c'"
+    , Str "."
+    ]
+]
