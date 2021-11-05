@@ -6,19 +6,17 @@ Copyright: © 2021 Martin Hepp
 Based on 
 - abstract-to-meta, copyright: © 2017–2021 Albert Krewinkel
 - include-files.lua, copyright: © 2019–2021 Albert Krewinkel
+- Merge functions from
+- https://github.com/jgm/pandoc/issues/3115#issuecomment-294506221
 
 License:   MIT – see LICENSE file for details
 ]]
 
--- Module pandoc.path is required and was added in version 2.12
 PANDOC_VERSION:must_be_at_least '2.12'
 
 local List = require 'pandoc.List'
 local utils = require 'pandoc.utils'
 local stringify = utils.stringify
--- local path = require 'pandoc.path'
--- local system = require 'pandoc.system'
-
 
 local function len(t)
   local count = 0
@@ -32,7 +30,7 @@ end
 -- https://github.com/jgm/pandoc/issues/3115#issuecomment-294506221
 -- Sincere thanks to Albert Krewinkel, @tarleb for this
 -- The original version does not handle boolean values properly for replace 
--- and keep. Fixed.
+-- and keep methods. Fixed.
 
 local merge_methods = {
   replace = function(v1, v2)
@@ -54,7 +52,6 @@ local merge_methods = {
     end
   end,
   extendlist = function(v1, v2)
-  -- TBD: Filter out duplicates
     local res
     if type(v1) == "table" and v1.tag == "MetaList" then
       res = v1
@@ -94,8 +91,6 @@ local merge_methods = {
 function merge_metadata(md1, md2)
   for k, v in pairs(md2) do
     -- The default method is to replace the current value.
-    -- local method = field_methods[k] or "replace"
-    -- print(k, type(k), md1[k], md2[k])
     if stringify(k) == 'header-includes' 
       or stringify(k) == 'author'
       or stringify(k) == 'bibliography' then
@@ -110,39 +105,26 @@ function merge_metadata(md1, md2)
   return md1
 end
 
--- Default priority rules
--- So far no quick solution for 'header-includes' in LUA
--- local field_methods = {
---    testproperty = "extendlist",
---    author = "extendlist",
---    bibliography = "extendlist",
---    title = "replace",
---    date = "replace",
---    classoptions = "replace"
---  }
-
 
 function meta_expand (meta)
   local all_meta = pandoc.MetaList({})
   local yaml_includes = meta['include-meta']
-  print(len(yaml_includes), "YAML meta file(s) to be included found.")
+  -- print(len(yaml_includes), "YAML meta file(s) to be included found.")
   for i, filename in pairs(yaml_includes) do
     yaml_file_path = stringify(filename)  
-    print('Processing:', yaml_file_path)
+  --  print('Processing:', yaml_file_path)
     local yaml_fh = io.open(yaml_file_path, "r")
     if not yaml_fh then
       io.stderr:write("Cannot open file: ", yaml_file_path, " - Skipped.\n")
     else
       local doc_from_file = pandoc.read(yaml_fh:read '*a', format)
 --      print(stringify(doc_from_file))
---      table.insert(all_meta, doc_from_file.meta)
       yaml_fh:close()
       all_meta = merge_metadata(all_meta, doc_from_file.meta)
     end
   end
   -- Remove the includes-meta directive after processing
   meta['include-meta'] = nil     
-  -- TBD: check wrt priority rules
   return merge_metadata(all_meta, meta, merge_methods)
 end
 
