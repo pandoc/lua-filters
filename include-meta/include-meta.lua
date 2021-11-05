@@ -110,22 +110,26 @@ function meta_expand (meta)
   local all_meta = pandoc.MetaList({})
   local yaml_includes = meta['include-meta']
   -- print(len(yaml_includes), "YAML meta file(s) to be included found.")
-  for i, filename in pairs(yaml_includes) do
-    yaml_file_path = stringify(filename)  
-  --  print('Processing:', yaml_file_path)
-    local yaml_fh = io.open(yaml_file_path, "r")
-    if not yaml_fh then
-      io.stderr:write("Cannot open file: ", yaml_file_path, " - Skipped.\n")
-    else
-      local doc_from_file = pandoc.read(yaml_fh:read '*a', format)
---      print(stringify(doc_from_file))
-      yaml_fh:close()
-      all_meta = merge_metadata(all_meta, doc_from_file.meta)
+  if yaml_includes then
+    for i, filename in pairs(yaml_includes) do
+      yaml_file_path = stringify(filename)  
+    --  print('Processing:', yaml_file_path)
+      local yaml_fh = io.open(yaml_file_path, "r")
+      if not yaml_fh then
+        io.stderr:write("Cannot open file: ", yaml_file_path, " - Skipped.\n")
+      else
+        local doc_from_file = pandoc.read(yaml_fh:read '*a', format)
+  --      print(stringify(doc_from_file))
+        yaml_fh:close()
+        all_meta = merge_metadata(all_meta, doc_from_file.meta)
+      end
     end
+    -- Remove the includes-meta directive after processing
+    meta['include-meta'] = nil     
+    return merge_metadata(all_meta, meta, merge_methods)
+  else
+    return
   end
-  -- Remove the includes-meta directive after processing
-  meta['include-meta'] = nil     
-  return merge_metadata(all_meta, meta, merge_methods)
 end
 
 return { {Meta = meta_expand} }
