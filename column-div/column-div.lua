@@ -1,6 +1,6 @@
 --[[
 column-div - leverage Pandoc native divs to make balanced and unbalanced column
-             and other things based on class name and attirbutes.
+             and other things based on class name and attributes.
 
 Copyright:  © 2021 Christophe Agathon <christophe.agathon@gmail.com>
 License:    MIT – see LICENSE file for details
@@ -50,7 +50,7 @@ function Div(div)
     end
     -- build the returned list of blocks
     begin_env = List:new{pandoc.RawBlock('tex',
-                                  '\\begin' .. '{' .. env .. '}' .. options)}
+                                         '\\begin{' .. env .. '}' .. options)}
     end_env = List:new{pandoc.RawBlock('tex', '\\end{' .. env .. '}')}
     returned_list = begin_env .. div.content .. end_env
 
@@ -69,8 +69,17 @@ function Div(div)
       if opt then options = '[' .. opt .. ']' .. options end
 
       begin_env = List:new{pandoc.RawBlock('tex',
-                            '\\begin' .. '{' .. 'minipage' .. '}' .. options)}
-      end_env = List:new{pandoc.RawBlock('tex', '\\end{' .. 'minipage' .. '}')}
+                                           '\\begin{minipage}' .. options)}
+      end_env = List:new{pandoc.RawBlock('tex', '\\end{minipage}')}
+
+      -- add support for color  TODO: background
+      opt = div.attributes.color
+      if opt then
+        begin_env = begin_env .. List:new{pandoc.RawBlock('tex',
+                                                      '\\color{' .. opt .. '}')}
+        div.attributes.color = nil    -- consume attribute
+      end
+
       returned_list = begin_env .. div.content .. end_env
 
     elseif div.classes:includes('columns') then
@@ -109,25 +118,39 @@ function Div(div)
       end
 
       begin_env = List:new{pandoc.RawBlock('tex',
-                                    '\\begin' .. '{' .. env .. '}' .. options)}
+                                    '\\begin{' .. env .. '}' .. options)}
       end_env = List:new{pandoc.RawBlock('tex', '\\end{' .. env .. '}')}
       returned_list = begin_env .. div.content .. end_env
     end
 
-  -- if the format is html add support for multi columns
+  -- if the format is html add what is not already done by plain pandoc
   elseif FORMAT:match 'html' then
+    local style
+    -- add support for multi columns
     opt = div.attributes['column-count']
     if opt then
-      -- add column-count to style if it exists
-      if div.attributes.style then
-        div.attributes.style = div.attributes.style ..
-                                '; column-count: ' .. opt
-      else
-        div.attributes.style = 'column-count: ' .. opt
-      end
+      -- add column-count to style
+      style = 'column-count: ' .. opt .. ';' .. (style or '')
       div.attributes['column-count'] = nil
       -- column-count is "consumed" by the filter otherwise it would appear as
       -- data-column-count="…" in the resulting document
+    end
+    -- add support for color  TODO: latex counterpart
+    opt = div.attributes.color
+    if opt then
+      -- add color to style
+      style = 'color: ' .. opt .. ';' .. (style or '')
+      div.attributes.color = nil    -- consume attribute
+    end
+    opt = div.attributes['background-color']
+    if opt then
+      -- add color to style
+      style = 'background-color: ' .. opt .. ';' .. (style or '')
+      div.attributes['background-color'] = nil    -- consume attribute
+    end
+    -- if we have style then build returned list
+    if style then
+      div.attributes.style = style .. (div.attributes.style or '')
       returned_list = List:new{pandoc.Div(div.content, div.attr)}
     end
   end
