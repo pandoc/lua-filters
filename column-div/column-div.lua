@@ -62,7 +62,14 @@ function Div(div)
       opt = div.attributes.width
       if opt then
         local width=tonumber(string.match(opt,'(%f[%d]%d[,.%d]*%f[%D])%%'))/100
-        options = '{' .. tostring(width) .. '\\columnwidth}'
+        options = '{' .. tostring(width)
+        if div.attributes['background-color'] then
+          -- fix the width for the \colorbox
+          options = '{\\dimexpr' .. tostring(width)
+                    .. '\\columnwidth-4\\fboxsep\\relax}'
+        else
+          options = '{' .. tostring(width) .. '\\columnwidth}'
+        end
       end
 
       opt = div.attributes.valign
@@ -72,7 +79,7 @@ function Div(div)
                                            '\\begin{minipage}' .. options)}
       end_env = List:new{pandoc.RawBlock('tex', '\\end{minipage}')}
 
-      -- add support for color  TODO: background
+      -- add support for color
       opt = div.attributes.color
       if opt then
         begin_env = begin_env .. List:new{pandoc.RawBlock('tex',
@@ -80,25 +87,22 @@ function Div(div)
         div.attributes.color = nil    -- consume attribute
       end
 
+      opt = div.attributes['background-color']
+      if opt then
+        begin_env = List:new{pandoc.RawBlock('tex',
+                                             '\\colorbox{' .. opt .. '}{')}
+                    .. begin_env
+        end_env = end_env .. List:new{pandoc.RawBlock('tex', '}')}
+        div.attributes['background-color'] = nil    -- consume attribute
+      end
+
       returned_list = begin_env .. div.content .. end_env
 
     elseif div.classes:includes('columns') then
-      env = 'columns'
-      -- merge two consecutives RawBlocks (\end... and \begin...)
-      -- to get rid of the unwanted blank line
-      local blocks = div.content
-      local rbtxt = ''
-
-      for i = #blocks-1, 1, -1 do
-        if i > 1 and blocks[i].tag == 'RawBlock' and blocks[i].text:match 'end'
-        and blocks[i+1].tag == 'RawBlock' and blocks[i+1].text:match 'begin'
-        then
-          rbtxt = blocks[i].text .. blocks[i+1].text
-          blocks:remove(i+1)
-          blocks[i].text = rbtxt
-        end
-      end
-      returned_list=blocks
+      -- it turns-out that asimple Tex \mbox do the job
+      begin_env = List:new{pandoc.RawBlock('tex', '\\mbox{')}
+      end_env = List:new{pandoc.RawBlock('tex', '}')}
+      returned_list = begin_env .. div.content .. end_env
 
     else
       -- other environments ex: multicols
