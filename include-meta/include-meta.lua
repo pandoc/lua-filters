@@ -92,7 +92,6 @@ function merge_metadata(md1, md2)
   for k, v in pairs(md2) do
     -- The default method is to replace the current value.
     if stringify(k) == 'header-includes' 
-      or stringify(k) == 'author'
       or stringify(k) == 'bibliography' then
       method = "extendlist"
     elseif false then

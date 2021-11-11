@@ -1,6 +1,5 @@
 ---
 author:
-- Joe Doe
 - Jill Doe
 - Frank van Lua
 bibliography:
@@ -37,3 +36,5 @@ titlepage-text-color: 050505
 This is a simple sample.
 
 The default author is added to the list.
+
+![Image caption](image.png)

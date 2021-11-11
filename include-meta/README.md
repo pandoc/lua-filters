@@ -52,10 +52,12 @@ document **is combined as follows:**
 - duplicates are ignored,
 - `title` and `date` are replaced by the value in the source with the
   highest priority (the document or the last YAML file in the list),
-- `author`, `header-includes` and `bibliography` values are joined
+- `header-includes` and `bibliography` values are joined
   into a combined list, and
 - values from all other properties are taken from the source with the
   highest priority (e.g. set according to the YAML in the document).
+
+**2021-11-11:** `author` entries are no longer joined into a combined list, because it turned out to be cumbersome to remove or modify an author name.
 
 For instance, if you specify one author in the the first YAML and
 another one in the second, the final meta-data will be a list of

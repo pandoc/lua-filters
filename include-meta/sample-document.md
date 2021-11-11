@@ -19,3 +19,5 @@ test_property_bool: false
 This is a simple sample.
 
 The default author is added to the list.
+
+![Image caption](image.png)
