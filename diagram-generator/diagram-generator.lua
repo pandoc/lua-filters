@@ -16,7 +16,9 @@ PANDOC_VERSION:must_be_at_least '2.7.3'
 
 local system = require 'pandoc.system'
 local utils = require 'pandoc.utils'
-local stringify = utils.stringify
+local stringify = function (s)
+  return type(s) == 'string' and s or utils.stringify(s)
+end
 local with_temporary_directory = system.with_temporary_directory
 local with_working_directory = system.with_working_directory
 

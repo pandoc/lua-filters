@@ -1,23 +1,583 @@
-[Header 1 ("here-is-one-section",[],[]) [Str "Here",Space,Str "is",Space,Str "one",Space,Str "section"]
-,Header 2 ("a-subsection",[],[]) [Str "A",Space,Str "subsection"]
-,Para [Str "Here",Space,Str "is",Space,Str "something",Space,Cite [Citation {citationId = "ainsworth:sheppard", citationPrefix = [], citationSuffix = [Space,Str "27"], citationMode = NormalCitation, citationNoteNum = 1, citationHash = 0}] [Str "(Ainsworth",Space,Str "1900,",Space,Str "27)"],Str ".",Space,Str "And",Space,Str "here",Space,Str "is",Space,Str "something",Space,Str "else",SoftBreak,Cite [Citation {citationId = "dames:physiology", citationPrefix = [], citationSuffix = [], citationMode = NormalCitation, citationNoteNum = 2, citationHash = 0}] [Str "(Dames",Space,Str "2007)"],Str ".",Space,Str "Finally,",Space,Str "we",Space,Str "want",Space,Str "to",Space,Str "make",Space,Str "sure",Space,Str "that",Space,Str "we",Space,Str "have",Space,Str "one",Space,Str "last",SoftBreak,Str "citation",Space,Str "here",Space,Cite [Citation {citationId = "kant:critique2", citationPrefix = [], citationSuffix = [Space,Str "29"], citationMode = NormalCitation, citationNoteNum = 3, citationHash = 0}] [Str "(Kant",Space,Str "2001,",Space,Str "29)"],Str "."]
-,Header 2 ("another-subsection.",[],[]) [Str "Another",Space,Str "subsection."]
-,Para [Str "Here",Space,Str "is",Space,Str "something",Space,Cite [Citation {citationId = "altick:aldine", citationPrefix = [], citationSuffix = [Space,Str "20"], citationMode = NormalCitation, citationNoteNum = 4, citationHash = 0}] [Str "(Altick",Space,Str "1958,",Space,Str "20)"],Str ".",Space,Str "And",Space,Str "here",Space,Str "is",Space,Str "something",Space,Str "repeated",SoftBreak,Cite [Citation {citationId = "dames:physiology", citationPrefix = [], citationSuffix = [], citationMode = NormalCitation, citationNoteNum = 5, citationHash = 0}] [Str "(Dames",Space,Str "2007)"],Str "."]
-,Div ("refs-1",["references","csl-bib-body","hanging-indent"],[])
- [Div ("ref-ainsworth:sheppard",["csl-entry"],[])
-  [Para [Str "Ainsworth,",Space,Str "William",Space,Str "Harrison.",Space,Str "1900.",Space,Emph [Str "Jack",Space,Str "Sheppard:",Space,Str "A",Space,Str "Romance"],Str ".",Space,Str "London:",Space,Str "George",Space,Str "Routledge",Space,Str "&",Space,Str "Sons."]]
- ,Div ("ref-altick:aldine",["csl-entry"],[])
-  [Para [Str "Altick,",Space,Str "Richard",Space,Str "D.",Space,Str "1958.",Space,Span ("",[],[]) [Str "\8220",Str "From",Space,Str "Aldine",Space,Str "to",Space,Str "Everyman:",Space,Str "Cheap",Space,Str "Reprint",Space,Str "Series",Space,Str "of",Space,Str "the",Space,Str "English",Space,Str "Classics",Space,Str "1830\8211\&1906",Str ".",Str "\8221"],Space,Emph [Str "Studies",Space,Str "in",Space,Str "Bibliography"],Space,Str "11:",Space,Str "3\8211\&24."]]
- ,Div ("ref-dames:physiology",["csl-entry"],[])
-  [Para [Str "Dames,",Space,Str "Nicholas.",Space,Str "2007.",Space,Emph [Str "The",Space,Str "Physiology",Space,Str "of",Space,Str "the",Space,Str "Novel:",Space,Str "Reading,",Space,Str "Neural",Space,Str "Science,",Space,Str "and",Space,Str "the",Space,Str "Form",Space,Str "of",Space,Str "Victorian",Space,Str "Fiction"],Str ".",Space,Str "Oxford:",Space,Str "Oxford",Space,Str "University",Space,Str "Press."]]
- ,Div ("ref-kant:critique2",["csl-entry"],[])
-  [Para [Str "Kant,",Space,Str "Immanuel.",Space,Str "2001.",Space,Emph [Str "Critique",Space,Str "of",Space,Str "Practical",Space,Str "Reason"],Str ".",Space,Str "Edited",Space,Str "and",Space,Str "translated",Space,Str "by",Space,Str "Mary",Space,Str "Gregor.",Space,Str "Cambridge,",Space,Str "UK:",Space,Str "Cambridge",Space,Str "University",Space,Str "Press."]]]
-,Header 1 ("here-is-another-section",[],[]) [Str "Here",Space,Str "is",Space,Str "another",Space,Str "section"]
-,Para [Str "Here",Space,Str "is",Space,Str "something",Space,Cite [Citation {citationId = "lukacs:european", citationPrefix = [], citationSuffix = [Space,Str "125"], citationMode = NormalCitation, citationNoteNum = 6, citationHash = 0}] [Str "(Luk\225cs",Space,Str "1989,",Space,Str "125)"],Str ".",Space,Str "And",Space,Str "here",Space,Str "is",Space,Str "something",Space,Str "else",SoftBreak,Cite [Citation {citationId = "cohen:jokes", citationPrefix = [], citationSuffix = [Space,Str "3"], citationMode = NormalCitation, citationNoteNum = 7, citationHash = 0}] [Str "(Cohen",Space,Str "1999,",Space,Str "3)"],Str ".",Space,Str "Finally,",Space,Str "we",Space,Str "want",Space,Str "to",Space,Str "make",Space,Str "sure",Space,Str "that",Space,Str "we",Space,Str "have",Space,Str "one",Space,Str "last",SoftBreak,Str "citation",Space,Str "here",Space,Cite [Citation {citationId = "trollope:autobiography", citationPrefix = [], citationSuffix = [Space,Str "392"], citationMode = NormalCitation, citationNoteNum = 8, citationHash = 0}] [Str "(Trollope",Space,Str "[1883]",Space,Str "1999,",Space,Str "392)"],Str "."]
-,Div ("refs-2",["references","csl-bib-body","hanging-indent"],[])
- [Div ("ref-cohen:jokes",["csl-entry"],[])
-  [Para [Str "Cohen,",Space,Str "Ted.",Space,Str "1999.",Space,Emph [Str "Jokes:",Space,Str "Philosophical",Space,Str "Thoughts",Space,Str "on",Space,Str "Joking",Space,Str "Matters"],Str ".",Space,Str "Chicago:",Space,Str "University",Space,Str "of",Space,Str "Chicago",Space,Str "Press."]]
- ,Div ("ref-lukacs:european",["csl-entry"],[])
-  [Para [Str "Luk\225cs,",Space,Str "Georg.",Space,Str "1989.",Space,Emph [Str "Studies",Space,Str "in",Space,Str "European",Space,Str "Realism:",Space,Str "A",Space,Str "Sociological",Space,Str "Survey",Space,Str "of",Space,Str "the",Space,Str "Writings",Space,Str "of",Space,Str "Balzac,",Space,Str "Stendhal,",Space,Str "Zola,",Space,Str "Tolstoy,",Space,Str "Gorki,",Space,Str "and",Space,Str "Others"],Str ".",Space,Str "Translated",Space,Str "by",Space,Str "Edith",Space,Str "Bone.",Space,Str "London:",Space,Str "The",Space,Str "Merlin",Space,Str "Press."]]
- ,Div ("ref-trollope:autobiography",["csl-entry"],[])
-  [Para [Str "Trollope,",Space,Str "Anthony.",Space,Str "(1883)",Space,Str "1999.",Space,Emph [Str "An",Space,Str "Autobiography"],Str ".",Space,Str "Edited",Space,Str "by",Space,Str "Michael",Space,Str "Sadleir",Space,Str "and",Space,Str "Frederick",Space,Str "Page.",Space,Str "Oxford:",Space,Str "Oxford",Space,Str "University",Space,Str "Press."]]]]
+[ Header
+    1
+    ( "here-is-one-section" , [] , [] )
+    [ Str "Here"
+    , Space
+    , Str "is"
+    , Space
+    , Str "one"
+    , Space
+    , Str "section"
+    ]
+, Header
+    2
+    ( "a-subsection" , [] , [] )
+    [ Str "A" , Space , Str "subsection" ]
+, Para
+    [ Str "Here"
+    , Space
+    , Str "is"
+    , Space
+    , Str "something"
+    , Space
+    , Cite
+        [ Citation
+            { citationId = "ainsworth:sheppard"
+            , citationPrefix = []
+            , citationSuffix = [ Space , Str "27" ]
+            , citationMode = NormalCitation
+            , citationNoteNum = 1
+            , citationHash = 0
+            }
+        ]
+        [ Str "(Ainsworth"
+        , Space
+        , Str "1900,"
+        , Space
+        , Str "27)"
+        ]
+    , Str "."
+    , Space
+    , Str "And"
+    , Space
+    , Str "here"
+    , Space
+    , Str "is"
+    , Space
+    , Str "something"
+    , Space
+    , Str "else"
+    , SoftBreak
+    , Cite
+        [ Citation
+            { citationId = "dames:physiology"
+            , citationPrefix = []
+            , citationSuffix = []
+            , citationMode = NormalCitation
+            , citationNoteNum = 2
+            , citationHash = 0
+            }
+        ]
+        [ Str "(Dames" , Space , Str "2007)" ]
+    , Str "."
+    , Space
+    , Str "Finally,"
+    , Space
+    , Str "we"
+    , Space
+    , Str "want"
+    , Space
+    , Str "to"
+    , Space
+    , Str "make"
+    , Space
+    , Str "sure"
+    , Space
+    , Str "that"
+    , Space
+    , Str "we"
+    , Space
+    , Str "have"
+    , Space
+    , Str "one"
+    , Space
+    , Str "last"
+    , SoftBreak
+    , Str "citation"
+    , Space
+    , Str "here"
+    , Space
+    , Cite
+        [ Citation
+            { citationId = "kant:critique2"
+            , citationPrefix = []
+            , citationSuffix = [ Space , Str "29" ]
+            , citationMode = NormalCitation
+            , citationNoteNum = 3
+            , citationHash = 0
+            }
+        ]
+        [ Str "(Kant" , Space , Str "2001," , Space , Str "29)" ]
+    , Str "."
+    ]
+, Header
+    2
+    ( "another-subsection." , [] , [] )
+    [ Str "Another" , Space , Str "subsection." ]
+, Para
+    [ Str "Here"
+    , Space
+    , Str "is"
+    , Space
+    , Str "something"
+    , Space
+    , Cite
+        [ Citation
+            { citationId = "altick:aldine"
+            , citationPrefix = []
+            , citationSuffix = [ Space , Str "20" ]
+            , citationMode = NormalCitation
+            , citationNoteNum = 4
+            , citationHash = 0
+            }
+        ]
+        [ Str "(Altick" , Space , Str "1958," , Space , Str "20)" ]
+    , Str "."
+    , Space
+    , Str "And"
+    , Space
+    , Str "here"
+    , Space
+    , Str "is"
+    , Space
+    , Str "something"
+    , Space
+    , Str "repeated"
+    , SoftBreak
+    , Cite
+        [ Citation
+            { citationId = "dames:physiology"
+            , citationPrefix = []
+            , citationSuffix = []
+            , citationMode = NormalCitation
+            , citationNoteNum = 5
+            , citationHash = 0
+            }
+        ]
+        [ Str "(Dames" , Space , Str "2007)" ]
+    , Str "."
+    ]
+, Div
+    ( "refs-1"
+    , [ "references" , "csl-bib-body" , "hanging-indent" ]
+    , []
+    )
+    [ Div
+        ( "ref-ainsworth:sheppard" , [ "csl-entry" ] , [] )
+        [ Para
+            [ Str "Ainsworth,"
+            , Space
+            , Str "William"
+            , Space
+            , Str "Harrison."
+            , Space
+            , Str "1900."
+            , Space
+            , Emph
+                [ Str "Jack"
+                , Space
+                , Str "Sheppard:"
+                , Space
+                , Str "A"
+                , Space
+                , Str "Romance"
+                ]
+            , Str "."
+            , Space
+            , Str "London:"
+            , Space
+            , Str "George"
+            , Space
+            , Str "Routledge"
+            , Space
+            , Str "&"
+            , Space
+            , Str "Sons."
+            ]
+        ]
+    , Div
+        ( "ref-altick:aldine" , [ "csl-entry" ] , [] )
+        [ Para
+            [ Str "Altick,"
+            , Space
+            , Str "Richard"
+            , Space
+            , Str "D."
+            , Space
+            , Str "1958."
+            , Space
+            , Span
+                ( "" , [] , [] )
+                [ Str "\8220"
+                , Str "From"
+                , Space
+                , Str "Aldine"
+                , Space
+                , Str "to"
+                , Space
+                , Str "Everyman:"
+                , Space
+                , Str "Cheap"
+                , Space
+                , Str "Reprint"
+                , Space
+                , Str "Series"
+                , Space
+                , Str "of"
+                , Space
+                , Str "the"
+                , Space
+                , Str "English"
+                , Space
+                , Str "Classics"
+                , Space
+                , Str "1830\8211\&1906"
+                , Str "."
+                , Str "\8221"
+                ]
+            , Space
+            , Emph
+                [ Str "Studies"
+                , Space
+                , Str "in"
+                , Space
+                , Str "Bibliography"
+                ]
+            , Space
+            , Str "11:"
+            , Space
+            , Str "3\8211\&24."
+            ]
+        ]
+    , Div
+        ( "ref-dames:physiology" , [ "csl-entry" ] , [] )
+        [ Para
+            [ Str "Dames,"
+            , Space
+            , Str "Nicholas."
+            , Space
+            , Str "2007."
+            , Space
+            , Emph
+                [ Str "The"
+                , Space
+                , Str "Physiology"
+                , Space
+                , Str "of"
+                , Space
+                , Str "the"
+                , Space
+                , Str "Novel:"
+                , Space
+                , Str "Reading,"
+                , Space
+                , Str "Neural"
+                , Space
+                , Str "Science,"
+                , Space
+                , Str "and"
+                , Space
+                , Str "the"
+                , Space
+                , Str "Form"
+                , Space
+                , Str "of"
+                , Space
+                , Str "Victorian"
+                , Space
+                , Str "Fiction"
+                ]
+            , Str "."
+            , Space
+            , Str "Oxford:"
+            , Space
+            , Str "Oxford"
+            , Space
+            , Str "University"
+            , Space
+            , Str "Press."
+            ]
+        ]
+    , Div
+        ( "ref-kant:critique2" , [ "csl-entry" ] , [] )
+        [ Para
+            [ Str "Kant,"
+            , Space
+            , Str "Immanuel."
+            , Space
+            , Str "2001."
+            , Space
+            , Emph
+                [ Str "Critique"
+                , Space
+                , Str "of"
+                , Space
+                , Str "Practical"
+                , Space
+                , Str "Reason"
+                ]
+            , Str "."
+            , Space
+            , Str "Edited"
+            , Space
+            , Str "and"
+            , Space
+            , Str "translated"
+            , Space
+            , Str "by"
+            , Space
+            , Str "Mary"
+            , Space
+            , Str "Gregor."
+            , Space
+            , Str "Cambridge,"
+            , Space
+            , Str "UK:"
+            , Space
+            , Str "Cambridge"
+            , Space
+            , Str "University"
+            , Space
+            , Str "Press."
+            ]
+        ]
+    ]
+, Header
+    1
+    ( "here-is-another-section" , [] , [] )
+    [ Str "Here"
+    , Space
+    , Str "is"
+    , Space
+    , Str "another"
+    , Space
+    , Str "section"
+    ]
+, Para
+    [ Str "Here"
+    , Space
+    , Str "is"
+    , Space
+    , Str "something"
+    , Space
+    , Cite
+        [ Citation
+            { citationId = "lukacs:european"
+            , citationPrefix = []
+            , citationSuffix = [ Space , Str "125" ]
+            , citationMode = NormalCitation
+            , citationNoteNum = 6
+            , citationHash = 0
+            }
+        ]
+        [ Str "(Luk\225cs"
+        , Space
+        , Str "1989,"
+        , Space
+        , Str "125)"
+        ]
+    , Str "."
+    , Space
+    , Str "And"
+    , Space
+    , Str "here"
+    , Space
+    , Str "is"
+    , Space
+    , Str "something"
+    , Space
+    , Str "else"
+    , SoftBreak
+    , Cite
+        [ Citation
+            { citationId = "cohen:jokes"
+            , citationPrefix = []
+            , citationSuffix = [ Space , Str "3" ]
+            , citationMode = NormalCitation
+            , citationNoteNum = 7
+            , citationHash = 0
+            }
+        ]
+        [ Str "(Cohen" , Space , Str "1999," , Space , Str "3)" ]
+    , Str "."
+    , Space
+    , Str "Finally,"
+    , Space
+    , Str "we"
+    , Space
+    , Str "want"
+    , Space
+    , Str "to"
+    , Space
+    , Str "make"
+    , Space
+    , Str "sure"
+    , Space
+    , Str "that"
+    , Space
+    , Str "we"
+    , Space
+    , Str "have"
+    , Space
+    , Str "one"
+    , Space
+    , Str "last"
+    , SoftBreak
+    , Str "citation"
+    , Space
+    , Str "here"
+    , Space
+    , Cite
+        [ Citation
+            { citationId = "trollope:autobiography"
+            , citationPrefix = []
+            , citationSuffix = [ Space , Str "392" ]
+            , citationMode = NormalCitation
+            , citationNoteNum = 8
+            , citationHash = 0
+            }
+        ]
+        [ Str "(Trollope"
+        , Space
+        , Str "[1883]"
+        , Space
+        , Str "1999,"
+        , Space
+        , Str "392)"
+        ]
+    , Str "."
+    ]
+, Div
+    ( "refs-2"
+    , [ "references" , "csl-bib-body" , "hanging-indent" ]
+    , []
+    )
+    [ Div
+        ( "ref-cohen:jokes" , [ "csl-entry" ] , [] )
+        [ Para
+            [ Str "Cohen,"
+            , Space
+            , Str "Ted."
+            , Space
+            , Str "1999."
+            , Space
+            , Emph
+                [ Str "Jokes:"
+                , Space
+                , Str "Philosophical"
+                , Space
+                , Str "Thoughts"
+                , Space
+                , Str "on"
+                , Space
+                , Str "Joking"
+                , Space
+                , Str "Matters"
+                ]
+            , Str "."
+            , Space
+            , Str "Chicago:"
+            , Space
+            , Str "University"
+            , Space
+            , Str "of"
+            , Space
+            , Str "Chicago"
+            , Space
+            , Str "Press."
+            ]
+        ]
+    , Div
+        ( "ref-lukacs:european" , [ "csl-entry" ] , [] )
+        [ Para
+            [ Str "Luk\225cs,"
+            , Space
+            , Str "Georg."
+            , Space
+            , Str "1989."
+            , Space
+            , Emph
+                [ Str "Studies"
+                , Space
+                , Str "in"
+                , Space
+                , Str "European"
+                , Space
+                , Str "Realism:"
+                , Space
+                , Str "A"
+                , Space
+                , Str "Sociological"
+                , Space
+                , Str "Survey"
+                , Space
+                , Str "of"
+                , Space
+                , Str "the"
+                , Space
+                , Str "Writings"
+                , Space
+                , Str "of"
+                , Space
+                , Str "Balzac,"
+                , Space
+                , Str "Stendhal,"
+                , Space
+                , Str "Zola,"
+                , Space
+                , Str "Tolstoy,"
+                , Space
+                , Str "Gorki,"
+                , Space
+                , Str "and"
+                , Space
+                , Str "Others"
+                ]
+            , Str "."
+            , Space
+            , Str "Translated"
+            , Space
+            , Str "by"
+            , Space
+            , Str "Edith"
+            , Space
+            , Str "Bone."
+            , Space
+            , Str "London:"
+            , Space
+            , Str "The"
+            , Space
+            , Str "Merlin"
+            , Space
+            , Str "Press."
+            ]
+        ]
+    , Div
+        ( "ref-trollope:autobiography" , [ "csl-entry" ] , [] )
+        [ Para
+            [ Str "Trollope,"
+            , Space
+            , Str "Anthony."
+            , Space
+            , Str "(1883)"
+            , Space
+            , Str "1999."
+            , Space
+            , Emph [ Str "An" , Space , Str "Autobiography" ]
+            , Str "."
+            , Space
+            , Str "Edited"
+            , Space
+            , Str "by"
+            , Space
+            , Str "Michael"
+            , Space
+            , Str "Sadleir"
+            , Space
+            , Str "and"
+            , Space
+            , Str "Frederick"
+            , Space
+            , Str "Page."
+            , Space
+            , Str "Oxford:"
+            , Space
+            , Str "Oxford"
+            , Space
+            , Str "University"
+            , Space
+            , Str "Press."
+            ]
+        ]
+    ]
+]
