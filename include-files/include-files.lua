@@ -36,14 +36,14 @@ local function update_contents(blocks, shift_by, include_path)
     end,
     -- If image paths are relative then prepend include file path
     Image = function (image)
-      if path.is_relative(image.src) then
+      if (string.sub(image.src,1,7) ~= "http://") and (string.sub(image.src,1,8) ~= "https://") and path.is_relative(image.src) then 
         image.src = path.normalize(path.join({include_path, image.src}))
       end
       return image
     end,
     -- Update path for include-code-files.lua filter style CodeBlocks
     CodeBlock = function (cb)
-      if cb.attributes.include and path.is_relative(cb.attributes.include) then
+      if cb.attributes.include and (string.sub(cb.attributes.include,1,7) ~= "http://") and (string.sub(cb.attributes.include,1,8) ~= "https://") and path.is_relative(cb.attributes.include) then
         cb.attributes.include =
           path.normalize(path.join({include_path, cb.attributes.include}))
         end
