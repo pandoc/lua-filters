@@ -53,6 +53,9 @@ end
 -- The dot (Graphviz) path. In order to define a dot version per pandoc
 -- document, use the meta data to define the key "dot_path".
 local dot_path = os.getenv("DOT") or "dot"
+local mmdc_path = os.getenv("MERMAID_BIN") or "mmdc"
+local base64_path = os.getenv("BASE64") or "base64"
+local drawio_path = os.getenv("DrawIO") or "drawio"
 
 -- The pdflatex path. In order to define a pdflatex version per pandoc
 -- document, use the meta data to define the key "pdflatex_path".
@@ -103,6 +106,15 @@ function Meta(meta)
   dot_path = stringify(
     meta.path_dot or meta.dotPath or dot_path
   )
+  mmdc_path = stringify(
+    meta.path_mmdc or meta.mmdcPath or mmdc_path
+  )
+  base64_path = stringify(
+    meta.path_base64 or meta.base64Path or base64_path
+  )
+  drawio_path = stringify(
+    meta.path_drawio or meta.drawioPath or drawio_path
+  )
   pdflatex_path = stringify(
     meta.pdflatex_path or meta.pdflatexPath or pdflatex_path
   )
@@ -126,6 +138,89 @@ local function graphviz(code, filetype)
   return pandoc.pipe(dot_path, {"-T" .. filetype}, code)
 end
 
+local function mermaid(code, filetype)
+  local tmpfile = os.tmpname()
+  local f = io.open(tmpfile, 'w')
+  f:write(code)
+  f:close()
+  local command=mmdc_path and mmdc_path .. ' -q -i ' .. tmpfile .. ' -o ' .. tmpfile .. '.' .. filetype
+  os.execute(command)
+
+  local r = io.open(tmpfile .. '.' .. filetype, 'rb')
+  local imgData = nil
+  if r then
+    imgData = r:read("*all")
+    r:close()
+  else
+    io.stderr:write(string.format("File '%s' could not be opened", tmpfile .. '.' .. filetype))
+    error 'Could not create image from mermaid.'
+  end
+
+  os.remove(tmpfile .. '*')
+
+  return imgData
+end
+
+local function drawio(code, filetype)
+  local tmpfile = os.tmpname()
+  local f = io.open(tmpfile, 'w')
+  f:write(code)
+  f:close()
+  if filetype == 'png' then
+    command=drawio_path and drawio_path .. ' -x -f png -s 2 -b 1 -p 0 ' .. tmpfile .. ' -o ' .. tmpfile .. '.png'
+  else
+    command=drawio_path and drawio_path .. ' -x -f svg -b 1 -p 0 ' .. tmpfile .. ' -o ' .. tmpfile .. '.svg'
+  end
+  os.execute(command)
+    
+  local r = io.open(tmpfile .. '.' .. filetype, 'rb')
+
+  local imgData = nil
+  if r then
+    imgData = r:read("*all")
+    r:close()
+  else
+    io.stderr:write(string.format("File '%s' could not be opened", tmpfile .. '.' .. filetype))
+    error 'Could not create image from drawio.'
+  end
+
+  os.remove(tmpfile .. '*')
+
+  return imgData
+  
+end
+
+local function diagram(code, filetype)
+  local tmpfile = os.tmpname()
+  local f = io.open(tmpfile, 'w')
+  f:write(code)
+  f:close()
+  local command=base64_path and base64_path .. ' -d ' .. tmpfile .. ' > ' .. tmpfile .. '.svg'
+  os.execute(command)
+  if filetype == 'png' then
+    --convert -background white -font NSimSun -density 300 bdp1.svg bdp1.png
+    --drawio -x -f xml -u bdp1.svg -o bdp1.xml
+    --drawio -x -f png -s 2 -b 1 -p 0 bdp1.xml -o bdp1.png
+    command=drawio_path and drawio_path .. ' -x -f xml -u ' .. tmpfile .. '.svg -o ' .. tmpfile .. '.xml'
+    os.execute(command)
+    command=drawio_path and drawio_path .. ' -x -f png -s 2 -b 1 -p 0 ' .. tmpfile .. '.xml -o ' .. tmpfile .. '.png'
+    os.execute(command)
+  end
+  local r = io.open(tmpfile .. '.' .. filetype, 'rb')
+
+  local imgData = nil
+  if r then
+    imgData = r:read("*all")
+    r:close()
+  else
+    io.stderr:write(string.format("File '%s' could not be opened", tmpfile .. '.' .. filetype))
+    error 'Could not create image from drawio in wiki.js.'
+  end
+
+  os.remove(tmpfile .. '*')
+
+  return imgData
+end
 --
 -- TikZ
 --
@@ -305,6 +400,9 @@ function CodeBlock(block)
   local converters = {
     plantuml = plantuml,
     graphviz = graphviz,
+    mermaid = mermaid,
+    diagram = diagram,
+    drawio = drawio,
     tikz = tikz2image,
     py2image = py2image,
     asymptote = asymptote,
