@@ -11,10 +11,18 @@ end
 --- Filter function for code blocks
 local function transclude (cb)
   if cb.attributes.include then
+    local wget_path = os.getenv("WGET") or "wget"
+    local tmpfile = os.tmpname()
+    local fn=cb.attributes.include
+    if (string.sub(fn,1,7) == "http://") or (string.sub(fn,1,8) == "https://") then
+      local command=wget_path and wget_path .. ' --no-check-certificate ' .. fn .. ' -O ' .. tmpfile
+      os.execute(command)
+      fn = tmpfile
+    end
     local content = ""
-    local fh = io.open(cb.attributes.include)
+    local fh = io.open(fn)
     if not fh then
-      io.stderr:write("Cannot open file " .. cb.attributes.include .. " | Skipping includes\n")
+      io.stderr:write("Cannot open file " .. fn .. " | Skipping includes\n")
     else
       local number = 1
       local start = 1
