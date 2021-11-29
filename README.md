@@ -58,3 +58,10 @@ All filters are published under the MIT license by their
 respective authors. See LICENSE for details.
 
 [Lua style guide]: https://github.com/hslua/lua-style-guide
+
+Ajeep Modify:
+-------------
+
+- include-files: debug: URLs are not relative path
+- include-code-files: Support include URL files
+- diagram-generator: Support mermaid, drawio and diagram(drawio in wiki.js)
