@@ -24,3 +24,4 @@ Related work:
 
 - <https://github.com/mhchem/mhchemParser/>
 
+[mhchem]:  https://ctan.org/pkg/mhchem
