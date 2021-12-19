@@ -6,6 +6,9 @@ filter replaces any `\ce{}` commands in RawInline, RawBlock,
 and Math elements, with Math elements that can be reliably
 converted to other formats by pandoc.
 
+Note: this filter requires pandoc 2.16.2 or higher (due to its
+use of lpeg).
+
 ## Usage
 
 To convert a LaTeX document containing mhchem macros
