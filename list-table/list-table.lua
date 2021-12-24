@@ -7,6 +7,46 @@ else
     error("pandoc version >=2.11 is required")
 end
 
+local function get_colspecs(div_attributes, column_count)
+    local aligns = {}
+    local widths = {}
+
+    if div_attributes.align then
+        local alignments = {
+            d = 'AlignDefault',
+            l = 'AlignLeft',
+            r = 'AlignRight',
+            c = 'AlignCenter'
+        }
+        for a in div_attributes.align:gmatch('[^,]') do
+            assert(alignments[a] ~= nil,
+                   "unknown column alignment " .. tostring(a))
+            table.insert(aligns, alignments[a])
+        end
+        div_attributes.align = nil
+    else
+        for i = 1, column_count do
+            table.insert(aligns, pandoc.AlignDefault)
+        end
+    end
+
+    if div_attributes.widths then
+        local total = 0
+        for w in div_attributes.widths:gmatch('[^,]') do
+            table.insert(widths, tonumber(w))
+            total = total + tonumber(w)
+        end
+        for i = 1, column_count do widths[i] = widths[i] / total end
+        div_attributes.widths = nil
+    else
+        for i = 1, column_count do
+            table.insert(widths, 0) -- let pandoc determine col widths
+        end
+    end
+
+    return aligns, widths
+end
+
 local function process(div)
     if div.attr.classes[1] ~= "list-table" then return nil end
     table.remove(div.attr.classes, 1)
@@ -30,41 +70,8 @@ local function process(div)
         table.insert(rows, list.content[i][1].content)
     end
 
-    local aligns = {}
-    local widths = {}
-
     local headers = table.remove(rows, 1)
-
-    if div.attr.attributes.align then
-        local alignments = {
-            d = 'AlignDefault',
-            l = 'AlignLeft',
-            r = 'AlignRight',
-            c = 'AlignCenter'
-        }
-        for a in div.attr.attributes.align:gmatch('[^,]') do
-            assert(alignments[a] ~= nil,
-                   "unknown column alignment " .. tostring(a))
-            table.insert(aligns, alignments[a])
-        end
-        div.attr.attributes.align = nil
-    else
-        for i = 1, #headers do table.insert(aligns, pandoc.AlignDefault) end
-    end
-
-    if div.attr.attributes.widths then
-        local total = 0
-        for w in div.attr.attributes.widths:gmatch('[^,]') do
-            table.insert(widths, tonumber(w))
-            total = total + tonumber(w)
-        end
-        for i = 1, #headers do widths[i] = widths[i] / total end
-        div.attr.attributes.widths = nil
-    else
-        for i = 1, #headers do
-            table.insert(widths, 0) -- let pandoc determine col widths
-        end
-    end
+    local aligns, widths = get_colspecs(div.attr.attributes, #headers)
 
     local table = pandoc.utils.from_simple_table(
                 pandoc.SimpleTable(caption, aligns, widths, headers, rows))
