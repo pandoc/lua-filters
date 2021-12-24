@@ -52,12 +52,12 @@ local function new_table_head(rows)
     return {{}, rows}
 end
 
-local function  new_table_body(rows)
+local function  new_table_body(rows, header_col_count)
     return {
         attr = {},
         body = rows,
         head = {},
-        row_head_columns = 0
+        row_head_columns = header_col_count
     }
 end
 
@@ -107,6 +107,9 @@ local function process(div)
     local header_row_count = tonumber(div.attr.attributes['header-rows']) or 1
     div.attr.attributes['header-rows'] = nil
 
+    local header_col_count = tonumber(div.attr.attributes['header-cols']) or 0
+    div.attr.attributes['header-cols'] = nil
+
     local colspecs = get_colspecs(div.attr.attributes, #rows[1][2])
     local thead_rows = {}
     for i = 1, header_row_count do
@@ -118,7 +121,7 @@ local function process(div)
         {long = caption, short = {}},
         colspecs,
         new_table_head(thead_rows),
-        {new_table_body(rows)},
+        {new_table_body(rows, header_col_count)},
         table_foot,
         div.attr
     )
