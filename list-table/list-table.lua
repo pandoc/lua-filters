@@ -66,12 +66,32 @@ local function new_row(cells)
 end
 
 local function new_cell(contents)
+    local attr = {}
+    local colspan = 1
+    local rowspan = 1
+    local align = pandoc.AlignDefault
+
+    -- At the time of writing this Pandoc does not support attributes
+    -- on list items, so we use empty spans as a workaround.
+    if contents[1] and contents[1].content then
+        if contents[1].content[1] and contents[1].content[1].t == "Span" then
+            if #contents[1].content[1].content == 0 then
+                attr = contents[1].content[1].attr
+                table.remove(contents[1].content, 1)
+                colspan = attr.attributes.colspan or 1
+                attr.attributes.colspan = nil
+                rowspan = attr.attributes.rowspan or 1
+                attr.attributes.rowspan = nil
+            end
+        end
+    end
+
     return {
-        attr = {},
-        alignment = pandoc.AlignDefault,
+        attr = attr,
+        alignment = align,
         contents = contents,
-        col_span = 1,
-        row_span = 1
+        col_span = colspan,
+        row_span = rowspan
     }
 end
 

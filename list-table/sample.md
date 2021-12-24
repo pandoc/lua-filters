@@ -41,3 +41,16 @@
    * - row 2, column 1
      - row 2, column 2
 :::
+
+:::{.list-table}
+   * - []{#id} Name
+     - []{.class} Italic
+     - []{some=attr} Code
+
+   * - []{colspan=2} Markdown
+     - []{rowspan=2} `*italic*`
+     - `` `code` ``
+
+   * - reStructuredText
+     - ` ``code`` `
+:::
