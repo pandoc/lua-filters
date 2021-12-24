@@ -7,6 +7,13 @@ else
     error("pandoc version >=2.11 is required")
 end
 
+local alignments = {
+    d = 'AlignDefault',
+    l = 'AlignLeft',
+    r = 'AlignRight',
+    c = 'AlignCenter'
+}
+
 local function get_colspecs(div_attributes, column_count)
     -- list of (align, width) pairs
     local colspecs = {}
@@ -16,12 +23,6 @@ local function get_colspecs(div_attributes, column_count)
     end
 
     if div_attributes.aligns then
-        local alignments = {
-            d = 'AlignDefault',
-            l = 'AlignLeft',
-            r = 'AlignRight',
-            c = 'AlignCenter'
-        }
         local i = 1
         for a in div_attributes.aligns:gmatch('[^,]') do
             assert(alignments[a] ~= nil,
@@ -82,6 +83,8 @@ local function new_cell(contents)
                 attr.attributes.colspan = nil
                 rowspan = attr.attributes.rowspan or 1
                 attr.attributes.rowspan = nil
+                align = alignments[attr.attributes.align] or pandoc.AlignDefault
+                attr.attributes.align = nil
             end
         end
     end
