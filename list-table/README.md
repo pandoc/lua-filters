@@ -81,13 +81,13 @@ results in:
 
 ## Column alignments
 
-With the `align` attribute you can configure column alignment. When given the
+With the `aligns` attribute you can configure column alignments. When given the
 value must specify an alignment character (`d`, `l`, `r`, or `c` for default,
 left, right or center respectively) for each column. The characters must be
 separated by commas.
 
 ```
-:::{.list-table align=l,c}
+:::{.list-table aligns=l,c}
    * - Name
      - Initial release
 
