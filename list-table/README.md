@@ -120,7 +120,7 @@ the second column will be three times as wide as the first column.
 
 <!-- no demo because GFM does not support inline CSS -->
 
-## Header rows
+## Header rows & columns
 
 You can configure how many rows are part of the table head
 with the `header-rows` attribute (which defaults to 1).
@@ -146,6 +146,43 @@ results in:
 <tr>
 <td>row 2, column 1</td>
 <td>row 2, column 2</td>
+</tr>
+</tbody>
+</table>
+
+The same also works for `header-cols` (which however defaults to 0).
+For example:
+
+```
+:::{.list-table header-cols=1}
+   * - Name
+     - Initial release
+
+   * - Markdown
+     - 2004
+
+   * - reStructuredText
+     - 2002
+:::
+```
+
+results in:
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Initial release</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>Markdown</th>
+<td>2004</td>
+</tr>
+<tr>
+<th>reStructuredText</th>
+<td>2002</td>
 </tr>
 </tbody>
 </table>
