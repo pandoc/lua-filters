@@ -119,3 +119,33 @@ For example when we change the first line of the previous example to:
 the second column will be three times as wide as the first column.
 
 <!-- no demo because GFM does not support inline CSS -->
+
+## Header rows
+
+You can configure how many rows are part of the table head
+with the `header-rows` attribute (which defaults to 1).
+
+```
+:::{.list-table header-rows=0}
+   * - row 1, column 1
+     - row 1, column 2
+
+   * - row 2, column 1
+     - row 2, column 2
+:::
+```
+
+results in:
+
+<table>
+<tbody>
+<tr>
+<td>row 1, column 1</td>
+<td>row 1, column 2</td>
+</tr>
+<tr>
+<td>row 2, column 1</td>
+<td>row 2, column 2</td>
+</tr>
+</tbody>
+</table>

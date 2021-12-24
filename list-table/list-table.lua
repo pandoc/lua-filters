@@ -104,8 +104,14 @@ local function process(div)
         table.insert(rows, row)
     end
 
+    local header_row_count = tonumber(div.attr.attributes['header-rows']) or 1
+    div.attr.attributes['header-rows'] = nil
+
     local colspecs = get_colspecs(div.attr.attributes, #rows[1][2])
-    local thead_rows = {table.remove(rows, 1)}
+    local thead_rows = {}
+    for i = 1, header_row_count do
+        table.insert(thead_rows, table.remove(rows, 1))
+    end
 
     local table_foot = {{}, {}};
     return pandoc.Table(
