@@ -230,3 +230,8 @@ results in:
 </tr>
 </tbody>
 </table>
+
+Individual cell alignment is also supported via the `align` attribute.
+Expected values are `l`, `r`, `c` for left, right and center respectively.
+(Please mind that contrary to [column alignments](#column-alignments)
+this attribute is singular).

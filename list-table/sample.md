@@ -52,5 +52,5 @@
      - `` `code` ``
 
    * - reStructuredText
-     - ` ``code`` `
+     - []{align=c} ` ``code`` `
 :::
