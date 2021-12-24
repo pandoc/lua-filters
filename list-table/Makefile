@@ -1,8 +1,11 @@
 DIFF ?= diff --strip-trailing-cr -u
 PANDOC ?= pandoc
+CMD = $(PANDOC) --lua-filter list-table.lua --to=html sample.md
 
-test: sample.md expected.html list-table.lua
-	@$(PANDOC) --lua-filter list-table.lua --to=html $< \
-		| $(DIFF) expected.html -
+test:
+	@$(CMD) | $(DIFF) expected.html -
 
-.PHONY: test
+update:
+	$(CMD) > expected.html
+
+.PHONY: test update
