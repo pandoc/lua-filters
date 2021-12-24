@@ -8,8 +8,12 @@ else
 end
 
 local function get_colspecs(div_attributes, column_count)
-    local aligns = {}
-    local widths = {}
+    -- list of (align, width) pairs
+    local colspecs = {}
+
+    for i = 1, column_count do
+        table.insert(colspecs, {pandoc.AlignDefault, nil})
+    end
 
     if div_attributes.align then
         local alignments = {
@@ -18,33 +22,57 @@ local function get_colspecs(div_attributes, column_count)
             r = 'AlignRight',
             c = 'AlignCenter'
         }
+        local i = 1
         for a in div_attributes.align:gmatch('[^,]') do
             assert(alignments[a] ~= nil,
                    "unknown column alignment " .. tostring(a))
-            table.insert(aligns, alignments[a])
+            colspecs[i][1] = alignments[a]
+            i = i + 1
         end
         div_attributes.align = nil
-    else
-        for i = 1, column_count do
-            table.insert(aligns, pandoc.AlignDefault)
-        end
     end
 
     if div_attributes.widths then
         local total = 0
+        local widths = {}
         for w in div_attributes.widths:gmatch('[^,]') do
             table.insert(widths, tonumber(w))
             total = total + tonumber(w)
         end
-        for i = 1, column_count do widths[i] = widths[i] / total end
-        div_attributes.widths = nil
-    else
         for i = 1, column_count do
-            table.insert(widths, 0) -- let pandoc determine col widths
+            colspecs[i][2] = widths[i] / total
         end
+        div_attributes.widths = nil
     end
 
-    return aligns, widths
+    return colspecs
+end
+
+local function new_table_head(rows)
+    return {{}, rows}
+end
+
+local function  new_table_body(rows)
+    return {
+        attr = {},
+        body = rows,
+        head = {},
+        row_head_columns = 0
+    }
+end
+
+local function new_row(cells)
+    return {{}, cells}
+end
+
+local function new_cell(contents)
+    return {
+        attr = {},
+        alignment = pandoc.AlignDefault,
+        contents = contents,
+        col_span = 1,
+        row_span = 1
+    }
 end
 
 local function process(div)
@@ -54,7 +82,8 @@ local function process(div)
     local caption = {}
 
     if div.content[1].t == "Para" then
-        caption = table.remove(div.content, 1).content
+        local para = table.remove(div.content, 1)
+        caption = {pandoc.Plain(para.content)}
     end
 
     assert(div.content[1].t == "BulletList",
@@ -67,16 +96,26 @@ local function process(div)
         assert(#list.content[i] == 1, "expected item to contain only one block")
         assert(list.content[i][1].t == "BulletList",
                "expected bullet list, found " .. list.content[i][1].t)
-        table.insert(rows, list.content[i][1].content)
+        local cells = {}
+        for _, cell_content in pairs(list.content[i][1].content) do
+            table.insert(cells, new_cell(cell_content))
+        end
+        local row = new_row(cells)
+        table.insert(rows, row)
     end
 
-    local headers = table.remove(rows, 1)
-    local aligns, widths = get_colspecs(div.attr.attributes, #headers)
+    local colspecs = get_colspecs(div.attr.attributes, #rows[1][2])
+    local thead_rows = {table.remove(rows, 1)}
 
-    local table = pandoc.utils.from_simple_table(
-                pandoc.SimpleTable(caption, aligns, widths, headers, rows))
-    table.attr = div.attr
-    return {table}
+    local table_foot = {{}, {}};
+    return pandoc.Table(
+        {long = caption, short = {}},
+        colspecs,
+        new_table_head(thead_rows),
+        {new_table_body(rows)},
+        table_foot,
+        div.attr
+    )
 end
 
 return {{Div = process}}
