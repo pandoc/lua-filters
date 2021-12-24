@@ -26,3 +26,10 @@
      - row 3, column 2
 :::
 
+:::{.list-table header-rows=0}
+   * - row 1, column 1
+     - row 1, column 2
+
+   * - row 2, column 1
+     - row 2, column 2
+:::
