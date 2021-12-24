@@ -11,7 +11,7 @@
      - row 3, column 2
 :::
 
-:::{.list-table align=l,c,r widths=1,2,3 #some-id .some-class}
+:::{.list-table aligns=l,c,r widths=1,2,3 #some-id .some-class}
    Here be some caption.
 
    * - row 1, column 1

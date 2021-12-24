@@ -15,7 +15,7 @@ local function get_colspecs(div_attributes, column_count)
         table.insert(colspecs, {pandoc.AlignDefault, nil})
     end
 
-    if div_attributes.align then
+    if div_attributes.aligns then
         local alignments = {
             d = 'AlignDefault',
             l = 'AlignLeft',
@@ -23,13 +23,13 @@ local function get_colspecs(div_attributes, column_count)
             c = 'AlignCenter'
         }
         local i = 1
-        for a in div_attributes.align:gmatch('[^,]') do
+        for a in div_attributes.aligns:gmatch('[^,]') do
             assert(alignments[a] ~= nil,
                    "unknown column alignment " .. tostring(a))
             colspecs[i][1] = alignments[a]
             i = i + 1
         end
-        div_attributes.align = nil
+        div_attributes.aligns = nil
     end
 
     if div_attributes.widths then
