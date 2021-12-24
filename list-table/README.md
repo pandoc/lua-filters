@@ -186,3 +186,47 @@ results in:
 </tr>
 </tbody>
 </table>
+
+## Cell attributes
+
+If the first inline element of a table cell is an empty Span it
+is removed and its attributes are transferred to the table cell.
+The `colspan` and `rowspan` attributes are supported.
+
+```
+:::{.list-table}
+   * - Name
+     - Italic
+     - Code
+
+   * - Markdown
+     - []{rowspan=2} `*italic*`
+     - `` `code` ``
+
+   * - reStructuredText
+     - ` ``code`` `
+:::
+```
+
+results in:
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Italic</th>
+<th>Code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Markdown</td>
+<td rowspan="2"> <code>*italic*</code></td>
+<td><code>`code`</code></td>
+</tr>
+<tr>
+<td><p>reStructuredText</p></td>
+<td><p><code>``code``</code></p></td>
+</tr>
+</tbody>
+</table>
