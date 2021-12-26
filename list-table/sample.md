@@ -54,3 +54,9 @@
    * - reStructuredText
      - []{align=c} ` ``code`` `
 :::
+
+::: list-table
+*  - []{colspan=2}header
+*  - cell 1
+   - cell 2
+:::
