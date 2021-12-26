@@ -133,7 +133,12 @@ local function process(div)
     local header_col_count = tonumber(div.attr.attributes['header-cols']) or 0
     div.attr.attributes['header-cols'] = nil
 
-    local colspecs = get_colspecs(div.attr.attributes, #rows[1][2])
+    local column_count = 0
+    for i = 1, #rows[1][2] do
+        column_count = column_count + rows[1][2][i].col_span
+    end
+
+    local colspecs = get_colspecs(div.attr.attributes, column_count)
     local thead_rows = {}
     for i = 1, header_row_count do
         table.insert(thead_rows, table.remove(rows, 1))
