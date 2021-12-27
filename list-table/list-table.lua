@@ -7,6 +7,27 @@ else
     error("pandoc version >=2.11 is required")
 end
 
+-- Get the list of cells in a row.
+local row_cells = function (row) return row.cells end
+
+-- "Polyfill" for older pandoc versions.
+if PANDOC_VERSION <= '2.16.2' then
+  -- previous pandoc versions used simple Attr/list pairs
+  pandoc.Row = function (cells) return {{}, cells} end
+  pandoc.TableHead = function (rows) return {{}, rows or {}} end
+  pandoc.TableFoot = function (rows) return {{}, rows or {}} end
+  pandoc.Cell = function (contents, align, rowspan, colspan, attr)
+    return {
+      attr = attr or pandoc.Attr(),
+      alignment = align or pandoc.AlignDefault,
+      contents = contents or {},
+      col_span = colspan or 1,
+      row_span = rowspan or 1
+    }
+  end
+  row_cells = function (row) return row[2] end
+end
+
 local alignments = {
     d = 'AlignDefault',
     l = 'AlignLeft',
@@ -49,10 +70,6 @@ local function get_colspecs(div_attributes, column_count)
     return colspecs
 end
 
-local function new_table_head(rows)
-    return {{}, rows}
-end
-
 local function  new_table_body(rows, header_col_count)
     return {
         attr = {},
@@ -60,10 +77,6 @@ local function  new_table_body(rows, header_col_count)
         head = {},
         row_head_columns = header_col_count
     }
-end
-
-local function new_row(cells)
-    return {{}, cells}
 end
 
 local function new_cell(contents)
@@ -89,13 +102,7 @@ local function new_cell(contents)
         end
     end
 
-    return {
-        attr = attr,
-        alignment = align,
-        contents = contents,
-        col_span = colspan,
-        row_span = rowspan
-    }
+    return pandoc.Cell(contents, align, rowspan, colspan, attr)
 end
 
 local function process(div)
@@ -123,7 +130,7 @@ local function process(div)
         for _, cell_content in pairs(list.content[i][1].content) do
             table.insert(cells, new_cell(cell_content))
         end
-        local row = new_row(cells)
+        local row = pandoc.Row(cells)
         table.insert(rows, row)
     end
 
@@ -134,8 +141,8 @@ local function process(div)
     div.attr.attributes['header-cols'] = nil
 
     local column_count = 0
-    for i = 1, #rows[1][2] do
-        column_count = column_count + rows[1][2][i].col_span
+    for i = 1, #row_cells(rows[1] or {}) do
+        column_count = column_count + row_cells(rows[1])[i].col_span
     end
 
     local colspecs = get_colspecs(div.attr.attributes, column_count)
@@ -144,13 +151,12 @@ local function process(div)
         table.insert(thead_rows, table.remove(rows, 1))
     end
 
-    local table_foot = {{}, {}};
     return pandoc.Table(
         {long = caption, short = {}},
         colspecs,
-        new_table_head(thead_rows),
+        pandoc.TableHead(thead_rows),
         {new_table_body(rows, header_col_count)},
-        table_foot,
+        pandoc.TableFoot(),
         div.attr
     )
 end
