@@ -15,13 +15,13 @@ prepare-tmp:
 	@rm -f test/tmp/*
 
 test-noop: prepare-tmp
-	@$(PANDOC) --lua-filter ./$(PANDOC)-quotes.lua -f markdown-smart -t html \
-		-o $(TMP_DIR)/$@.out $(DATA_DIR)/$@.md
+	@$(PANDOC) --lua-filter ./pandoc-quotes.lua -f markdown-smart -t html \
+		--wrap=none -o $(TMP_DIR)/$@.out $(DATA_DIR)/$@.md
 	@$(DIFF) $(TMP_DIR)/$@.out $(NORM_DIR)/$@.out
 
 $(TESTS): prepare-tmp
-	@$(PANDOC) --lua-filter ./$(PANDOC)-quotes.lua -t html \
-		-o $(TMP_DIR)/$@.out $(DATA_DIR)/$@.md
+	@$(PANDOC) --lua-filter ./pandoc-quotes.lua -t html \
+		--wrap=none -o $(TMP_DIR)/$@.out $(DATA_DIR)/$@.md
 	@$(DIFF) $(TMP_DIR)/$@.out $(NORM_DIR)/$@.out
 
 
