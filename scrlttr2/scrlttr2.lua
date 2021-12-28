@@ -1,7 +1,8 @@
 -- Ensure unpack also works if pandoc was compiled against Lua 5.1
 local unpack = unpack or table.unpack
+local utils = require 'pandoc.utils'
 local List = require 'pandoc.List'
-local stringify = (require 'pandoc.utils')['stringify']
+local stringify = utils.stringify
 
 --- Set some default options
 local default = {
@@ -10,6 +11,20 @@ local default = {
   address = 'no address given'
 }
 
+--- Returns the type of a metadata value.
+--
+-- @param v a metadata value
+-- @treturn string one of `Blocks`, `Inlines`, `List`, `Map`, `string`, `boolean`
+local function metatype (v)
+  if PANDOC_VERSION <= '2.16.2' then
+    local metatag = type(v) == 'table' and v.t and v.t:gsub('^Meta', '')
+    return metatag and metatag ~= 'Map' and metatag or type(v)
+  end
+  return utils.type(v)
+end
+
+local type = metatype
+
 --- Return a list of inlines representing a call to a latex command.
 local function latex_command (command, ...)
   local entry = {
@@ -17,7 +32,7 @@ local function latex_command (command, ...)
   }
   for _, arg in ipairs{...} do
     entry[#entry + 1] = pandoc.RawInline('latex', '{')
-    if type(arg) ~= 'table' then
+    if type(arg) ~= 'Inlines' then
       entry[#entry + 1] = pandoc.RawInline('latex', tostring(arg))
     else
       List.extend(entry, arg)
@@ -31,9 +46,9 @@ end
 local function ensure_inlines (val)
   if not val or type(val) == 'string' or type(val) == 'boolean' then
     return pandoc.MetaInlines{pandoc.Str(tostring(val))}
-  elseif type(val) == 'table' and val.t == 'MetaInlines' then
-      return val
-  elseif type(val) == 'table' then
+  elseif type(val) == 'Inlines' then
+    return val
+  elseif type(val) == 'List' then
     local res = List:new{}
     for i = 1, #val do
       res:extend(val[i])
@@ -48,7 +63,7 @@ end
 
 --- Convert the given value to a MetaList
 local function ensure_meta_list (val)
-  if not val or val.t ~= 'MetaList'  then
+  if not val or type(val) ~= 'List' then
     return pandoc.MetaList{}
   else
     return val
