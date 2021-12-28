@@ -75,6 +75,17 @@ local header_code = {
 ]],
 }
 
+--- Returns the type of a metadata value.
+--
+-- @param v a metadata value
+-- @return string one of Blocks, Inlines, List, table, string, or boolean.
+local type = PANDOC_VERSION > '2.16.2'
+  and utils.type
+  or function (v)
+    local metatag = type(v) == 'table' and v.t and v.t:gsub('^Meta', '')
+    return metatag and metatag ~= 'Map' and metatag or type(v)
+  end
+
 --- Add a block to the document's header-includes meta-data field.
 -- @param meta the document's metadata block
 -- @param blocks list of Pandoc block elements (e.g. RawBlock or Para)
@@ -87,7 +98,7 @@ local function add_header_includes(meta, blocks)
   -- add any exisiting meta['header-includes']
   -- it could be a MetaList or a single String
   if meta['header-includes'] then
-    if meta['header-includes'].t == 'MetaList' then
+    if type(meta['header-includes']) == 'List' then
       header_includes:extend(meta['header-includes'])
     else
       header_includes:insert(meta['header-includes'])
@@ -132,10 +143,10 @@ function process_metadata(meta)
 
     if (user_options['remove-after']) then
 
-      if user_options['remove-after'].t == 'MetaInlines' or
-        user_options['remove-after'].t == 'MetaList' then
+      if type(user_options['remove-after']) == 'Inlines' or
+        type(user_options['remove-after']) == 'List' then
 
-          if user_options['remove-after'].t == 'MetaInlines' then
+          if type(user_options['remove-after']) == 'Inlines' then
 
             options.remove_indent_after:insert (
               utils.stringify(user_options['remove-after']))
@@ -155,13 +166,13 @@ function process_metadata(meta)
 
     if (user_options['dont-remove-after']) then
 
-      if user_options['dont-remove-after'].t == 'MetaInlines' or
-        user_options['dont-remove-after'].t == 'MetaList' then
+      if type(user_options['dont-remove-after']) == 'Inlines' or
+        type(user_options['dont-remove-after']) == 'List' then
 
           -- list of strings to be removed
           local blacklist = pandoc.List({})
 
-          if user_options['dont-remove-after'].t == 'MetaInlines' then
+          if type(user_options['dont-remove-after']) == 'Inlines' then
 
             blacklist:insert (
               utils.stringify(user_options['dont-remove-after']))
