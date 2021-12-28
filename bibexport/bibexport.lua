@@ -3,6 +3,8 @@ local List = require 'pandoc.List'
 
 local citation_id_set = {}
 
+local type = utils.type or type
+
 -- Collect all citation IDs.
 function Cite (c)
   local cs = c.citations
@@ -37,7 +39,7 @@ function bibdata (bibliography)
       or stringifyMetaInlines(bibitem):gsub('%.bib$', '')
   end
 
-  local bibs = bibliography.t == 'MetaList'
+  local bibs = (type(bibliography) == 'List' or bibliography.t == 'MetaList')
     and List.map(bibliography, bibname)
     or {bibname(bibliography)}
   return table.concat(bibs, ',')
@@ -62,7 +64,7 @@ function write_dummy_aux (bibliography, auxfile)
   local filename
   if type(auxfile) == 'string' then
     filename = auxfile
-  elseif type(auxfile) == 'table' then
+  elseif type(auxfile) == 'table' or type(auxfile) == 'Inlines' then
     -- assume list of inlines
     filename = utils.stringify(pandoc.Span(auxfile))
   else
