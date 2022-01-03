@@ -45,7 +45,7 @@ RUN wget https://sourceforge.net/projects/plantuml/files/${plantuml_jar} \
       --quiet --output-document=/root/${plantuml_jar}
 ENV PLANTUML=/root/$plantuml_jar
 
-RUN npm install --global mathjax-node-cli
+RUN npm install --global mathjax-node-cli katex
 
 ENV DIFF="diff -u"
 ENV LC_ALL="C.UTF-8"
