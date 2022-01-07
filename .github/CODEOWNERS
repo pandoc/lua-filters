@@ -22,7 +22,7 @@ minted/*
 table-short-captions/*
 diagram-generator/*
 multiple-bibliographies/*
-track-changes/*
+track-changes/* @tolot27
 doi2cite/*
 not-in-format/*
 wordcount/* @jgm
