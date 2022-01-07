@@ -1,0 +1,32 @@
+# Default
+* @tarleb @jgm
+
+include-files/* @tarleb
+revealjs-codeblock/*
+latex-hyphen/*
+lilypond/*
+scholarly-metadata/*
+list-table/*
+scrlttr2/*
+abstract-to-meta/* @tarleb
+lua-debug-example/*
+section-refs/*
+author-info-blocks/*
+math2svg/*
+short-captions/*
+bibexport/*
+mhchem/* @jgm
+spellcheck/*
+cito/*
+minted/*
+table-short-captions/*
+diagram-generator/*
+multiple-bibliographies/*
+track-changes/*
+doi2cite/*
+not-in-format/*
+wordcount/* @jgm
+first-line-indent/*
+pagebreak/*
+include-code-files/*
+pandoc-quotes.lua/*
