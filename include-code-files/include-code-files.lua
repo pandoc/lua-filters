@@ -14,6 +14,9 @@ local function transclude (cb)
     local wget_path = os.getenv("WGET") or "wget"
     local tmpfile = os.tmpname()
     local fn=cb.attributes.include
+    if string.sub(fn,1,1) == "~" then
+      fn = os.getenv("HOME")..string.sub(fn,2)
+    end
     if (string.sub(fn,1,7) == "http://") or (string.sub(fn,1,8) == "https://") then
       local command=wget_path and wget_path .. ' --no-check-certificate ' .. fn .. ' -O ' .. tmpfile
       os.execute(command)
