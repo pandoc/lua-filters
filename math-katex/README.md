@@ -88,28 +88,6 @@ ParseError exception when encountering an error. The default is `false`.
 This string key value determines the markup language of the output. The default
 is `false`.
 
-### Adding `header-includes`
-It might turn out useful to systematically include LaTeX macros, for example as
-shown below, a series of `\newcommand`.
-
-```latex
----
-header-includes: |
-    \newcommand{\j}{\text{j}}
-    \newcommand{\e}[1]{\,\text{e}^{#1}}
-...
-```
-
-This may be achieved either by adding a [YAML][yaml] block with the
-[`header-includes`][pandoc.header-includes] key value at the top of the input
-document, or by having a separate YAML document loaded before the input
-document. In the latter case, simply evoke `pandoc` as follows:
-
-```bash
-pandoc --mathml --filter='math-katex.lua' header-includes.yaml input.md
-```
-
-
 ## Adding katex css
 
 For rendering katex maths you must include the `katex.css` file included in the
