@@ -4,7 +4,7 @@
 include-files/* @tarleb
 revealjs-codeblock/*
 latex-hyphen/*
-lilypond/*
+lilypond/* @cole-miller
 scholarly-metadata/*
 list-table/*
 scrlttr2/*
