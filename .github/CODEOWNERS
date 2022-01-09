@@ -29,4 +29,4 @@ wordcount/* @jgm
 first-line-indent/*
 pagebreak/*
 include-code-files/*
-pandoc-quotes.lua/*
+pandoc-quotes.lua/* @odkr
