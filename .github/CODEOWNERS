@@ -13,6 +13,7 @@ lua-debug-example/*
 section-refs/*
 author-info-blocks/*
 math2svg/*
+math-katex/* @benabel
 short-captions/*
 bibexport/*
 mhchem/* @jgm
