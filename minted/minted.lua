@@ -195,8 +195,7 @@ local function minted_attributes(elem, kind)
 
   -- Value options using key=value (e.g., ```{.bash fontsize=\scriptsize}) show
   -- up in the list of attributes.
-  for _, attr in ipairs(elem.attributes) do
-    cls, value = attr[1], attr[2]
+  for cls, value in pairs(elem.attributes) do
     if is_minted_class(cls) then
       table.insert(minted_attributes, cls .. "=" .. value)
       table.insert(minted_keys, cls)
@@ -250,8 +249,7 @@ local function remove_minted_attibutes(elem)
 
   -- Remove any minted items from the attributes.
   extra_attrs = {}
-  for _, attr in ipairs(elem.attributes) do
-    cls, value = attr[1], attr[2]
+  for cls, value in pairs(elem.attributes) do
     if not is_minted_class(cls) then
       table.insert(extra_attrs, {cls, value})
     end

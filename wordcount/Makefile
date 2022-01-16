@@ -1,6 +1,7 @@
 DIFF ?= diff --strip-trailing-cr -u
+PANDOC ?= pandoc
 
 test:
-	@pandoc --lua-filter=wordcount.lua sample.md | $(DIFF) expected.txt -
+	@$(PANDOC) --lua-filter=wordcount.lua sample.md | $(DIFF) expected.txt -
 
 .PHONY: test

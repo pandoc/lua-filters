@@ -64,7 +64,7 @@ function split_hyphen(inputstr)
 end
 
 function Str(elem)
-  local parts = split_hyphen(elem.c)
+  local parts = split_hyphen(elem.text)
   -- if not more than one part, string contains no hyphen, return unchanged.
   if #parts <= 1 then
     return nil

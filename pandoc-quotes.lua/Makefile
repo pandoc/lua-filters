@@ -1,3 +1,5 @@
+DIFF ?= diff --strip-trailing-cr -u
+PANDOC ?= pandoc
 BASE_DIR := test
 DATA_DIR := $(BASE_DIR)/docs
 TMP_DIR  := $(BASE_DIR)/tmp
@@ -13,14 +15,14 @@ prepare-tmp:
 	@rm -f test/tmp/*
 
 test-noop: prepare-tmp
-	@pandoc --lua-filter ./pandoc-quotes.lua -f markdown-smart -t html \
+	@$(PANDOC) --lua-filter ./$(PANDOC)-quotes.lua -f markdown-smart -t html \
 		-o $(TMP_DIR)/$@.out $(DATA_DIR)/$@.md
-	@cmp $(TMP_DIR)/$@.out $(NORM_DIR)/$@.out
+	@$(DIFF) $(TMP_DIR)/$@.out $(NORM_DIR)/$@.out
 
 $(TESTS): prepare-tmp
-	@pandoc --lua-filter ./pandoc-quotes.lua -t html \
+	@$(PANDOC) --lua-filter ./$(PANDOC)-quotes.lua -t html \
 		-o $(TMP_DIR)/$@.out $(DATA_DIR)/$@.md
-	@cmp $(TMP_DIR)/$@.out $(NORM_DIR)/$@.out
+	@$(DIFF) $(TMP_DIR)/$@.out $(NORM_DIR)/$@.out
 
 
 .PHONY: prepare-tmp test $(TESTS)

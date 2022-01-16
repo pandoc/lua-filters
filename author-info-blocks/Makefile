@@ -1,14 +1,15 @@
 DIFF ?= diff --strip-trailing-cr -u
+PANDOC ?= pandoc
 
 test: sample.md author-info-blocks.lua
-	@pandoc --lua-filter=author-info-blocks.lua --standalone --to=native $< \
+	@$(PANDOC) --lua-filter=author-info-blocks.lua --standalone --to=native $< \
 	    | $(DIFF) expected.native -
 
 expected.native: sample.md author-info-blocks.lua
-	@pandoc --lua-filter=author-info-blocks.lua --standalone --output $@ $<
+	@$(PANDOC) --lua-filter=author-info-blocks.lua --standalone --output $@ $<
 
 sample.pdf: sample.md author-info-blocks.lua
-	@pandoc \
+	@$(PANDOC) \
 	    --lua-filter=author-info-blocks.lua \
 	    --output $@ $<
 

@@ -1,6 +1,6 @@
 -- pandoc.utils.make_sections exists since pandoc 2.8
 if PANDOC_VERSION == nil then -- if pandoc_version < 2.1
-  error("ERROR: pandoc >= 2.1 required for section-refs filter")
+  error("ERROR: pandoc >= 2.8 required for section-refs filter")
 else
   PANDOC_VERSION:must_be_at_least {2,8}
 end
@@ -37,10 +37,10 @@ local function adjust_refs_components (div)
   end
   local blocks = div.content
   local bib_header = blocks:find_if(function (b)
-      return b.identifier == 'bibliography'
+      return b.attr and b.identifier == 'bibliography'
   end)
   local refs = blocks:find_if(function (b)
-      return b.identifier == 'refs'
+      return b.attr and b.identifier == 'refs'
   end)
   if bib_header then
     bib_header.identifier = 'bibliography-' .. header.attributes.number
