@@ -22,6 +22,10 @@ Note:       You need to include multicol latex package to get balanced columns
             in latex or pdf
             I tried to use well known html or latex parameter.
             Even if lua doen't like hyphens like in column-count.
+
+Bugs:       * html rendering throws a warning [WARNING] Ignoring duplicate attribute style="width:60%;".
+            when widht AND color are set and totally ignore the width
+            attribute. Don't know if this bug is mine
 --]]
 local List = require 'pandoc.List'
 
@@ -40,22 +44,8 @@ function Div(div)
   --        effect.
   if not div.classes or #div.classes == 0 then return nil end
 
-  -- if the output is beamer do columns
-  if FORMAT:match 'beamer' then
-    -- only arbitrary environment support in beamer for now. Environment has to
-    -- be the firs class name.
-    env = div.classes[1]
-    if options == '' and div.attributes['data-latex'] then
-      options = div.attributes['data-latex']
-    end
-    -- build the returned list of blocks
-    begin_env = List:new{pandoc.RawBlock('tex',
-                                         '\\begin{' .. env .. '}' .. options)}
-    end_env = List:new{pandoc.RawBlock('tex', '\\end{' .. env .. '}')}
-    returned_list = begin_env .. div.content .. end_env
-
   -- if the format is latex then do minipage and others (like multicol)
-  elseif FORMAT:match 'latex' then
+  if FORMAT:match 'latex' then
     -- build the returned list of blocks
     if div.classes:includes('column') then
       env = 'column'
@@ -111,6 +101,7 @@ function Div(div)
         -- process supported options
         opt = div.attributes['column-count']
         if opt then options = '{' .. opt .. '}' end
+      --[[ This functionality will be moved in another filter since it can't be consistent with the positionless classname requirement
       else
         -- Latex skilled users can use arbitrary environments passed as
         -- the first (and only signifiant) class name.
@@ -119,6 +110,7 @@ function Div(div)
         if options == '' and div.attributes['data-latex'] then
           options = div.attributes['data-latex']
         end
+      --]]
       end
 
       begin_env = List:new{pandoc.RawBlock('tex',
@@ -139,7 +131,7 @@ function Div(div)
       -- column-count is "consumed" by the filter otherwise it would appear as
       -- data-column-count="…" in the resulting document
     end
-    -- add support for color  TODO: latex counterpart
+    -- add support for color
     opt = div.attributes.color
     if opt then
       -- add color to style
@@ -156,6 +148,7 @@ function Div(div)
     if style then
       div.attributes.style = style .. (div.attributes.style or '')
       returned_list = List:new{pandoc.Div(div.content, div.attr)}
+      --returned_list = List:new{pandoc.Div(div.content)}
     end
   end
   return returned_list
