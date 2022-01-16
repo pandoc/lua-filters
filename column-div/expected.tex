@@ -3,7 +3,7 @@
 
 content\ldots{}
 
-\leavevmode\hypertarget{thisdivdoesnothing}{}%
+\leavevmode\vadjust pre{\hypertarget{thisdivdoesnothing}{}}%
 content\ldots{}
 
 \hypertarget{three-columns}{%
@@ -92,3 +92,50 @@ contents\ldots{}
 }
 
 \end{multicols}
+
+\hypertarget{columns-and-colors}{%
+\subsection{Columns and Colors}\label{columns-and-colors}}
+
+\mbox{
+
+\begin{minipage}{0.4\columnwidth}
+
+\color{blue}
+
+blue content\ldots{}
+
+\end{minipage}
+
+\colorbox{red}{
+
+\begin{minipage}{\dimexpr0.6\columnwidth-4\fboxsep\relax}
+
+content on red background\ldots{}
+
+\end{minipage}
+
+}
+
+}
+
+\mbox{
+
+\colorbox{red}{
+
+\begin{minipage}{\dimexpr0.6\columnwidth-4\fboxsep\relax}
+
+\color{blue}
+
+blue content on red background\ldots{}
+
+\end{minipage}
+
+}
+
+\begin{minipage}{0.4\columnwidth}
+
+contents\ldots{}
+
+\end{minipage}
+
+}

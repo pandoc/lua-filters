@@ -62,3 +62,24 @@ contents...
 :::
 ::::::
 :::::::::
+
+
+## Columns and Colors
+
+:::::: {.columns}
+::: {.column width="40%" color="blue"}
+blue content...
+:::
+::: {.column width="60%" background-color="red"}
+content on red background...
+:::
+::::::
+
+:::::: {.columns}
+::: {.column width="60%" color="blue" background-color="red"}
+blue content  on red background...
+:::
+::: {.column width="40%" }
+contents...
+:::
+::::::
