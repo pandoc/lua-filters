@@ -9,6 +9,7 @@ on:
       - CONTRIBUTING.md
       - LICENSE
       - .editorconfig
+      - '.github/CODEOWNERS'
   push:
     branches:
       - master
@@ -17,6 +18,7 @@ on:
       - CONTRIBUTING.md
       - LICENSE
       - .editorconfig
+      - '.github/CODEOWNERS'
   schedule:
     # At 4:17am each Monday
     - cron: '17 4 * * 1'
