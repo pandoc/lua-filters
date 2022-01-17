@@ -24,7 +24,7 @@ Note:       You need to include multicol latex package to get balanced columns
             Even if lua doen't like hyphens like in column-count.
 
 Bugs:       * html rendering throws a warning [WARNING] Ignoring duplicate attribute style="width:60%;".
-            when widht AND color are set and totally ignore the width
+            when width AND color are set and totally ignore the width
             attribute. Don't know if this bug is mine
 --]]
 local List = require 'pandoc.List'
