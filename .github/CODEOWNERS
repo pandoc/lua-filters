@@ -3,7 +3,7 @@
 
 include-files/* @tarleb
 revealjs-codeblock/*
-latex-hyphen/*
+latex-hyphen/* @frederik-elwert
 lilypond/* @cole-miller
 scholarly-metadata/* @tarleb
 list-table/*
