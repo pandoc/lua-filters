@@ -5,28 +5,28 @@ include-files/* @tarleb
 revealjs-codeblock/*
 latex-hyphen/*
 lilypond/* @cole-miller
-scholarly-metadata/*
+scholarly-metadata/* @tarleb
 list-table/*
-scrlttr2/*
+scrlttr2/* @tarleb
 abstract-to-meta/* @tarleb
 lua-debug-example/*
 section-refs/*
-author-info-blocks/*
+author-info-blocks/* @tarleb
 math2svg/*
 short-captions/*
-bibexport/*
+bibexport/* @tarleb
 mhchem/* @jgm
 spellcheck/*
-cito/*
+cito/* @tarleb
 minted/*
 table-short-captions/*
 diagram-generator/*
-multiple-bibliographies/*
+multiple-bibliographies/* @tarleb
 track-changes/* @tolot27
 doi2cite/*
 not-in-format/*
 wordcount/* @jgm
 first-line-indent/*
-pagebreak/*
+pagebreak/* @tarleb
 include-code-files/*
 pandoc-quotes.lua/* @odkr
