@@ -1,0 +1,196 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={table-vrules lua filter test file},
+  pdfauthor={Christophe Agathon},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{longtable,booktabs,array}
+	\usepackage{calc} % for calculating minipage widths
+	% Correct order of tables after \paragraph or \subparagraph
+	\usepackage{etoolbox}
+	\makeatletter
+	\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+	\makeatother
+	% Allow footnotes in longtable head/foot
+	\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+	\makesavenoteenv{longtable} 
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{table-vrules lua filter test file}
+\author{Christophe Agathon}
+\date{}
+
+\begin{document}
+\maketitle
+
+\hypertarget{simple-table}{%
+\section{Simple Table}\label{simple-table}}
+
+\begin{longtable}[]{@{}|r|l|c|l|@{}}
+\caption{Demonstration of simple table syntax.}\tabularnewline
+\toprule
+Right & Left & Center & Default \\
+\midrule
+\endfirsthead
+\toprule
+Right & Left & Center & Default \\
+\midrule
+\endhead
+12 & 12 & 12 & 12 \\
+123 & 123 & 123 & 123 \\
+1 & 1 & 1 & 1 \\
+\bottomrule
+\end{longtable}
+
+\hypertarget{multiline-tables}{%
+\section{Multiline Tables}\label{multiline-tables}}
+
+\begin{longtable}[]{@{}
+  |>{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1667}}
+  |>{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1111}}
+  |>{\raggedleft\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2222}}
+  |>{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3611}}|@{}}
+\caption{Here's the caption. It, too, may span multiple
+lines.}\tabularnewline
+\toprule
+\begin{minipage}[b]{\linewidth}\centering
+Centered Header
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Default Aligned
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Right Aligned
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Left Aligned
+\end{minipage} \\
+\midrule
+\endfirsthead
+\toprule
+\begin{minipage}[b]{\linewidth}\centering
+Centered Header
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Default Aligned
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Right Aligned
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Left Aligned
+\end{minipage} \\
+\midrule
+\endhead
+First & row & 12.0 & Example of a row that spans multiple lines. \\
+Second & row & 5.0 & Here's another one. Note the blank line between
+rows. \\
+\bottomrule
+\end{longtable}
+
+\hypertarget{grid-tables}{%
+\section{Grid Tables}\label{grid-tables}}
+
+\begin{longtable}[]{@{}
+  |>{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2222}}
+  |>{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2222}}
+  |>{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.2917}}|@{}}
+\caption{Sample grid table.}\tabularnewline
+\toprule
+\begin{minipage}[b]{\linewidth}\raggedright
+Fruit
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Price
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Advantages
+\end{minipage} \\
+\midrule
+\endfirsthead
+\toprule
+\begin{minipage}[b]{\linewidth}\raggedright
+Fruit
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Price
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Advantages
+\end{minipage} \\
+\midrule
+\endhead
+Bananas & \$1.34 & \begin{minipage}[t]{\linewidth}\raggedright
+\begin{itemize}
+\tightlist
+\item
+  built-in wrapper
+\item
+  bright color
+\end{itemize}
+\end{minipage} \\
+Oranges & \$2.10 & \begin{minipage}[t]{\linewidth}\raggedright
+\begin{itemize}
+\tightlist
+\item
+  cures scurvy
+\item
+  tasty
+\end{itemize}
+\end{minipage} \\
+\bottomrule
+\end{longtable}
+
+\hypertarget{pipes-tables}{%
+\section{Pipes Tables}\label{pipes-tables}}
+
+\begin{longtable}[]{@{}|r|l|l|c|@{}}
+\caption{Demonstration of pipe table syntax.}\tabularnewline
+\toprule
+Right & Left & Default & Center \\
+\midrule
+\endfirsthead
+\toprule
+Right & Left & Default & Center \\
+\midrule
+\endhead
+12 & 12 & 12 & 12 \\
+123 & 123 & 123 & 123 \\
+1 & 1 & 1 & 1 \\
+\bottomrule
+\end{longtable}
+
+\end{document}

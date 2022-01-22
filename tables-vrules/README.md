@@ -24,7 +24,9 @@ For more information you can refer to :
 
 marjinshraagen proposed a solution based on a patch of `\LT@array` in Latex. It used to work pretty well. It doesn't anymore for Multiline Tables and Pipes Tables since Pandoc changed the Latex code it generates for those kind of tables. Don't know exactly when it changed but sometime between Pandoc version 2.9.2.1 and version 2.16.
 
-Since patching in Latex is tricky and I am not a Latex guru, I didn't manage to make it work again, so I made this filter which change the call to `longtable` to add vertical rules in a more "natural" whay.
+Since patching in Latex is tricky and I am not a Latex guru, I didn't manage to make it work again, so I made this filter which change the call to `longtable` to add vertical rules in a more "natural" way.
+
+The filter adds some code in the Latex preamble because Pandoc adds it only if there are tables in the document (which is OK) and only if the Tables blocks are not processed by a filter (which might be considered as bug).
 
 
 Usage
