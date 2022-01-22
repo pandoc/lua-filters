@@ -1,0 +1,160 @@
+1. Chemical formulae
+
+   a. \ce{H2O}
+   a. \ce{Sb2O3}
+
+1. Charges
+
+   a. \ce{H+}
+   a. \ce{CrO4^2-}
+   a. \ce{[AgCl2]-}
+   a. \ce{Y^99+}
+   a. \ce{Y^{99+}}
+
+1. Stoichiometric Numbers
+
+   a. \ce{2 H2O}
+   a. \ce{2H2O}
+   a. \ce{0.5 H2O}
+   a. \ce{1/2 H2O}
+   a. \ce{(1/2) H2O}
+   a. \ce{$n$ H2O}
+   a. \ce{n H2O}
+   a. \ce{nH2O}
+   a. \ce{n/2 H2O}
+
+1. Nuclides, Isotopes
+
+   a. \ce{^{227}_{90}Th+}
+   a. \ce{^227_90Th+}
+   a. \ce{^{0}_{-1}n^{-}}
+   a. \ce{^0_-1n-}
+   a. \ce{H{}^3HO}
+   a. \ce{H^3HO}
+
+1. Reaction Arrows
+
+   a. \ce{A -> B}
+   a. \ce{A <- B}
+   a. \ce{A <-> B}
+   a. \ce{A <--> B}
+   a. \ce{A <=> B}
+   a. \ce{A <=>> B}
+   a. \ce{A <<=> B}
+   a. \ce{A ->[H2O] B}
+   a. \ce{A ->[{text above}][{text below}] B}
+   a. \ce{A ->[$x$][$x_i$] B}
+
+1. Parentheses, Brackets, Braces
+
+   a. \ce{(NH4)2S}
+   a. \ce{[\{(X2)3\}2]^3+}
+   a. \ce{CH4 + 2 $\left( \ce{O2 + 79/21 N2} \right)$}
+
+1. States of Aggregation
+
+   a. \ce{H2(aq)}
+   a. \ce{CO3^2-_{(aq)}}
+   a. \ce{CO3^2-{}_{(aq)}}
+   a. \ce{NaOH(aq,$\infty$)}
+
+1. Crystal Systems
+
+   a. \ce{ZnS ($c$)}
+   a. \ce{ZnS (\ca$c$)}
+
+1. Variables like __*x*, *n*, 2*n*+1__
+
+   a. \ce{NO_x}
+   a. \ce{Fe^n+}
+   a. \ce{x Na(NH4)HPO4 ->[\Delta] (NaPO3)_x + x NH3 ^ + x H2O}
+
+1. Greek Characters
+
+   a. \ce{\mu-Cl}
+   a. \ce{[Pt(\eta^2-C2H4)Cl3]-}
+   a. \ce{\beta +}
+   a. \ce{^40_18Ar + \gamma{} + \nu_e}
+
+1. (Italic) Math
+
+   a. \ce{NaOH(aq,$\infty$)}
+   a. \ce{Fe(CN)_{$\frac{6}{2}$}}
+   a. \ce{X_{$i$}^{$x$}}
+   a. \ce{X_$i$^$x$}
+
+1. Italic Text
+
+   a. \ce{$cis${-}[PtCl2(NH3)2]}
+   a. \ce{CuS($hP12$)}
+
+1. Upright Text, Escape Parsing
+
+   a. \ce{{Gluconic Acid} + H2O2}
+   a. \ce{X_{{red}}}
+   a. \ce{{(+)}_589{-}[Co(en)3]Cl3}
+
+1. Bonds
+
+   a. \ce{C6H5-CHO}
+   a. \ce{A-B=C#D}
+   a. \ce{A\bond{-}B\bond{=}C\bond{#}D}
+   a. \ce{A\bond{1}B\bond{2}C\bond{3}D}
+   a. \ce{A\bond{~}B\bond{~-}C}
+   a. \ce{A\bond{~--}B\bond{~=}C\bond{-~-}D}
+   a. \ce{A\bond{...}B\bond{....}C}
+   a. \ce{A\bond{->}B\bond{<-}C}
+
+1. Addition Compounds
+
+   a. \ce{KCr(SO4)2*12H2O}
+   a. \ce{KCr(SO4)2.12H2O}
+   a. \ce{KCr(SO4)2 * 12 H2O}
+
+1. Oxidation States
+
+   a. \ce{Fe^{II}Fe^{III}2O4}
+
+1. Unpaired Electrons, Radical Dots
+
+   a. \ce{OCO^{.-}}
+   a. \ce{NO^{(2.)-}}
+
+<!--
+1. Kröger-Vink Notation
+
+   a. \ce{Li^x_{Li,1-2x}Mg^._{Li,x}$V$\'_{Li,x}Cl^x_{Cl}}
+   a. \ce{O\'\'_{i,x}}
+   a. \ce{M^{..}_i}
+   a. \ce{$V$^{4\'}_{Ti}}
+   a. \ce{V_{V,1}C_{C,0.8}$V$_{C,0.2}}
+-->
+
+1. Equation Operators
+
+   a. \ce{A + B}
+   a. \ce{A - B}
+   a. \ce{A = B}
+   a. \ce{A \pm B}
+
+1. Precipitate and Gas
+
+   a. \ce{SO4^2- + Ba^2+ -> BaSO4 v}
+   a. \ce{A v B (v) -> B ^ B (^)}
+
+1. Other Symbols and Shortcuts
+
+   a. \ce{NO^*}
+   a. \ce{1s^2-N}
+   a. \ce{n-Pr}
+   a. \ce{iPr}
+   a. \ce{\ca Fe}
+   a. \ce{A, B, C; F}
+
+1. Complex Examples
+
+   a. \ce{Zn^2+  <=>[+ 2OH-][+ 2H+]  $\underset{\text{amphoteres Hydroxid}}{\ce{Zn(OH)2 v}}$  <=>[+ 2OH-][+ 2H+]  $\underset{\text{Hydroxozikat}}{\ce{[Zn(OH)4]^2-}}$}
+   a. \ce{$K = \frac{[\ce{Hg^2+}][\ce{Hg}]}{[\ce{Hg2^2+}]}$}
+   a. \ce{$K = \ce{\frac{[Hg^2+][Hg]}{[Hg2^2+]}}$}
+   a. \ce{Hg^2+ ->[I-]  $\underset{\mathrm{red}}{\ce{HgI2}}$  ->[I-]  $\underset{\mathrm{red}}{\ce{[Hg^{II}I4]^2-}}$}
+

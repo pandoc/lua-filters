@@ -1,0 +1,32 @@
+# Default
+* @tarleb @jgm
+
+include-files/* @tarleb
+revealjs-codeblock/*
+latex-hyphen/* @frederik-elwert
+lilypond/* @cole-miller
+scholarly-metadata/* @tarleb
+list-table/*
+scrlttr2/* @tarleb
+abstract-to-meta/* @tarleb
+lua-debug-example/*
+section-refs/*
+author-info-blocks/* @tarleb
+math2svg/*
+short-captions/*
+bibexport/* @tarleb
+mhchem/* @jgm
+spellcheck/*
+cito/* @tarleb
+minted/*
+table-short-captions/*
+diagram-generator/*
+multiple-bibliographies/* @tarleb
+track-changes/* @tolot27
+doi2cite/*
+not-in-format/*
+wordcount/* @jgm
+first-line-indent/*
+pagebreak/* @tarleb
+include-code-files/*
+pandoc-quotes.lua/* @odkr
