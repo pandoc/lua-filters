@@ -53,7 +53,8 @@ function Meta(meta)
   -- We have to add this since Pandoc doesn't do it when a filter is
   -- processing tables (is it a bug or a feature ???)
   --
-  includes = [[\usepackage{longtable,booktabs,array}
+  includes = [[%begin tables-vrules.lua
+  \usepackage{longtable,booktabs,array}
 	\usepackage{calc} % for calculating minipage widths
 	% Correct order of tables after \paragraph or \subparagraph
 	\usepackage{etoolbox}
@@ -62,7 +63,11 @@ function Meta(meta)
 	\makeatother
 	% Allow footnotes in longtable head/foot
 	\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
-	\makesavenoteenv{longtable} ]]
+	\makesavenoteenv{longtable}
+  \setlength{\aboverulesep}{0pt}
+  \setlength{\belowrulesep}{0pt}
+  \renewcommand{\arraystretch}{1.3}
+%end tables-vrules.lua]]
 
   if meta['header-includes'] then
     table.insert(meta['header-includes'], pandoc.RawBlock('tex', includes))
