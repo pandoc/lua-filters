@@ -2,6 +2,7 @@
 tables-vrules - adds vertical rules to tables for latex output
 
 Copyright:  © 2021 Christophe Agathon <christophe.agathon@gmail.com>
+
 License:    MIT – see LICENSE file for details
 
 Credits:    marijnschraagen for the original Latex hack
@@ -23,10 +24,9 @@ function Table(table)
 
   if FORMAT:match 'latex' then
 
-    --print(pandoc.utils.stringify(table.caption))
-
     latex_code = pandoc.write ( pandoc.Pandoc({table}),'latex' )
-    envdef, begdef, coldef, enddef = latex_code:match("((\\begin{longtable}%[[^%]]*%]{@{})(.*)(@{}}))")
+    envdef, begdef, coldef, enddef =
+          latex_code:match("((\\begin{longtable}%[[^%]]*%]{@{})(.*)(@{}}))")
 
     if not coldef then return nil end
 
@@ -37,11 +37,6 @@ function Table(table)
       -- asuming new style
       new_coldef = coldef:gsub('(>)','|%1') .. '|'
     end
-    --print ('>', coldef)
-    --print ('>', new_coldef)
-    --print ('>', envdef)
-    --print ('>', begdef .. new_coldef .. enddef ..
-    --         latex_code:sub(envdef:len() + 1))
     returned_list = List:new{pandoc.RawBlock('tex',
                                begdef .. new_coldef .. enddef ..
                                latex_code:sub(envdef:len() + 1))}
@@ -52,7 +47,7 @@ end
 function Meta(meta)
   -- We have to add this since Pandoc doesn't do it when a filter is
   -- processing tables (is it a bug or a feature ???)
-  --
+
   includes = [[%begin tables-vrules.lua
   \usepackage{longtable,booktabs,array}
 	\usepackage{calc} % for calculating minipage widths
