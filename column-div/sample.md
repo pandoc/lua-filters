@@ -1,11 +1,6 @@
 ---
 title : Test
-header-includes:
-    - |
-      ```{=latex}
-      \usepackage{multicol}
 
-      ```
 ---
 
 # column-div test
@@ -26,10 +21,10 @@ content...
 
 ## Two uneven columns
 :::::: {.columns}
-::: {.column width="40%" valign="b"}
+::: {.column width="30%" valign="b"}
 contents...
 :::
-::: {.column width="60%" valign="b"}
+::: {.column width="70%" valign="b"}
 contents...
 :::
 ::::::

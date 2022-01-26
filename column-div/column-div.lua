@@ -14,18 +14,15 @@ Usage:                          classname   attributes
             balanced columns    .columns    column-count
             columns(container)  .columns
             column(each column) .column     width(percent) valign(t|c|b)
-            other divs          .<somename> data-latex
 
             See README.md for details
 
-Note:       You need to include multicol latex package to get balanced columns
-            in latex or pdf
+Note:       You don't need to include multicol latex package to get balanced
+            columns in latex or pdf. The filter does it.
+
             I tried to use well known html or latex parameter.
             Even if lua doen't like hyphens like in column-count.
 
-Bugs:       * html rendering throws a warning [WARNING] Ignoring duplicate attribute style="width:60%;".
-            when width AND color are set and totally ignore the width
-            attribute. Don't know if this bug is mine
 --]]
 local List = require 'pandoc.List'
 
@@ -39,9 +36,6 @@ function Div(div)
 
   -- if the div has no class, the object is left unchanged
   -- if the div has no class but an id, div.classes ~= nil
-  -- TODO: use a div with no class to build a 'scope' in Latex
-  --        usefull for user who would throw inline Latex code and limit it's
-  --        effect.
   if not div.classes or #div.classes == 0 then return nil end
 
   -- if the format is latex then do minipage and others (like multicol)
@@ -101,16 +95,6 @@ function Div(div)
         -- process supported options
         opt = div.attributes['column-count']
         if opt then options = '{' .. opt .. '}' end
-      --[[ This functionality will be moved in another filter since it can't be consistent with the positionless classname requirement
-      else
-        -- Latex skilled users can use arbitrary environments passed as
-        -- the first (and only signifiant) class name.
-        env = div.classes[1]
-        -- default if no known options
-        if options == '' and div.attributes['data-latex'] then
-          options = div.attributes['data-latex']
-        end
-      --]]
       end
 
       begin_env = List:new{pandoc.RawBlock('tex',
@@ -146,10 +130,32 @@ function Div(div)
     end
     -- if we have style then build returned list
     if style then
+      -- process width attribute since Pandoc complains about duplicate
+      -- style attribute and ignores it.
+      opt = div.attributes.width
+      if opt then
+        style = 'width: ' .. opt .. ';' .. (style or '')
+        div.attributes.width = nil    -- consume attribute
+      end
       div.attributes.style = style .. (div.attributes.style or '')
       returned_list = List:new{pandoc.Div(div.content, div.attr)}
-      --returned_list = List:new{pandoc.Div(div.content)}
     end
   end
   return returned_list
+end
+
+function Meta(meta)
+  -- Include  multicol latex package to get balanced columns in latex or pdf
+
+  includes = [[\usepackage{multicol}]]
+
+  if FORMAT:match 'latex' then
+    if meta['header-includes'] then
+      table.insert(meta['header-includes'], pandoc.RawBlock('tex', includes))
+    else
+      meta['header-includes'] = List:new{pandoc.RawBlock('tex', includes)}
+    end
+  end
+
+  return meta
 end
