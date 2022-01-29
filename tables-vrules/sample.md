@@ -1,6 +1,8 @@
 ---
 title: table-vrules lua filter test file
 author: Christophe Agathon
+tables-vrules: true
+tables-hrules: true
 
 ---
  

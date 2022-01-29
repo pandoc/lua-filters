@@ -4,9 +4,9 @@ DIFF ?= diff --strip-trailing-cr -u
 
 test: test_latex
 
-test_latex: sample.md expected.tex tables-vrules.lua
-	@pandoc -s --lua-filter tables-vrules.lua --to=latex $< \
+test_latex: sample.md expected.tex tables-rules.lua
+	@pandoc -s --lua-filter tables-rules.lua --to=latex $< \
 		| $(DIFF) expected.tex -
 
-expected.tex: sample.md tables-vrules.lua
-	pandoc -s --lua-filter tables-vrules.lua --output $@ $<
+expected.tex: sample.md tables-rules.lua
+	pandoc -s --lua-filter tables-rules.lua --output $@ $<

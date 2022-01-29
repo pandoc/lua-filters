@@ -46,19 +46,19 @@
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 %begin tables-vrules.lua
-  \usepackage{longtable,booktabs,array}
-	\usepackage{calc} % for calculating minipage widths
-	% Correct order of tables after \paragraph or \subparagraph
-	\usepackage{etoolbox}
-	\makeatletter
-	\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
-	\makeatother
-	% Allow footnotes in longtable head/foot
-	\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
-	\makesavenoteenv{longtable}
-  \setlength{\aboverulesep}{0pt}
-  \setlength{\belowrulesep}{0pt}
-  \renewcommand{\arraystretch}{1.3}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\aboverulesep}{0pt}
+\setlength{\belowrulesep}{0pt}
+\renewcommand{\arraystretch}{1.3}
 %end tables-vrules.lua
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
@@ -85,7 +85,11 @@ Right & Left & Center & Default \\
 \midrule
 \endhead
 12 & 12 & 12 & 12 \\
+
+\midrule
 123 & 123 & 123 & 123 \\
+
+\midrule
 1 & 1 & 1 & 1 \\
 \bottomrule
 \end{longtable}
@@ -125,6 +129,8 @@ Left Aligned
 \midrule
 \endhead
 First & row & 12.0 & Example of a row that spans multiple lines. \\
+
+\midrule
 Second & row & 5.0 & Here's another one. Note the blank line between
 rows. \\
 \bottomrule
@@ -167,6 +173,8 @@ Bananas & \$1.34 & \begin{minipage}[t]{\linewidth}\raggedright
   bright color
 \end{itemize}
 \end{minipage} \\
+
+\midrule
 Oranges & \$2.10 & \begin{minipage}[t]{\linewidth}\raggedright
 \begin{itemize}
 \tightlist
@@ -193,7 +201,11 @@ Right & Left & Default & Center \\
 \midrule
 \endhead
 12 & 12 & 12 & 12 \\
+
+\midrule
 123 & 123 & 123 & 123 \\
+
+\midrule
 1 & 1 & 1 & 1 \\
 \bottomrule
 \end{longtable}
