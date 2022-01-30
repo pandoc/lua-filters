@@ -61,7 +61,7 @@ function Table(table)
 	latex_code = latex_code:sub(envdef:len() + 1)
       end
     end
-    
+
     -- Add \midrules after each row if needed
     if vars.hrules then
       latex_code = latex_code:gsub('(\\\\\n)([\\%w]+)', repl_midrules)
@@ -80,8 +80,8 @@ function Table(table)
 end
 
 function Meta(meta)
-  -- We have to add this since Pandoc doesn't do it when a filter is
-  -- processing tables (is it a bug or a feature ???)
+  -- We have to add this since Pandoc doesn't because there are no
+  -- table anymore in the AST. We converted them in RawBlocks
 
   if not vars.vrules and not vars.hrules then return nil end
   includes = [[
