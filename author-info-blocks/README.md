@@ -15,7 +15,7 @@ the [scholarly-metadata filter](../scholarly-metadata).
 The filter should be run after *scholarly-metadata.lua*:
 
     pandoc --lua-filter=scholarly-metadata/scholarly-metadata.lua \
-           --lua-filter=author-info-blocks/author-inffo-blocks.lua \
+           --lua-filter=author-info-blocks/author-info-blocks.lua \
            --output=outfile.pdf --pdf-engine=xelatex \
            article.md
 
