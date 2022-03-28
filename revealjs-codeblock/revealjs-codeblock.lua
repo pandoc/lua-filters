@@ -59,6 +59,9 @@ function CodeBlock(block)
       attribute_string = string.format('%s="%s"', k, v)
       if is_pre_tag_attribute(k) then
         table.insert(pre_tag_attributes, attribute_string)
+      elseif k == "startFrom" then
+        table.insert(code_tag_attributes,
+                      string.format('data-ln-start-from="%s"', v))
       else
         table.insert(code_tag_attributes, attribute_string)
       end

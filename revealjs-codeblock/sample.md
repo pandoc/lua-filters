@@ -91,3 +91,11 @@ function SecondExample() {
 ``` {data-id="code-animate"}
 {data-id="code-animate"}
 ```
+
+# test line number offset
+
+``` {.haskell .numberLines startFrom="100"}
+qsort []     = []
+qsort (x:xs) = qsort (filter (< x) xs) ++ [x] ++
+               qsort (filter (>= x) xs)
+```
