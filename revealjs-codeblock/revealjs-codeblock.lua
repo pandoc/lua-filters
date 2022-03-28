@@ -16,7 +16,8 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ]]
 local function is_numberlines_class(class)
-  return class == 'numberLines' or class == 'number-lines'
+  class = class:lower()
+  return class == 'numberlines' or class == 'number-lines'
 end
 
 local function is_pre_tag_attribute(attribute)
