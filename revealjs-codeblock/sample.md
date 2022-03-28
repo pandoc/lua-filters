@@ -94,6 +94,14 @@ function SecondExample() {
 
 # test line number offset
 
+``` {.html data-line-numbers="" data-ln-start-from="7"}
+<tr>
+  <td>Oranges</td>
+  <td>$2</td>
+  <td>18</td>
+</tr>
+```
+
 ``` {.haskell .numberLines startFrom="100"}
 qsort []     = []
 qsort (x:xs) = qsort (filter (< x) xs) ++ [x] ++
