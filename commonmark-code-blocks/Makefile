@@ -1,4 +1,4 @@
-DIFF ?= diff --ignore-all-space --ignore-blank-lines -u
+DIFF := diff --ignore-all-space --ignore-blank-lines -u
 PANDOC ?= pandoc
 
 .PHONY: test
