@@ -151,19 +151,20 @@ local function convert_with_inkscape(filetype)
   -- Build the basic Inkscape command for the conversion
   local inkscape_output_args
   if filetype == 'png' then
-    inkscape_output_args = '--export-png="%s" --export-dpi=300'
+    inkscape_output_args = '--export-type=png --export-dpi=300'
   elseif filetype == 'svg' then
-    inkscape_output_args = '--export-plain-svg="%s"'
+    inkscape_output_args = '--export-type=svg --export-plain-svg'
   else
     return nil
   end
   return function (pdf_file, outfile)
     local inkscape_command = string.format(
-      '"%s" --without-gui --file="%s" ' .. inkscape_output_args,
+      '"%s" "%s" -o "%s" ' .. inkscape_output_args,
       inkscape_path,
       pdf_file,
       outfile
     )
+    print(inkscape_command)
     local command_output = io.popen(inkscape_command)
     -- TODO: print output when debugging.
     command_output:close()
