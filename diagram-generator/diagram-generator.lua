@@ -154,48 +154,30 @@ local function convert_with_inkscape(filetype)
   -- Check inksape version.
   -- TODO: this can be removed if supporting older Inkscape is not important.
   local inkscape_v_string = io.popen(inkscape_path .. " --version"):read()
-  local inkscape_v_major = inkscape_v_string:match(" ([0-9%.]*) "):gmatch("([0-9]*)%.")()
-  if tonumber(inkscape_v_major) < 1 then
-    -- If Inkscape is pre-1.0 version then use old format of arguments
-    if filetype == 'png' then
-      inkscape_output_args = '--export-png="%s" --export-dpi=300'
-    elseif filetype == 'svg' then
-      inkscape_output_args = '--export-plain-svg="%s"'
-    else
-      return nil
-    end
-    return function (pdf_file, outfile)
-      local inkscape_command = string.format(
-        '"%s" --without-gui --file="%s" ' .. inkscape_output_args,
-        inkscape_path,
-        pdf_file,
-        outfile
-      )
-      local command_output = io.popen(inkscape_command)
-      -- TODO: print output when debugging.
-      command_output:close()
-    end
+  local inkscape_v_major = inkscape_v_string:gmatch("([0-9]*)%.")()
+  local isv1 = tonumber(inkscape_v_major) >= 1
 
+  local cmd_arg = isv1 and '"%s" "%s" -o "%s" ' or '"%s" --without-gui --file="%s" '
+
+  if filetype == 'png' then
+    local png_arg = isv1 and '--export-type=png' or '--export-png="%s"'
+    output_args = png_arg .. '--export-dpi=300'
+  elseif filetype == 'svg' then
+    output_args = isv1 and '--export-type=svg --export-plain-svg' or '--export-plain-svg="%s"'
   else
-    -- If Inkscape v 1.0 or later, use new format of arguments.
-    if filetype == 'png' then
-      inkscape_output_args = '--export-type=png --export-dpi=300'
-    elseif filetype == 'svg' then
-      inkscape_output_args = '--export-type=svg --export-plain-svg'
-    else
-      return nil
-    end
-    return function (pdf_file, outfile)
-      local inkscape_command = string.format(
-        '"%s" "%s" -o "%s" ' .. inkscape_output_args,
-        inkscape_path,
-        pdf_file,
-        outfile
-      )
-      local command_output = io.popen(inkscape_command)
-      -- TODO: print output when debugging.
-      command_output:close()
-    end
+    return nil
+  end
+
+  return function (pdf_file, outfile)
+    local inkscape_command = string.format(
+      cmd_arg .. output_args,
+      inkscape_path,
+      pdf_file,
+      outfile
+    )
+    local command_output = io.popen(inkscape_command)
+    -- TODO: print output when debugging.
+    command_output:close()
   end
 end
 
