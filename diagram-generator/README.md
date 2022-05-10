@@ -202,7 +202,7 @@ cxy, f = axs[1].cohere(s1, s2, 256, 1. / dt)
 axs[1].set_ylabel('coherence')
 
 fig.tight_layout()
-plt.savefig("$DESTINATION$", dpi=300, fomat="$FORMAT$")
+plt.savefig("$DESTINATION$", dpi=300, fotmat="$FORMAT$")
 ```
 ~~~~~~~~~~~~~~~~
 
