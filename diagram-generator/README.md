@@ -161,7 +161,7 @@ final image data in a temporary file with the correct format. In case you use
 matplotlib for a diagram, add the following line to do so:
 
 ```python
-plt.savefig("$DESTINATION$", dpi=300, fomat="$FORMAT$")
+plt.savefig("$DESTINATION$", dpi=300, format="$FORMAT$")
 ```
 
 The placeholder `$FORMAT$` gets replace by the necessary format. Most of the
