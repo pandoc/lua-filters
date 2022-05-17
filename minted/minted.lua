@@ -75,13 +75,13 @@ backticks).  The default is also `"text"`, and changing is discouraged.
 ### `block_attributes` (list of strings)
 
 Any default attributes to apply to _all_ code blocks.  These may be
-overriden on a per-code-block basis.  See section 5.3 of the
+overridden on a per-code-block basis.  See section 5.3 of the
 [minted documentation][minted_docs] for available options.
 
 ### `inline_attributes` (list of strings)
 
 Any default attributes to apply to _all_ inline code.  These may be
-overriden on a per-code basis.  See section 5.3 of the
+overridden on a per-code basis.  See section 5.3 of the
 [minted documentation][minted_docs] for available options.
 
 [minted_docs]: http://mirrors.ctan.org/macros/latex/contrib/minted/minted.pdf
