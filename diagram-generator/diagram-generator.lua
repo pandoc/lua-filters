@@ -150,16 +150,27 @@ local tikz_template = [[
 local function convert_with_inkscape(filetype)
   -- Build the basic Inkscape command for the conversion
   local inkscape_output_args
+
+  -- Check inksape version.
+  -- TODO: this can be removed if supporting older Inkscape is not important.
+  local inkscape_v_string = io.popen(inkscape_path .. " --version"):read()
+  local inkscape_v_major = inkscape_v_string:gmatch("([0-9]*)%.")()
+  local isv1 = tonumber(inkscape_v_major) >= 1
+
+  local cmd_arg = isv1 and '"%s" "%s" -o "%s" ' or '"%s" --without-gui --file="%s" '
+
   if filetype == 'png' then
-    inkscape_output_args = '--export-png="%s" --export-dpi=300'
+    local png_arg = isv1 and '--export-type=png' or '--export-png="%s"'
+    output_args = png_arg .. '--export-dpi=300'
   elseif filetype == 'svg' then
-    inkscape_output_args = '--export-plain-svg="%s"'
+    output_args = isv1 and '--export-type=svg --export-plain-svg' or '--export-plain-svg="%s"'
   else
     return nil
   end
+
   return function (pdf_file, outfile)
     local inkscape_command = string.format(
-      '"%s" --without-gui --file="%s" ' .. inkscape_output_args,
+      cmd_arg .. output_args,
       inkscape_path,
       pdf_file,
       outfile
