@@ -5,6 +5,18 @@
 [GitHub Actions badge]: https://img.shields.io/github/workflow/status/pandoc/lua-filters/CI?logo=github
 [GitHub Actions]: https://github.com/pandoc/lua-filters/actions
 
+--------------------------------------------------------
+
+**DISCLAIMER : This repositoy is not active any more.**
+
+**See [hk-pandoc-filters](https://github.com/chrisaga/hk-pandoc-filters)**
+
+**I started this fork almost when pandoc/lus-filters stoped accepting third party contributions.**
+**Hence I started a fresh new repository to host my  own lua filters.**
+**As soon as they'll provide a way to contribute or be referenced, I will apply.**
+
+--------------------------------------------------------
+
 A collection of Lua filters for pandoc.
 
 To learn about Lua filters, see the [documentation].
