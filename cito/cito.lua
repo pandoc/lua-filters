@@ -88,7 +88,7 @@ end
 --- `default_cito_property` will be returned, together with the
 --- unchanged input ID.
 local function split_cito_from_id (citation_id)
-  local pattern = '^(.+):(.+)$'
+  local pattern = '^([^:]+):(.+)$'
   local prop_alias, split_citation_id = citation_id:match(pattern)
 
   if properties_by_alias[prop_alias] then
