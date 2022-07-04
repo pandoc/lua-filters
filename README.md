@@ -9,6 +9,13 @@ A collection of Lua filters for pandoc.
 
 To learn about Lua filters, see the [documentation].
 
+> **Note**
+>
+> This repository **does not** accept new filter submissions at
+> this time. Please see [issue
+> #207](https://github.com/pandoc/lua-filters/issues/207) for
+> details.
+
 [documentation]: http://pandoc.org/lua-filters.html
 
 Requirements
