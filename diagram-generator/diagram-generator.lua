@@ -371,6 +371,8 @@ function CodeBlock(block)
   local img_attr = {
     id = block.identifier,
     name = block.attributes.name
+    width = block.attributes.width,
+    height = block.attributes.height
   }
 
   -- Create a new image for the document's structure. Attach the user's
