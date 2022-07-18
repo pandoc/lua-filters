@@ -361,7 +361,7 @@ function CodeBlock(block)
   local title = #caption > 0 and "fig:" or ""
 
   -- Transfer identifier and other relevant attributes from the code
-  -- block to the image. Currently, only `name` is kept as an attribute.
+  -- block to the image. The `name` is kept as an attribute.
   -- This allows a figure block starting with:
   --
   --     ```{#fig:example .plantuml caption="Image created by **PlantUML**."}
@@ -370,7 +370,7 @@ function CodeBlock(block)
   -- with `pandoc-crossref`.
   local img_attr = {
     id = block.identifier,
-    name = block.attributes.name
+    name = block.attributes.name,
     width = block.attributes.width,
     height = block.attributes.height
   }
