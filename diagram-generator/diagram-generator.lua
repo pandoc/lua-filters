@@ -67,6 +67,9 @@ local asymptote_path = os.getenv ("ASYMPTOTE") or "asy"
 -- document, use the meta data to define the key "mermaid_path".
 local mermaid_path = os.getenv("MERMAID") or "mmdc"
 
+-- mermaid-cli additional options.
+local mermaid_options = os.getenv("MERMAID_OPTIONS") or ""
+
 -- The default format is SVG i.e. vector graphics:
 local filetype = "svg"
 local mimetype = "image/svg+xml"
@@ -116,6 +119,9 @@ function Meta(meta)
   )
   mermaid_path = stringify(
     meta.mermaid_path or meta.mermaidPath or mermaid_path
+  ) 
+  mermaid_options = stringify(
+    meta.mermaid_options or meta.mermaidOptions or mermaid_options
   ) 
 end
 
@@ -337,7 +343,13 @@ local function mermaid(code, filetype)
           f:close()
 
           local outfile = "pandoc_diagram." .. filetype
-          pandoc.pipe(mermaid_path, {"-o", outfile, "-i", mmd_file}, "")
+          local mmdc_parameters = {"-o", outfile, "-i", mmd_file}
+          if not(mermaid_options == "") then
+            for match in mermaid_options:gmatch("%S+") do
+              table.insert(mmdc_parameters, match)
+            end
+          end
+          pandoc.pipe(mermaid_path, mmdc_parameters, "")
 
           -- Try to open the written image:
           local r = io.open(outfile, 'rb')
