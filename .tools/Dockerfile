@@ -82,7 +82,13 @@ RUN wget https://sourceforge.net/projects/plantuml/files/${plantuml_jar} \
       --quiet --output-document=/root/${plantuml_jar}
 ENV PLANTUML=/root/$plantuml_jar
 
-RUN npm install --global mathjax-node-cli @mermaid-js/mermaid-cli --unsafe-perm=true
+RUN npm install --location=global mathjax-node-cli @mermaid-js/mermaid-cli
+
+# mermaid-cli uses puppeteer to control headless chromium.
+# the "simple" way to launch it inside a container is to add the `--no-sandbox`
+# parameter to puppeteer, through the `-p` mmdc option.
+RUN echo '{"args": ["--no-sandbox"]}' > /root/puppeteer-config.json
+ENV MERMAID_OPTIONS="-p /root/puppeteer-config.json"
 
 ENV DIFF="diff -u"
 ENV LC_ALL="C.UTF-8"
