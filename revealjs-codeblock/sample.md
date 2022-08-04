@@ -1,5 +1,4 @@
-Pretty Code {#pretty-code data-auto-animate=""}
-===========
+# Pretty Code {#pretty-code data-auto-animate=""}
 
 ``` {.jsx .numberLines data-id="code-animation"}
 import React, { useState } from 'react';
@@ -15,8 +14,7 @@ function Example() {
 
 Example courtesy of [reveal.js](https://revealjs.com/#/4).
 
-Even Prettier Animations {#even-prettier-animations data-auto-animate=""}
-========================
+# Even Prettier Animations {#even-prettier-animations data-auto-animate=""}
 
 ``` {.jsx data-line-numbers="|4,8-11|17|22-24" data-id="code-animation"}
 import React, { useState } from 'react';
@@ -48,16 +46,15 @@ function SecondExample() {
 }
 ```
 
-test line number classes
-========================
+# test line number classes
 
     unnumbered
 
-``` {.numberLines}
+``` numberLines
 {.numberLines}
 ```
 
-``` {.number-lines}
+``` number-lines
 {.number-lines}
 ```
 
@@ -65,8 +62,7 @@ test line number classes
 {.numberLines .number-lines}
 ```
 
-test data-line-numbers attribute
-================================
+# test data-line-numbers attribute
 
 ``` {data-line-numbers="1"}
 {data-line-numbers="1"}
@@ -76,8 +72,7 @@ test data-line-numbers attribute
 {.numberLines data-line-numbers="1"}
 ```
 
-test code tag attributes
-========================
+# test code tag attributes
 
 ``` {.html .another-class}
 {.html .another-class}
@@ -87,8 +82,7 @@ test code tag attributes
 {data-trim="" some-other-attribute="" style="border: 1px solid yellow;"}
 ```
 
-test pre tag attributes
-=======================
+# test pre tag attributes
 
 ``` {#code}
 {#code}
@@ -96,4 +90,20 @@ test pre tag attributes
 
 ``` {data-id="code-animate"}
 {data-id="code-animate"}
+```
+
+# test line number offset
+
+``` {.html data-line-numbers="" data-ln-start-from="7"}
+<tr>
+  <td>Oranges</td>
+  <td>$2</td>
+  <td>18</td>
+</tr>
+```
+
+``` {.haskell .numberLines startFrom="100"}
+qsort []     = []
+qsort (x:xs) = qsort (filter (< x) xs) ++ [x] ++
+               qsort (filter (>= x) xs)
 ```

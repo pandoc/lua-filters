@@ -16,7 +16,8 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ]]
 local function is_numberlines_class(class)
-  return class == 'numberLines' or class == 'number-lines'
+  class = class:lower()
+  return class == 'numberlines' or class == 'number-lines'
 end
 
 local function is_pre_tag_attribute(attribute)
@@ -58,6 +59,9 @@ function CodeBlock(block)
       attribute_string = string.format('%s="%s"', k, v)
       if is_pre_tag_attribute(k) then
         table.insert(pre_tag_attributes, attribute_string)
+      elseif k == "startFrom" then
+        table.insert(code_tag_attributes,
+                      string.format('data-ln-start-from="%s"', v))
       else
         table.insert(code_tag_attributes, attribute_string)
       end

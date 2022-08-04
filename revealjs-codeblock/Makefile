@@ -2,7 +2,7 @@ DIFF ?= diff --strip-trailing-cr -u
 PANDOC ?= pandoc
 
 test:
-	@$(PANDOC) --lua-filter=revealjs-codeblock.lua sample.md -t revealjs | \
+	@$(PANDOC) --lua-filter=revealjs-codeblock.lua sample.md -t revealjs --wrap none | \
 		$(DIFF) expected.html -
 
 .PHONY: test

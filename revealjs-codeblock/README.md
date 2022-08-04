@@ -12,11 +12,14 @@ The filter passes the code block attributes to reveal.js. This enables
 the following reveal.js features:
 
 - [Line Numbers &
-  Highlights](https://github.com/hakimel/reveal.js/tree/master/plugin/highlight)
-  and [Step-by-step
-  Highlights](https://revealjs.com/code/#step-by-step-highlights) via
-  the `data-line-numbers` attribute. (`.numerLines` and
+  Highlights](https://revealjs.com/code/#line-numbers-%26-highlights)
+  via the `data-line-numbers` attribute. (`.numerLines` and
   `.number-lines` classes are converted for compatibility.)
+- [Line Number
+  Offset](https://revealjs.com/code/#line-number-offset-4.2.0) (via
+  `data-ln-start-from` and `startFrom` attributes)
+- [Step-by-step
+  Highlights](https://revealjs.com/code/#step-by-step-highlights)
 - [Auto-Animation](https://revealjs.com/auto-animate/#example%3A-animating-between-code-blocks)
   of code blocks with line numbers and a `data-id`. (The slide
   headings need the `data-auto-animate` attribute.)
@@ -32,7 +35,7 @@ two additional variables:
   [comes](https://github.com/hakimel/reveal.js/tree/master/plugin/highlight)
   with `monokai` (default) and `zenburn`.
 
-```bash
+``` bash
 $ pandoc sample.md -o sample.html -t revealjs -L revealjs-codeblock.lua \
   --template template.html -V highlightjs -V highlightjs-theme:zenburn
 ```
