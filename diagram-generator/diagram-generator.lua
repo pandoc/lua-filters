@@ -161,7 +161,7 @@ local function convert_with_inkscape(filetype)
 
   if filetype == 'png' then
     local png_arg = isv1 and '--export-type=png' or '--export-png="%s"'
-    output_args = png_arg .. '--export-dpi=300'
+    output_args = png_arg .. ' --export-dpi=300'
   elseif filetype == 'svg' then
     output_args = isv1 and '--export-type=svg --export-plain-svg' or '--export-plain-svg="%s"'
   else
