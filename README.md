@@ -55,8 +55,9 @@ where `$PANDOC_DIR` is a user directory as listed in the output of
 Contributing
 ------------
 
-PRs for improvements, bug fixes, or new filters are welcome.
-Please see CONTRIBUTING.md for additional information.
+PRs for improvements or bug fixes are welcome. However, we do not
+accept new filters at this time. Please see CONTRIBUTING.md for
+additional information.
 
 License
 -------
