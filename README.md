@@ -33,7 +33,7 @@ A curated list of pandoc Lua filters in separate repositories.
   bibliography for each section of a document.
 
 [abstract-section]: https://github.com/pandoc-ext/abstract-section
-[pretty-url]: https://github.com/pandoc-ext/pretty-url
+[pretty-urls]: https://github.com/pandoc-ext/pretty-url
 [section-bibs]: https://github.com/pandoc-ext/section-bibliographies
 
 Requirements
