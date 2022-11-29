@@ -2,6 +2,7 @@
 pagebreak – convert raw LaTeX page breaks to other formats
 
 Copyright © 2017-2021 Benct Philip Jonsson, Albert Krewinkel
+Copyright © 2022 Duncan Murdoch
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -103,6 +104,15 @@ function Para (el)
       el.content[1].text == '\\newpage' or
       el.content[1].text == '\\pagebreak') then
     return newpage(FORMAT)
+  else
+    if #el.content == 2 and
+       el.content[1].t == 'Span' and
+       el.content[2].t == 'Span' and
+       el.content[1].content == pandoc.Span('\\').content and
+       (el.content[2].content == pandoc.Span('newpage').content or
+        el.content[2].content == pandoc.Span('pagebreak').content) then
+      return newpage(FORMAT)
+    end
   end
 end
 

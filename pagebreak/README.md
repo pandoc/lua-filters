@@ -1,10 +1,10 @@
 pagebreak
 =========
 
-This filter converts paragraps containing only the LaTeX
+This filter converts paragraphs containing only the LaTeX
 `\newpage` or `\pagebreak` command into appropriate pagebreak
 markup for other formats. The command must be the only contents
-of a raw TeX block in order to be recognized. I.e., for Markdown
+of the paragraph in order to be recognized. I.e., for Markdown
 the following is sufficient:
 
     Paragraph before page break
