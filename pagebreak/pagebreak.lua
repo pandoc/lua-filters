@@ -96,9 +96,12 @@ function RawBlock (el)
 end
 
 -- Turning paragraphs which contain nothing but a form feed
--- characters into line breaks.
+-- characters or \newpage/\pagebreak lines into line breaks.
 function Para (el)
-  if #el.content == 1 and el.content[1].text == '\f' then
+  if #el.content == 1 and
+     (el.content[1].text == '\f' or
+      el.content[1].text == '\\newpage' or
+      el.content[1].text == '\\pagebreak') then
     return newpage(FORMAT)
   end
 end
