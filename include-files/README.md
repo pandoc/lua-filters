@@ -2,6 +2,11 @@
 
 Filter to include other files in the document.
 
+## Prerquisites
+
+- This filter needs to be executed before some other filters, 
+  including `pandoc-xnos`.
+
 ## Usage
 
 Use a special code block with class `include` to include files of
