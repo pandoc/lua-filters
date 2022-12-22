@@ -28,6 +28,12 @@ local with_working_directory = system.with_working_directory
 -- "plantuml_path".
 local plantuml_path = os.getenv("PLANTUML") or "plantuml.jar"
 
+-- Use the PlantUML binary if it's available.
+local success, status, status_code = os.execute("plantuml -quiet -v 2> /dev/null")
+if status_code == 0 then
+  plantuml_path = "plantuml"
+end
+
 -- The Inkscape path. In order to define an Inkscape version per pandoc
 -- document, use the meta data to define the key "inkscape_path".
 local inkscape_path = os.getenv("INKSCAPE") or "inkscape"
@@ -113,11 +119,11 @@ end
 
 -- Call plantuml.jar with some parameters (cf. PlantUML help):
 local function plantuml(puml, filetype)
-  return pandoc.pipe(
-    java_path,
-    {"-jar", plantuml_path, "-t" .. filetype, "-pipe", "-charset", "UTF8"},
-    puml
-  )
+  if string.find(plantuml_path, ".jar") then
+    return pandoc.pipe(java_path, {"-jar", plantuml_path, "-t" .. filetype, "-pipe", "-charset", "UTF8"}, puml)
+  else
+    return pandoc.pipe(plantuml_path, {"-t" .. filetype, "-pipe", "-charset", "UTF8"}, puml)
+  end
 end
 
 -- Call dot (GraphViz) in order to generate the image
