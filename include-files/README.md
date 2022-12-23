@@ -2,6 +2,11 @@
 
 Filter to include other files in the document.
 
+## Prerquisites
+
+This filter needs to be executed before most other filters. Any
+filter that runs before this will only see the empty codeblocks.
+
 ## Usage
 
 Use a special code block with class `include` to include files of
