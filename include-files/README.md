@@ -4,10 +4,10 @@ Filter to include other files in the document.
 
 ## Note
 
-Do not run other filters before executing `include-files`, unless you are certain the
-other filter does not require `include-files` to function properly. Executing
-most filters without first using `include-files` will result in the other filter
-seeing an empty code block.
+Do not run other filters before executing `include-files`, unless you are
+certain the other filter does not require `include-files` to function properly.
+Executing most filters without first using `include-files` will result in the
+other filter seeing an empty code block.
 
 ## Usage
 
