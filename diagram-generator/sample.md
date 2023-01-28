@@ -58,7 +58,6 @@ gallery](https://graphviz.gitlab.io/_pages/Gallery/directed/fsm.html):
 ```{.graphviz caption="This is an image, created by **Graphviz**'s dot."}
 digraph finite_state_machine {
 	rankdir=LR;
-	size="8,5"
 	node [shape = doublecircle]; LR_0 LR_3 LR_4 LR_8;
 	node [shape = circle];
 	LR_0 -> LR_2 [ label = "SS(B)" ];
