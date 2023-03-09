@@ -404,12 +404,21 @@ function CodeBlock(block)
   if FORMAT == "beamer" or FORMAT == "latex" then
     local language   = minted_language(block, MintedBlock)
     local attributes = minted_attributes(block, MintedBlock)
+
+    if (block.identifier == "") then
+        label = ""
+    else
+        label = string.format("\\label{%s}", block.identifier)
+    end
+
     local raw_minted = string.format(
-      "\\begin{minted}[%s]{%s}\n%s\n\\end{minted}",
+      "%s\n\\begin{minted}[%s]{%s}\n%s\n\\end{minted}",
+      label,
       attributes,
       language,
       block.text
     )
+
     -- NOTE: prior to pandoc commit 24a0d61, `beamer` cannot be used as the
     -- RawBlock format.  Using `latex` should not cause any problems.
     return pandoc.RawBlock("latex", raw_minted)
