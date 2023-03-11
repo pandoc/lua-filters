@@ -62,6 +62,11 @@ local pdflatex_path = os.getenv("PDFLATEX") or "pdflatex"
 -- "asymptote_path".
 local asymptote_path = os.getenv ("ASYMPTOTE") or "asy"
 
+
+-- The mermaid path. There is also a metadata variable
+-- "mermaid_path".
+local mermaid_path = os.getenv ("MERMAID") or "mmdc"
+
 -- The default format is SVG i.e. vector graphics:
 local filetype = "svg"
 local mimetype = "image/svg+xml"
@@ -108,6 +113,9 @@ function Meta(meta)
   )
   asymptote_path = stringify(
      meta.asymptote_path or meta.asymptotePath or asymptote_path
+  )
+  mermaid_path = stringify(
+     meta.mermaid_path or meta.mermaidPath or mermaid_path
   )
 end
 
@@ -310,6 +318,57 @@ local function asymptote(code, filetype)
   end)
 end
 
+-- Call mermaid  in order to generate the image
+-- Couldn't ask mermaid to generate output to stdout....
+local function mermaid(code, filetype)
+    -- It seems that there is a problem is svg output with
+    -- So... replace svg output with pdf output
+    --if filetype == "svg" then filetype = "pdf" end
+    return with_temporary_directory(
+        "mermaid",
+        function(tmpdir)
+          return with_working_directory(
+            tmpdir,
+            function ()
+              local tmp_filetype
+              -- Little hack : it seems that ther id a bug in
+              -- svg output genrated by mermaid : 
+              -- https://github.com/mermaid-js/mermaid-cli/issues/112
+              -- so, if we ask for a svg file, generate a pdf
+              -- then convert the pdf to svg
+              -- if this bug is corrected, the following code can
+              -- be simplified as mermaid can produce pdf svg, png... on its own.
+              if filetype == "svg" then
+                tmp_filetype = "pdf"
+              else
+                tmp_filetype = filetype
+              end
+              local tmp_output_file = "mermaid_output."..tmp_filetype
+              local output_file = "mermaid_output."..filetype
+              -- Option -f is for pdf output only, no effect on other output formats
+              pandoc.pipe(mermaid_path, {"-i", "-", "-f", "-e", tmp_filetype, "-o", tmp_output_file}, code)
+              -- Second part of little hack...
+              if tmp_output_file ~= output_file then
+                if tmp_filetype == "pdf" and filetype == "svg" then
+                    pandoc.pipe("pdf2svg", {tmp_output_file, output_file}, "")
+                else
+                    error("can not convert "..tmp_filetype.." to "..filetype)
+                end
+              end
+              -- OK, let's go...
+              local r = io.open(output_file, 'rb')
+              local img_data
+              if r then
+                img_data = r:read("*all")
+                r:close()
+              else
+                error("could not read mermaid result file")
+              end
+              return img_data
+          end)
+      end)
+  end
+
 -- Executes each document's code block to find matching code blocks:
 function CodeBlock(block)
   -- Using a table with all known generators i.e. converters:
@@ -319,6 +378,7 @@ function CodeBlock(block)
     tikz = tikz2image,
     py2image = py2image,
     asymptote = asymptote,
+    mermaid = mermaid,
   }
 
   -- Check if a converter exists for this block. If not, return the block
@@ -327,6 +387,8 @@ function CodeBlock(block)
   if not img_converter then
     return nil
   end
+
+  --if block.classes[1] == "mermaid" then filetype = "png" end
 
   -- Call the correct converter which belongs to the used class:
   local success, img = pcall(img_converter, block.text,

@@ -270,6 +270,25 @@ label("$O$", O, W);
 label("$I$", I, E);
 ```
 
+## Mermaid
+[Mermaid](https://mermaid.js.org/#/) is a diagramming and charting tool.
+[mmdc](https://github.com/mermaid-js/mermaid-cli) is a cli to mermaid.
+Your distribution may have a package called `mermaid-cli` or `mmdc`.
+
+```{.mermaid caption="Sample git graph, created by **mermaid**."}
+gitGraph
+    commit
+    commit
+    branch develop
+    checkout develop
+    commit
+    commit
+    checkout main
+    merge develop
+    commit
+    commit
+```
+
 ## How to run pandoc
 This section will show, how to call Pandoc in order to use this filter with
 meta keys. The following command assume, that the filters are stored in the
@@ -292,6 +311,7 @@ All available environment variables:
 - `DOT` e.g. `c:\ProgramData\chocolatey\bin\dot.exe`; Default: `dot`
 - `PDFLATEX` e.g. `c:\Program Files\MiKTeX 2.9\miktex\bin\x64\pdflatex.exe`; Default: `pdflatex`
 - `ASYMPTOTE` e.g. `c:\Program Files\Asymptote\asy`; Default: `asy`
+- `MERMAID` e.g. `??`; Default: `mmdc`
 
 All available meta keys:
 
@@ -303,3 +323,4 @@ All available meta keys:
 - `dot_path`
 - `pdflatex_path`
 - `asymptote_path`
+- `mermaid_path`
