@@ -2,7 +2,7 @@
 
 [![Build status][CI badge]][GitHub Actions]
 
-[CI badge]: https://img.shields.io/github/actions/workflow/status/pandoc/lua-filters/ci.yaml?branch=main&logo=github
+[CI badge]: https://img.shields.io/github/actions/workflow/status/pandoc/lua-filters/ci.yml?branch=master&logo=github
 [GitHub Actions]: https://github.com/pandoc/lua-filters/actions
 
 A collection of Lua filters for pandoc.
