@@ -1,8 +1,8 @@
 # Lua Filters
 
-[![Build status][GitHub Actions badge]][GitHub Actions]
+[![Build status][CI badge]][GitHub Actions]
 
-[GitHub Actions badge]: https://img.shields.io/github/workflow/status/pandoc/lua-filters/CI?logo=github
+[CI badge]: https://img.shields.io/github/actions/workflow/status/pandoc/lua-filters/ci.yaml?branch=main&logo=github
 [GitHub Actions]: https://github.com/pandoc/lua-filters/actions
 
 A collection of Lua filters for pandoc.
