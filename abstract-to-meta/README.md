@@ -1,6 +1,6 @@
 # abstract-to-meta
 
-> *Warning*
+> **Warning**
 >
 > This filter is deprecated and no longer maintained. Please use
 > [abstract-section] instead.
