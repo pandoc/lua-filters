@@ -1,5 +1,12 @@
 # abstract-to-meta
 
+> *Warning*
+>
+> This filter is deprecated and no longer maintained. Please use
+> [abstract-section] instead.
+
+[abstract-section]: https://github.com/pandoc-ext/abstract-section
+
 This moves a document's abstract from the main text into the
 metadata. Metadata elements usually allow for finer placement
 control in the final output, but writing body text is easier and
