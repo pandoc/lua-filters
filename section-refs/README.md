@@ -1,5 +1,13 @@
 # section-refs
 
+> **Warning**
+>
+> The filter has been moved and is now maintained at
+> [pandoc-ext/section-bibliographies][secbibs]. Please use the
+> updated code instead.
+
+[secbibs]: https://github.com/pandoc-ext/section-bibliographies
+
 This filter allows the user to put bibliographies at the end of
 each section, containing only those references in the section. It
 works by splitting the document up into sections, and then
