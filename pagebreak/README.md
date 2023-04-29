@@ -1,6 +1,13 @@
 pagebreak
 =========
 
+> **Warning**
+>
+> The filter has been moved to [pandoc-ext/pagebreak]. Please use
+> the updated code instead.
+
+[pandoc-ext/pagebreak]: https://github.com/pandoc-ext/pagebreak
+
 This filter converts paragraps containing only the LaTeX
 `\newpage` or `\pagebreak` command into appropriate pagebreak
 markup for other formats. The command must be the only contents
