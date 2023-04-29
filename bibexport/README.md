@@ -1,5 +1,18 @@
 # bibexport
 
+> **Warning**
+>
+> This filter is deprecated, as the functionality is now include
+> in pandoc. Use `--to=biblatex` with this filter instead:
+>
+> ``` lua
+> function Pandoc (doc)
+>   doc.meta.references = pandoc.utils.references(doc)
+>   doc.meta.bibliography = nil
+>   return doc
+> end
+> ```
+
 Export all cited references into a single bibtex file. This is
 most useful when writing collaboratively while using a large,
 private bibtex collection. Using the bibexport filter allows to
@@ -35,5 +48,3 @@ redirecting stdout to a file. E.g.
 or, when the filter is called in a one-off fashion
 
     pandoc --lua-filter=bibexport.lua article.md -o /dev/null
-    
-
