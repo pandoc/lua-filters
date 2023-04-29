@@ -1,5 +1,11 @@
 # cito
 
+> **Warning**
+>
+> The filter has moved and is now maintained at
+> <https://github.com/pandoc-ext/cito>. Please use the updated
+> code and report issues in that repository.
+
 This filter extracts optional CiTO (Citation Typing Ontology)
 information from citations and stores the information in the
 document's metadata. The extracted info is intended to be used in
