@@ -1,5 +1,11 @@
 # List tables for Pandoc
 
+> **Warning**
+>
+> This filter is now maintained at
+> <https://github.com/pandoc-ext/list-table>. The code here will
+> no longer be updated.
+
 This is the documentation for `list-table.lua`, a Lua filter
 to bring [RST-style list tables] to Pandoc's Markdown.
 
