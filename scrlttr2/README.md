@@ -1,10 +1,16 @@
 # scrlttr2
 
+> **Note**
+>
+> This filter is deprecated and no longer maintained. Use the
+> [pandoc-scrlttr2 template][template] instead.
+
 This filter allows to write DIN 5008 letter using the [scrlttr2]
 LaTeX document class from KOMA script. It converts metadata to
 the appropriate KOMA variables and allows using the default LaTeX
 template shipped with pandoc.
 
+[template]: https://github.com/JensErat/pandoc-scrlttr2
 [scrlttr2]: https://www.ctan.org/pkg/scrlttr2
 
 ## Base variables
