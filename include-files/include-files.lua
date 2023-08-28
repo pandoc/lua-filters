@@ -10,11 +10,15 @@ local List = require 'pandoc.List'
 local path = require 'pandoc.path'
 local system = require 'pandoc.system'
 
---- Get include auto mode
+--- Get include auto mode and no relative mode
 local include_auto = false
+local no_relative = false
 function get_vars (meta)
   if meta['include-auto'] then
     include_auto = true
+  end
+  if meta['no-relative'] then
+    no_relative = true
   end
 end
 
@@ -26,30 +30,43 @@ end
 
 --- Update contents of included file
 local function update_contents(blocks, shift_by, include_path)
-  local update_contents_filter = {
-    -- Shift headings in block list by given number
-    Header = function (header)
-      if shift_by then
-        header.level = header.level + shift_by
-      end
-      return header
-    end,
-    -- If image paths are relative then prepend include file path
-    Image = function (image)
-      if path.is_relative(image.src) then
-        image.src = path.normalize(path.join({include_path, image.src}))
-      end
-      return image
-    end,
-    -- Update path for include-code-files.lua filter style CodeBlocks
-    CodeBlock = function (cb)
-      if cb.attributes.include and path.is_relative(cb.attributes.include) then
-        cb.attributes.include =
-          path.normalize(path.join({include_path, cb.attributes.include}))
+  local update_contents_filter
+  if no_relative then
+    update_contents_filter = {
+      -- Shift headings in block list by given number
+      Header = function (header)
+        if shift_by then
+          header.level = header.level + shift_by
         end
-      return cb
-    end
-  }
+        return header
+      end
+    }
+  else
+    update_contents_filter = {
+      -- Shift headings in block list by given number
+      Header = function (header)
+        if shift_by then
+          header.level = header.level + shift_by
+        end
+        return header
+      end,
+      -- If image paths are relative then prepend include file path
+      Image = function (image)
+        if path.is_relative(image.src) then
+          image.src = path.normalize(path.join({include_path, image.src}))
+        end
+        return image
+      end,
+      -- Update path for include-code-files.lua filter style CodeBlocks
+      CodeBlock = function (cb)
+        if cb.attributes.include and path.is_relative(cb.attributes.include) then
+          cb.attributes.include =
+            path.normalize(path.join({include_path, cb.attributes.include}))
+          end
+        return cb
+      end
+    }
+  end
 
   return pandoc.walk_block(pandoc.Div(blocks), update_contents_filter).content
 end
@@ -95,8 +112,14 @@ function transclude (cb)
         ).blocks
         last_heading_level = 0
         -- recursive transclusion
+        local directory
+        if no_relative then 
+          directory = path.directory('./')
+        else
+          directory = path.directory(line)
+        end
         contents = system.with_working_directory(
-            path.directory(line),
+            directory,
             function ()
               return pandoc.walk_block(
                 pandoc.Div(contents),
