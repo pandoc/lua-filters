@@ -204,4 +204,5 @@ end
 
 function Math(el)
   el.text = string.gsub(el.text, "(\\ce%b{})", handleCe)
+  return el
 end
