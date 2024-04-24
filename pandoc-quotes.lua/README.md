@@ -22,10 +22,8 @@ You need [Pandoc](https://www.pandoc.org/) 2.0 or later.
 
 ### Installation
 
-1. Download the
-   [latest release](https://github.com/odkr/pandoc-quotes.lua/releases/latest).
-2. Unpack it.
-3. Move `pandoc-quotes.lua` from the repository directory to the
+1. Download [pandoc-quotes.lua](https://github.com/pandoc/lua-filters/blob/master/pandoc-quotes.lua/pandoc-quotes.lua).
+2. Move `pandoc-quotes.lua` from the repository directory to the
    `filters` sub-directory of your Pandoc data directory
    (`pandoc --version` will tell you where that is).
 
