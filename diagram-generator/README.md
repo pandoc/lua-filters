@@ -1,5 +1,12 @@
 # Diagram Generator Lua Filter
 
+> [!NOTE]
+>
+> This filter is now maintained in its own repository at
+> [pandoc-ext/diagram]. The version here is outdated.
+
+[pandoc-ext/diagram]: https://github.com/pandoc-ext/diagram
+
 ## Introduction
 This Lua filter is used to create images with or without captions from code
 blocks. Currently PlantUML, Graphviz, Ti*k*Z and Python can be processed.
@@ -167,7 +174,7 @@ plt.savefig("$DESTINATION$", dpi=300, format="$FORMAT$")
 The placeholder `$FORMAT$` gets replace by the necessary format. Most of the
 time, this will be `png` or `svg`. The second placeholder, `$DESTINATION$`
 gets replaced by the path and file name of the destination. Both placeholders
-can be used as many times as you want. Example usage from the [Matplotlib 
+can be used as many times as you want. Example usage from the [Matplotlib
 examples](https://matplotlib.org/gallery/lines_bars_and_markers/cohere.html#sphx-glr-gallery-lines-bars-and-markers-cohere-py):
 
 ~~~~~~~~~~~~~~~~
