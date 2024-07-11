@@ -10,6 +10,11 @@ local List = require 'pandoc.List'
 local path = require 'pandoc.path'
 local system = require 'pandoc.system'
 
+local warn = pcall(require, 'pandoc.log')
+  and (require 'pandoc.log').warn
+  or warn
+  or function (msg) io.stderr:write(msg .. '\n') end
+
 --- Get include auto mode
 local include_auto = false
 function get_vars (meta)
@@ -85,7 +90,7 @@ function transclude (cb)
     if line:sub(1,2) ~= '//' then
       local fh = io.open(line)
       if not fh then
-        io.stderr:write("Cannot open file " .. line .. " | Skipping includes\n")
+        warn("Cannot open file " .. line .. " | Skipping includes")
       else
         -- read file as the given format with global reader options
         local contents = pandoc.read(
