@@ -69,8 +69,8 @@ relative to the directory from which they are included. I.e., if a file `a/b.md`
 is included in the main document, and another file `a/b/c.md` should be included
 from `a/b.md`, then the relative path from `a/b.md` must be used, in this case
 `b/c.md`. The full relative path will be automatically generated in the final
-document. The same goes for image paths and codeblock file paths using the
-`include-code-files` filter.
+document. The same goes for image paths, link paths and codeblock file paths
+using the `include-code-files` filter.
 
 ## Example
 
