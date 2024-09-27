@@ -117,11 +117,16 @@
     , Space
     , Str "updated."
     ]
-, Para
-    [ Image
-        ( "" , [] , [] )
-        [ Str "Image" , Space , Str "title" ]
-        ( "subdir/someimage.png" , "fig:" )
+, Figure
+    ( "" , [] , [] )
+    (Caption
+       Nothing [ Plain [ Str "Image" , Space , Str "title" ] ])
+    [ Plain
+        [ Image
+            ( "" , [] , [] )
+            [ Str "Image" , Space , Str "title" ]
+            ( "subdir/someimage.png" , "" )
+        ]
     ]
 , Header
     1
