@@ -41,13 +41,22 @@ local function update_contents(blocks, shift_by, include_path)
     end,
     -- If link paths are relative then prepend include file path
     Link = function (link)
-        if path.is_relative(link.target) then
-            link.target = path.normalize(path.join({include_path, link.target}))
-        end
+      if string.match(link.target, "^%a+://") then
         return link
+      end
+
+      if path.is_relative(link.target) then
+          link.target = path.normalize(path.join({include_path, link.target}))
+      end
+
+      return link
     end,
     -- If image paths are relative then prepend include file path
     Image = function (image)
+      if string.match(image.src, "^%a+://") then
+        return image
+      end
+
       if path.is_relative(image.src) then
         image.src = path.normalize(path.join({include_path, image.src}))
       end
