@@ -128,11 +128,28 @@
             ( "subdir/someimage.png" , "" )
         ]
     ]
+, Figure
+    ( "" , [] , [] )
+    (Caption
+       Nothing [ Plain [ Str "Image" , Space , Str "title" ] ])
+    [ Plain
+        [ Image
+            ( "" , [] , [] )
+            [ Str "Image" , Space , Str "title" ]
+            ( "https://example.com/someimage.png" , "" )
+        ]
+    ]
 , Para
     [ Link
         ( "" , [] , [] )
         [ Str "Some" , Space , Str "link" ]
         ( "subdir/someimage.png" , "" )
+    ]
+, Para
+    [ Link
+        ( "" , [] , [] )
+        [ Str "Some" , Space , Str "link" ]
+        ( "https://example.com/someimage.png" , "" )
     ]
 , Header
     2
