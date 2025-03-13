@@ -105,7 +105,7 @@ function transclude (cb)
             function ()
               return pandoc.walk_block(
                 pandoc.Div(contents),
-                { Header = update_last_level, CodeBlock = transclude }
+                { Header = update_last_level, CodeBlock = transclude, Code = inline_transclude }
               )
             end).content
         --- reset to level before recursion
@@ -119,7 +119,35 @@ function transclude (cb)
   return blocks
 end
 
+local inline_transclude
+function inline_transclude(code)
+  -- ignore inline code which is not of class "include".
+  if not code.classes:includes 'include' then
+    return
+  end
+
+  -- Markdown is used if this is nil.
+  local format = code.attributes['format']
+  local document
+  local content
+  for line in code.text:gmatch('[^\n]+') do
+    if line:sub(1,2) ~= '//' then
+      local fh = io.open(line)
+      if not fh then
+        io.stderr:write("Cannot open file " .. line .. " | Skipping includes\n")
+      else
+        document = pandoc.read(fh:read '*a', format)
+        if document ~= nil then
+          content = document.blocks[1].content
+        end
+        fh:close()
+      end
+    end
+  end
+  return content
+end
+
 return {
   { Meta = get_vars },
-  { Header = update_last_level, CodeBlock = transclude }
+  { Header = update_last_level, CodeBlock = transclude, Code = inline_transclude}
 }
