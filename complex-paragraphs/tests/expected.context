@@ -1,0 +1,19 @@
+[Para [Emph [Str "Let\8217s",Space,Str "begin",Space,Str "with",Space,Str "a",Space,Str "simple",Space,Str "test",Space,Str "case:"]]
+,Div ("",["complex-paragraph"],[])
+ [Para [Str "When",Space,Str "Clovis",Space,Str "came",Space,Str "in",Space,Str "front",Space,Str "of",Space,Str "the",Space,Str "soldier,",Space,Str "he",Space,Str "smashed",Space,Str "his",Space,Str "head",Space,Str "with",SoftBreak,Str "his",Space,Str "axe,",Space,Str "saying:"]
+ ,BlockQuote
+  [Para [Str "Remember",Space,Str "the",Space,Str "vase",Space,Str "at",Space,Str "Soissons!"]]
+ ,Para [RawInline (Format "context") "\\noindentation{}",Str "This",Space,Str "was",Space,Str "an",Space,Str "allusion",Space,Str "to",Space,Str "the",Space,Str "vase",Space,Str "that",Space,Str "the",Space,Str "soldier",Space,Str "had",Space,Str "broken",Space,Str "so",Space,Str "that",SoftBreak,Str "it",Space,Str "could",Space,Str "not",Space,Str "be",Space,Str "returned",Space,Str "to",Space,Str "Remigius."]]
+,Para [Emph [Str "It",Space,Str "is",Space,Str "not",Space,Str "necessary",Space,Str "for",Space,Str "the",Space,Str "first",Space,Str "block",Space,Str "to",Space,Str "be",Space,Str "normal",Space,Str "text:"]]
+,Div ("",["complex-paragraph"],[])
+ [BlockQuote
+  [Para [Str "Remember",Space,Str "the",Space,Str "vase",Space,Str "at",Space,Str "Soissons!"]]
+ ,Para [RawInline (Format "context") "\\noindentation{}",Str "This",Space,Str "was",Space,Str "an",Space,Str "allusion",Space,Str "to",Space,Str "the",Space,Str "vase",Space,Str "that",Space,Str "the",Space,Str "soldier",Space,Str "had",Space,Str "broken",Space,Str "so",Space,Str "that",SoftBreak,Str "it",Space,Str "could",Space,Str "not",Space,Str "be",Space,Str "returned",Space,Str "to",Space,Str "Remigius."]]
+,Para [Emph [Str "Nested",Space,Str "Divs",Space,Str "are",Space,Str "supported:"]]
+,Div ("",["complex-paragraph"],[])
+ [Div ("",["narrative"],[])
+  [Para [Str "When",Space,Str "Clovis",Space,Str "came",Space,Str "in",Space,Str "front",Space,Str "of",Space,Str "the",Space,Str "soldier,",Space,Str "he",Space,Str "smashed",Space,Str "his",Space,Str "head",Space,Str "with",SoftBreak,Str "his",Space,Str "axe,",Space,Str "saying:"]
+  ,BlockQuote
+   [Para [Str "Remember",Space,Str "the",Space,Str "vase",Space,Str "at",Space,Str "Soissons!"]]]
+ ,Div ("",["explanation"],[])
+  [Para [RawInline (Format "context") "\\noindentation{}",Str "This",Space,Str "was",Space,Str "an",Space,Str "allusion",Space,Str "to",Space,Str "the",Space,Str "vase",Space,Str "that",Space,Str "the",Space,Str "soldier",Space,Str "had",Space,Str "broken",Space,Str "so",Space,Str "that",SoftBreak,Str "it",Space,Str "could",Space,Str "not",Space,Str "be",Space,Str "returned",Space,Str "to",Space,Str "Remigius."]]]]
