@@ -1,0 +1,20 @@
+<html>
+<head>
+  <title>$if(title-prefix)$$title-prefix$ – $endif$$pagetitle$</title>
+</head>
+<body>
+
+$body$
+
+$for(author)$$author$$endfor$
+$if(institute)$
+$for(institute)$$institute$$endfor$
+$endif$
+
+<!-- Refs should be below this -->
+
+$if(referencesblock)$$referencesblock$$endif$
+
+
+</body>
+</html>
