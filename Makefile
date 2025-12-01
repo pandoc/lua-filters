@@ -7,9 +7,6 @@ LUA_FILTERS_TEST_IMAGE = pandoc/lua-filters-test
 test:
 	sh runtests.sh $(FILTERS)
 
-test-docker:
-	xvfb-run sh runtests.sh $(FILTERS)
-
 archive: .build/lua-filters.tar.gz
 
 archives: .build/lua-filters.tar.gz .build/lua-filters.zip
@@ -23,7 +20,7 @@ docker-test:
 	       --rm \
 	       --volume "$(PWD):/data" \
 	       --entrypoint /usr/bin/make \
-	       $(LUA_FILTERS_TEST_IMAGE) FILTERS="${FILTERS}" test-docker
+	       $(LUA_FILTERS_TEST_IMAGE) FILTERS="${FILTERS}"
 
 docker-test-image: .tools/Dockerfile
 	docker build --tag $(LUA_FILTERS_TEST_IMAGE) --file $< .

@@ -36,4 +36,3 @@ jobs:
 
       - name: Run tests in Docker image
         run: make docker-test
-
