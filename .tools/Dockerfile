@@ -38,7 +38,8 @@ RUN apt-get -q --no-allow-insecure-repositories update \
        texlive-pictures \
        texlive-plain-generic \
        texlive-xetex \
-       wget
+       wget \
+       xvfb
 
 ARG plantuml_jar=plantuml.1.2018.9.jar
 RUN wget https://sourceforge.net/projects/plantuml/files/${plantuml_jar} \
